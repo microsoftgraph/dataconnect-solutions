@@ -1,0 +1,67 @@
+[
+  {
+    "pypi": {
+      "package": "azure-core==1.9.0"
+    }
+  },
+  {
+    "pypi": {
+      "package": "azure-storage-blob==12.5.0"
+    }
+  },
+  {
+    "pypi": {
+      "package": "azure-identity==1.4.1"
+    }
+  },
+  {
+    "pypi": {
+      "package": "azure-keyvault-secrets==4.2.0"
+    }
+  },
+  {
+    "pypi": {
+      "package": "nltk==3.5"
+    }
+  },
+  {
+    "pypi": {
+      "package": "spacy==2.3.1"
+    }
+  },
+  {
+    "pypi": {
+      "package": "gensim==3.8.0"
+    }
+  },
+  {
+    "pypi": {
+      "package": "spacy-lookups-data==0.3.2"
+    }
+  },
+  {
+    "pypi": {
+      "package": "numpy==1.19.1"
+    }
+  },
+  {
+    "pypi": {
+      "package": "fse==0.1.15"
+    }
+  },
+  {
+    "pypi": {
+      "package": "adal==1.2.5"
+    }
+  },
+  {
+    "pypi": {
+      "package": "dill==0.3.3"
+    }
+  },
+  {
+    "pypi": {
+      "package": "pyyaml==5.4.1"
+    }
+  }
+]

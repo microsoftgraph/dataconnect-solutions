@@ -1,0 +1,2 @@
+mail,name,available_starting_from,role,employee_type,current_engagement,department,company_name,manager_name,manager_email,country,state,city,location,office_location,linkedin_profile
+ahgarza@somewhere.com,Aaron H. Garza,"",Software Engineer,Full Time Employee,Beta,R&D,QA Inc.,John Doe,jdoe@example.com,US,QA,Tacoma,"Tacoma, WA, US","42 Main Ave",https://www.linkedin.com/in/unavailable/

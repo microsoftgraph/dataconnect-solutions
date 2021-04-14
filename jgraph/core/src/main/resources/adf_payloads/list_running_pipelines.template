@@ -1,0 +1,14 @@
+{
+  lastUpdatedAfter: $startTime,
+  lastUpdatedBefore: $endTime,
+  filters: [
+    {
+      operand: Status,
+      operator: Equals,
+      values: [
+        InProgress
+      ]
+    }
+  ]
+
+}

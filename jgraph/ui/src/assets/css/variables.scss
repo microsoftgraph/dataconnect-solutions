@@ -1,0 +1,20 @@
+$main-color: rgb(40, 51, 64);
+$main-border-radius: 4px;
+$main-border-color: #e8e7e6;
+
+// Bootstrap variables
+$gray-dark: #212529;
+$primary: #007bff;
+$secondary: #858585;
+$secondary-light: #afafaf;
+$success: #00b768;
+
+:root {
+  --main-padding: 24px;
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --main-padding: 12px;
+  }
+}

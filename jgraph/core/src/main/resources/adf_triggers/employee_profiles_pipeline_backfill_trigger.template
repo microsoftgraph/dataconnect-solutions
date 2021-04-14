@@ -1,0 +1,36 @@
+{
+    name: $triggerName,
+    properties: {
+        annotations: [],
+        pipeline: {
+            pipelineReference: {
+                referenceName: End2EndEmployeeProfilePipeline,
+                type: PipelineReference
+            }
+        },
+        type: TumblingWindowTrigger,
+        typeProperties: {
+            frequency: Hour,
+            interval: 24,
+            startTime: $startTime,
+            endTime: $endTime,
+            delay: @raw(`"00:00:00"`),,
+            maxConcurrency: 1,
+            retryPolicy: {
+                count: 3,
+                intervalInSeconds: 86400
+            },
+            dependsOn: [
+                {
+                    type: TumblingWindowTriggerDependencyReference,
+                    size: @raw(`"1.00:00:00"`),
+                    offset: @raw(`"0.00:00:00"`),
+                    referenceTrigger: {
+                        referenceName: airtable_pipeline_backfill_trigger,
+                        type: TriggerReference
+                    }
+                }
+            ]
+        }
+    }
+}

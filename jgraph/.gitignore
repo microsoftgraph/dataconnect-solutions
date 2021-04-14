@@ -1,0 +1,40 @@
+HELP.md
+target/
+email_schema_transform/src/main/resources/enron_results
+latest-reply-extractor/src/test/resources/replyextraction_job/actual_result
+dependency-reduced-pom.xml
+!.mvn/wrapper/maven-wrapper.jar
+!../graph-api-tool/src/main/java
+!**/src/test/**
+.DS_Store
+*.DS_Store
+.java-version
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/
+/**/node_modules/
+/ui/node/
+/ui/dist

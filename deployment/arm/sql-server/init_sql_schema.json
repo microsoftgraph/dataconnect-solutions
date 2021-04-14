@@ -1,0 +1,92 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "forceUpdateTag": {
+      "type": "string",
+      "defaultValue": "[utcNow()]"
+    },
+    "userIdentityName": {
+      "type": "string"
+    },
+    "sqlserver.name": {
+      "type": "String",
+      "defaultValue": "gdc-dbserver",
+      "metadata": {
+        "description": "Azure SQL Server name "
+      }
+    },
+    "sqlsever.database.name": {
+      "type": "String",
+      "defaultValue": "gdc_database",
+      "metadata": {
+        "description": "Azure SQL Server Database Name "
+      }
+    },
+    "appservice.name": {
+      "type": "String",
+      "defaultValue": "jgraph-app",
+      "metadata": {
+        "description": " Deployment Name for JGraph app, it will be available at https://{appservice.name}.azurewebsites.net "
+      }
+    },
+    "gdc-service.sp.name": {
+      "type": "String",
+      "defaultValue": "gdc-service",
+      "metadata": {
+        "description": " Name of service principal for GDC deployment "
+      }
+    },
+    "_artifactsLocation": {
+      "type": "string",
+      "metadata": {
+        "description": "The base URI where artifacts required by this template are located including a trailing '/'"
+      }
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated. Use the defaultValue if the staging location is not secured."
+      },
+      "defaultValue": ""
+    }
+  },
+
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deploymentScripts",
+      "apiVersion": "2019-10-01-preview",
+      "name": "runPowerShellInline",
+      "location": "[parameters('location')]",
+      "kind": "AzurePowerShell",
+      "identity": {
+        "type": "userAssigned",
+        "userAssignedIdentities": {
+          "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userIdentityName'))]": { /*ttk bug*/
+          }
+        }
+      },
+      "properties": {
+        "forceUpdateTag": "[parameters('forceUpdateTag')]",
+        "azPowerShellVersion": "3.0",
+        "scriptContent": "[ concat(' ./init_schema.ps1 -sqlServerName ', parameters('sqlserver.name'),
+            ' -ResourceGroup ', resourceGroup().name, ' -sqlDBName ', parameters('sqlsever.database.name'), ' -useSqlAuth 0 '
+         ) ]",
+        "supportingScriptUris": [
+          "[uri(parameters('_artifactsLocation'), concat('sql-server/init_schema.ps1', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('sql-server/schema.sql', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('sql-server/stored_procedures.sql', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('sql-server/data.sql', parameters('_artifactsLocationSasToken')))]",
+          "[uri(parameters('_artifactsLocation'), concat('sql-server/custom-init.sql', parameters('_artifactsLocationSasToken')))]"
+        ],
+        "timeout": "PT30M",
+        "cleanupPreference": "OnSuccess",
+        "retentionInterval": "P1D"
+      }
+    }
+  ]
+}

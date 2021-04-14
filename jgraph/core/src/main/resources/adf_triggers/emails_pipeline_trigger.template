@@ -1,0 +1,29 @@
+{
+    name: $triggerName,
+    properties: {
+        annotations: [],
+        pipeline: {
+            pipelineReference: {
+                referenceName: End2EndEmailsPipeline,
+                type: PipelineReference
+            },
+            parameters: {
+                batchStartTime: @raw(`"@trigger().outputs.windowStartTime"`),
+                batchEndTime: @raw(`"@trigger().outputs.windowEndTime"`)
+            }
+        },
+        type: TumblingWindowTrigger,
+        typeProperties: {
+            frequency: Hour,
+            interval: 24,
+            startTime: $startTime,
+            delay: @raw(`"00:10:00"`),,
+            maxConcurrency: 1,
+            retryPolicy: {
+                count: 3,
+                intervalInSeconds: 7200
+            },
+            dependsOn: []
+        }
+    }
+}

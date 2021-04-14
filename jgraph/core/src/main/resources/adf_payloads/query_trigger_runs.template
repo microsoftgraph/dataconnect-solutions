@@ -1,0 +1,19 @@
+{
+  lastUpdatedAfter: $startTime,
+  lastUpdatedBefore: $endTime,
+  filters: [
+    {
+      operand: TriggerName,
+      operator: In,
+      values: [
+        $triggerName
+      ]
+    }
+  ],
+  orderBy: [
+      {
+          order: DESC,
+          orderBy: TriggerRunTimestamp
+      }
+  ]
+}

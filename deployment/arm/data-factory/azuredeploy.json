@@ -1,0 +1,287 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adf.name": {
+      "type": "string",
+      "metadata": {
+        "description": " Azure Data Factory Name "
+      },
+      "defaultValue": "gdc-adf"
+    },
+    "location": {
+      "type": "string"
+    },
+    "sqlsever.database.name": {
+      "type": "string",
+      "defaultValue": "gdc_database"
+    },
+    "azbs.employee_profiles.container.name": {
+      "type": "string",
+      "defaultValue": "employee-profiles"
+    },
+    "azbs.emails.container.name": {
+      "type": "string",
+      "defaultValue": "emails"
+    },
+    "azbs.domainexperts.container.name": {
+      "type": "string",
+      "defaultValue": "domain-experts"
+    },
+    "search-service.index-prefix": {
+      "type": "string",
+      "defaultValue": "gdc"
+    },
+    "keyvault.url": {
+      "type": "string"
+    },
+    "search-service.url": {
+      "type": "string"
+    },
+    "sqlserver.host": {
+      "type": "string"
+    },
+    "sqlsever.sql-auth": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "storageAccount.name": {
+      "type": "string"
+    },
+    "gdc-service.sp.clientId": {
+      "type": "string"
+    },
+    "m365Adf-reader.sp.clientId": {
+      "type": "string"
+    },
+    "gdc-service.tenantId": {
+      "type": "string"
+    },
+    "gdc_employees_group_id": {
+      "type": "string"
+    },
+    "logs.workspace.name": {
+      "type": "string"
+    },
+    "adfSettingsName": {
+      "type": "string",
+      "defaultValue": "gdc-adf-logs"
+    },
+    "adfLogs.PipelineRuns": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.ActivityRuns": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.TriggerRuns": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISPackageEventMessages": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISPackageExecutableStatistics": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISPackageEventMessageContext": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISPackageExecutionComponentPhases": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISPackageExecutionDataStatistics": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISIntegrationRuntimeLogs": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfMetrics.AllMetrics": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "gdc_adb_secret_scope": {
+      "type": "string",
+      "defaultValue": "gdc"
+    },
+    "gdc_data_ingestion_mode": {
+      "type": "string",
+      "defaultValue": "simulated_mode",
+      "allowedValues": [
+        "simulated_mode",
+        "sample_mode",
+        "production_mode"
+      ]
+    },
+    "gdc_azbs_demodata_storage_account": {
+      "type": "string",
+      "defaultValue": "demodata"
+    },
+    "gdc_deployment_artifacts_azbs_container": {
+      "type": "string",
+      "defaultValue": "deployment-artifacts"
+    }
+  },
+  "resources": [
+    {
+      "name": "[parameters('adf.name')]",
+      "type": "Microsoft.DataFactory/factories",
+      "apiVersion": "2018-06-01",
+      "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "globalParameters": {
+          "gdc_azure_sql_database": {
+            "type": "string",
+            "value": "[parameters('sqlsever.database.name')]"
+          },
+          "gdc_employee_profiles_azbs_container": {
+            "type": "string",
+            "value": "[parameters('azbs.employee_profiles.container.name')]"
+          },
+          "gdc_emails_azbs_container": {
+            "type": "string",
+            "value": "[parameters('azbs.emails.container.name')]"
+          },
+          "gdc_domain_experts_azbs_container": {
+            "type": "string",
+            "value": "[parameters('azbs.domainexperts.container.name')]"
+          },
+          "gdc_key_vault_url": {
+            "type": "string",
+            "value": "[parameters('keyvault.url')]"
+          },
+          "gdc_azure_search_url": {
+            "type": "string",
+            "value": "[parameters('search-service.url')]"
+          },
+          "gdc_azure_sql_server_name": {
+            "type": "string",
+            "value": "[parameters('sqlserver.host')]"
+          },
+          "gdc_azbs_storage_account": {
+            "type": "string",
+            "value": "[parameters('storageAccount.name')]"
+          },
+          "gdc_azure_search_index_prefix": {
+            "type": "string",
+            "value": "[parameters('search-service.index-prefix')]"
+          },
+          "gdc_app_registration_application_id": {
+            "type": "string",
+            "value": "[parameters('gdc-service.sp.clientId')]"
+          },
+          "gdc_app_registration_directory_id": {
+            "type": "string",
+            "value": "[parameters('gdc-service.tenantId')]"
+          },
+          "gdc_graph_api_app_registration_application_id": {
+            "type": "string",
+            "value": "[parameters('gdc-service.sp.clientId')]"
+          },
+          "gdc_graph_api_app_registration_directory_id": {
+            "type": "string",
+            "value": "[parameters('gdc-service.tenantId')]"
+          },
+          "gdc_m365Adf_reader_app_registration_application_id": {
+            "type": "string",
+            "value": "[parameters('m365Adf-reader.sp.clientId')]"
+          },
+          "gdc_employees_group_id": {
+            "type": "string",
+            "value": "[parameters('gdc_employees_group_id')]"
+          },
+          "gdc_log_analytics_workspace_id": {
+            "type": "string",
+            "value": "[if(not(empty(parameters('logs.workspace.name'))), reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logs.workspace.name')),'2020-08-01', 'Full').properties.customerId, ' ')]"
+          },
+          "gdc_adb_secret_scope": {
+            "type": "string",
+            "value": "[parameters('gdc_adb_secret_scope')]"
+          },
+          "gdc_data_ingestion_mode": {
+            "type": "string",
+            "value": "[parameters('gdc_data_ingestion_mode')]"
+          },
+          "gdc_azbs_demodata_storage_account": {
+            "type": "string",
+            "value": "[parameters('gdc_azbs_demodata_storage_account')]"
+          },
+          "gdc_deployment_artifacts_azbs_container": {
+            "type": "string",
+            "value": "[parameters('gdc_deployment_artifacts_azbs_container')]"
+          },
+          "gdc_azure_sql_msi_auth_enabled": {
+            "type": "string",
+            "value": "[string(not(parameters('sqlsever.sql-auth')))]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DataFactory/factories/providers/diagnosticSettings",
+      "apiVersion": "2017-05-01-preview",
+      "name": "[concat(parameters('adf.name'),'/microsoft.insights/', parameters('adfSettingsName'))]",
+      "condition": "[not(empty(parameters('logs.workspace.name')))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.DataFactory/factories', parameters('adf.name'))]"
+      ],
+      "properties": {
+        "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logs.workspace.name'))]",
+        "logs": [
+          {
+            "category": "ActivityRuns",
+            "enabled": "[parameters('adfLogs.ActivityRuns')]"
+          },
+          {
+            "category": "PipelineRuns",
+            "enabled": "[parameters('adfLogs.PipelineRuns')]"
+          },
+          {
+            "category": "TriggerRuns",
+            "enabled": "[parameters('adfLogs.TriggerRuns')]"
+          },
+          {
+            "category": "SSISPackageEventMessages",
+            "enabled": "[parameters('adfLogs.SSISPackageEventMessages')]"
+          },
+          {
+            "category": "SSISPackageExecutableStatistics",
+            "enabled": "[parameters('adfLogs.SSISPackageExecutableStatistics')]"
+          },
+          {
+            "category": "SSISPackageEventMessageContext",
+            "enabled": "[parameters('adfLogs.SSISPackageEventMessageContext')]"
+          },
+          {
+            "category": "SSISPackageExecutionComponentPhases",
+            "enabled": "[parameters('adfLogs.SSISPackageExecutionComponentPhases')]"
+          },
+          {
+            "category": "SSISPackageExecutionDataStatistics",
+            "enabled": "[parameters('adfLogs.SSISPackageExecutionDataStatistics')]"
+          },
+          {
+            "category": "SSISIntegrationRuntimeLogs",
+            "enabled": "[parameters('adfLogs.SSISIntegrationRuntimeLogs')]"
+          }
+        ],
+        "metrics": [
+          {
+            "category": "AllMetrics",
+            "enabled": "[parameters('adfMetrics.AllMetrics')]"
+          }
+        ]
+      }
+    }
+  ]
+}

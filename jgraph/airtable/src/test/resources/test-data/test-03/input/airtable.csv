@@ -1,0 +1,3 @@
+mail,name,status,locate,up_for_redeployment_date,current_engagement,current_engagement_end_date,reports_to,manager_email,role,consultant_type,linkedin_profile,id,version
+agmorris@somewhere.com,Aaron G. Morris,Active,"Dallas, TX","2030-06-30",Alpha,"2030-06-29",John Doe,jdoe@example.com,Program Manager,Mid Level Consultant,https://www.linkedin.com/in/unavailable/,0,1753-01-01 00:00:00
+ahgarza@somewhere.com,Aaron H. Garza,Active,"Tacoma, WA, US",,Beta,,John Doe,jdoe@example.com,Software Engineer,Mid Level Consultant,https://www.linkedin.com/in/unavailable/,1,1753-01-01 00:00:00

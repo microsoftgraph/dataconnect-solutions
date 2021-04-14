@@ -1,0 +1,95 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adb.workspace.name": {
+            "type": "string"
+        },
+        "vnet.name": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the virtual network to create."
+            }
+        },
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "Location for all resources."
+            }
+        },
+        "adb.nsg.name": {
+            "defaultValue": "gdc-databricks-nsg",
+            "type": "string",
+            "metadata": {
+                "description": "The name of the network security group to create."
+            }
+        },
+        "adb.pricingTier": {
+            "defaultValue": "standard",
+            "allowedValues": [
+                "trial",
+                "standard",
+                "premium"
+            ],
+            "type": "string",
+            "metadata": {
+                "description": "The pricing tier of workspace."
+            }
+        },
+        "adb.privateSubnetName": {
+            "defaultValue": "gdc-databricks-private",
+            "type": "string",
+            "metadata": {
+                "description": "The name of the private subnet to create."
+            }
+        },
+        "adb.publicSubnetName": {
+            "defaultValue": "gdc-databricks-public",
+            "type": "string",
+            "metadata": {
+                "description": "The name of the public subnet to create."
+            }
+        }
+    },
+    "variables": {
+        "managedResourceGroupName": "[concat('databricks-rg-', parameters('adb.workspace.name'), '-', uniqueString(parameters('adb.workspace.name'), resourceGroup().id))]",
+        "managedResourceGroupId": "[subscriptionResourceId('Microsoft.Resources/resourceGroups', variables('managedResourceGroupName'))]",
+        "virtualNetworkId": "[resourceId('Microsoft.Network/virtualNetworks', parameters('vnet.name'))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2020-05-01",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "location": "[parameters('location')]",
+            "name": "[parameters('adb.nsg.name')]",
+            "properties": {}
+        },
+        {
+            "type": "Microsoft.Databricks/workspaces",
+            "apiVersion": "2018-04-01",
+            "name": "[parameters('adb.workspace.name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups',parameters('adb.nsg.name'))]"
+            ],
+            "sku": {
+                "name": "[parameters('adb.pricingTier')]"
+            },
+            "comments": "The managed resource group specified will be locked after deployment.",
+            "properties": {
+                "ManagedResourceGroupId": "[variables('managedResourceGroupId')]",
+                "parameters": {
+                    "customVirtualNetworkId": {
+                        "value": "[variables('virtualNetworkId')]"
+                    },
+                    "customPublicSubnetName": {
+                        "value": "[parameters('adb.publicSubnetName')]"
+                    },
+                    "customPrivateSubnetName": {
+                        "value": "[parameters('adb.privateSubnetName')]"
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,46 @@
+{
+  "odata": "W/\"CQAAABYAAADJ3KJOXID9QK40NlbnZL54AABfYzhd\"",
+  "id": "AAMkADUyZDUxMDVhLTZiM2QtNDgyNy1hZTgyLWQ1NDdlZGMyNjFlNgBGAAAAAACAuje_ISRLRJt-gJWTH483BwDJ3KJOXID9QK40NlbnZL54AAAAAAEMAADJ3KJOXID9QK40NlbnZL54AABfbap-AAA=",
+  "createdDateTime": "2020-08-03T11:08:23Z",
+  "lastModifiedDateTime": "2020-08-03T11:08:32Z",
+  "changeKey": "CQAAABYAAADJ3KJOXID9QK40NlbnZL54AABfYzhd",
+  "categories": [],
+  "receivedDateTime": "2020-08-03T11:08:28Z",
+  "sentDateTime": "2020-08-03T11:08:08Z",
+  "hasAttachments": false,
+  "internetMessageId": "<CAMFW8ARcWwsi1kve+sQxY4zRyOSNwFdTR7f5=GHmPCjsvaC+=g@mail.gmail.com>",
+  "subject": "Re: Test mail formats",
+  "bodyPreview": "response 2 from gmail\r\n\r\nOn Mon, Aug 3, 2020, 14:07 John Doe <johndoe@example.com> wrote:\r\nResponse from johndoe\r\n\r\nOn 3 Aug 2020, at 14:06, John Doe <johndoe@example.com> wrote:\r\n\r\nresponse 1 for formats\r\n\r\nOn Mon, Aug 3, 2020, 14:06 An",
+  "importance": "normal",
+  "parentFolderId": "AQMkADUyZDUxMDVhLTZiM2QtNDgyNy1hZTgyLWQ1NDdlZGMyNjFlNgAuAAADgLo3viEkS0Sbf4CVkx_PNwEAydyiTlyA-UCuNDZW52S_eAAAAgEMAAAA",
+  "conversationId": "AAQkADUyZDUxMDVhLTZiM2QtNDgyNy1hZTgyLWQ1NDdlZGMyNjFlNgAQAPQmaPGnKupLv0BMCCKmtqM=",
+  "conversationIndex": "AQHWaYYe9CZo8acq6ku/QEwIIqa2o6kmOU4AgAAAP4CAAAAjAA==",
+  "isDeliveryReceiptRequested": null,
+  "isReadReceiptRequested": false,
+  "isRead": true,
+  "isDraft": false,
+  "webLink": "https://outlook.office365.com/owa/?ItemID=AAMkADUyZDUxMDVhLTZiM2QtNDgyNy1hZTgyLWQ1NDdlZGMyNjFlNgBGAAAAAACAuje%2BISRLRJt%2FgJWTH483BwDJ3KJOXID9QK40NlbnZL54AAAAAAEMAADJ3KJOXID9QK40NlbnZL54AABfbap%2FAAA%3D&exvsurl=1&viewmodel=ReadMessageItem",
+  "inferenceClassification": "focused",
+  "sender": {
+    "emailAddress": {
+      "name": "John Doe",
+      "address": "danieldoe@example.com"
+    }
+  },
+  "from": {
+    "emailAddress": {
+      "name": "John Doe",
+      "address": "danieldoe@example.com"
+    }
+  },
+  "toRecipients": [
+    {
+      "emailAddress": {
+        "name": "John Doe",
+        "address": "johndoe@example.com"
+      }
+    }
+  ],
+  "ccRecipients": [],
+  "bccRecipients": null
+}

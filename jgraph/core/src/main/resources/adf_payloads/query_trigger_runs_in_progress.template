@@ -1,0 +1,27 @@
+{
+  lastUpdatedAfter: $startTime,
+  lastUpdatedBefore: $endTime,
+  filters: [
+    {
+      operand: TriggerName,
+      operator: In,
+      values: [
+        $triggerName
+      ]
+    },
+    {
+      operand: Status,
+      operator: In,
+      values: [
+        WaitingOnDependency,
+        Running
+      ]
+    }
+  ],
+  orderBy: [
+      {
+          order: DESC,
+          orderBy: TriggerRunTimestamp
+      }
+  ]
+}

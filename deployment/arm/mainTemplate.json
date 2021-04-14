@@ -1,0 +1,730 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sqlserver.admin.login": {
+            "type": "String",
+            "metadata": {
+                "description": "SQL Server Admin login "
+            }
+        },
+        "sqlserver.admin.password": {
+            "type": "securestring",
+            "metadata": {
+                "description": "SQL Server Admin password, must be at least 8 characters long and include uppercase letters, lowercase letters, digits and non-alphanumeric characters "
+            }
+        },
+        "sqlsever.database.aad.admin-login": {
+            "type": "String"
+        },
+        "sqlsever.database.aad.admin-object-id": {
+            "type": "String"
+        },
+        "sqlserver.name": {
+            "type": "String",
+            "defaultValue": "gdc-db",
+            "metadata": {
+                "description": "Azure SQL Server name ( unique across Azure, letters, digits, hyphens are allowed)"
+            }
+        },
+        "keyvault.name": {
+            "type": "String",
+            "defaultValue": "GdcApp",
+            "metadata": {
+                "description": " Preferable Azure KeyVault for application properties ( unique across Azure, lowercase letters, numbers, and hyphens)"
+            }
+        },
+        "m365Adf-keyvault.name": {
+            "type": "string",
+            "defaultValue": "GdcBackend",
+            "metadata": {
+                "description": " Preferable Azure KeyVault for offline pipeline ( unique across Azure, alphanumerics and hyphens)"
+            }
+        },
+        "keyvault.enableSoftDelete": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "storageAccount.name": {
+            "type": "string",
+            "defaultValue": "gdcstorage",
+            "metadata": {
+                "description": " Preferable Azure Storage Account name for GDC data ( unique across Azure, lowcase letters only)"
+            }
+        },
+        "testStorageAccount.name": {
+            "type": "string",
+            "defaultValue": "demodata",
+            "metadata": {
+                "description": " Preferable Azure Storage Account name for GDC sample and simulated data ( unique across Azure, lowcase letters only)"
+            }
+        },
+        "search-service.name": {
+            "type": "string",
+            "defaultValue": "gdc-search-service",
+            "metadata": {
+                "description": " Preferable Azure Search name for GDC data ( unique across Azure, letters, digits, underscores are allowed) "
+            }
+        },
+        "search-service.sku": {
+            "type": "string",
+            "defaultValue": "basic",
+            "allowedValues": [
+                "free",
+                "basic",
+                "standard"
+            ],
+            "metadata": {
+                "description": "The azure search instance tier."
+            }
+        },
+        "search-service.emails-index": {
+            "type": "string",
+            "defaultValue": "gdc-emails"
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "The base URI where artifacts required by this template are located including a trailing '/'"
+            }
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated. Use the defaultValue if the staging location is not secured."
+            },
+            "defaultValue": ""
+        },
+        "sqlsever.database.aad.admin-tenant-id": {
+            "type": "String",
+            "defaultValue": "[subscription().tenantId]"
+        },
+        "sqlsever.database.sku.family": {
+            "type": "String",
+            "defaultValue": "Gen5",
+            "metadata": {
+                "description": "Azure SQL Server SKU family name "
+            }
+        },
+        "sqlsever.database.sku.name": {
+            "type": "String",
+            "defaultValue": "GP_S_Gen5",
+            "metadata": {
+                "description": "Azure SQL Server SKU name "
+            }
+        },
+        "sqlsever.database.sku.edition": {
+            "type": "String",
+            "defaultValue": "GeneralPurpose",
+            "metadata": {
+                "description": "Azure SQL Server SKU edition "
+            }
+        },
+        "sqlsever.database.sku.capacity": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "Azure SQL Server SKU capacity "
+            }
+        },
+        "sqlsever.sql-auth": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "docker.login": {
+            "type": "securestring"
+        },
+        "docker.password": {
+            "type": "securestring"
+        },
+        "appservice.name": {
+            "type": "String",
+            "defaultValue": "jgraph-app",
+            "metadata": {
+                "description": " Deployment Name for JGraph app (unique across Azure), it will be available at https://{appservice.name}.azurewebsites.net "
+            }
+        },
+        "appservice.aad.clientId": {
+            "type": "securestring"
+        },
+        "appservice.aad.clientSecret": {
+            "type": "securestring"
+        },
+        "appservice.version": {
+            "type": "string",
+            "defaultValue": "1.4.1",
+            "metadata": {
+                "description": " Release version "
+            }
+        },
+        "adf.name": {
+            "type": "string",
+            "defaultValue": "gdc-adf",
+            "metadata": {
+                "description": " Azure Data Factory Name ( unique across Azure, alphanumerics and hyphens )"
+            }
+        },
+        "adb.workspace.name": {
+            "type": "string",
+            "defaultValue": "gdc-databricks-workspace",
+            "metadata": {
+                "description": " Azure Databricks Workspace name "
+            }
+        },
+        "gdc-service.sp.clientId": {
+            "type": "securestring"
+        },
+        "gdc-service.sp.objectId": {
+            "type": "string"
+        },
+        "gdc-service.sp.clientSecret": {
+            "type": "securestring"
+        },
+        "m365Adf-reader.sp.clientId": {
+            "type": "securestring"
+        },
+        "gdc_employees_ad_group_id": {
+            "type": "string"
+        },
+        "logs.workspace.name": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "pipeline_start_time": {
+            "type": "string"
+        },
+        "alert.admin.email": {
+            "type": "string"
+        },
+        "alert.admin.fullname": {
+           "type": "string"
+        },
+        "gdc_data_ingestion_mode": {
+            "type": "string",
+            "defaultValue": "simulated_mode",
+            "allowedValues": [
+                "simulated_mode",
+                "sample_mode",
+                "production_mode"
+            ],
+            "metadata": {
+                "description": "Choose data ingestion mode. Allowed options: simulated_mode, sample_mode or production_mode)  "
+            }
+        },
+        "pygraph_utils_library.name": {
+            "type": "string"
+        },
+        "gdcAdmins.groupId": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "nsg.name": "[concat('gdc-nsg-', resourceGroup().name)]",
+        "adb.nsg.name": "[concat('gdc-databricks-nsg-', resourceGroup().name)]",
+        "vnet.name": "[concat('gdc-network-', resourceGroup().name)]",
+        "sqlsever.database.name": "gdc_database",
+        "search-service.url": "[concat('https://', parameters('search-service.name'), '.search.windows.net')]",
+        "adb.workspace.name": "[parameters('adb.workspace.name')]",
+        "network.stage.uri": "[uri(parameters('_artifactsLocation'), concat('network/azuredeploy.json', parameters('_artifactsLocationSasToken')))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2020-05-01",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[variables('nsg.name')]",
+            "location": "[parameters('location')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "LogAnalytics-Stage",
+            "condition": "[not(empty(parameters('logs.workspace.name')))]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('log-analytics/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "logs.workspace.name": {
+                        "value": "[parameters('logs.workspace.name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "GdcNetworks-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsg.name'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('network.stage.uri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "vnet.name": {
+                        "value": "[variables('vnet.name')]"
+                    },
+                    "nsg.name": {
+                        "value": "[variables('nsg.name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "GdcKeyVault-Stage",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('keyvault/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyvault.name')]"
+                    },
+                    "m365AdfKeyVault.name": {
+                        "value": "[parameters('m365Adf-keyvault.name')]"
+                    },
+                    "enableSoftDelete": {
+                        "value": "[parameters('keyvault.enableSoftDelete')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "GdcStorageAccount",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','GdcNetworks-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('storage/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "storageAccount.name": {
+                        "value": "[parameters('storageAccount.name')]"
+                    },
+                    "testStorageAccount.name": {
+                        "value": "[parameters('testStorageAccount.name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "GdcSqlServer-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','GdcNetworks-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('sql-server/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlserver.name": {
+                        "value": "[parameters('sqlserver.name')]"
+                    },
+                    "vnet.name": {
+                        "value": "[variables('vnet.name')]"
+                    },
+                    "sqlsever.database.name": {
+                        "value": "[variables('sqlsever.database.name')]"
+                    },
+                    "sqlserver.admin.login": {
+                        "value": "[parameters('sqlserver.admin.login')]"
+                    },
+                    "sqlserver.admin.password": {
+                        "value": "[parameters('sqlserver.admin.password')]"
+                    },
+                    "sqlsever.database.aad.admin-login": {
+                        "value": "[parameters('sqlsever.database.aad.admin-login')]"
+                    },
+                    "sqlsever.database.aad.admin-object-id": {
+                        "value": "[parameters('sqlsever.database.aad.admin-object-id')]"
+                    },
+                    "sqlsever.database.aad.admin-tenant-id": {
+                        "value": "[parameters('sqlsever.database.aad.admin-tenant-id')]"
+                    },
+                    "sqlsever.database.sku.family": {
+                        "value": "[parameters('sqlsever.database.sku.family')]"
+                    },
+                    "sqlsever.database.sku.name": {
+                        "value": "[parameters('sqlsever.database.sku.name')]"
+                    },
+                    "sqlsever.database.sku.edition": {
+                        "value": "[parameters('sqlsever.database.sku.edition')]"
+                    },
+                    "sqlsever.database.sku.capacity": {
+                        "value": "[parameters('sqlsever.database.sku.capacity')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "GdcAdbCluster",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','GdcNetworks-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('adb-cluster/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "vnet.name": {
+                        "value": "[variables('vnet.name')]"
+                    },
+                    "adb.workspace.name": {
+                        "value": "[variables('adb.workspace.name')]"
+                    },
+                    "adb.nsg.name": {
+                        "value": "[variables('adb.nsg.name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "JGraphAppService-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','GdcNetworks-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','GdcKeyVault-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','GdcSqlServer-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('app-service/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "vnet.name": {
+                        "value": "[variables('vnet.name')]"
+                    },
+                    "sqlserver.name": {
+                        "value": "[parameters('sqlserver.name')]"
+                    },
+                    "sqlsever.database.name": {
+                        "value": "[variables('sqlsever.database.name')]"
+                    },
+                    "sqlsever.sql-auth": {
+                        "value": "[parameters('sqlsever.sql-auth')]"
+                    },
+                    "keyvault.name": {
+                        "value": "[parameters('keyvault.name')]"
+                    },
+                    "search-service.name": {
+                        "value": "[parameters('search-service.name')]"
+                    },
+                    "clientId": {
+                        "value": "[parameters('appservice.aad.clientId')]"
+                    },
+                    "clientSecret": {
+                        "value": "[parameters('appservice.aad.clientSecret')]"
+                    },
+                    "appservice.docker-config": {
+                        "value": {
+                            "username": "[parameters('docker.login')]",
+                            "password": "[parameters('docker.password')]",
+                                "server": "blueprint.azurecr.io",
+                            "image": "bpcs/jgraph",
+                            "tag": "[parameters('appservice.version')]"
+                        }
+                    },
+                    "tenantId": {
+                        "value": "[subscription().tenantId]"
+                    },
+                    "appservice.name": {
+                        "value": "[parameters('appservice.name')]"
+                    },
+                    "alert.admin.email": {
+                        "value": "[parameters('alert.admin.email')]"
+                    },
+                    "alert.name": {
+                        "value": "JGraph HTTP Errors Alert"
+                    },
+                    "alert.enabled": {
+                        "value": false
+                    },
+                    "alert.admin.fullname": {
+                        "value": "[parameters('alert.admin.fullname')]"
+                    },
+                    "logs.workspace.name": {
+                        "value": "[parameters('logs.workspace.name')]"
+                    },
+                    "adf.name": {
+                        "value": "[parameters('adf.name')]"
+                    },
+                    "resourceGroup.name": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "subscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "gdcAdmins.groupId": {
+                        "value": "[parameters('gdcAdmins.groupId')]"
+                    },
+                    "gdc_azbs_demodata_storage_account" : {
+                        "value": "[parameters('testStorageAccount.name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "SearchService-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','GdcKeyVault-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','JGraphAppService-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('search-service/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "search-service.name": {
+                        "value": "[parameters('search-service.name')]"
+                    },
+                    "search-service.sku": {
+                        "value": "[parameters('search-service.sku')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "DataFactory-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','GdcKeyVault-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('data-factory/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "adf.name": {
+                        "value": "[parameters('adf.name')]"
+                    },
+                    "keyvault.url": {
+                        "value": "[concat('https://', parameters('m365Adf-keyvault.name'), '.vault.azure.net/')]"
+                    },
+                    "sqlsever.database.name": {
+                        "value": "[variables('sqlsever.database.name')]"
+                    },
+                    "search-service.url": {
+                        "value": "[variables('search-service.url')]"
+                    },
+                    "sqlserver.host": {
+                        "value": "[concat(parameters('sqlserver.name'), '.database.windows.net')]"
+                    },
+                    "sqlsever.sql-auth": {
+                        "value": "[parameters('sqlsever.sql-auth')]"
+                    },
+                    "storageAccount.name": {
+                        "value": "[parameters('storageAccount.name')]"
+                    },
+                    "gdc-service.sp.clientId": {
+                        "value": "[parameters('gdc-service.sp.clientId')]"
+                    },
+                    "m365Adf-reader.sp.clientId": {
+                        "value": "[parameters('m365Adf-reader.sp.clientId')]"
+                    },
+                    "gdc-service.tenantId": {
+                        "value": "[subscription().tenantId]"
+                    },
+                    "gdc_employees_group_id": {
+                        "value": "[parameters('gdc_employees_ad_group_id')]"
+                    },
+                    "logs.workspace.name": {
+                        "value": "[parameters('logs.workspace.name')]"
+                    },
+                    "gdc_azbs_demodata_storage_account" : {
+                        "value": "[parameters('testStorageAccount.name')]"
+                    },
+                    "gdc_data_ingestion_mode" : {
+                        "value": "[parameters('gdc_data_ingestion_mode')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "KeyVault-Setup-ACL-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','GdcKeyVault-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','DataFactory-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','JGraphAppService-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('keyvault/configure-acl.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultName": {
+                        "value": "[parameters('keyvault.name')]"
+                    },
+                    "m365AdfKeyVault.name": {
+                        "value": "[parameters('m365Adf-keyvault.name')]"
+                    },
+                    "gdc-service.sp.objectId": {
+                        "value": "[parameters('gdc-service.sp.objectId')]"
+                    },
+                    "adf.name": {
+                        "value": "[parameters('adf.name')]"
+                    },
+                    "appservice.name": {
+                        "value": "[parameters('appservice.name')]"
+                    },
+                    "gdc-service.tenantId": {
+                        "value": "[subscription().tenantId]"
+                    },
+                    "gdc.aad.admin-object-id": {
+                        "value": "[parameters('sqlsever.database.aad.admin-object-id')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "Storage-Setup-ACL-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','DataFactory-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','GdcStorageAccount')]",
+                "[resourceId('Microsoft.Resources/deployments','JGraphAppService-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('storage/configure-acl.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "gdc-service.sp.objectId": {
+                        "value": "[parameters('gdc-service.sp.objectId')]"
+                    },
+                    "adf.name": {
+                        "value": "[parameters('adf.name')]"
+                    },
+                    "storageAccount.name": {
+                        "value": "[parameters('storageAccount.name')]"
+                    },
+                    "testStorageAccount.name": {
+                        "value": "[parameters('testStorageAccount.name')]"
+                    },
+                    "gdcAdmins.groupId": {
+                        "value": "[parameters('gdcAdmins.groupId')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "DataFactory-Pipeline-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','GdcKeyVault-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','DataFactory-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','SearchService-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','GdcStorageAccount')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('data-factory/pipelines.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "adf.name": {
+                        "value": "[parameters('adf.name')]"
+                    },
+                    "pipeline_start_time": {
+                        "value": "[parameters('pipeline_start_time')]"
+                    },
+                    "keyvault.url": {
+                        "value": "[concat('https://', parameters('m365Adf-keyvault.name'), '.vault.azure.net/')]"
+                    },
+                    "storageAccount.endpoint": {
+                        "value": "[concat('https://', parameters('storageAccount.name') ,'.blob.core.windows.net/')]"
+                    },
+                    "testStorageAccount.endpoint": {
+                        "value": "[concat('https://', parameters('testStorageAccount.name') ,'.blob.core.windows.net/')]"
+                    },
+                    "search-service.url": {
+                        "value": "[variables('search-service.url')]"
+                    },
+                    "gdc-service.sp.clientId": {
+                        "value": "[parameters('gdc-service.sp.clientId')]"
+                    },
+                    "m365Adf-reader.sp.clientId": {
+                        "value": "[parameters('m365Adf-reader.sp.clientId')]"
+                    },
+                    "m365.tenant_id": {
+                        "value": "[subscription().tenantId]"
+                    },
+                    "pygraph_utils_library.name": {
+                        "value": "[parameters('pygraph_utils_library.name')]"
+                    }
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,3 @@
+mail,name,available_starting_from,role,employee_type,current_engagement,department,company_name,manager_name,manager_email,country,state,city,location,office_location,linkedin_profile
+agmorris@somewhere.com,Aaron G. Morris,2030-06-30,Program Manager,Mid Level Consultant,Alpha,Engineering,Test Corporation,John Doe,jdoe@example.com,United States,TX,Dallas," Dallas, TX",Remote,https://www.linkedin.com/in/unavailable/
+ahgarza@somewhere.com,Aaron H. Garza,"",Software Engineer,Full Time Employee,Beta,R&D,QA Inc.,John Doe,jdoe@example.com,US,QA,Tacoma,"Tacoma, WA, US  ","42 Main Ave",https://www.linkedin.com/in/unavailable/

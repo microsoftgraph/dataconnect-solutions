@@ -1,0 +1,20 @@
+# Ignore data folder (sync from Blob Storage)
+pygraph_utils/taxo_utils/data/raw/
+
+# Ignore outputs
+pygraph_utils/*.whl
+pygraph_utils/*.tar.gz
+
+# Ignore config files (reason: sensitive API keys)
+config*.json
+*_params.json
+# Allow config template
+!config_default.json
+
+# Ignore temporary domain_experts/taxo for debug
+_so_domain_expert.bin
+so_domain_expert.bin
+taxo_de.dill.gz
+
+# Ignore debug folders
+debug_*/

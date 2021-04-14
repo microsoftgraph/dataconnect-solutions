@@ -1,0 +1,84 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "gdc-service.sp.objectId": {
+      "type": "string"
+    },
+    "adf.name": {
+      "type": "string"
+    },
+    "storageAccount.name": {
+      "type": "string"
+    },
+    "testStorageAccount.name": {
+      "defaultValue": "demodata",
+      "type": "string"
+    },
+    "gdcAdmins.groupId": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "roleDefinitionId": {
+      "StorageBlobDataContributor": "[subscriptionResourceId('Microsoft.Authorization/roleAssignments', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+    },
+    "gdc-service.roleName": "[guid('StorageBlobDataContributor', parameters('gdc-service.sp.objectId'), parameters('storageAccount.name'))]",
+    "testdata.account.gdc-service.roleName": "[guid('StorageBlobDataContributor', parameters('gdc-service.sp.objectId'), parameters('testStorageAccount.name'))]",
+    "adf.roleName": "[guid('StorageBlobDataContributor', parameters('adf.name'), parameters('storageAccount.name'))]",
+    "testdata.account.adf.roleName": "[guid('StorageBlobDataContributor', parameters('adf.name'), parameters('testStorageAccount.name'))]",
+    "testdata.account.gdcAdmins.roleName": "[guid('StorageBlobDataContributor', parameters('gdcAdmins.groupId'), parameters('testStorageAccount.name'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+      "apiVersion": "2018-09-01-preview",
+      "name": "[concat(parameters('storageAccount.name'), '/Microsoft.Authorization/', variables('gdc-service.roleName') )]",
+      "properties": {
+        "roleDefinitionId": "[variables('roleDefinitionId').StorageBlobDataContributor]",
+        "principalId": "[parameters('gdc-service.sp.objectId')]",
+        "principalType": "ServicePrincipal"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+      "apiVersion": "2018-09-01-preview",
+      "name": "[concat(parameters('storageAccount.name'), '/Microsoft.Authorization/', variables('adf.roleName') )]",
+      "properties": {
+        "roleDefinitionId": "[variables('roleDefinitionId').StorageBlobDataContributor]",
+        "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', parameters('adf.name')), '2018-06-01', 'Full').identity.principalId]",
+        "principalType": "ServicePrincipal"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+      "apiVersion": "2018-09-01-preview",
+      "name": "[concat(parameters('testStorageAccount.name'), '/Microsoft.Authorization/', variables('testdata.account.gdc-service.roleName') )]",
+      "properties": {
+        "roleDefinitionId": "[variables('roleDefinitionId').StorageBlobDataContributor]",
+        "principalId": "[parameters('gdc-service.sp.objectId')]",
+        "principalType": "ServicePrincipal"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+      "apiVersion": "2018-09-01-preview",
+      "name": "[concat(parameters('testStorageAccount.name'), '/Microsoft.Authorization/', variables('testdata.account.adf.roleName') )]",
+      "properties": {
+        "roleDefinitionId": "[variables('roleDefinitionId').StorageBlobDataContributor]",
+        "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', parameters('adf.name')), '2018-06-01', 'Full').identity.principalId]",
+        "principalType": "ServicePrincipal"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+      "apiVersion": "2018-09-01-preview",
+      "name": "[concat(parameters('testStorageAccount.name'), '/Microsoft.Authorization/', variables('testdata.account.gdcAdmins.roleName') )]",
+      "properties": {
+        "roleDefinitionId": "[variables('roleDefinitionId').StorageBlobDataContributor]",
+        "principalId": "[parameters('gdcAdmins.groupId')]",
+        "principalType": "Group"
+      }
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "search-service.name": {
+      "type": "string",
+      "metadata": {
+        "description": "The azure search instance name"
+      }
+    },
+    "search-service.sku": {
+      "type": "string",
+      "defaultValue": "free",
+      "allowedValues": [
+        "free",
+        "basic",
+        "standard"
+      ],
+      "metadata": {
+        "description": "The azure search instance tier."
+      }
+    },
+    "search-service.ReplicaCount": {
+      "type": "int",
+      "defaultValue": 1,
+      "allowedValues": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "metadata": {
+        "description": "The number of search replicas"
+      }
+    },
+    "search-service.PartitionCount": {
+      "type": "int",
+      "defaultValue": 1,
+      "allowedValues": [
+        1,
+        2,
+        3,
+        4,
+        6,
+        12
+      ],
+      "metadata": {
+        "description": "The number of search partitions"
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "allowedIps": {
+      "type": "array",
+      "metadata": {
+        "description": "List of IPs allowed to access seaech from."
+      },
+      "defaultValue": []
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2020-03-13",
+      "name": "[parameters('search-service.name')]",
+      "type": "Microsoft.Search/searchServices",
+      "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "sku": {
+        "name": "[parameters('search-service.sku')]"
+      },
+      "properties": {
+        "replicaCount": "[parameters('search-service.ReplicaCount')]",
+        "partitionCount": "[parameters('search-service.PartitionCount')]",
+        "networkRuleSet": {
+          "copy": [
+            {
+              "name": "ipRules",
+              "count": "[length(parameters('allowedIps'))]",
+              "input": {
+                "value": "[parameters('allowedIps')[copyIndex('ipRules')]]"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

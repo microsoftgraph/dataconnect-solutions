@@ -1,0 +1,3 @@
+mail,name,availableStartingFrom,role,employeeType,currentEngagement,department,companyName,managerName,managerEmail,country,state,city,location,officeLocation,linkedInProfile
+agmorris@somewhere.com,Aaron G. Morris,2030-06-30,Program Manager,Mid Level Consultant,Alpha,"","",John Doe,jdoe@example.com,"","","","Dallas, TX","",https://www.linkedin.com/in/unavailable/
+ahgarza@somewhere.com,Aaron H. Garza,"",Software Engineer,Mid Level Consultant,Beta,"","",John Doe,jdoe@example.com,"","","","Tacoma, WA, US","",https://www.linkedin.com/in/unavailable/

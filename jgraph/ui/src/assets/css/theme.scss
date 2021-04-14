@@ -1,0 +1,98 @@
+:root {
+  font-size: 14px;
+}
+
+@import '../../../node_modules/bootstrap/scss/bootstrap.scss';
+@import '../../../node_modules/bootstrap-vue/dist/bootstrap-vue.css';
+
+.flex-1 {
+  -ms-flex: 1 !important;
+  -webkit-flex: 1 !important;
+  flex: 1 !important;
+}
+
+.flex-2 {
+  -ms-flex: 2 !important;
+  -webkit-flex: 2 !important;
+  flex: 2 !important;
+}
+
+.flex-3 {
+  -ms-flex: 3 !important;
+  -webkit-flex: 3 !important;
+  flex: 3 !important;
+}
+
+.flex-4 {
+  -ms-flex: 4 !important;
+  -webkit-flex: 4 !important;
+  flex: 4 !important;
+}
+
+.flex-5 {
+  -ms-flex: 5 !important;
+  -webkit-flex: 5 !important;
+  flex: 5 !important;
+}
+
+.flex-6 {
+  -ms-flex: 6 !important;
+  -webkit-flex: 6 !important;
+  flex: 6 !important;
+}
+
+.flex-7 {
+  -ms-flex: 7 !important;
+  -webkit-flex: 7 !important;
+  flex: 7 !important;
+}
+
+.flex-8 {
+  -ms-flex: 8 !important;
+  -webkit-flex: 8 !important;
+  flex: 8 !important;
+}
+
+.flex-9 {
+  -ms-flex: 9 !important;
+  -webkit-flex: 9 !important;
+  flex: 9 !important;
+}
+
+.flex-10 {
+  -ms-flex: 10 !important;
+  -webkit-flex: 10 !important;
+  flex: 10 !important;
+}
+
+.flex-11 {
+  -ms-flex: 11 !important;
+  -webkit-flex: 11 !important;
+  flex: 11 !important;
+}
+
+.flex-12 {
+  -ms-flex: 12 !important;
+  -webkit-flex: 12 !important;
+  flex: 12 !important;
+}
+// Override Bootstrap css
+.btn {
+  font-weight: 300;
+  height: 36px;
+  &.default-size {
+    width: 120px;
+  }
+}
+
+div {
+  &.default-size {
+    width: 120px;
+  }
+}
+
+fieldset {
+  input {
+    min-height: 36px !important;
+  }
+}

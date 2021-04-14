@@ -1,0 +1,15 @@
+**/*.pkl
+**/*.dill
+**/*~
+**/__pycache__
+**/.editorconfig
+.idea
+*.iml
+logs
+.DS_Store
+**/.ipynb_checkpoints
+**/TAGS
+/pygraph/azure_processing/pygraph_utils/build/
+/pygraph/azure_processing/pygraph_utils/dist/
+/pygraph/azure_processing/pygraph_utils/pygraph_utils.egg-info/
+/target/

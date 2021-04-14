@@ -1,0 +1,40 @@
+    <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:serif="http://www.serif.com/"
+          width="100%"
+          height="100%"
+          viewBox="0 0 72 72"
+          version="1.1"
+          xml:space="preserve"
+          style="fill-rule:evenodd;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:1.5;"
+        >
+          <rect
+            id="ico-72-people"
+            x="0"
+            y="0"
+            width="72"
+            height="72"
+            style="fill:none;"
+          />
+          <circle
+            cx="47.517"
+            cy="23.392"
+            r="11"
+            style="fill:none;stroke:#007bff;stroke-width:1.4px;"
+          />
+          <path
+            d="M26.123,59.608c0.629,-11.264 9.974,-20.216 21.394,-20.216c11.42,0 20.765,8.952 21.394,20.216l-42.788,-0Z"
+            style="fill:none;stroke:#007bff;stroke-width:1.4px;"
+          />
+          <circle
+            cx="21.197"
+            cy="25.284"
+            r="10.108"
+            style="fill:none;stroke:#007bff;stroke-width:1.4px;"
+          />
+          <path
+            d="M20.136,59.392l-17.047,0c-0,-10.486 8.514,-19 19,-19c3.051,0 5.936,0.721 8.491,2.001c-5.894,3.509 -9.967,9.765 -10.444,16.999Z"
+            style="fill:none;stroke:#007bff;stroke-width:1.4px;"
+          />
+        </svg>
