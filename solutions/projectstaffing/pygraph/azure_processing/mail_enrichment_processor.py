@@ -48,6 +48,7 @@ from taxo_utils.nlp_utils import NLPUtils
 # used in last version -> allowed_postags=['NOUN']
 
 
+
 from taxo_utils.nlp_utils import clean_email_body
 
 
@@ -411,7 +412,7 @@ if __name__ == '__main__':
 
         # TODO: should be in defaults ?
         # args = SimpleNamespace(
-        #    log_analytics_workspace_id=" ",  # "b61e5e81-9eb2-413e-aaef-624b89af04a0",
+        #    log_analytics_workspace_id=" ",
 
         SERVICE_PRINCIPAL_SECRET = json.load(open("config.json"))["SERVICE_PRINCIPAL_SECRET"]
 

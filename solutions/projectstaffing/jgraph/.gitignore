@@ -1,6 +1,5 @@
 HELP.md
 target/
-email_schema_transform/src/main/resources/enron_results
 latest-reply-extractor/src/test/resources/replyextraction_job/actual_result
 dependency-reduced-pom.xml
 !.mvn/wrapper/maven-wrapper.jar

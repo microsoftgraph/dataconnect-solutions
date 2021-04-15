@@ -19,11 +19,9 @@
     </properties>
 
     <modules>
-        <module>personal-email-exporter</module>
         <module>latest-reply-extractor</module>
         <module>jgraph-common</module>
         <module>m365-user-to-azure-sql</module>
-        <module>email_schema_transform</module>
         <module>ui</module>
         <module>core</module>
         <module>airtable</module>

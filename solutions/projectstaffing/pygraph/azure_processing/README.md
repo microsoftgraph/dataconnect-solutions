@@ -114,15 +114,6 @@ eval "$(pyenv virtualenv-init -)"
 + check - `databricks-connect test`
     + may error if pyspark wasn't uninstalled / left garbage folders (for some reason) -> `rm -rf /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/pyspark`
 
-Databricks configuration:
-```
-* Databricks Host: https://adb-2527426194246904.4.azuredatabricks.net/
-* Databricks Token: dapi68fedf13d6e7ee7743f8ae1a83079b10
-* Cluster ID: 1002-021455-serfs576
-* Org ID: 2527426194246904
-* Port: 15001
-```
-
 
 Optional objective:
 + TODO: can use local Spark while `databricks-connect` is installed and configured ?

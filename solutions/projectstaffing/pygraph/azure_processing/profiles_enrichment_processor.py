@@ -9,15 +9,16 @@ import json
 import os
 import sys
 import traceback
+from collections import OrderedDict
+from datetime import datetime
+from pathlib import Path
+
 from adal import AuthenticationContext
 from azure.identity import ClientSecretCredential
 from azure.keyvault.secrets import SecretClient
 from azure.storage.blob import BlobServiceClient
-from collections import OrderedDict
-from datetime import datetime
 from log_analytics_client.logger import LogAnalyticsLogger
 from nltk.stem.porter import *
-from pathlib import Path
 from pyspark import TaskContext
 # TODO: remove this lines when configured from production
 from pyspark.sql import Row
@@ -749,7 +750,7 @@ if __name__ == '__main__':
 
         # TODO: should be in defaults ?
         # args = SimpleNamespace(
-        # log_analytics_workspace_id=" ",  # "b61e5e81-9eb2-413e-aaef-624b89af04a0",
+        # log_analytics_workspace_id=" ",
 
         SERVICE_PRINCIPAL_SECRET = json.load(open("config.json"))["SERVICE_PRINCIPAL_SECRET"]
         if args.log_analytics_workspace_id is None or not (args.log_analytics_workspace_id.strip()):

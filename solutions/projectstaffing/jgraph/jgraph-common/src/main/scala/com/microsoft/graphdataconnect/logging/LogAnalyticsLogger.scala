@@ -13,7 +13,7 @@ import org.slf4j.{Logger, LoggerFactory}
 import scala.collection.JavaConverters._
 import scala.util.{Failure, Success, Try}
 
-class LogAnalyticsLogger(workspaceId: String = "", //"b61e5e81-9eb2-413e-aaef-624b89af04a0",
+class LogAnalyticsLogger(workspaceId: String = "",
                          //Use either the primary or the secondary client authentication key
                          sharedKey: String = "",
                          clazz: Class[_],
