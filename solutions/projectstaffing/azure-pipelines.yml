@@ -1,0 +1,129 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+parameters:
+  - name: 'tag_override'
+    type: string
+    default: '$(Build.BuildNumber)'
+  - name: 'skipTests'
+    type: boolean
+    default: false
+  - name: 'uploadArtifacts'
+    type: boolean
+    default: false
+
+trigger: none
+
+resources:
+- repo: self
+
+variables:
+  tag: ${{ parameters.tag_override }}
+  skipTests: ${{ parameters.skipTests  }}
+  containerRegistryServConn: TODO_define_missing_value
+  blobStorageServConn: TODO_define_missing_value
+  dockerRepositoryName: TODO_define_missing_value
+  storageName: TODO_define_missing_value
+  containerName: TODO_define_missing_value
+  testDBUser: sa
+  testDBPass: password_!23
+  databaseName: gdc_database
+
+stages:
+- stage: build
+  pool:
+    vmImage: 'ubuntu-latest'
+  displayName: Build gdc
+  jobs:
+  - job: jgraph_build
+    displayName: Building jgraph
+    steps:
+      - task: Docker@2
+        displayName: Login to $(containerRegistryServConn)
+        inputs:
+          command: login
+          containerRegistry: $(containerRegistryServConn)
+      - task: DockerCompose@0
+        displayName: Run test db
+        inputs:
+          action: Run services
+          dockerComposeFile: deployment/local/docker-compose.yml
+          projectName: $(Build.Repository.Name)-tests
+          qualifyImageNames: true
+          serviceName: gdc_database-test
+          buildImages: false
+          abortOnContainerExit: true
+          detached: true
+      - task: Bash@3
+        displayName: Create the test DB
+        inputs:
+          targetType: 'inline'
+          script: |
+            sleep 20s
+            docker exec -i $(docker ps -aqf "name=gdc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <deployment/local/tests/create_mssql/create-database.sql
+            docker exec -i $(docker ps -aqf "name=gdc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <deployment/local/tests/create_mssql/create-database.sql
+      - task: Maven@3
+        displayName: Running maven build
+        inputs:
+          mavenPomFile: 'jgraph/pom.xml'
+          mavenOptions: '-Xmx3072m'
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.8'
+          publishJUnitResults: true
+          testResultsFiles: '**/TEST-*.xml'
+          options: '-DskipTests=$(skipTests) -DdockerTag=$(tag)'
+          goals: 'clean package'
+      - task: Docker@2
+        displayName: 'Build an image $(dockerRepositoryName):$(tag)'
+        inputs:
+          command: buildAndPush
+          containerRegistry: $(containerRegistryServConn)
+          repository: $(dockerRepositoryName)
+          buildContext: '$(Build.SourcesDirectory)/jgraph/core'
+          dockerfile: '$(Build.SourcesDirectory)/jgraph/core/Dockerfile'
+          tags: |
+            $(tag)
+      - task: Bash@3
+        displayName: Preparing artifacts
+        condition: ${{ parameters.uploadArtifacts }}
+        inputs:
+          filePath: 'bin/prepare_artifacts.sh'
+          arguments: '--skip-maven'
+      - task: ArchiveFiles@2
+        displayName: Archiving artifacts
+        condition: ${{ parameters.uploadArtifacts }}
+        inputs:
+          rootFolderOrFile: 'target/output/gdc/arm'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: 'gdc-$(tag).zip'
+          replaceExistingArchive: true
+      - task: PublishPipelineArtifact@1
+        condition: ${{ parameters.uploadArtifacts }}
+        inputs:
+          targetPath: '$(System.DefaultWorkingDirectory)/gdc-$(tag).zip'
+          artifact: 'archive'
+          publishLocation: 'pipeline'
+- stage: uploadArtifacts
+  pool:
+    vmImage: 'windows-latest'
+  displayName: Upload gdc artifacts
+  condition: and(${{ parameters.uploadArtifacts }}, succeeded())
+  jobs:
+  - job: artifacts_upload
+    displayName: Uploading artifacts
+    steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          buildType: 'current'
+          artifactName: 'archive'
+          patterns: '**/gdc-$(tag).zip'
+          targetPath: '$(Pipeline.Workspace)'
+      - task: AzureFileCopy@4
+        inputs:
+          SourcePath: '$(Pipeline.Workspace)\gdc-$(tag).zip'
+          azureSubscription: '$(blobStorageServConn)'
+          Destination: 'AzureBlob'
+          storage: '$(storageName)'
+          ContainerName: '$(containerName)'
+          BlobPrefix: 'builds/gdc-$(tag).zip'
