@@ -31,6 +31,7 @@ export default function setup(commit: Commit) {
     error => {
       // Request user to authorize more permissions
       if (
+        error.response &&
         error.response.status === 400 &&
         error.response.data &&
         error.response.data.permissionConsentLink
