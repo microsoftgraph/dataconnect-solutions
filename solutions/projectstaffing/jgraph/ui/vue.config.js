@@ -5,15 +5,16 @@ module.exports = {
         target: 'http://localhost:7655/',
         logLevel: 'debug'
       },
-      '/.auth/me': {
-        target: 'https://gdc-jgraph.azurewebsites.net/',
-        logLevel: 'debug'
-      },
+      // Change target field for local development environment. Leaving it empty will result in missing logged in user name
+      // '/.auth/me': {
+      // target: '',
+      // logLevel: 'debug'
+      // },
       '/ws': {
         target: 'http://localhost:7655/',
         ws: true,
         changeOrigin: true,
-        logLevel: 'debug',
+        logLevel: 'debug'
       }
     }
   },
