@@ -10,16 +10,15 @@
        Global Administrator role and multiple manual steps have to be performed during the deployment. We recommend SQL Authentication instead.
      
 
-
 ### Install 
 
 1. Download prebuilt package
 
         mkdir gdc
         cd gdc
-        wget https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/builds/gdc-1.3.0.zip
-        unzip gdc-1.3.0.zip
-        rm gdc-1.3.0.zip
+        wget https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/builds/gdc-1.4.1.zip
+        unzip gdc-1.4.1.zip
+        rm gdc-1.4.1.zip
            
 2. Log into your account using Azure CLI 
 
@@ -29,24 +28,21 @@
   
 3. Run deployment script from the created gdc folder
 
-      Note: you may change the deployment name and the region in the command below. 
+      > Note: you may change the deployment name and the region in the command below. 
       The deployment name is used for naming the Azure resource group.
-      The name of the App Service will be prompted for during the install.
+      The name of the App Service will be prompted for during the installation.
       Ensure you have at least 12 Azure Databricks cores in the location/subscription you deploy.
-      
+   
+    
+      ./install.sh --deployment-name gdctest --location westus --docker-password <docker-registry-password> --debug
 
-    
-        ./install.sh --deployment-name gdctest --location westus --docker-password <docker-registry-password> --debug
-    
-    
-    
 
-Note: Azure CloudShell has default idle timeout of 20 minutes, 
-      so please monitor the install progress to avoid the script being interrupted by Cloud Shell.
-      You'll have to delete the created resource group and start all over!
+> Note: Azure CloudShell has default idle timeout of 20 minutes, 
+      so please monitor the installation progress to avoid the script being interrupted by Cloud Shell.
+      Otherwise, you'll have to delete the created resource group and start all over!
     
     
-After the install completes, a simulated dataset is provisioned in the installed application (it takes 30-45 minutes on the default installed configuration) which can be accessed at:
-    
-        https://<appServiceName>.azurewebsites.net
+After the installation completes, a simulated dataset is provisioned in the installed application.  
+This process takes 30-45 minutes on the default installed configuration, and can be monitored in the Azure DataFactory UI.  
+The application UI can be accessed at `https://<appServiceName>.azurewebsites.net`
 

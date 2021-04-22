@@ -1,21 +1,45 @@
 # Azure Processing
+The `pygraph` module contains pyspark jobs which are meant to be run on an Azure Databricks (ADB) cluster:
++ [mail_enrichment](mail_enrichment_processor.py) - processes mails and extracts relevant data (such as tokens) from it,
++ [profiles_enrichment](profiles_enrichment_processor.py) - processes M365 profiles and extracts specific fields, to be reused within the main portal later,
++ [mail_role_detection](mail_role_detection_taxo.py) - processes mails and leverages FSE (Fast Sentence Embedding) to classify the employee roles.
++ [create_azure_search_index](create_azure_search_index.py) - creates an AzureSearch index (e.g. employees, emails), using a schema file from AZBS provided as argument
+
+In production, these jobs are orchestrated by Azure DataFactory (ADF) pipelines.  
+
+While doing development, the pyspark jobs can be run either:
++ locally - run using sample data locally:
+  + profiles_enrichment (`process_local_job()` instead of `run_spark_job()`),
+  + mail_enrichment (`process_local()` uncommented in `__main__`),
+  + mail_role_detection - use `process_local()`.
++ directly on the ADB cluster, or
++ remotely, from the local environment to a target ADB cluster using `databricks-connect`.
+
+## Set up jobs configuration for Databricks
+The environment specific configuration for each job can be provided via a configurations file.  
+
+For local debugging and execution you should have a configuration file named `config.json`, with the following structure:
+```
+{
+  "SERVICE_PRINCIPAL_SECRET": "[...]"
+}
+```
+
+The following fields need to be filled:
+- `SERVICE_PRINCIPAL_SECRET` - the secret for the `gdc-service` service principal, that is used by all spark jobs to connect to Azure services (AZBS, AzureSql, KeyVault etc) 
+
+> **Make sure not to commit this file** since it will contain sensitive information! Check if the rules from the `.gitignore` file cover your file name.  
+> Only store locally information for non-critical environments, which don't contain sensitive data and which can be easily decommissioned!
 
 
-# Set up Databricks config
-
-You should have multiple config files, similar to the commited [`config_default.json`](./config_default.json). Specifically:
-+ `config.json` - test config
-+ `config_dev.json` - dev config (developer environment)
-+ `config_staging.json` - staging config (staging/client environment)
-
-Jobs like [`mail_enrichment_processor.py`](./mail_enrichment_processor.py) or [`profile_enrichment_processor.py`](./profile_enrichment_processor.py) will run under this [Databricks cluster](https://adb-2527426194246904.4.azuredatabricks.net/?o=2527426194246904#setting/clusters/1002-021455-serfs576/configuration) in the [SparkUI](https://adb-2527426194246904.4.azuredatabricks.net/?o=2527426194246904#setting/clusters/1002-021455-serfs576/sparkUi).
+Jobs like [`mail_enrichment_processor.py`](./mail_enrichment_processor.py) or [`profiles_enrichment_processor.py`](./profiles_enrichment_processor.py) will run on the Databricks cluster,and can be monitored in the cluster's SparkUI.
 
 Be mindful if cluster is active/inactive, in order to:
-+ to minimize load - if cluster is used for upgrade / demo and
++ minimize load - if cluster is used for upgrade / demo
 + TCO - cluster doesn't have to be spun up needlessly, costs should be limited.
 
 
-# Python Environment Setup
+## Python Environment Setup
 Set up your environment, and activate it both in your shell and in your IDE:
 + `conda create --name gdc --file requirements_conda.txt`
 
@@ -29,7 +53,7 @@ Any subsequent installs have to be made in the:
 Note: Latest requirements file has the `smart_open` import bug from gensim patched by upgrading smart_open (`conda update smart_open`). You shouldn't encounter this error unless `gensim` reinstalls the faulty `smart_open` version.
 
 
-# Pyspark / Databricks setup
+## Pyspark / Databricks setup
 Oracle changed the licensing in 2019, so these will not work ([source](https://github.com/Homebrew/homebrew-cask-versions/issues/7253)):
 + `brew cask install java` or
 + `brew install --cask java8`
@@ -42,7 +66,7 @@ Installer links:
 Below steps have been used and tested for Mac OS X Catalina.
 
 
-## Java Setup
+### Java Setup
 In order to allow for multiple versions of java on the same system, we use `jenv`:
 + install - `brew install jenv`
 + append the following to config file (`~/.bashrc` or `~/.zshrc`) and run `source` or restart/open new shell:
@@ -69,7 +93,7 @@ Set JDK needed for Spark:
 + sanity check - `java -version`
 
 
-## Python Setup
+### Python Setup
 Similar to what we did for Java, in this case for Python:
 + install - `brew install pyenv pyenv-virtualenv`
 + append the following to config file (`~/.bashrc` or `~/.zshrc`) and run `source` or restart/open new shell:
@@ -79,8 +103,7 @@ eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 ```
 + check - `pyenv versions`
-+ install - `pyenv install -v 3.7.8` => why `<3.8` ([source](https://stackoverflow.com/questions/58700384/how-to-fix-typeerror-an-integer-is-required-got-type-bytes-error-when-tryin
-))
++ install - `pyenv install -v 3.7.8` => why `<3.8` ([source](https://stackoverflow.com/questions/58700384/how-to-fix-typeerror-an-integer-is-required-got-type-bytes-error-when-tryin))
 + set installed version globally - `pyenv global 3.7.8`
 + sanity check - `pyenv versions`
 
@@ -101,7 +124,7 @@ eval "$(pyenv virtualenv-init -)"
 ```
 
 
-## Spark / Databricks Setup
+### Spark / Databricks Setup
 + install - `brew install apache-spark`
     + usually located in `/usr/local/Cellar/apache-spark/3.0.1/libexec/`
 
@@ -119,7 +142,7 @@ Optional objective:
 + TODO: can use local Spark while `databricks-connect` is installed and configured ?
 
 
-## Finishing setup
+### Finishing setup
 
 Check your PATH:
 + `echo $PATH | tr ":" "\n"`
@@ -133,13 +156,13 @@ Note: ( **VERY IMPORTANT** ) Perform sanity checks for faulty `PATH` or `SPARK_H
 + `~/.zsh_rc`, `~/.zprofile`
 
 Note: Also try to perform sanity checks in a new tab and your IDE of choice:
-+  for `jenv`, `pyenv`, `databricks-connect` (mentioned above).
-+ run `python spark_test.py` and check [SparkUI](https://adb-2527426194246904.4.azuredatabricks.net/login.html?o=2527426194246904#setting/clusters/1002-021455-serfs576/sparkUi).
++ for `jenv`, `pyenv`, `databricks-connect` (mentioned above).
++ run `python spark_test.py` and check the Spark UI
 
 
 ---
 
-# More links:
+## More links:
 + https://docs.oracle.com/javase/8/docs/technotes/guides/install/mac_jdk.html
 + https://medium.com/@chamikakasun/how-to-manage-multiple-java-version-in-macos-e5421345f6d0
 + https://github.com/jenv/jenv/issues/212
