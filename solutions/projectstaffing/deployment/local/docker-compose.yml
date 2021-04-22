@@ -1,0 +1,43 @@
+version: '2.4'
+services:
+  gdc_database:
+    container_name: gdc_database
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: on-failure
+
+    environment:
+      SA_PASSWORD: ${MSSQL_PASSWORD:-password_!23}
+      ACCEPT_EULA: y
+      MSSQL_TCP_PORT: 1433
+    ports:
+      - "1433:1433"
+    networks:
+      - gdc
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+  gdc_database-test:
+    container_name: gdc_database-test
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: on-failure
+
+    environment:
+      SA_PASSWORD: ${MSSQL_PASSWORD:-password_!23}
+      ACCEPT_EULA: y
+      MSSQL_TCP_PORT: 1433
+    ports:
+      - "11433:1433"
+    networks:
+      - gdc
+    volumes:
+      - mssql_test_data:/var/opt/mssql
+
+networks:
+  gdc:
+    driver: bridge
+
+volumes:
+  mssql_data:
+    driver: local
+  mssql_test_data:
+    driver: local
