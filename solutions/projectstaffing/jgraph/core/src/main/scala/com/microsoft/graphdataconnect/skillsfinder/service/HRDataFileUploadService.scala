@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile
 import reactor.core.publisher.Mono
 
 import scala.collection.JavaConverters._
+import scala.compat.java8.FunctionConverters._
 
 @Service
 class HRDataFileUploadService {
@@ -58,10 +59,16 @@ class HRDataFileUploadService {
     val blobServiceClient: BlobServiceClient = new BlobServiceClientBuilder()
       .endpoint(s"https://${demoDataStorageAccountName}.blob.core.windows.net")
       .credential(new TokenCredential {
+
         override def getToken(tokenRequestContext: TokenRequestContext): Mono[AccessToken] = {
-          Mono.just(new AccessToken(accessToken,
-            OffsetDateTime.now().plusDays(10)))
+          Mono.just(new AccessToken(accessToken, OffsetDateTime.MAX))
+            .onErrorMap(
+              ((e: Throwable) => {
+                logger.error("Received an error when accessing  AccessToken Mono for creating BlobServiceClient.", e)
+                e
+              }).asJava)
         }
+
       }).buildClient()
 
     val latestIngestionModeOpt: Option[IngestionMode.Value] = modeSwitchStateService.getIngestionMode
