@@ -250,6 +250,16 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <!--  The relocation is added in order to avoid the error: java.lang.NoSuchMethodError: org.apache.commons.compress.archivers.ArchiveStreamFactory.detect(Ljava/io/InputStream;)Ljava/lang/String;
+                                  This error shows up because Databricks Runtime 6.6 has a dependency on version 1.8.1 of the org.apache.commons:commons-compress library, but the apache tika library (that we are using
+                                  for processing emails) uses org.apache.commons:commons-compress:1.20. By relocating the commons-compress dependency, apache tika can use 1.20 version without interference from Databricks.
+                                  For more info, check the following links: https://forums.databricks.com/questions/28378/trying-to-use-apache-tika-on-databricks.html, https://stackoverflow.com/questions/52505752/spark-2-x-tika-java-lang-nosuchmethoderror-org-apache-commons-compress-archi -->
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.apache.commons.compress</pattern>
+                                    <shadedPattern>org.shaded.apache.commons.compress</shadedPattern>
+                                </relocation>
+                            </relocations>
                             <transformers>
                                 <transformer
                                         implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
