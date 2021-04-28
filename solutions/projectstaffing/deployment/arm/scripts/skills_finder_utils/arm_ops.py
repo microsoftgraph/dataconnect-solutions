@@ -331,9 +331,9 @@ def create_main_arm_parameters(install_config: InstallConfiguration, base_uri: s
             parameters["365Adf-reader.sp.objectId"] = {
                 "value": get_service_principal_object_id(app_id=install_config.m365_reader_service_principal["objectId"])
             }
-    if install_config.gdc_admin_ad_group and "objectId" in install_config.gdc_admin_ad_group:
+    if install_config.gdc_employees_ad_group and "objectId" in install_config.gdc_employees_ad_group:
         parameters['gdc_employees_ad_group_id'] = {
-            "value": install_config.gdc_admin_ad_group['objectId']
+            "value": install_config.gdc_employees_ad_group['objectId']
         }
     if log_analytic_ws_name:
         parameters['logs.workspace.name'] = {
