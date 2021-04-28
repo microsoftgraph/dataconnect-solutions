@@ -50,8 +50,28 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
 
     if not install_config.m365_reader_service_principal:
         print("Creating %s service principal " % "gdc-m365-reader")
+        graph_user_read_all_role = ad_ops.find_graph_user_read_all_role()
+        if not graph_user_read_all_role:
+            raise RuntimeError("Couldn't find 'User.Read.All' permission in 'Microsoft Graph' for your tenant ")
+        graph_mail_read_role = ad_ops.find_graph_mail_read_role()
+        if not graph_mail_read_role:
+            raise RuntimeError("Couldn't find 'Mail.Read' permission in 'Microsoft Graph' for your tenant ")
         m365_reader_sp = ad_ops.get_or_create_service_principal("gdc-m365-reader")
         install_config.m365_reader_service_principal = m365_reader_sp
+        ad_ops.add_service_principal_app_permission(sp_app_id=m365_reader_sp['appId'],
+                                                    api_resource_id=graph_user_read_all_role['appId'],
+                                                    permission_id=graph_user_read_all_role['id'])
+        ad_ops.add_service_principal_app_permission(sp_app_id=m365_reader_sp['appId'],
+                                                    api_resource_id=graph_mail_read_role['appId'],
+                                                    permission_id=graph_mail_read_role['id'])
+
+        try:
+            admin_group_members = ad_ops.get_group_members(group_object_id=install_config.gdc_admin_ad_group["objectId"])
+            for member in admin_group_members:
+                ad_ops.make_user_owner_for_app(user_object_id=member['objectId'], app_id=m365_reader_sp['appId'])
+        except Exception as azError:
+            print("Failed to make members of admin group owners over gdc-m365-reader service principal!")
+            print(azError)
 
     if not install_config.jgraph_aad_app:
         app_registration_name = deployment_name + "-jgraph-aad-web-app"
