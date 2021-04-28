@@ -24,6 +24,7 @@ nltk.download('stopwords')
 from nltk.corpus import stopwords
 from log_analytics_client.logger import LogAnalyticsLogger
 from adal import AuthenticationContext
+from pyspark.sql.types import StructType, StructField, ArrayType, StringType, BooleanType, LongType
 
 stop_words = list(stopwords.words('english'))
 stop_words.extend(
@@ -535,12 +536,46 @@ if __name__ == '__main__':
 
     finalEmployeesDf = None
 
+    email_schema = StructType([StructField("BccRecipients",ArrayType(StructType([StructField("EmailAddress",StructType([StructField("Address",StringType(),True),StructField("Name",StringType(),True)]),True)]),True),True),
+                         StructField("Categories",ArrayType(StringType(),True),True),
+                         StructField("CcRecipients",ArrayType(StructType([StructField("EmailAddress",StructType([StructField("Address",StringType(),True),StructField("Name",StringType(),True)]),True)]),True),True),
+                         StructField("ChangeKey",StringType(),True),
+                         StructField("ConversationId",StringType(),True),
+                         StructField("CreatedDateTime",StringType(),True),
+                         StructField("From",StructType([StructField("EmailAddress",StructType([StructField("Address",StringType(),True),StructField("Name",StringType(),True)]),True)]),True),
+                         StructField("HasAttachments",BooleanType(),True),
+                         StructField("Id",StringType(),True),
+                         StructField("Importance",StringType(),True),
+                         StructField("InternetMessageId",StringType(),True),
+                         StructField("IsDeliveryReceiptRequested",BooleanType(),True),
+                         StructField("IsDraft",BooleanType(),True),
+                         StructField("IsRead",BooleanType(),True),
+                         StructField("IsReadReceiptRequested",BooleanType(),True),
+                         StructField("LastModifiedDateTime",StringType(),True),
+                         StructField("ODataType",StringType(),True),
+                         StructField("ParentFolderId",StringType(),True),
+                         StructField("ReceivedDateTime",StringType(),True),
+                         StructField("ReplyTo",ArrayType(StructType([StructField("EmailAddress",StructType([StructField("Address",StringType(),True),StructField("Name",StringType(),True)]),True)]),True),True),
+                         StructField("Sender",StructType([StructField("EmailAddress",StructType([StructField("Address",StringType(),True),StructField("Name",StringType(),True)]),True)]),True),
+                         StructField("SentDateTime",StringType(),True),
+                         StructField("Subject",StringType(),True),
+                         StructField("ToRecipients",ArrayType(StructType([StructField("EmailAddress",StructType([StructField("Address",StringType(),True),StructField("Name",StringType(),True)]),True)]),True),True),
+                         StructField("UniqueBody",StructType([StructField("Content",StringType(),True),StructField("ContentType",StringType(),True)]),True),
+                         StructField("WebLink",StringType(),True),
+                         StructField("datarow",LongType(),True),
+                         StructField("pagerow",LongType(),True),
+                         StructField("ptenant",StringType(),True),
+                         StructField("puser",StringType(),True),
+                         StructField("pAdditionalInfo",StringType(),True),
+                         StructField("rowinformation",StructType([StructField("isUserSummaryRow",BooleanType(),True),StructField("userHasCompleteData",BooleanType(),True),StructField("userReturnedNoData",BooleanType(),True), StructField("errorInformation",StringType(),True)]),True),
+                         StructField("userrow",LongType(),True)])
+
     for index, json_file_to_process in enumerate(list_of_json_files_from_folder):
         logger.info(f"processing: {json_file_to_process}")
         wasb_file_path = f"abfss://{input_container}@{storage_account_name}.dfs.core.windows.net/{json_file_to_process}"
         logger.info(f"input wasb_file_path: {wasb_file_path}")
 
-        input_df = spark.read.json(wasb_file_path)
+        input_df = spark.read.json(wasb_file_path, schema=email_schema)
 
         # spark_res_rdd = input_df.rdd.mapPartitions(self.process_spark_partitions)  # .map(lambda x: str(x))
 
