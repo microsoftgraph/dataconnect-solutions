@@ -1,0 +1,46 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+- stage: jmeter_test
+  pool:
+    vmImage: 'ubuntu-latest'
+  displayName: Running jmeter tests for SkillsFinder
+  jobs:  
+  - job: run_jmeter_tests
+    displayName: 'Running jmeter test'
+    steps:
+      - task: Bash@3
+        displayName: 'Executing jmeter'
+        inputs:
+          filePath: 'jmeter_scripts/run_test.sh'
+          arguments: 'smoke-test_v01_upd.jmx'
+          workingDirectory: 'jmeter_scripts'
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: 'jmeter_scripts/smoke-test_v01_upd_report'
+          publishLocation: 'pipeline'
+- stage: selenium_test
+  pool:
+    vmImage: 'ubuntu-latest'
+  displayName: Running selenium tests for SkillsFinder
+  jobs:  
+  - job: run_selenium_tests
+    displayName: 'Running selenium test'
+    steps:
+      - task: Bash@3
+        displayName: 'Executing selenium'
+        inputs:
+          filePath: 'selenium/run_tests.sh'
+          workingDirectory: 'selenium'
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: 'selenium/target'
+          publishLocation: 'pipeline'
