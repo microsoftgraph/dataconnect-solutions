@@ -130,6 +130,12 @@
                                     "locations": [
                                         "[parameters('location')]"
                                     ]
+                                },
+                                {
+                                    "service": "Microsoft.Storage",
+                                    "locations": [
+                                        "[parameters('location')]"
+                                    ]
                                 }
                             ],
                             "delegations": [
