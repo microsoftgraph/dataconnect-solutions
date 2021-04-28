@@ -1886,7 +1886,14 @@
                     {
                         "name": "exportEmailsToAzureSearch",
                         "type": "Copy",
-                        "dependsOn": [],
+                        "dependsOn": [
+                            {
+                                "activity": "ThereIsContentToExport",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
                         "policy": {
                             "timeout": "7.00:00:00",
                             "retry": 0,
@@ -2237,6 +2244,53 @@
                                 }
                             }
                         ]
+                    },
+                    {
+                        "name": "ThereIsContentToExport",
+                        "type": "Validation",
+                        "dependsOn": [],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "dataset": {
+                                "referenceName": "EnrichedEmailsForIndexing",
+                                "type": "DatasetReference",
+                                "parameters": {
+                                    "batchTimeBasedSubpath": {
+                                        "value": "@pipeline().parameters.batchTimeBasedSubpath",
+                                        "type": "Expression"
+                                    },
+                                    "azbsContainer": {
+                                        "value": "@pipeline().globalParameters.gdc_emails_azbs_container",
+                                        "type": "Expression"
+                                    }
+                                }
+                            },
+                            "timeout": "0.00:00:05",
+                            "sleep": 2,
+                            "childItems": true
+                        }
+                    },
+                    {
+                        "name": "Do nothing",
+                        "type": "Wait",
+                        "dependsOn": [
+                            {
+                                "activity": "ThereIsContentToExport",
+                                "dependencyConditions": [
+                                    "Failed"
+                                ]
+                            },
+                            {
+                                "activity": "exportEmailsToAzureSearch",
+                                "dependencyConditions": [
+                                    "Skipped"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "waitTimeInSeconds": 1
+                        }
                     }
                 ],
                 "parameters": {
