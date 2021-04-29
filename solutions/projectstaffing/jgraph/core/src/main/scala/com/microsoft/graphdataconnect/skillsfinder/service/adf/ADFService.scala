@@ -11,11 +11,14 @@ import com.microsoft.graphdataconnect.skillsfinder.models.dto.adf.{PipelineRun, 
 import com.microsoft.graphdataconnect.skillsfinder.models.dto.admin.UserToken
 import com.microsoft.graphdataconnect.skillsfinder.utils.FileUtils
 import org.slf4j.{Logger, LoggerFactory}
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Service
 
 @Service
 class ADFService(@Autowired val adfRestClient: AdfRestClient) {
+
+  @Value("${adf.triggers.emailsBackfillTimeSpan}")
+  var emailsBackfillTimeSpan: Int = _
 
   private val triggersDateTimeFormatter = DateTimeFormatter.ISO_INSTANT
 
@@ -102,7 +105,8 @@ class ADFService(@Autowired val adfRestClient: AdfRestClient) {
     val template: JsonTemplate = new JsonTemplate(emailsPipelineBackfillPastWeekTriggerDef)
 
     val endTime = mostRecentDayInThePast6AM
-    val startTime = endTime.minusDays(7)
+    val triggerTimeSpan = if(emailsBackfillTimeSpan < 7) emailsBackfillTimeSpan else 7
+    val startTime = endTime.minusDays(triggerTimeSpan)
 
     val startTimeStr = startTime.format(triggersDateTimeFormatter)
     val endTimeStr = endTime.format(triggersDateTimeFormatter)
@@ -116,20 +120,22 @@ class ADFService(@Autowired val adfRestClient: AdfRestClient) {
 
   private def createEmailsPipelineBackfillFurtherPastTrigger(mostRecentDayInThePast6AM: ZonedDateTime)
                                                             (implicit userToken: UserToken): Unit = {
-    val emailsPipelineBackfillPastWeekTriggerDef: String = FileUtils.readResourceContent("adf_triggers/emails_pipeline_backfill_further_past_trigger.template")
-    val template: JsonTemplate = new JsonTemplate(emailsPipelineBackfillPastWeekTriggerDef)
+    if(emailsBackfillTimeSpan > 7) {
+      val emailsPipelineBackfillPastWeekTriggerDef: String = FileUtils.readResourceContent("adf_triggers/emails_pipeline_backfill_further_past_trigger.template")
+      val template: JsonTemplate = new JsonTemplate(emailsPipelineBackfillPastWeekTriggerDef)
 
-    val startTime = mostRecentDayInThePast6AM.minusYears(10)
-    val endTime = mostRecentDayInThePast6AM.minusDays(7)
+      val startTime = mostRecentDayInThePast6AM.minusDays(emailsBackfillTimeSpan)
+      val endTime = mostRecentDayInThePast6AM.minusDays(7)
 
-    val startTimeStr = startTime.format(triggersDateTimeFormatter)
-    val endTimeStr = endTime.format(triggersDateTimeFormatter)
+      val startTimeStr = startTime.format(triggersDateTimeFormatter)
+      val endTimeStr = endTime.format(triggersDateTimeFormatter)
 
-    template.withVar("startTime", startTimeStr)
-    template.withVar("endTime", endTimeStr)
-    template.withVar("triggerName", ADFTrigger.EMAILS_PIPELINE_BACKFILL_FURTHER_PAST_TRIGGER.triggerName)
+      template.withVar("startTime", startTimeStr)
+      template.withVar("endTime", endTimeStr)
+      template.withVar("triggerName", ADFTrigger.EMAILS_PIPELINE_BACKFILL_FURTHER_PAST_TRIGGER.triggerName)
 
-    adfRestClient.createTrigger(template.prettyString(), ADFTrigger.EMAILS_PIPELINE_BACKFILL_FURTHER_PAST_TRIGGER.triggerName)
+      adfRestClient.createTrigger(template.prettyString(), ADFTrigger.EMAILS_PIPELINE_BACKFILL_FURTHER_PAST_TRIGGER.triggerName)
+    }
   }
 
   private def createInferredRolesPipelineBackfillTrigger(mostRecentDayInThePast6AM: ZonedDateTime)
@@ -279,9 +285,11 @@ class ADFService(@Autowired val adfRestClient: AdfRestClient) {
 
   def createAndStartBackFillFurtherPastEmailTrigger(newIngestionMode: IngestionMode, mostRecentDayInThePast6AM: ZonedDateTime)
                                                    (implicit userToken: UserToken): Unit = {
-    createEmailsPipelineBackfillFurtherPastTrigger(mostRecentDayInThePast6AM)
-    if (newIngestionMode.equals(IngestionMode.Production)) {
-      adfRestClient.startTrigger(ADFTrigger.EMAILS_PIPELINE_BACKFILL_FURTHER_PAST_TRIGGER.triggerName)
+    if(emailsBackfillTimeSpan > 7) {
+      createEmailsPipelineBackfillFurtherPastTrigger(mostRecentDayInThePast6AM)
+      if (newIngestionMode.equals(IngestionMode.Production)) {
+        adfRestClient.startTrigger(ADFTrigger.EMAILS_PIPELINE_BACKFILL_FURTHER_PAST_TRIGGER.triggerName)
+      }
     }
   }
 

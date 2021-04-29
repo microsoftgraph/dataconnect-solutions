@@ -220,6 +220,15 @@
         },
         "gdcAdmins.groupId": {
             "type": "string"
+        },
+        "emails.backfill.time.span": {
+            "type": "int",
+            "defaultValue": 30,
+            "minValue": 1,
+            "maxValue": 3650,
+            "metadata": {
+                "description": "Time span of processed emails from the past. Provide a value between 1 and 3650 days. For larger values, make sure your infrastructure can scale to such high loads"
+            }
         }
     },
     "variables": {
@@ -509,6 +518,9 @@
                     },
                     "gdc_azbs_demodata_storage_account" : {
                         "value": "[parameters('testStorageAccount.name')]"
+                    },
+                    "emails.backfill.time.span": {
+                        "value": "[parameters('emails.backfill.time.span')]"
                     }
                 }
             }
@@ -722,6 +734,9 @@
                     },
                     "pygraph_utils_library.name": {
                         "value": "[parameters('pygraph_utils_library.name')]"
+                    },
+                    "emails.backfill.time.span": {
+                        "value": "[parameters('emails.backfill.time.span')]"
                     }
                 }
             }

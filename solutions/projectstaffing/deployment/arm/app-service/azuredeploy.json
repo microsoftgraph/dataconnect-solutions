@@ -131,6 +131,9 @@
     },
     "gdc_azbs_demodata_storage_account": {
       "type": "string"
+    },
+    "emails.backfill.time.span": {
+      "type": "int"
     }
   },
   "variables": {
@@ -321,6 +324,10 @@
             {
               "name": "DEMO_DATA_STORAGE_ACCOUNT_NAME",
               "value": "[parameters('gdc_azbs_demodata_storage_account')]"
+            },
+            {
+              "name": "EMAILS_BACKFILL_TIME_SPAN",
+              "value": "[parameters('emails.backfill.time.span')]"
             }
           ],
           "connectionStrings": [
