@@ -3,9 +3,9 @@ import json
 import os
 import uuid
 from datetime import date
-from retry import retry
 from time import sleep
 
+from retry import retry
 from skills_finder_utils.az import az_cli
 from skills_finder_utils.common import is_valid_uuid
 from skills_finder_utils.common import make_strong_password
@@ -274,6 +274,10 @@ def find_graph_user_read_all_role():
     graph_app_id = "00000003-0000-0000-c000-000000000000"
     return _find_build_in_role(aad_app_id=graph_app_id, role_name='User.Read.All')
 
+def find_graph_mail_read_role():
+    # az ad sp list --all --filter "displayName eq 'Microsoft Graph'" --query "[].appId"
+    graph_app_id = "00000003-0000-0000-c000-000000000000"
+    return _find_build_in_role(aad_app_id=graph_app_id, role_name='Mail.Read')
 
 def find_graph_user_read_permission():
     # be aware https://go.microsoft.com/fwlink/?linkid=2132805
@@ -299,6 +303,14 @@ def add_service_principal_app_permission(sp_app_id: str, api_resource_id: str, p
     rsp = az_cli("ad app permission add", "--id", sp_app_id,
                  "--api", api_resource_id, "--api-permissions", "%s=Role" % permission_id)
     print(rsp)
+
+@retry(tries=5, delay=1, backoff=2)
+def get_group_members(group_object_id: str):
+    return az_cli("ad group member list --group", group_object_id)
+
+@retry(tries=5, delay=1, backoff=2)
+def make_user_owner_for_app(user_object_id: str, app_id: str):
+    return az_cli("ad app owner add --id", app_id, "--owner-object-id", user_object_id)
 
 
 @retry(tries=5, delay=1, backoff=2)
