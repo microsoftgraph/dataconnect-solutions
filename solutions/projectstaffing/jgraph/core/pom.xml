@@ -8,11 +8,11 @@
     <parent>
         <artifactId>jgraph</artifactId>
         <groupId>com.microsoft.graphdataconnect</groupId>
-        <version>1.4.2</version>
+        <version>1.4.3-SNAPSHOT</version>
     </parent>
 
     <artifactId>jgraph-core</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.3-SNAPSHOT</version>
 
     <scm>
         <url>https://bp-product@dev.azure.com/bp-product/gdc/_git/gdc</url>
