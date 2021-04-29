@@ -1,0 +1,565 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adf.name": {
+      "type": "string",
+      "metadata": {
+        "description": "Data Factory name"
+      },
+      "defaultValue": "gdc-adf5d24af5"
+    },
+    "emails.backfill.time.span": {
+      "type": "int",
+      "defaultValue": 30
+    },
+    "pipeline_start_time": {
+      "type": "string",
+      "defaultValue": "2021-04-01T06:00:00Z"
+    }
+  },
+  "variables": {
+    "factoryId": "[resourceId('Microsoft.DataFactory/factories', parameters('adf.name'))]",
+    "further_past_emails_trigger_time_span": "[if(greater(parameters('emails.backfill.time.span'), 7), parameters('emails.backfill.time.span'), 0)]",
+    "past_week_emails_trigger_time_span": "[if(less(parameters('emails.backfill.time.span'), 7), parameters('emails.backfill.time.span'), 7)]"
+  },
+  "resources": [
+    {
+      "name": "[concat(parameters('adf.name'), '/exportEmailsToAzureSearch')]",
+      "type": "Microsoft.DataFactory/factories/pipelines",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "activities": [
+          {
+            "name": "exportEmailsToAzureSearch",
+            "type": "Copy",
+            "dependsOn": [
+              {
+                "activity": "ThereIsContentToExport",
+                "dependencyConditions": [
+                  "Succeeded"
+                ]
+              }
+            ],
+            "policy": {
+              "timeout": "7.00:00:00",
+              "retry": 0,
+              "retryIntervalInSeconds": 30
+            },
+            "userProperties": [],
+            "typeProperties": {
+              "source": {
+                "type": "JsonSource",
+                "storeSettings": {
+                  "type": "AzureBlobStorageReadSettings",
+                  "recursive": true,
+                  "wildcardFolderPath": {
+                    "value": "@{concat('enriched/', pipeline().parameters.batchTimeBasedSubpath)}",
+                    "type": "Expression"
+                  },
+                  "wildcardFileName": "*.json"
+                },
+                "formatSettings": {
+                  "type": "JsonReadSettings"
+                }
+              },
+              "sink": {
+                "type": "AzureSearchIndexSink",
+                "writeBatchSize": 1000,
+                "writeBehavior": "merge"
+              },
+              "enableStaging": false,
+              "validateDataConsistency": true,
+              "logSettings": {
+                "enableCopyActivityLog": true,
+                "copyActivityLogSettings": {
+                  "logLevel": "Info",
+                  "enableReliableLogging": false
+                },
+                "logLocationSettings": {
+                  "linkedServiceName": {
+                    "referenceName": "blobstorage_linkedservice",
+                    "type": "LinkedServiceReference"
+                  },
+                  "path": {
+                    "value": "@concat('logs/End2EndEmailsPipeline/', pipeline().RunId)",
+                    "type": "Expression"
+                  }
+                }
+              },
+              "translator": {
+                "type": "TabularTranslator",
+                "mappings": [
+                  {
+                    "source": {
+                      "path": "$['Content']"
+                    },
+                    "sink": {
+                      "name": "Content",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['Content_v2']"
+                    },
+                    "sink": {
+                      "name": "Content_v2",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['Date']"
+                    },
+                    "sink": {
+                      "name": "Date",
+                      "type": "DateTimeOffset"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['From']"
+                    },
+                    "sink": {
+                      "name": "From",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['Subject']"
+                    },
+                    "sink": {
+                      "name": "Subject",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['TargetUser']"
+                    },
+                    "sink": {
+                      "name": "TargetUser",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['ToRecipients']"
+                    },
+                    "sink": {
+                      "name": "ToRecipients",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['actors']"
+                    },
+                    "sink": {
+                      "name": "actors",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_data_science']"
+                    },
+                    "sink": {
+                      "name": "de_data_science",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_data_science_mapping']"
+                    },
+                    "sink": {
+                      "name": "de_data_science_mapping",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_facilities']"
+                    },
+                    "sink": {
+                      "name": "de_facilities",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_facilities_mapping']"
+                    },
+                    "sink": {
+                      "name": "de_facilities_mapping",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_finance']"
+                    },
+                    "sink": {
+                      "name": "de_finance",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_finance_mapping']"
+                    },
+                    "sink": {
+                      "name": "de_finance_mapping",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_healthcare']"
+                    },
+                    "sink": {
+                      "name": "de_healthcare",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_healthcare_mapping']"
+                    },
+                    "sink": {
+                      "name": "de_healthcare_mapping",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_human_relations']"
+                    },
+                    "sink": {
+                      "name": "de_human_relations",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_human_relations_mapping']"
+                    },
+                    "sink": {
+                      "name": "de_human_relations_mapping",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_legal']"
+                    },
+                    "sink": {
+                      "name": "de_legal",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_legal_mapping']"
+                    },
+                    "sink": {
+                      "name": "de_legal_mapping",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_oilgas']"
+                    },
+                    "sink": {
+                      "name": "de_oilgas",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_oilgas_mapping']"
+                    },
+                    "sink": {
+                      "name": "de_oilgas_mapping",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_sales_marketing']"
+                    },
+                    "sink": {
+                      "name": "de_sales_marketing",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_sales_marketing_mapping']"
+                    },
+                    "sink": {
+                      "name": "de_sales_marketing_mapping",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_software']"
+                    },
+                    "sink": {
+                      "name": "de_software",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['de_software_mapping']"
+                    },
+                    "sink": {
+                      "name": "de_software_mapping",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['id']"
+                    },
+                    "sink": {
+                      "name": "id",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['internet_message_id']"
+                    },
+                    "sink": {
+                      "name": "internet_message_id",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['lemma_body']"
+                    },
+                    "sink": {
+                      "name": "lemma_body",
+                      "type": "String"
+                    }
+                  },
+                  {
+                    "source": {
+                      "path": "$['mail_id']"
+                    },
+                    "sink": {
+                      "name": "mail_id",
+                      "type": "String"
+                    }
+                  }
+                ]
+              }
+            },
+            "inputs": [
+              {
+                "referenceName": "EnrichedEmailsForIndexing",
+                "type": "DatasetReference",
+                "parameters": {
+                  "batchTimeBasedSubpath": {
+                    "value": "@pipeline().parameters.batchTimeBasedSubpath",
+                    "type": "Expression"
+                  },
+                  "azbsContainer": {
+                    "value": "@pipeline().globalParameters.gdc_emails_azbs_container",
+                    "type": "Expression"
+                  }
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "referenceName": "AzureSearchEmailsIndex",
+                "type": "DatasetReference",
+                "parameters": {
+                  "emailsIndexName": {
+                    "value": "@concat(pipeline().globalParameters.gdc_azure_search_index_prefix,'-emails')",
+                    "type": "Expression"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "name": "ThereIsContentToExport",
+            "type": "Validation",
+            "dependsOn": [],
+            "userProperties": [],
+            "typeProperties": {
+              "dataset": {
+                "referenceName": "EnrichedEmailsForIndexing",
+                "type": "DatasetReference",
+                "parameters": {
+                  "batchTimeBasedSubpath": {
+                    "value": "@pipeline().parameters.batchTimeBasedSubpath",
+                    "type": "Expression"
+                  },
+                  "azbsContainer": {
+                    "value": "@pipeline().globalParameters.gdc_emails_azbs_container",
+                    "type": "Expression"
+                  }
+                }
+              },
+              "timeout": "0.00:00:05",
+              "sleep": 2,
+              "childItems": true
+            }
+          },
+          {
+            "name": "Do nothing",
+            "type": "Wait",
+            "dependsOn": [
+              {
+                "activity": "ThereIsContentToExport",
+                "dependencyConditions": [
+                  "Failed"
+                ]
+              },
+              {
+                "activity": "exportEmailsToAzureSearch",
+                "dependencyConditions": [
+                  "Skipped"
+                ]
+              }
+            ],
+            "userProperties": [],
+            "typeProperties": {
+              "waitTimeInSeconds": 1
+            }
+          }
+        ],
+        "parameters": {
+          "batchTimeBasedSubpath": {
+            "type": "string"
+          }
+        },
+        "folder": {
+          "name": "M365Emails/Components"
+        },
+        "annotations": []
+      },
+      "dependsOn": []
+    },
+    {
+      "condition": "[not(equals(variables('further_past_emails_trigger_time_span'),0))]",
+      "name": "[concat(parameters('adf.name'), '/emails_pipeline_backfill_further_past_trigger')]",
+      "type": "Microsoft.DataFactory/factories/triggers",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "runtimeState": "Stopped",
+        "pipeline": {
+          "pipelineReference": {
+            "referenceName": "End2EndEmailsPipeline",
+            "type": "PipelineReference"
+          },
+          "parameters": {
+            "batchStartTime": "@trigger().outputs.windowStartTime",
+            "batchEndTime": "@trigger().outputs.windowEndTime"
+          }
+        },
+        "type": "TumblingWindowTrigger",
+        "typeProperties": {
+          "frequency": "Hour",
+          "interval": 24,
+          "startTime": "[dateTimeAdd(parameters('pipeline_start_time'), concat('-P',string(variables('further_past_emails_trigger_time_span')) ,'D'))]",
+          "endTime": "[dateTimeAdd(parameters('pipeline_start_time'), '-P7D')]",
+          "delay": "00:00:00",
+          "maxConcurrency": 10,
+          "retryPolicy": {
+            "count": 3,
+            "intervalInSeconds": 86400
+          }
+        }
+      },
+      "dependsOn": []
+    },
+    {
+      "name": "[concat(parameters('adf.name'), '/emails_pipeline_backfill_past_week_trigger')]",
+      "type": "Microsoft.DataFactory/factories/triggers",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "runtimeState": "Started",
+        "pipeline": {
+          "pipelineReference": {
+            "referenceName": "End2EndEmailsPipeline",
+            "type": "PipelineReference"
+          },
+          "parameters": {
+            "batchStartTime": "@trigger().outputs.windowStartTime",
+            "batchEndTime": "@trigger().outputs.windowEndTime"
+          }
+        },
+        "type": "TumblingWindowTrigger",
+        "typeProperties": {
+          "frequency": "Hour",
+          "interval": 24,
+          "startTime": "[dateTimeAdd(parameters('pipeline_start_time'), concat('-P',string(variables('past_week_emails_trigger_time_span')) ,'D'))]",
+          "endTime": "[parameters('pipeline_start_time')]",
+          "delay": "00:00:00",
+          "maxConcurrency": 4,
+          "retryPolicy": {
+            "count": 3,
+            "intervalInSeconds": 86400
+          }
+        }
+      },
+      "dependsOn": []
+    },
+    {
+      "name": "[concat(parameters('adf.name'), '/inferred_roles_pipeline_backfill_trigger')]",
+      "type": "Microsoft.DataFactory/factories/triggers",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "runtimeState": "Started",
+        "pipeline": {
+          "pipelineReference": {
+            "referenceName": "End2EndMailsToRolesPipeline",
+            "type": "PipelineReference"
+          },
+          "parameters": {}
+        },
+        "type": "TumblingWindowTrigger",
+        "typeProperties": {
+          "frequency": "Hour",
+          "interval": 24,
+          "startTime": "[dateTimeAdd(parameters('pipeline_start_time'), '-P1D')]",
+          "endTime": "[parameters('pipeline_start_time')]",
+          "delay": "00:00:00",
+          "maxConcurrency": 1,
+          "retryPolicy": {
+            "count": 3,
+            "intervalInSeconds": 86400
+          },
+          "dependsOn": [
+            {
+              "type": "TumblingWindowTriggerDependencyReference",
+              "size": "7.00:00:00",
+              "offset": "-6.00:00:00",
+              "referenceTrigger": {
+                "referenceName": "emails_pipeline_backfill_past_week_trigger",
+                "type": "TriggerReference"
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+          "[concat(variables('factoryId'), '/triggers/emails_pipeline_backfill_past_week_trigger')]"
+      ]
+    }
+  ]
+}
