@@ -311,6 +311,13 @@ class InstallConfiguration:
                 return default_value
         return None
 
+    def _get_parameter_attribute(self, param_name: str, attribute_name: str):
+        param_def = self._arm_params.get(param_name)
+        if param_def and attribute_name in param_def:
+            attribute_value = param_def[attribute_name]
+            return attribute_value
+        return None
+
     def _param_description(self, param_name: str):
         def_param = self._arm_params.get(param_name)
         if def_param and "metadata" in def_param:
@@ -352,6 +359,16 @@ class InstallConfiguration:
                         entered_value = None
             else:
                 entered_value = input(msg)
+                if isinstance(def_value, int) and entered_value:
+                    entered_value = int(entered_value)
+                    # check if the int value is contained in the defined limits, if present
+                    min_value = self._get_parameter_attribute(param_name=param_name, attribute_name="minValue")
+                    if min_value and entered_value < min_value:
+                        entered_value = None
+                    max_value = self._get_parameter_attribute(param_name=param_name, attribute_name="maxValue")
+                    if max_value and entered_value > max_value:
+                        entered_value = None
+
                 if validator_func:
                     if not validator_func(entered_value):
                         entered_value = None

@@ -64,10 +64,15 @@
         },
         "pygraph_utils_library.name": {
             "type": "string"
+        },
+        "emails.backfill.time.span": {
+            "type": "int"
         }
     },
     "variables": {
-        "factoryId": "[resourceId('Microsoft.DataFactory/factories', parameters('adf.name'))]"
+        "factoryId": "[resourceId('Microsoft.DataFactory/factories', parameters('adf.name'))]",
+        "further_past_emails_trigger_time_span": "[if(greater(parameters('emails.backfill.time.span'), 7), parameters('emails.backfill.time.span'), 0)]",
+        "past_week_emails_trigger_time_span": "[if(less(parameters('emails.backfill.time.span'), 7), parameters('emails.backfill.time.span'), 7)]"
     },
     "resources": [
         {
@@ -5345,6 +5350,7 @@
             ]
         },
         {
+            "condition": "[not(equals(variables('further_past_emails_trigger_time_span'),0))]",
             "name": "[concat(parameters('adf.name'), '/emails_pipeline_backfill_further_past_trigger')]",
             "type": "Microsoft.DataFactory/factories/triggers",
             "apiVersion": "2018-06-01",
@@ -5365,8 +5371,8 @@
                 "typeProperties": {
                     "frequency": "Hour",
                     "interval": 24,
-                    "startTime": "[dateTimeAdd(parameters('pipeline_start_time'), '-P10Y')]",
-                    "endTime": "[parameters('pipeline_start_time')]",
+                    "startTime": "[dateTimeAdd(parameters('pipeline_start_time'), concat('-P',string(variables('further_past_emails_trigger_time_span')) ,'D'))]",
+                    "endTime": "[dateTimeAdd(parameters('pipeline_start_time'), '-P7D')]",
                     "delay": "00:00:00",
                     "maxConcurrency": 10,
                     "retryPolicy": {
@@ -5399,7 +5405,7 @@
                 "typeProperties": {
                     "frequency": "Hour",
                     "interval": 24,
-                    "startTime": "[dateTimeAdd(parameters('pipeline_start_time'), '-P7D')]",
+                    "startTime": "[dateTimeAdd(parameters('pipeline_start_time'), concat('-P',string(variables('past_week_emails_trigger_time_span')) ,'D'))]",
                     "endTime": "[parameters('pipeline_start_time')]",
                     "delay": "00:00:00",
                     "maxConcurrency": 4,
