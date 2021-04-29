@@ -6,7 +6,6 @@ employees indexes.
 - mail_role_detection_taxo.py
 
 Profile enrichment scripts are using the following steps:
-
 - the data is being read from the azure sql database
 - for the content,skills,about_me,topics the following steps are being used:
     - the content is being tokenized, and the stopwords are being removed
@@ -16,7 +15,7 @@ Profile enrichment scripts are using the following steps:
         - if the term is being found, the associated words are being retrieved
         - for the corresponding domain we collect the associated words
 
-The same steps are being used for the mail processing.
+The same steps are being used for the mail processing, except here the input data is read from AZBS.
 
 The output of the processing pipeline will contain the original fields plus associated de_ _domain_ fields.
 
@@ -140,15 +139,16 @@ management:design,leadership,area,engineering,projects
 
 ------------
 
-Role detection pipeline is making use of a custom model. For each user present in the system, all its mails are being
-aggregated.
+**Role Inference**
+
+The role detection pipeline is making use of a custom model. 
+For each user present in the system, all their mails are being aggregated.
 
 For each mail belonging to a user:
-
 - the mail is being split in fragments.
 - for each fragment a role (and an associated score) is being assigned to that fragment
 - once the roles were collected for the mail content:
-- we extract the most common role,the role with the highest score
+- we extract the most common role, the role with the highest score
 - all this information is computed again after processing all the mails for the given user
     
 
