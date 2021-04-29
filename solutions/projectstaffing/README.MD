@@ -14,7 +14,8 @@ The following data sources are used:
    - it is meant to be complementary to the data obtained from M365 (Graph Data Connect)
    - more details can be found in the [HR Data documentation](./docs/HR_Data.md)
    
-The ADF pipelines process the data from these sources using mainly Azure Databricks (ADB) jobs written either in scala or spark.  
+The [ADF pipelines](docs/AzureDataFactory.MD) process the data from these sources using mainly Azure Databricks (ADB) 
+jobs written either in scala or spark. The pipelines are orchestrated by [ADF triggers](docs/ADF_trigger_creation_policy.md).  
 The resulting data is written in AzureSQL and/or in Azure Cognitive Search. Intermediate data is also written in AZBS.  
 Sensitive data is stored in Azure KeyVault.  
 Application logs and ADB jobs logs are also sent to Azure Log Analytics.  
