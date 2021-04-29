@@ -5,7 +5,7 @@
     <parent>
         <artifactId>jgraph</artifactId>
         <groupId>com.microsoft.graphdataconnect</groupId>
-        <version>1.4.2-SNAPSHOT</version>
+        <version>1.4.2</version>
     </parent>
     <artifactId>hr-data</artifactId>
     <modelVersion>4.0.0</modelVersion>
