@@ -10,12 +10,14 @@ The following steps must be performed in order:
         - python script `mail_role_detection_taxo.py`
 
 2. Azure Data Factory updates
+    - Delete  `inferred_roles_pipeline_backfill_trigger`, `emails_pipeline_backfill_past_week_trigger` and `further_past_emails_trigger_time_span` before 
+    executing the next steps. This can be done from Azure Data Factory UI (Manage -> Triggers).
     - Update ADF pipelines based on the ARM template file (`ADF_update_1_4_1_to_1_4_2.json`)
         - import the provided ARM template json file into ADF (ARM Template -> Import ARM Template -> Build your own template in the editor -> paste provided content)
         - adapt the parameters in the template:
             - `adf.name`- must match the name of the existing ADF resource
             - `pipeline_start_time`- must be set to most recent 6AM UTC date that is in the past
-            - `emails.backfill.time.span-: a value between 1 and 3650 which represents the time span for which the emails will be processed
+            - `emails.backfill.time.span`- a value between 1 and 3650 which represents the time span for which the emails will be processed
     
     - The value of the `gdc_employees_group_id` ADF global parameter has to be changed to the value of the object id of the `GDC Employees` group. The change can be
     done from the Azure Portal. Follow the steps below in order to make the necessary change:

@@ -517,6 +517,49 @@
         }
       },
       "dependsOn": []
+    },
+    {
+      "name": "[concat(parameters('adf.name'), '/inferred_roles_pipeline_backfill_trigger')]",
+      "type": "Microsoft.DataFactory/factories/triggers",
+      "apiVersion": "2018-06-01",
+      "properties": {
+        "annotations": [],
+        "runtimeState": "Started",
+        "pipeline": {
+          "pipelineReference": {
+            "referenceName": "End2EndMailsToRolesPipeline",
+            "type": "PipelineReference"
+          },
+          "parameters": {}
+        },
+        "type": "TumblingWindowTrigger",
+        "typeProperties": {
+          "frequency": "Hour",
+          "interval": 24,
+          "startTime": "[dateTimeAdd(parameters('pipeline_start_time'), '-P1D')]",
+          "endTime": "[parameters('pipeline_start_time')]",
+          "delay": "00:00:00",
+          "maxConcurrency": 1,
+          "retryPolicy": {
+            "count": 3,
+            "intervalInSeconds": 86400
+          },
+          "dependsOn": [
+            {
+              "type": "TumblingWindowTriggerDependencyReference",
+              "size": "7.00:00:00",
+              "offset": "-6.00:00:00",
+              "referenceTrigger": {
+                "referenceName": "emails_pipeline_backfill_past_week_trigger",
+                "type": "TriggerReference"
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+          "[concat(variables('factoryId'), '/triggers/emails_pipeline_backfill_past_week_trigger')]"
+      ]
     }
   ]
 }
