@@ -1,0 +1,57 @@
+﻿@model WhoKnowWho.Models.Correspondence
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Search";
+}
+
+<style>
+    img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        height: 50%;
+        width: 50%;
+    }
+</style>
+
+<div>
+    <br />
+    <img src="~/Images/SocialGraph.png"/>
+</div>
+
+<div class="text-center">
+
+    <h2>Who Knows Who for Office 365</h2>
+    <h4>By Contoso</h4>
+
+    <h3>Leverage your organization's social network to find connections to people and business</h3>
+</div>
+
+<br />
+
+@using (Html.BeginForm("Search", "Correspondence", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="search-windows text-center">
+        <div>
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "search-windows", placeholder = @ViewBag.SearchSuggestions, value = "@(ViewBag.SampleUser ?? String.Empty)" } })
+            <button type="submit" class="search-windows" />
+        </div>
+        <div>
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/Scripts/search.js")
+}
+
+

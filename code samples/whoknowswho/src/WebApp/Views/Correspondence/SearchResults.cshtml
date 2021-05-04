@@ -1,0 +1,39 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model IEnumerable<WhoKnowWho.Models.Correspondence>
+
+@{
+    ViewBag.Title = "Search Results";
+}
+
+<h2>Colleagues who know @ViewBag.SearchEmail:</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Closeness)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Closeness)
+            </td>
+        </tr>
+    }
+</table>
+
+<p>
+    @Html.ActionLink("Search Again", "Search")
+</p>

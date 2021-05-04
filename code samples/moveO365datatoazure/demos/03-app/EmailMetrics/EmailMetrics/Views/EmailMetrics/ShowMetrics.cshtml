@@ -1,0 +1,26 @@
+﻿@* Copyright (c) Microsoft Corporation. All rights reserved. *@
+@* Licensed under the MIT license. *@
+
+@model IEnumerable<EmailMetrics.Models.EmailMetric>
+
+@{
+    ViewBag.Title = "ShowMetrics";
+}
+
+<h2>Email Metrics</h2>
+
+<table class="table">
+    <tr>
+        <th>Sender</th>
+        <th>Number of Recipients</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Email)</td>
+            <td>@Html.DisplayFor(modelItem => item.RecipientsToEmail)</td>
+        </tr>
+    }
+
+</table>
