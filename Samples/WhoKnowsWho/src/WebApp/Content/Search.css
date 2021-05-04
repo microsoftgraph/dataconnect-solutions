@@ -1,0 +1,36 @@
+﻿div.search-windows {
+    font-size: 0; /* no gaps between controls */
+}
+
+input.search-windows {
+	background: none repeat scroll 0 0 #fff;
+	border: 2px solid #00c0ff;
+	height: 38px;
+    font-size: 20px;
+	margin: 0 0;
+    padding: 0 0;
+	transition: background 0.3s ease-in-out 0s;
+    width: 45%;
+	max-width: 500px;
+    vertical-align: middle;
+    text-indent: 5px;
+}
+
+button.search-windows {
+	background: url("/Images/Search.png") no-repeat scroll center center;
+    background-size: 100%; /* To fill the dimensions of container (button), or */
+    background-size: 38px auto; /* to specify dimensions explicitly */
+	cursor: pointer;
+	height: 38px;
+	width: 38px;
+	text-indent: -99999em;
+	transition: background 0.3s ease-in-out 0s;
+	border: 0px;
+    padding: 0 0;
+    margin: 0 0;
+    vertical-align: middle;
+}
+
+button:hover.search-windows {
+	background-color:#000;
+}

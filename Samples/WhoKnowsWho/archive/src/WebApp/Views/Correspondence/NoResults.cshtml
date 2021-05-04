@@ -1,0 +1,13 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Search Results";
+}
+
+<h2>None of your collegues seem to know @ViewBag.SearchEmail</h2>
+
+<p>
+    @Html.ActionLink("Search Again", "Search")
+</p>
