@@ -42,17 +42,17 @@ In this step you will ensure that two users in your Office 365 tenant have the *
 1. Login using an account with global administrator rights to your Azure and Office 365 tenants.
 1. Select **Azure Active Directory** (Azure AD) from the sidebar navigation or using the search bar:
 
-    ![Screenshot selecting Azure AD](./Images/aad-user-setup-01.png)
+    ![Screenshot selecting Azure AD](./images/aad-user-setup-01.png)
 
 1. On the Azure AD Overview page, select **Users** from the **Manage** section of the menu:
 
-    ![Screenshot of the Users menu in Azure AD](./Images/aad-user-setup-02.png)
+    ![Screenshot of the Users menu in Azure AD](./images/aad-user-setup-02.png)
 
 1. In the list of **All Users**, identify a user you will use in this lab that you have access to.
     1. Select the user by selecting their name.
     1. In the sidebar navigation menu, select **Assigned roles**.
 
-        ![Screenshot of the Users menu in Azure AD](./Images/aad-user-setup-03.png)
+        ![Screenshot of the Users menu in Azure AD](./images/aad-user-setup-03.png)
 
     1. If the role **Global administrator** is not in the list of roles for the user:
         1. Select **Add assignment** button.
@@ -70,15 +70,15 @@ In this step you will setup your Office 365 tenant to enable usage of Microsoft 
 
     - **Type**: Mail-enabled security
 
-    ![Screenshot of creating a new mail-enabled security group](./Images/m365-group-setup-01.png)
+    ![Screenshot of creating a new mail-enabled security group](./images/m365-group-setup-01.png)
 
     - **Name**: Consent Request Approvers
 
-    ![Screenshot of creating a new mail-enabled security group named Consent Request Approvers](./Images/m365-group-setup-02.png)
+    ![Screenshot of creating a new mail-enabled security group named Consent Request Approvers](./images/m365-group-setup-02.png)
 
     - **Email Prefix**: consentrequestapprovers
 
-    ![Screenshot of creating a new mail-enabled security group named with email prefix consentrequestapprovers](./Images/m365-group-setup-03.png)
+    ![Screenshot of creating a new mail-enabled security group named with email prefix consentrequestapprovers](./images/m365-group-setup-03.png)
 
 1. **It can take up to an hour before the newly created group shows up in the list**. Once the group has been created, select it.
 
@@ -94,7 +94,7 @@ In this step you will enable the Microsoft Graph data connect service on your Of
 1. While you are still logged into the Microsoft 365 Admin Portal, select the **Settings > Org settings** menu item.
 1. Select the **Microsoft Graph data connect** service.
 
-    ![Screenshot of the Managed access to Microsoft Graph data connect settings](./Images/o365-admin.png)
+    ![Screenshot of the Managed access to Microsoft Graph data connect settings](./images/o365-admin.png)
 
 1. Enable the toggle button at the top of the dialog to **Turn Microsoft Graph data connect on or off for your entire organization.**
 1. Enter **Consent Request Approvers** (*or the name of the group you created previously*) in the **Group of users to make approval decisions** and select **Save**.
@@ -115,7 +115,7 @@ The first step is to create an Azure AD application that will be used as the sec
 1. On the Azure AD Overview page, select **App registrations** from the **Manage** section of the menu.
 1. Select the **New application registration** button:
 
-    ![Screenshot of the list of app registrations page in the Azure portal](./Images/aad-app-setup-01.png)
+    ![Screenshot of the list of app registrations page in the Azure portal](./images/aad-app-setup-01.png)
 
 1. Use the following values to create a new Azure AD application and select **Register**:
 
@@ -130,7 +130,7 @@ The first step is to create an Azure AD application that will be used as the sec
 
     You can choose different values for **Description** and **Expires** if you like, but ensure you keep a copy of the name and the hashed key after it is saved as the hashed value will never be shown again and you will need to create a new key as it is needed later in the lab.
 
-    ![Screenshot of creating a password for an Azure AD application](./Images/aad-app-setup-03.png)
+    ![Screenshot of creating a password for an Azure AD application](./images/aad-app-setup-03.png)
 
     This will be referenced as the *service principal key*.
 
@@ -159,7 +159,7 @@ In this step you will create an Azure Storage account where Microsoft Graph data
     1. Select the Azure Storage account
     1. In the sidebar menu, select **Access control (IAM)**
 
-        ![Screenshot of the Azure Storage permissions](./Images/azstorage-config-01.png)
+        ![Screenshot of the Azure Storage permissions](./images/azstorage-config-01.png)
 
     1. Select the **Add** button in the **Add a role assignment** block.
     1. Use the following values to find the application you previously selected to grant it the **Storage Blob Data Contributor** role, then select **Save**:
@@ -193,44 +193,44 @@ The next step is to use the Azure Data Factory to create a pipeline to extract t
     - **Version**: V2
     - **Location**: *pick an Azure region in the same region as your Office 365 region*
 
-    ![Screenshot creating an Azure Data Factory](./Images/adfv2-setup-01.png)
+    ![Screenshot creating an Azure Data Factory](./images/adfv2-setup-01.png)
 
 1. Once the Azure Data Factory resource is created, select the **Author & Monitor** tile to launch the Azure Data Factory full screen editor.
 
-    ![Screenshot of the Azure Data Factory](./Images/adfv2-setup-02.png)
+    ![Screenshot of the Azure Data Factory](./images/adfv2-setup-02.png)
 
 1. Switch from the **Overview** to the **Manage** experience by selecting it from the left-hand navigation:
 
-    ![Screenshot of the Azure Data Factory menu](./Images/adf-01.png)
+    ![Screenshot of the Azure Data Factory menu](./images/adf-01.png)
 
 1. [Optional] By default, the Azure Data Factory will use an *Integration Runtime* that is auto-resolving the region. As the Microsoft Graph Data Connect requires that your source and destination, and integration runtime to exist in the same Office 365 region, it is recommended that you create a new Integration Runtime with a fixed region.
 
     1. Select **Integration runtimes** > **New**.
 
-        ![Screenshot of the Integration Runtime Setup 1](./Images/adf-02.png)
+        ![Screenshot of the Integration Runtime Setup 1](./images/adf-02.png)
 
     1. Select **Azure, Self-Hosted** and select **Continue**.
 
-        ![Screenshot of the Integration Runtime Setup 2](./Images/adf-03.png)
+        ![Screenshot of the Integration Runtime Setup 2](./images/adf-03.png)
 
     1. Select **Azure** for network environment and select **Continue**.
 
-        ![Screenshot of the Integration Runtime Setup 3](./Images/adf-04.png)
+        ![Screenshot of the Integration Runtime Setup 3](./images/adf-04.png)
 
     1. Use the following details to complete the form on the final screen and then select **Create**:
         - **Name**: *name of your integration runtime*
         - **Description**: *enter a description*
         - **Region**: *select the region that matches your Office 365 region*
 
-        ![Screenshot of the Integration Runtime Setup 4](./Images/adf-05.png)
+        ![Screenshot of the Integration Runtime Setup 4](./images/adf-05.png)
 
 1. Switch from the **Manage** to the **Author** experience by selecting it from the left-hand navigation and create a new pipeline by selecting the plus icon, then **pipeline**:
 
-    ![Screenshot of the Azure Data Factory menu](./Images/adf-06.png)
+    ![Screenshot of the Azure Data Factory menu](./images/adf-06.png)
 
     1. Drag the **Copy Data** activity from the **Move & Transform** section onto the design surface:
 
-        ![Screenshot of the Azure Data Factory menu](./Images/adfv2-setup-05.png)
+        ![Screenshot of the Azure Data Factory menu](./images/adfv2-setup-05.png)
 
     1. Select the activity in the designer.
     1. In the activity editor pane below the designer, select the **Source** tab, then select **New**.
@@ -240,11 +240,11 @@ The next step is to use the Azure Data Factory to create a pipeline to extract t
 
         > NOTE: If you created a dedicated Integration Runtime, select it in the **Connect via integration runtime** dropdown.
 
-        ![Screenshot creating a new Office 365 connector in Azure Data Factory](./Images/adfv2-setup-06.png)
+        ![Screenshot creating a new Office 365 connector in Azure Data Factory](./images/adfv2-setup-06.png)
 
     1. After creating the Office 365 connection, for the **Table** field, select **BasicDataSet_v0.Message_v0**.
 
-        ![Screenshot configuring the Office 365 connector in Azure Data Factory](./Images/adf-09.png)
+        ![Screenshot configuring the Office 365 connector in Azure Data Factory](./images/adf-09.png)
 
     1. Switch from **Office365Table** to **Pipeline > Source**. Use the following values for the **Date filter**.
         - **Column Name**: CreatedDateTime
@@ -253,7 +253,7 @@ The next step is to use the Azure Data Factory to create a pipeline to extract t
 
     1. Select the **Schema** tab and then select **Import Schema**.
 
-        ![Screenshot configuring the Office 365 connector in Azure Data Factory](./Images/adf-07.png)
+        ![Screenshot configuring the Office 365 connector in Azure Data Factory](./images/adf-07.png)
 
     1. With the *source* configured for your **copy data** activity, now configure the *sink*, or the location where data will be stored.
 
@@ -261,7 +261,7 @@ The next step is to use the Azure Data Factory to create a pipeline to extract t
 
     1. Select the **copy data** activity, then select the **sink** tab:
 
-        ![Screenshot of the Azure Data Factory designer](./Images/adfv2-setup-08.png)
+        ![Screenshot of the Azure Data Factory designer](./images/adfv2-setup-08.png)
 
     1. Select the **New** button, select **Azure Blob Storage**, and then select the **Continue** button.
     1. Select **Binary** as the format for the data and then select the **Continue** button.
@@ -277,14 +277,14 @@ The next step is to use the Azure Data Factory to create a pipeline to extract t
 
             > NOTE: If you created a dedicated Integration Runtime, select it in the **Connect via integration runtime** dropdown.
 
-            ![Screenshot of creating a new linked service](./Images/adfv2-setup-09.png)
+            ![Screenshot of creating a new linked service](./images/adfv2-setup-09.png)
 
         1. Next to the **File path** field, select **Browse**.
         1. Select the name of the storage container you created previously.
         1. Ensure the **File format** is set to **JSON format**.
         1. Set the **File pattern** to **Set of objects**.
 
-            ![Screenshot of the Azure Storage blob linked service](./Images/adfv2-setup-10.png)
+            ![Screenshot of the Azure Storage blob linked service](./images/adfv2-setup-10.png)
 
 1. With the pipeline created, select the **Validate All** button at the top of the designer.
 1. After validating (*and fixing any issues that were found*), select the **Publish All** button at the top of the designer.
@@ -297,25 +297,25 @@ With the pipeline created, now it's time to execute it.
 
 1. In the Azure Data Factory designer, with the pipeline open, select **Add trigger > Trigger Now**:
 
-    ![Screenshot starting a job](./Images/adfv2-run-01.png)
+    ![Screenshot starting a job](./images/adfv2-run-01.png)
 
 1. After starting the job, from the sidebar menu, select **Monitor** to view current running jobs:
 
-    ![Screenshot of Azure Data Factory's Monitor screen](./Images/adfv2-run-02.png)
+    ![Screenshot of Azure Data Factory's Monitor screen](./images/adfv2-run-02.png)
 
 1. Locate the pipeline run you just started in the list. In the **Actions** column, select the **View Activity Runs** icon:
 
-    ![Screenshot of all pipeline runs](./Images/adfv2-run-03.png)
+    ![Screenshot of all pipeline runs](./images/adfv2-run-03.png)
 
 1. On the **Activity Runs** screen, you will see a list of all the activities that are running in this pipeline. Our pipeline only  has one activity that should show as currently *In Progress*.
 
-    ![Screenshot of activity runs for the selected pipeline](./Images/adfv2-run-04.png)
+    ![Screenshot of activity runs for the selected pipeline](./images/adfv2-run-04.png)
 
     While the status may show as *In Progress*, the request may be paused internally as the request for access to the data in Office 365 may need to be approved. You can see if this is the case by selecting the **Details** icon in the **Actions** column.
 
 1. In the **Details** screen, look for the status of the pipeline activity as highlighted in the following image. In this case you can see it is in a state of **RequestingConsent**:
 
-    ![Screenshot of activity run status](./Images/adfv2-run-05.png)
+    ![Screenshot of activity run status](./images/adfv2-run-05.png)
 
     At this point, the activity run is internally paused until someone manually approves the consent request.
 
@@ -328,7 +328,7 @@ With the pipeline created, now it's time to execute it.
 1. Select a pending **Data Access Request**.
 1. In the **Data Access Request** callout, select the **Approve** button.
 
-    ![Screenshot showing an approved data access reqest in the Microsoft 365 Admin Center](./Images/adfv2-run-09.png)
+    ![Screenshot showing an approved data access reqest in the Microsoft 365 Admin Center](./images/adfv2-run-09.png)
 
 ### Approve Office 365 Consent Request - via Windows PowerShell
 
@@ -369,7 +369,7 @@ In this step you will use Exchange Online PowerShell to find data requests that 
 
     Examine the list of data access requests returned. In the following image, notice there are two pending requests:
 
-    ![Screenshot of pending data access requests](./Images/adfv2-run-06.png)
+    ![Screenshot of pending data access requests](./images/adfv2-run-06.png)
 
 1. Approve a data access returned in the previous step by copying the **Identity** GUID of a request by executing the following PowerShell:
 
@@ -381,11 +381,11 @@ In this step you will use Exchange Online PowerShell to find data requests that 
 
 1. After a few moments, you should see the status page for the activity run update to show it is now extracting data:
 
-    ![Screenshot of activity run status](./Images/adfv2-run-07.png)
+    ![Screenshot of activity run status](./images/adfv2-run-07.png)
 
 This process of extracting the data can take some time depending on the size of your Office 365 tenant as shown in the following example:
 
-![Screenshot of pipeline successful runs](./Images/adfv2-run-08.png)
+![Screenshot of pipeline successful runs](./images/adfv2-run-08.png)
 
 ### Verify data extracted from Office 365 to Azure Storage Blob
 
@@ -398,7 +398,7 @@ Once the pipeline completes, verify data has been extracted to the Azure Storage
 1. On the Azure Storage account blade, select **Blobs** from the sidebar menu.
 1. Select the container created previously in this lab that you configured the Azure Data Factory pipeline as the sink for the extracted data. You should see data in this container now:
 
-    ![Screenshot of extracted data in Azure Storage blob](./Images/azstorage-raw-data.png)
+    ![Screenshot of extracted data in Azure Storage blob](./images/azstorage-raw-data.png)
 
 <a name="exercise3"></a>
 
@@ -412,7 +412,7 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
     1. Select **ASP.NET Web Application (.NET Framework)**.
     1. Enter **EmailMetrics** for the Name of the project.
 
-        ![Visual Studio 2017 create new project dialog](./Images/vs-newproj-01.png)
+        ![Visual Studio 2017 create new project dialog](./images/vs-newproj-01.png)
 
         > Note: Ensure that you enter the exact same name for the Visual Studio Project that is specified in these lab instructions. The Visual Studio Project name becomes part of the namespace in the code. The code inside these instructions depends on the namespace matching the Visual Studio Project name specified in these instructions. If you use a different project name the code will not compile unless you adjust all the namespaces to match the Visual Studio Project name you enter when you create the project.
 
@@ -420,7 +420,7 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
 1. Add and configure Azure Storage as a connected service:
     1. In the **Solution Explorer** tool window, right-click the **Connected Services** node and select **Add Connected Service**.
 
-        ![Screenshot adding a connected service to the project](./Images/vs-connectedService-01.png)
+        ![Screenshot adding a connected service to the project](./images/vs-connectedService-01.png)
 
     1. On the **Connected Services** dialog, select **Cloud Storage with Azure Storage**.
     1. On the **Azure Storage** Dialog, select the storage account where you exported the data to in the previous exercise and select **Add**.
@@ -440,11 +440,11 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
 1. Create a new controller that will calculate and display the results of processing the emails exported in the previous exercise.
     1. Right-click the **Controllers** folder and select **Add > Controller**:
 
-        ![Screenshot of adding a new MVC controller](./Images/vs-newcontroller-01.png)
+        ![Screenshot of adding a new MVC controller](./images/vs-newcontroller-01.png)
 
     1. In the **Add Scaffold** dialog, select **MVC 5 Controller - Empty** and select **Add**.
 
-        ![Screenshot of adding a new MVC controller](./Images/vs-newcontroller-02.png)
+        ![Screenshot of adding a new MVC controller](./images/vs-newcontroller-02.png)
 
     1. When prompted, name the controller **EmailMetricsController** and select **OK**.
     1. Add the following `using` statements after the existing `using` statements at the top fo the file containing the `EmailMetricsController` class:
@@ -555,11 +555,11 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
 1. Create a new view for the **EmailMetrics** **Index** action:
     1. In the **Solution Explorer** tool window, right-click the **Views > EmailMetrics** folder and select **Add > View**.
 
-        ![Screenshot of adding a new MVC view](./Images/vs-newView-01.png)
+        ![Screenshot of adding a new MVC view](./images/vs-newView-01.png)
 
     1. In the **Add View** dialog, set the **View name** to **Index**, leave the remaining input controls to their default values and select **Add**.
 
-        ![Screenshot of adding a new MVC view](./Images/vs-newView-02.png)
+        ![Screenshot of adding a new MVC view](./images/vs-newView-02.png)
 
     1. Update the markup in the new **Views/EmailMetrics/Index.cshtml** to the following. This will add a form with a single button that will submit an HTTP POST to the custom controller action added in the last step:
 
@@ -592,7 +592,7 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
         - **Template**: List
         - **Model class**: EmailMetric (EMailMetric.Models)
 
-        ![Screenshot of adding a new MVC view](./Images/vs-newView-03.png)
+        ![Screenshot of adding a new MVC view](./images/vs-newView-03.png)
 
     1. Update the markup in the new **Views/EmailMetrics/ShowMetrics.cshtml** to the following. This will display the results of the calculations.
 
@@ -641,8 +641,8 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
     1. When the application is built and loads in a new browser window, select the **Email Metrics** item in the top navigation bar.
     1. On the **Email Metrics** page, select the **View email metrics** button.
 
-        ![Screenshot of testing the application's Index action](./Images/test-app-01.png)
+        ![Screenshot of testing the application's Index action](./images/test-app-01.png)
 
     1. When the page loads, you will see a list of emails addresses that were found among all emails with a sum of all the recipients sent between them, as shown from a small sample set in a test email extract in the following figure.
 
-        ![Screenshot of testing the application's ShowMetrics action](./Images/test-app-02.png)
+        ![Screenshot of testing the application's ShowMetrics action](./images/test-app-02.png)
