@@ -8,7 +8,7 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
     1. Select **ASP.NET Web Application (.NET Framework)**.
     1. Enter **EmailMetrics** for the Name of the project.
 
-        ![Visual Studio 2017 create new project dialog](./../../Images/vs-newproj-01.png)
+        ![Visual Studio 2017 create new project dialog](./../../images/vs-newproj-01.png)
 
         > Note: Ensure that you enter the exact same name for the Visual Studio Project that is specified in these lab instructions. The Visual Studio Project name becomes part of the namespace in the code. The code inside these instructions depends on the namespace matching the Visual Studio Project name specified in these instructions. If you use a different project name the code will not compile unless you adjust all the namespaces to match the Visual Studio Project name you enter when you create the project.
 
@@ -16,7 +16,7 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
 1. Add and configure Azure Storage as a connected service:
     1. In the **Solution Explorer** tool window, right-click the **Connected Services** node and select **Add Connected Service**.
 
-        ![Screenshot adding a connected service to the project](./../../Images/vs-connectedService-01.png)
+        ![Screenshot adding a connected service to the project](./../../images/vs-connectedService-01.png)
 
     1. On the **Connected Services** dialog, select **Cloud Storage with Azure Storage**.
     1. On the **Azure Storage** Dialog, select the storage account where you exported the data to in the previous exercise and select **Add**.
@@ -36,11 +36,11 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
 1. Create a new controller that will calculate and display the results of processing the emails exported in the previous exercise.
     1. Right-click the **Controllers** folder and select **Add > Controller**:
 
-        ![Screenshot of adding a new MVC controller](./../../Images/vs-newController-01.png)
+        ![Screenshot of adding a new MVC controller](./../../images/vs-newController-01.png)
 
     1. In the **Add Scaffold** dialog, select **MVC 5 Controller - Empty** and select **Add**.
 
-        ![Screenshot of adding a new MVC controller](./../../Images/vs-newController-02.png)
+        ![Screenshot of adding a new MVC controller](./../../images/vs-newController-02.png)
 
     1. When prompted, name the controller **EmailMetricsController** and select **OK**.
     1. Add the following `using` statements after the existing `using` statements at the top fo the file containing the `EmailMetricsController` class:
@@ -151,11 +151,11 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
 1. Create a new view for the **EmailMetrics** **Index** action:
     1. In the **Solution Explorer** tool window, right-click the **Views > EmailMetrics** folder and select **Add > View**.
 
-        ![Screenshot of adding a new MVC view](./../../Images/vs-newView-01.png)
+        ![Screenshot of adding a new MVC view](./../../images/vs-newView-01.png)
 
     1. In the **Add View** dialog, set the **View name** to **Index**, leave the remaining input controls to their default values and select **Add**.
 
-        ![Screenshot of adding a new MVC view](./../../Images/vs-newView-02.png)
+        ![Screenshot of adding a new MVC view](./../../images/vs-newView-02.png)
 
     1. Update the markup in the new **Views/EmailMetrics/Index.cshtml** to the following. This will add a form with a single button that will submit an HTTP POST to the custom controller action added in the last step:
 
@@ -188,7 +188,7 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
         - **Template**: List
         - **Model class**: EmailMetric (EMailMetric.Models)
 
-        ![Screenshot of adding a new MVC view](./../../Images/vs-newView-03.png)
+        ![Screenshot of adding a new MVC view](./../../images/vs-newView-03.png)
 
     1. Update the markup in the new **Views/EmailMetrics/ShowMetrics.cshtml** to the following. This will display the results of the calculations.
 
@@ -237,11 +237,11 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
     1. When the application is built and loads in a new browser window, select the **Email Metrics** item in the top navigation bar.
     1. On the **Email Metrics** page, select the **View email metrics** button.
 
-        ![Screenshot of testing the application's Index action](./../../Images/test-app-01.png)
+        ![Screenshot of testing the application's Index action](./../../images/test-app-01.png)
 
     1. When the page loads, you will see a list of emails addresses that were found among all emails with a sum of all the recipients sent between them, as shown from a small sample set in a test email extract in the following figure.
 
-        ![Screenshot of testing the application's ShowMetrics action](./../../Images/test-app-02.png)
+        ![Screenshot of testing the application's ShowMetrics action](./../../images/test-app-02.png)
 
 
 
