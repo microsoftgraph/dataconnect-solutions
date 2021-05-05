@@ -10,3 +10,10 @@ This sample covers:
 Helpful Links:
 
 https://docs.microsoft.com/en-us/azure/sql-database/sql-database-export
+
+
+
+
+# Copyright
+
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.

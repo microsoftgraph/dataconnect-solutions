@@ -26,3 +26,8 @@ It makes use of TumblingWindowTrigger to schedule the pipeline to run consistent
 https://docs.microsoft.com/en-us/azure/data-factory/how-to-create-tumbling-window-trigger
 
 > **NOTE:** The connectionString property under waterMarkLinkedService in ARM template needs to be substituted with the db connection string. (Refer [samplewatermarkdbsetup.sql](samplewatermarkdbsetup.sql) for table and sproc definitions)
+
+
+# Copyright
+
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.

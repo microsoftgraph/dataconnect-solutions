@@ -1,4 +1,7 @@
-﻿# Pre requisites
+﻿# Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+# See LICENSE in the project root for license information.
+
+# Pre requisites
 # This script requires Microsoft Exchange Web Services Managed API 2.2
 # Please download and install from here
 # https://www.microsoft.com/en-us/download/details.aspx?id=42951

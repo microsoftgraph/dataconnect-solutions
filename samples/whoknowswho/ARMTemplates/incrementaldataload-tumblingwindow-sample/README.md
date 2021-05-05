@@ -18,3 +18,9 @@ The samples currently perform:
 ### Scenarios
 
 This is useful when you are looking to independent data pulls based on time slices regardless of the previous pull. Essentially, if the pipeline from Jan 1st fails (after retries etc...), the pipeline from Jan 2nd, will still run as needed. IF, your scenario requires data to be pulled consistently from the last sync please use the watermark [sample](https://github.com/OfficeDev/MS-Graph-Data-Connect/ARMTemplates/incrementaldataload-sqlwatermark-sample)
+
+
+
+# Copyright
+
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.

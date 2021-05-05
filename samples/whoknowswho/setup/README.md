@@ -18,3 +18,12 @@ This section provides steps to populate your test organization with synthetic da
 - Run following command from this directory:
 `.\Create-Interactions.ps1 -TenantName "<tenant name here>" -DefaultUserPassword "<default user password here>" -InteractionTableLocation .\wkw_interactions.csv`
 - This script will then create interactions based on the `InteractionTableLocation` csv file you provide.
+
+
+
+
+
+
+# Copyright
+
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.

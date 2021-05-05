@@ -242,3 +242,9 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
     1. When the page loads, you will see a list of emails addresses that were found among all emails with a sum of all the recipients sent between them, as shown from a small sample set in a test email extract in the following figure.
 
         ![Screenshot of testing the application's ShowMetrics action](./../../Images/test-app-02.png)
+
+
+
+# Copyright
+
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.

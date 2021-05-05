@@ -43,3 +43,8 @@ This module has been recorded and is available in the Office Development YouTube
 **THIS CODE IS PROVIDED _AS IS_ WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
 
 <img src="https://telemetry.sharepointpnp.com/msgraph-training-dataconnect" />
+
+
+# Copyright
+
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.

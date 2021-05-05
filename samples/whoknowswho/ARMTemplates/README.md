@@ -55,3 +55,10 @@ Finally, deploy the ARM template and create the ADF pipeline by running the depl
 
 > **NOTE:** This will create all the resources in a resource group with the same name as the folder name of the sample (e.g. `ArtifactStagingDirectory`) For example, if you deploy `basic-sample` you'll find all the resource created in a resource group named `basic-sample`. If you make changes to `azuredeploy.json` and re-run the same command without changing the folder name, it will simply update the resources instead of creating new ones.
 
+
+
+
+
+# Copyright
+
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.

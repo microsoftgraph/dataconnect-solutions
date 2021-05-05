@@ -33,3 +33,8 @@ To deploy to Azure:
 		b. In Profile tab, select Microsoft Azure App Service.
 		c. Select your Subscription.  Use an existing or make a new WebApp
         d. Make sure you enable SSL for the WebApp.
+
+
+# Copyright
+
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.

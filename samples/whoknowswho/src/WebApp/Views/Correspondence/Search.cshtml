@@ -1,4 +1,7 @@
-﻿@model WhoKnowWho.Models.Correspondence
+﻿@* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license. *@
+@* See LICENSE in the project root for license information. *@
+
+@model WhoKnowWho.Models.Correspondence
 
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -20,7 +23,7 @@
 
 <div>
     <br />
-    <img src="~/Images/SocialGraph.png"/>
+    <img src="~/Images/SocialGraph.png" />
 </div>
 
 <div class="text-center">
@@ -35,17 +38,17 @@
 
 @using (Html.BeginForm("Search", "Correspondence", FormMethod.Post))
 {
-    @Html.AntiForgeryToken()
+@Html.AntiForgeryToken()
 
-    <div class="search-windows text-center">
-        <div>
-            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "search-windows", placeholder = @ViewBag.SearchSuggestions, value = "@(ViewBag.SampleUser ?? String.Empty)" } })
-            <button type="submit" class="search-windows" />
-        </div>
-        <div>
-            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-        </div>
+<div class="search-windows text-center">
+    <div>
+        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "search-windows", placeholder = @ViewBag.SearchSuggestions, value = "@(ViewBag.SampleUser ?? String.Empty)" } })
+        <button type="submit" class="search-windows" />
     </div>
+    <div>
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+</div>
 }
 
 
