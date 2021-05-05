@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
+# See LICENSE in the project root for license information.
+
 # Pre requisites
 # This script requires installing Office 365 modules for powershell
 # Please follow the guide (Connect to Office 365 PowerShell) below

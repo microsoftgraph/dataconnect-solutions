@@ -65,3 +65,13 @@ The template creates a pipeline with four copy activities, one for each data typ
 ![Pipeline run parameters](https://github.com/OfficeDev/MS-Graph-Data-Connect/blob/master/Common-Data-Model/images/PipelineRunParameters.PNG)
 
 Once the parameters are fully populated, click run. You can then monitor the pipeline run in the Azure Data Factory monitor tab. You will need a global administrator (or delegate that was appointed during the pre-reqs of this walkthrough) to approve the Microsoft Graph data connect data access request through Privileged Access Management once the copy activity status is "ConsentPending". The resulting CDM entities will be available as CSVs under the cdm filesystem in the ADLSg2 account.
+
+
+
+
+
+
+
+# Copyright
+
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.

@@ -219,3 +219,10 @@ See here if you want to [Run](https://github.com/OfficeDev/MS-Graph-Data-Connect
 ### Web App Sample UX
 
 ![](../docs/images/web-app-sample-ux.png)
+
+
+
+
+# Copyright
+
+Copyright (c) 2021 Microsoft Corporation. All rights reserved.

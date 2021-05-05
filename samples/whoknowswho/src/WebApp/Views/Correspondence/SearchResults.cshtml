@@ -1,4 +1,7 @@
-﻿@{
+﻿@* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license. *@
+@* See LICENSE in the project root for license information. *@
+
+@{
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -23,14 +26,14 @@
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Closeness)
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Closeness)
+        </td>
+    </tr>
     }
 </table>
 

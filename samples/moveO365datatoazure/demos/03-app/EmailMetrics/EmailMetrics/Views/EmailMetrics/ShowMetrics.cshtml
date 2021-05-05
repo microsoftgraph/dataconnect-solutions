@@ -1,21 +1,21 @@
-﻿@* Copyright (c) Microsoft Corporation. All rights reserved. *@
-@* Licensed under the MIT license. *@
+﻿@* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license. *@
+@* See LICENSE in the project root for license information. *@
 
 @model IEnumerable<EmailMetrics.Models.EmailMetric>
 
-@{
+    @{
     ViewBag.Title = "ShowMetrics";
-}
+    }
 
-<h2>Email Metrics</h2>
+    <h2>Email Metrics</h2>
 
-<table class="table">
-    <tr>
-        <th>Sender</th>
-        <th>Number of Recipients</th>
-    </tr>
+    <table class="table">
+        <tr>
+            <th>Sender</th>
+            <th>Number of Recipients</th>
+        </tr>
 
-    @foreach (var item in Model)
+        @foreach (var item in Model)
     {
         <tr>
             <td>@Html.DisplayFor(modelItem => item.Email)</td>
@@ -23,4 +23,4 @@
         </tr>
     }
 
-</table>
+    </table>
