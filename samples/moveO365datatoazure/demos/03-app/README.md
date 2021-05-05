@@ -36,11 +36,11 @@ In this exercise you will create a simple ASP.NET MVC web application that will 
 1. Create a new controller that will calculate and display the results of processing the emails exported in the previous exercise.
     1. Right-click the **Controllers** folder and select **Add > Controller**:
 
-        ![Screenshot of adding a new MVC controller](./../../images/vs-newController-01.png)
+        ![Screenshot of adding a new MVC controller](./../../images/vs-newcontroller-01.png)
 
     1. In the **Add Scaffold** dialog, select **MVC 5 Controller - Empty** and select **Add**.
 
-        ![Screenshot of adding a new MVC controller](./../../images/vs-newController-02.png)
+        ![Screenshot of adding a new MVC controller](./../../images/vs-newcontroller-02.png)
 
     1. When prompted, name the controller **EmailMetricsController** and select **OK**.
     1. Add the following `using` statements after the existing `using` statements at the top fo the file containing the `EmailMetricsController` class:
