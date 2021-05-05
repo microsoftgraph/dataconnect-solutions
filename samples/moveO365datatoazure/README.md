@@ -10,9 +10,9 @@ In this lab you will use Microsoft Graph data connect to analyze emails from an 
 
 ## Demos
 
-- [Setup tenant & get data out of Office 365 with Graph data connect and Data Factory](./Demos/01-setup)
-- [Extract Office 365 data with Graph data connect](./Demos/02-extract)
-- [Process the Exported Data](./Demos/03-app)
+- [Setup tenant & get data out of Office 365 with Graph data connect and Data Factory](./demos/01-setup)
+- [Extract Office 365 data with Graph data connect](./demos/02-extract)
+- [Process the Exported Data](./demos/03-app)
 
 ## Watch the module
 
