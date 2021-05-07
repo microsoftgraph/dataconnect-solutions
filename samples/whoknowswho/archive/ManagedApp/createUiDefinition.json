@@ -1,0 +1,90 @@
+{
+  "handler": "Microsoft.Compute.MultiVm",
+  "version": "0.1.2-preview",
+  "parameters": {
+    "basics": [ {} ],
+    "steps": [
+      {
+        "name": "webAppSettings",
+        "label": "Web App Settings",
+        "subLabel": {
+          "postValidation": "Done",
+          "preValidation": "Configure the Web App settings"
+        },
+        "bladeTitle": "Web App Settings",
+        "elements": [
+          {
+            "name": "webSiteName",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Website name",
+            "toolTip": "The website name, used as the prefix in the url of the published web app.  E.g. <websitename>.azurewebsites.net",
+            "constraints": {
+              "required": true
+            }
+          }
+        ]
+      },
+      {
+        "name": "adfSettings",
+        "label": "Data Factory Settings",
+        "subLabel": {
+          "postValidation": "Done",
+          "preValidation": "Configure the Data Factory settings"
+        },
+        "bladeTitle": "Data Factory Settings",
+        "elements": [
+          {
+            "name": "destinationServicePrincipalAadId",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Destination ADLS service principal AAD Id",
+            "toolTip": "The AAD Id of the service principal to be granted access to the destination Data Lake store",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "destinationServicePrincipalId",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Destination ADLS service principal Id",
+            "toolTip": "The app Id of the service principal that has access to the destination Data Lake store",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "destinationServicePrincipalKey",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Destination ADLS service principal key",
+            "toolTip": "The app secret of the service principal that has access to the destination Data Lake store. If the secret expires, the app will stop.",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "triggerStartTime",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Trigger start time",
+            "toolTip": "The time when the trigger will first start to run the pipeline. Everything prior to this time will be backfilled",
+            "constraints": {
+              "required": true
+            }
+          },
+          {
+            "name": "allowedGroups",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Groups to extract data from",
+            "toolTip": "The users in the group provided will have their data used in this application."
+          }
+        ]
+      }
+    ],
+    "outputs": {
+      "destinationServicePrincipalAadId": "[steps('adfSettings').destinationServicePrincipalAadId]",
+      "destinationServicePrincipalId": "[steps('adfSettings').destinationServicePrincipalId]",
+      "destinationServicePrincipalKey": "[steps('adfSettings').destinationServicePrincipalKey]",
+      "triggerStartTime": "[steps('adfSettings').triggerStartTime]",
+      "allowedGroups": "[steps('adfSettings').allowedGroups]",
+      "webSiteName": "[steps('webAppSettings').webSiteName]"
+    }
+  }
+}

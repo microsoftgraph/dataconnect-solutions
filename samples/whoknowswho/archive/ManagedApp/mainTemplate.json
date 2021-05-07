@@ -1,0 +1,773 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "destinationServicePrincipalAadId": {
+      "type": "string",
+      "metadata": {
+        "description": "The AAD object Id of the service principal that needs to access the destination Data Lake store."
+      }
+    },
+    "destinationServicePrincipalId": {
+      "type": "string",
+      "metadata": {
+        "description": "The id of the service principal that has access to the destination Data Lake store."
+      }
+    },
+    "destinationServicePrincipalKey": {
+      "type": "string",
+      "metadata": {
+        "description": "The key of the service principal that has access to the destination Data Lake store."
+      }
+    },
+    "webSiteName": {
+      "type": "string"
+    },
+    "triggerStartTime": {
+      "type": "string",
+      "metadata": {
+        "description": "The time when the trigger will first start to run the pipeline. Everything prior to this time will be backfilled."
+      }
+    },
+    "backFillInterval": {
+      "type": "int",
+      "defaultValue": 30,
+      "metadata": {
+          "description": "The number of days to backfill on the first run."
+      }
+    },
+    "allowedGroups": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The object ids of the groups of users to extract data from. List up to 10 groups."
+      }
+    }
+  },
+  "variables": {
+    "dataFactoryName": "[concat('myadf', uniqueString(resourceGroup().id))]",
+    "destinationAdlsAccountName": "[concat('myadls', uniqueString(resourceGroup().id))]",
+    "auditStorageAccountName": "[concat('audit', uniqueString(resourceGroup().id))]",
+    "auditStorageAccountSku": "Standard_LRS",
+    "sourceLinkedServiceName": "SourceO365LinkedService",
+    "sourceLinkedServicePrincipalId": "<A valid SPN in app owner's tenant>",
+    "sourceLinkedServicePrincipalKey": "<SPN secret>",
+    "sourceLinkedServicePrincipalTenantId": "<App owner's tenant ID>",
+    "destinationLinkedServiceName": "DestinationADLSLinkedService",
+    "inputEventDatasetName": "O365InputEventDataset",
+    "inputMessageDatasetName": "O365InputMessageDataset",
+    "outputEventDatasetName": "ADLSOutputEventDataset",
+    "outputMessageDatasetName": "ADLSOutputMessageDataset",
+    "pipelineName": "mypipeline",
+    "triggerName": "mytrigger",
+    "webSiteName": "[parameters('webSiteName')]",
+    "isBackfill": "[concat('bool(equals(trigger().outputs.windowStartTime,''', parameters('triggerStartTime'),'''))')]",
+    "backFillIntervalNegative": "[sub(0, parameters('backFillInterval'))]",
+    "backfillStart": "[concat('formatDateTime(adddays(trigger().outputs.windowStartTime,', variables('backFillIntervalNegative'),', ''yyyy-MM-ddTHH:mm:ss.fffffffzzz''),''yyyy-MM-ddTHH:mm:ssZ'')')]",
+    "incrementalStart": "formatDateTime(adddays(trigger().outputs.windowStartTime, 0,'yyyy-MM-ddTHH:mm:ss.fffffffzzz'),'yyyy-MM-ddTHH:mm:ssZ')",
+    "windowStart": "[concat('@if(', variables('isBackfill'), ',',variables('backfillStart'), ',',variables('incrementalStart'),')')]",
+    "windowEnd": "@formatDateTime(adddays(trigger().outputs.windowEndTime, 0,'yyyy-MM-ddTHH:mm:ss.fffffffzzz'),'yyyy-MM-ddTHH:mm:ssZ')",
+    "hostingPlanName": "Free",
+    "skuCapacity": "1",
+    "skuName": "F1",
+    "aadInstance": "https://login.microsoftonline.com/",
+    "artifacts": {
+      "webAppRemote": "https://samplestorage.blob.core.windows.net/webappcontainer/WhoKnowWho.zip"
+    },
+    "outputDataLakeStore": {
+      "path": "targetFolder",
+      "messagePath": "targetFolder/Message",
+      "eventPath": "targetFolder/Event"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('auditStorageAccountName')]",
+      "apiVersion": "2016-01-01",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[variables('auditStorageAccountSku')]"
+      },
+      "kind": "Storage",
+      "properties": {}
+    },
+    {
+      "type": "Microsoft.DataLakeStore/accounts",
+      "name": "[variables('destinationAdlsAccountName')]",
+      "comments": "Creates the destination Data Lake store in the customer's subscription used in the ADF pipeline for the data output.",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[variables('auditStorageAccountName')]"
+      ],
+      "apiVersion": "2016-11-01",
+      "properties": {
+        "initialUser": "[parameters('destinationServicePrincipalAadId')]",
+        "newTier": "Consumption",
+        "encryptionState": "Enabled",
+        "encryptionConfig": {
+          "type": "ServiceManaged"
+        }
+      },
+      "resources": [
+        {
+          "type": "providers/diagnosticSettings",
+          "name": "Microsoft.Insights/current",
+          "dependsOn": [
+            "[concat('Microsoft.DataLakeStore/accounts/', variables('destinationAdlsAccountName'))]",
+            "[concat('Microsoft.Storage/storageAccounts/', variables('auditStorageAccountName'))]"
+          ],
+          "apiVersion": "2017-05-01-preview",
+          "properties": {
+            "name": "current",
+            "storageAccountId": "[resourceId('Microsoft.Storage/storageAccounts', variables('auditStorageAccountName'))]",
+            "logs": [
+              {
+                "category": "Audit",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 180,
+                  "enabled": true
+                }
+              },
+              {
+                "category": "Requests",
+                "enabled": true,
+                "retentionPolicy": {
+                  "days": 180,
+                  "enabled": true
+                }
+              }
+            ],
+            "metrics": [
+              {
+                "category": "AllMetrics",
+                "enabled": true,
+                "retentionPolicy": {
+                  "enabled": true,
+                  "days": 30
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "[variables('dataFactoryName')]",
+      "apiVersion": "2017-09-01-preview",
+      "type": "Microsoft.DataFactory/factories",
+      "comments": "Creates the ADF pipeline that copies data from O365 to the newly created destination ADLS.",
+      "dependsOn": [
+        "[resourceId('Microsoft.DataLakeStore/accounts/', variables('destinationAdlsAccountName'))]"
+      ],
+      "location": "[resourceGroup().location]",
+      "resources": [
+        {
+          "type": "linkedservices",
+          "name": "[variables('sourceLinkedServiceName')]",
+          "comments": "Creates the link to O365 which is used as the source of the data extraction. Using service principal supplied by the source ADLS owner.",
+          "dependsOn": [
+            "[variables('dataFactoryName')]"
+          ],
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "type": "Office365",
+            "description": "Source O365 linked service",
+            "typeProperties": {
+              "office365tenantId": "[subscription().tenantId]",
+              "PrivacyPolicyUri": "http://www.wkw.com/privacy",
+              "TermsOfUseUri": "http://www.wkw.com/tos",
+              "servicePrincipalId": "[variables('sourceLinkedServicePrincipalId')]",
+              "servicePrincipalKey": {
+                "type": "SecureString",
+                "value": "[variables('sourceLinkedServicePrincipalKey')]"
+              },
+              "servicePrincipalTenantId": "[variables('sourceLinkedServicePrincipalTenantId')]",
+              "allowedGroups": "[if(empty(parameters('allowedGroups')), json('null'), split(parameters('allowedGroups'),','))]"
+            }
+          }
+        },
+        {
+          "type": "linkedservices",
+          "name": "[variables('destinationLinkedServiceName')]",
+          "comments": "Creates the link to the newly created destination ADLS, using service principal supplied by the customer deploying this template.",
+          "dependsOn": [
+            "[variables('dataFactoryName')]"
+          ],
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "type": "AzureDataLakeStore",
+            "description": "Destination Azure Data Lake Store linked service",
+            "typeProperties": {
+              "dataLakeStoreUri": "[concat('adl://', reference(resourceId('Microsoft.DataLakeStore/accounts', variables('destinationAdlsAccountName'))).endpoint)]",
+              "servicePrincipalId": "[parameters('destinationServicePrincipalId')]",
+              "servicePrincipalKey": {
+                "type": "SecureString",
+                "value": "[parameters('destinationServicePrincipalKey')]"
+              },
+              "tenant": "[subscription().tenantId]",
+              "resourceGroupName": "[resourceGroup().name]",
+              "subscriptionId": "[subscription().subscriptionId]"
+            }
+          }
+        },
+        {
+          "type": "datasets",
+          "name": "[variables('inputMessageDatasetName')]",
+          "dependsOn": [
+            "[variables('dataFactoryName')]",
+            "[variables('sourceLinkedServiceName')]"
+          ],
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "published": false,
+            "type": "Office365Table",
+            "linkedServiceName": {
+              "referenceName": "[variables('sourceLinkedServiceName')]",
+              "type": "LinkedServiceReference"
+            },
+            "structure": [
+              {
+                "name": "Subject",
+                "type": "string"
+              },
+              {
+                "name": "HasAttachments",
+                "type": "boolean"
+              },
+              {
+                "name": "SentDateTime",
+                "type": "datetime"
+              },
+              {
+                "name": "ReceivedDateTime",
+                "type": "datetime"
+              },
+              {
+                "name": "Sender",
+                "type": "string"
+              },
+              {
+                "name": "From",
+                "type": "string"
+              },
+              {
+                "name": "ToRecipients",
+                "type": "string"
+              },
+              {
+                "name": "CcRecipients",
+                "type": "string"
+              },
+              {
+                "name": "BccRecipients",
+                "type": "string"
+              },
+              {
+                "name": "ConversationId",
+                "type": "string"
+              }
+            ],
+            "typeProperties": {
+              "tableName": "BasicDataSet_v0.Message_v0",
+              "dateFilterColumn": "ReceivedDateTime", 
+              "startTime": "@{dataset().windowStart}",
+              "endTime": "@{dataset().windowEnd}"
+            },
+            "parameters": {
+              "windowStart": {
+                "type": "String"
+              },
+              "windowEnd": {
+                "type": "String"
+              }
+            }
+          }
+        },
+        {
+          "type": "datasets",
+          "name": "[variables('inputEventDatasetName')]",
+          "dependsOn": [
+            "[variables('dataFactoryName')]",
+            "[variables('sourceLinkedServiceName')]"
+          ],
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "published": false,
+            "type": "Office365Table",
+            "linkedServiceName": {
+              "referenceName": "[variables('sourceLinkedServiceName')]",
+              "type": "LinkedServiceReference"
+            },
+            "structure": [
+              {
+                "name": "Subject",
+                "type": "string"
+              },
+              {
+                "name": "HasAttachments",
+                "type": "boolean"
+              },
+              {
+                "name": "End",
+                "type": "string"
+              },
+              {
+                "name": "Start",
+                "type": "string"
+              },
+              {
+                "name": "ResponseStatus",
+                "type": "string"
+              },
+              {
+                "name": "Organizer",
+                "type": "string"
+              },
+              {
+                "name": "Attendees",
+                "type": "string"
+              },
+              {
+                "name": "Importance",
+                "type": "string"
+              },
+              {
+                "name": "Sensitivity",
+                "type": "string"
+              },
+              {
+                "name": "Recurrence",
+                "type": "string"
+              },
+              {
+                "name": "WebLink",
+                "type": "string"
+              }
+            ],
+            "typeProperties": {
+              "tableName": "BasicDataSet_v0.Event_v0",
+              "dateFilterColumn": "CreatedDateTime", 
+              "startTime": "@{dataset().windowStart}",
+              "endTime": "@{dataset().windowEnd}"
+            },
+            "parameters": {
+              "windowStart": {
+                "type": "String"
+              },
+              "windowEnd": {
+                "type": "String"
+              }
+            }
+          }
+        },
+        {
+          "type": "datasets",
+          "name": "[variables('outputMessageDatasetName')]",
+          "dependsOn": [
+            "[variables('dataFactoryName')]",
+            "[variables('destinationLinkedServiceName')]"
+          ],
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "published": false,
+            "type": "AzureDataLakeStoreFile",
+            "linkedServiceName": {
+              "referenceName": "[variables('destinationLinkedServiceName')]",
+              "type": "LinkedServiceReference"
+            },
+            "typeProperties": {
+              "format": {
+                "type": "JsonFormat",
+                "filePattern": "setOfObjects"
+              },
+              "folderPath": "[concat('@concat(''', variables('outputDataLakeStore').messagePath, '/'', formatDateTime(dataset().windowStart, ''yyyy-MM-dd-HH-mm-ss''), ''-'', formatDateTime(dataset().windowEnd, ''yyyy-MM-dd-HH-mm-ss''))')]"
+            },
+            "parameters": {
+              "windowStart": {
+                "type": "String"
+              },
+              "windowEnd": {
+                "type": "String"
+              }
+            }
+          }
+        },
+        {
+          "type": "datasets",
+          "name": "[variables('outputEventDatasetName')]",
+          "dependsOn": [
+            "[variables('dataFactoryName')]",
+            "[variables('destinationLinkedServiceName')]"
+          ],
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "published": false,
+            "type": "AzureDataLakeStoreFile",
+            "linkedServiceName": {
+              "referenceName": "[variables('destinationLinkedServiceName')]",
+              "type": "LinkedServiceReference"
+            },
+            "typeProperties": {
+              "format": {
+                "type": "JsonFormat",
+                "filePattern": "setOfObjects"
+              },
+              "folderPath": "[concat('@concat(''', variables('outputDataLakeStore').eventPath, '/'', formatDateTime(dataset().windowStart, ''yyyy-MM-dd-HH-mm-ss''), ''-'', formatDateTime(dataset().windowEnd, ''yyyy-MM-dd-HH-mm-ss''))')]"
+            },
+            "parameters": {
+              "windowStart": {
+                "type": "String"
+              },
+              "windowEnd": {
+                "type": "String"
+              }
+            }
+          }
+        },
+        {
+          "type": "pipelines",
+          "name": "[variables('pipelineName')]",
+          "dependsOn": [
+            "[variables('dataFactoryName')]",
+            "[variables('sourceLinkedServiceName')]",
+            "[variables('destinationLinkedServiceName')]",
+            "[variables('inputMessageDatasetName')]",
+            "[variables('outputMessageDatasetName')]",
+            "[variables('inputEventDatasetName')]",
+            "[variables('outputEventDatasetName')]"
+          ],
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "parameters": {
+              "windowStart": {
+                "type": "String"
+              },
+              "windowEnd": {
+                "type": "String"
+              }
+            },
+            "activities": [
+              {
+                "name": "CopyMessageFromO365ToAzureDLS",
+                "description": "Copy message data from O365 to Azure Data Lake Store",
+                "type": "Copy",
+                "inputs": [
+                  {
+                    "referenceName": "[variables('inputMessageDatasetName')]",
+                    "type": "DatasetReference",
+                    "parameters": {
+                      "windowStart": {
+                        "value": "@pipeline().parameters.windowStart",
+                        "type": "Expression"
+                      },
+                      "windowEnd": {
+                        "value": "@pipeline().parameters.windowEnd",
+                        "type": "Expression"
+                      }
+                    }
+                  }
+                ],
+                "outputs": [
+                  {
+                    "referenceName": "[variables('outputMessageDatasetName')]",
+                    "type": "DatasetReference",
+                    "parameters": {
+                      "windowStart": {
+                        "value": "@pipeline().parameters.windowStart",
+                        "type": "Expression"
+                      },
+                      "windowEnd": {
+                        "value": "@pipeline().parameters.windowEnd",
+                        "type": "Expression"
+                      }
+                    }
+                  }
+                ],
+                "typeProperties": {
+                  "source": {
+                    "type": "Office365Source"
+                  },
+                  "sink": {
+                    "type": "AzureDataLakeStoreSink"
+                  }
+                }
+              },
+              {
+                "name": "CopyEventFromO365ToAzureDLS",
+                "description": "Copy event data from O365 to Azure Data Lake Store",
+                "type": "Copy",
+                "inputs": [
+                  {
+                    "referenceName": "[variables('inputEventDatasetName')]",
+                    "type": "DatasetReference",
+                    "parameters": {
+                      "windowStart": {
+                        "value": "@pipeline().parameters.windowStart",
+                        "type": "Expression"
+                      },
+                      "windowEnd": {
+                        "value": "@pipeline().parameters.windowEnd",
+                        "type": "Expression"
+                      }
+                    }
+                  }
+                ],
+                "outputs": [
+                  {
+                    "referenceName": "[variables('outputEventDatasetName')]",
+                    "type": "DatasetReference",
+                    "parameters": {
+                      "windowStart": {
+                        "value": "@pipeline().parameters.windowStart",
+                        "type": "Expression"
+                      },
+                      "windowEnd": {
+                        "value": "@pipeline().parameters.windowEnd",
+                        "type": "Expression"
+                      }
+                    }
+                  }
+                ],
+                "typeProperties": {
+                  "source": {
+                    "type": "Office365Source"
+                  },
+                  "sink": {
+                    "type": "AzureDataLakeStoreSink"
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "triggers",
+          "name": "[variables('triggerName')]",
+          "dependsOn": [
+            "[variables('dataFactoryName')]",
+            "[variables('sourceLinkedServiceName')]",
+            "[variables('destinationLinkedServiceName')]",
+            "[variables('inputMessageDatasetName')]",
+            "[variables('outputMessageDatasetName')]",
+            "[variables('inputEventDatasetName')]",
+            "[variables('outputEventDatasetName')]",
+            "[variables('pipelineName')]"
+          ],
+          "apiVersion": "2017-09-01-preview",
+          "properties": {
+            "type": "TumblingWindowTrigger",
+            "typeProperties": {
+              "frequency": "Hour",
+              "interval": 24,
+              "startTime": "[parameters('triggerStartTime')]",
+              "delay": "00:00:01",
+              "retryPolicy": {
+                "count": 2,
+                "intervalInSeconds": 30
+              },
+              "maxConcurrency": 10
+            },
+            "pipeline": {
+              "pipelineReference": {
+                "type": "PipelineReference",
+                "referenceName": "[variables('pipelineName')]"
+              },
+              "parameters": {
+                "windowStart": "[variables('windowStart')]",
+                "windowEnd": "[variables('windowEnd')]"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.DataFactory/factories/triggers/status",
+      "name": "[concat(variables('dataFactoryName'), '/', variables('triggerName'), '/start')]",
+      "apiVersion": "2017-09-01-preview",
+      "dependsOn": [
+        "[concat('Microsoft.DataFactory/factories/', variables('dataFactoryName'), '/triggers/', variables('triggerName'))]"
+      ],
+      "properties": {}
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[variables('hostingPlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "displayName": "HostingPlan"
+      },
+      "sku": {
+        "name": "[variables('skuName')]",
+        "capacity": "[int(variables('skuCapacity'))]"
+      },
+      "properties": {
+        "name": "[variables('hostingPlanName')]"
+      }
+    },
+    {
+      "apiVersion": "2015-08-01",
+      "name": "[variables('webSiteName')]",
+      "type": "Microsoft.Web/sites",
+      "comments": "Creates the web app that uses data stored in the newly created target ADLS.",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]": "Resource",
+        "displayName": "Website"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
+      ],
+      "properties": {
+        "name": "[variables('webSiteName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+      },
+      "resources": [
+        {
+          "name": "MSDeploy",
+          "type": "extensions",
+          "comments": "Creates the web app deployment.",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]"
+          ],
+          "tags": {
+            "displayName": "WKWWebAppDeployment"
+          },
+          "properties": {
+            "packageUri": "[variables('artifacts').webAppRemote]",
+            "dbType": "None",
+            "setParameters": {
+              "IIS Web Application Name": "[variables('webSiteName')]"
+            }
+          }
+        },
+        {
+          "name": "appsettings",
+          "type": "config",
+          "comments": "Creates app setting overrides for the web app.",
+          "apiVersion": "2015-08-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', variables('webSiteName'))]",
+            "[concat('Microsoft.Web/Sites/', variables('webSiteName'), '/Extensions/MSDeploy')]"
+          ],
+          "tags": {
+            "displayName": "AppSettingsConfiguration"
+          },
+          "properties": {
+            "arm:TenantId": "[subscription().tenantId]",
+            "arm:ClientId": "[parameters('destinationServicePrincipalId')]",
+            "arm:PostLogoutRedirectUri": "[concat('https://', variables('webSiteName'), '.azurewebsites.net/')]",
+            "arm:AADInstance": "[variables('aadInstance')]",
+            "arm:SubscriptionId": "[subscription().subscriptionId]",
+            "arm:ManagedResourceGroupName": "[resourceGroup().name]",
+            "arm:DataFactoryName": "[variables('dataFactoryName')]",
+            "arm:PipelineName": "[variables('pipelineName')]",
+            "arm:ClientSecret": "[parameters('destinationServicePrincipalKey')]",
+            "arm:AccountName": "[variables('destinationAdlsAccountName')]",
+            "arm:Path": "[variables('outputDataLakeStore').path]"
+          }
+        }
+      ]
+    },
+    {
+      "apiVersion": "2014-04-01",
+      "name": "[concat(variables('hostingPlanName'), '-', resourceGroup().name)]",
+      "type": "Microsoft.Insights/autoscalesettings",
+      "location": "[resourceGroup().location]",
+      "tags": {
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]": "Resource",
+        "displayName": "AutoScaleSettings"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
+      ],
+      "properties": {
+        "profiles": [
+          {
+            "name": "Default",
+            "capacity": {
+              "minimum": 1,
+              "maximum": 2,
+              "default": 1
+            },
+            "rules": [
+              {
+                "metricTrigger": {
+                  "metricName": "CpuPercentage",
+                  "metricResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
+                  "timeGrain": "PT1M",
+                  "statistic": "Average",
+                  "timeWindow": "PT10M",
+                  "timeAggregation": "Average",
+                  "operator": "GreaterThan",
+                  "threshold": 80.0
+                },
+                "scaleAction": {
+                  "direction": "Increase",
+                  "type": "ChangeCount",
+                  "value": 1,
+                  "cooldown": "PT10M"
+                }
+              },
+              {
+                "metricTrigger": {
+                  "metricName": "CpuPercentage",
+                  "metricResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]",
+                  "timeGrain": "PT1M",
+                  "statistic": "Average",
+                  "timeWindow": "PT1H",
+                  "timeAggregation": "Average",
+                  "operator": "LessThan",
+                  "threshold": 60.0
+                },
+                "scaleAction": {
+                  "direction": "Decrease",
+                  "type": "ChangeCount",
+                  "value": 1,
+                  "cooldown": "PT1H"
+                }
+              }
+            ]
+          }
+        ],
+        "enabled": false,
+        "name": "[concat(variables('hostingPlanName'), '-', resourceGroup().name)]",
+        "targetResourceUri": "[concat(resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]"
+      }
+    },
+    {
+      "apiVersion": "2014-04-01",
+      "name": "[variables('webSiteName')]",
+      "type": "Microsoft.Insights/components",
+      "location": "East US",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites/', variables('webSiteName'))]"
+      ],
+      "tags": {
+        "[concat('hidden-link:', resourceGroup().id, '/providers/Microsoft.Web/sites/', variables('webSiteName'))]": "Resource",
+        "displayName": "AppInsightsComponent"
+      },
+      "properties": {
+        "applicationId": "[variables('webSiteName')]"
+      }
+    },
+    {
+      "apiVersion": "2018-02-01",
+      "name": "pid-8ac71724-bc0f-5773-a386-020c47e097f8", 
+      "type": "Microsoft.Resources/deployments",
+      "properties": {
+          "mode": "Incremental",
+          "template": {
+              "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+              "contentVersion": "1.0.0.0",
+              "resources": []
+          }
+      }
+    }
+  ]
+}

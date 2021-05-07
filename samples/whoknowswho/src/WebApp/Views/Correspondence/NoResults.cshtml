@@ -1,0 +1,16 @@
+﻿@* Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license. *@
+@* See LICENSE in the project root for license information. *@
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    ViewBag.Title = "Search Results";
+}
+
+<h2>None of your collegues seem to know @ViewBag.SearchEmail</h2>
+
+<p>
+    @Html.ActionLink("Search Again", "Search")
+</p>
