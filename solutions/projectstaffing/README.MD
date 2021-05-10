@@ -51,10 +51,12 @@ state of long-running operations, etc.
 ### Data Sources
 The following data sources are used:
 1. M365 User profiles
-    - data retrieved using Graph Data Connect (GDC)
-2. M365 Emails
+    - data about employees retrieved using Graph Data Connect (GDC)
+2. M365 Managers
+    - data about managers retrieved using Graph Data Connect (GDC)
+3. M365 Emails
     - sent and received emails retrieved using Graph Data Connect (GDC)
-3. HR Data employee profiles
+4. HR Data employee profiles
     - custom data format which can be derived from the systems used by the HR department to store data about the company's employees
     - it is meant to be complementary to the data obtained from M365 (Graph Data Connect)
     - more details can be found in the [HR Data documentation](./docs/HR_Data.md)
@@ -70,14 +72,22 @@ of which two modes rely on example datasets:
 - simulated mode
     - relies on a set of artificially generated employee profiles and emails
     - meant for presentation and demonstration purposes
-    - this dataset can be found [here](https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/simulated-data/)
-    - this data gets copied by the deployment script to the "demodata" storage account (the name format of the storage account is `demodata<deploymentHash>`), in the `simulated-data` container
-
+    - the files in this dataset can be manually downloaded using `wget <link>` from the following links:
+        - https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/simulated-data/m365_users/generated_user_profiles.json
+        - https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/simulated-data/m365_managers/generated_managers.json
+        - https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/simulated-data/m365_emails/generated_emails.json
+        - https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/simulated-data/hr_data/generated_hr_data.csv
+    - this data automatically gets copied by the deployment script to the `demodata<deploymentHash>` storage account 
+      of the deployment resource group, in the `simulated-data` container, in the following respective folders: 
+      `m365_users`, `m365_managers`, `m365_emails`, `hr_data`
+        - any manual changes to the simulated data require uploading it to these locations
+        - in simulated mode, the ADF pipelines retrieve the data from these 4 locations, instead of the production data sources described above
 - sample mode
     - relies on a subset of real internal data obtained from employees who explicitly provided some of their emails and profile data
     - this approach can be used as a shortcut to validate how the product works with known internal people, until approval is obtained from IT to use full production data
     - the required schema of the sample data and the AZBS location where it needs to be placed is described in detail [here](./docs/InputSampleData.MD)
-
+    - in sample mode, the ADF pipelines retrieve the data from the AZBS sample data locations, instead of the production data sources described above
+    
 The initial ingestion mode can be chosen during deployment via the deployment script, by typing 
 `production_mode`/`simulated_mode`/`sample_mode` when prompted for the ingestion mode.  
 The switch from one ingestion mode to another can be performed by application admins from the SkillsFinder UI via 
