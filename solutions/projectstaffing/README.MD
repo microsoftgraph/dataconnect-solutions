@@ -50,14 +50,14 @@ It also uses the Azure SQL database database to store and retrieve information a
 The following data sources are used:
 
 1. Microsoft 365 User profiles
-    - data about employees retrieved using Graph Data Connect (GDC)
+    - data about employees retrieved using Microsoft Graph Data Connect
 2. Microsoft 365 Managers
-    - data about managers retrieved using Graph Data Connect (GDC)
+    - data about managers retrieved using Microsoft Graph Data Connect
 3. Microsoft 365 Emails
-    - sent and received emails retrieved using Graph Data Connect (GDC)
+    - sent and received emails retrieved using Microsoft Graph Data Connect
 4. HR Data employee profiles
     - custom data format which can be derived from the systems used by the HR department to store data about the company's employees
-    - it is meant to be complementary to the data obtained from Microsoft 365 (Data Connect)
+    - it is meant to be complementary to the data obtained from Microsoft 365 (Microsoft Graph Data Connect)
     - more details can be found in the [HR Data documentation](./docs/HR_Data.md)
 
 ### Data ingestion modes
