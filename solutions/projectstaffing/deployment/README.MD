@@ -108,7 +108,7 @@ Please see the [build pipeline documentation](../docs/build_pipeline.md) for det
 ### Performing deployment on a new environment
 This creates all the required infrastructure ("static") components and deploys the "dynamic" components mentioned above on top of them.   
 The deployment steps are described in the deployment script [readme file](../deployment/arm/README.md) 
-and in the [deployment overview](../docs/SkillsFinder%20Deployment%20Overview.pptx)
+and in the [deployment overview ](../docs/SkillsFinderDeploymentOverview.MD)
 
 ### Updating app release version over existing deployment
 Depending on what changed form one release to another, some or all of the steps below need to be performed:
