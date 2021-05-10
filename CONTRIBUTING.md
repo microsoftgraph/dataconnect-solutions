@@ -16,7 +16,6 @@ You can contribute to [Microsoft Graph data connect](https://developer.microsoft
 - Report documentation bugs via [GitHub Issues](https://github.com/microsoftgraph/dataconnect-solutions/issues).
 - Add or vote for documentation requests at [Microsoft Tech Community](https://techcommunity.microsoft.com/t5/microsoft-365-developer-platform/idb-p/Microsoft365DeveloperPlatform/label-name/Microsoft%20Graph).
 
-
 ## Before we can accept your pull request
 
 ### Minor corrections
@@ -38,7 +37,8 @@ You can download or digitally sign the Contribution License Agreement (CLA) [her
 
 ## Use GitHub, Git, and this repository
 
-**Note:** 
+**Note:**
+
 - Most of the information in this section can be found in [GitHub Help][] articles.  If you're familiar with Git and GitHub, skip to the **Contribute and edit content** section for the particulars of the code/content flow of this repository.
 - Before contributing for the first time to Microsoft Graph docs, employees of Microsoft should please complete configuring their GitHub accounts. See the **Document** section of the internal Microsoft Graph Partners onboarding documentation for details.
 
@@ -154,7 +154,7 @@ Any additional work requires a new branch.
 To delete your branch follow these steps:
 
 1. In GitBash type `git checkout main` at the command prompt.  This ensures that you aren't in the branch to be deleted (which isn't allowed).
-2. Next, type `git branch -d <branch name>` at the command prompt.  This deletes the branch on your local machine only if it has been successfully merged to the upstream repository. (You can override this behavior with the `–D` flag, but first be sure you want to do this.)
+2. Next, type `git branch -d <branch name>` at the command prompt.  This deletes the branch on your local machine only if it has been successfully merged to the upstream repository. (You can override this behavior with the `ï¿½D` flag, but first be sure you want to do this.)
 3. Finally, type `git push origin :<branch name>` at the command prompt (a space before the colon and no space after it).  This will delete the branch on your github fork.
 
 Congratulations, you have successfully contributed to the project.

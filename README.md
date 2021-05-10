@@ -2,25 +2,13 @@
 
 ## [SkillsFinder application](solutions/projectstaffing/README.MD)
 
+## [Analyze Microsoft 365 emails](samples/moveO365datatoazure/README.md)
 
-## [Analyze O365 emails](samples/moveO365datatoazure/README.md)
+In this sample you will use Microsoft Graph data connect to analyze emails from an organization in Microsoft 365 to find subject matter experts on specific topics.
 
-In this sample you will use Microsoft Graph data connect to analyze emails from an organization in Office 365 to find subject matter experts on specific topics.
+## [Using Microsoft 365 data with Azure analytics to build intelligent applications](samples/whoknowswho/README.md)
 
-## [Using Office 365 data with Azure analytics to build intelligent applications](samples/whoknowswho/README.md)
-
-In this sample you will use Microsoft Graph data connect brings Office 365 data and Azure resources to independent software vendors (ISVs). This system enables ISVs to build intelligent applications with Microsoft’s most valuable data and best development tools. Office 365 customers will gain innovative or industry-specific applications that enhance their productivity while keeping full control over their data. For more information, see [Overview](https://github.com/OfficeDev/MS-Graph-Data-Connect/wiki)
-
-
-
-
-
-
-
-
-
-
-
+In this sample you will use Microsoft Graph data connect brings Microsoft 365 data and Azure resources to independent software vendors (ISVs). This system enables ISVs to build intelligent applications with Microsoft's most valuable data and best development tools. Microsoft 365 customers will gain innovative or industry-specific applications that enhance their productivity while keeping full control over their data. For more information, see [Overview](https://github.com/OfficeDev/MS-Graph-Data-Connect/wiki)
 
 ## Give us your feedback
 
@@ -33,7 +21,6 @@ Your feedback is important to us.
 ## Code of conduct
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
 
 ## Copyright
 
