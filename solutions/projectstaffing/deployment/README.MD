@@ -43,9 +43,9 @@ Building the SkillsFinder App Service jar requires the following two modules to 
 - the UI module
     - the steps required to build the UI module are described in the [UI documentation](../jgraph/ui/README.md)
     - when the UI is built, the resulting artifacts are meant to get integrated into the SkillsFinder App Service jar. This is done in two steps:
-        1. build the UI module
+        1. building the UI module
             - the relevant resulting artifacts are placed in `ui/target/dist`
-        2. build the SkillsFinder "core" module, as described below
+        2. building the SkillsFinder "core" module, as described below
             - this first uses the `maven-resources-plugin` to copy the artifacts in the `core` module's resources folder in `resources/public`
             - a later step of the build process copies the module resources to `target/classes` to get packed into the resulting jar
 - the jgraph-common module
@@ -91,34 +91,38 @@ The resulting jars can be found in the `target` folder of the corresponding modu
 
 ### Building the python utils wheel
 The steps required to build the pygraph utils wheel are defined in the pygraph_utils [readme file](../pygraph/azure_processing/pygraph_utils/README.md)
+
 ### Building the artifacts zip
 From the project root folder run `./bin/prepare_artifacts.sh`  
 After this is complete, go to target/output and rename the `arm` folder into `gdc-<release_version>` (e.g. gdc-x.y.z)  
 Compress this folder into a zip archive (e.g. gdc-x.y.z.zip).  
 If desired, upload the archive to the project deliverables AZBS storage account, to make it available for download and deployment
 
+
 ## Building the project using Azure DevOps pipelines
 Please see the [build pipeline documentation](../docs/build_pipeline.md) for details
+
+
 
 ## Deployment
 ### Performing deployment on a new environment
 This creates all the required infrastructure ("static") components and deploys the "dynamic" components mentioned above on top of them.   
 The deployment steps are described in the deployment script [readme file](../deployment/arm/README.md) 
-and in the [deployment overview ](../docs/SkillsFinder%20Deployment%20Overview.pptx)
+and in the [deployment overview](../docs/SkillsFinder%20Deployment%20Overview.pptx)
 
 ### Updating app release version over existing deployment
 Depending on what changed form one release to another, some or all of the steps below need to be performed:
 - update ADB libraries (jars, python scripts and python utils wheel)
-    - detailed deployment steps provided in "Deploying individual components" section
+    - detailed deployment steps provided in the [Deploying individual components](#deploying-jars-python-scripts-and-python-utils-wheel-to-azure-databricks-cluster) section
     - the jars current are: cleanup-jgraph.jar, latest-reply-extractor.jar, airtable-to-hr-data.jar, hr-data-to-azure-sql.jar, m365-user-to-azure-sql.jar, replace-current-search-index.jar, update-azure-sql-data-version.jar
     - the python scripts are: create_azure_search_index.py, mail_enrichment_processor.py, mail_role_detection_taxo.py, profiles_enrichment_processor.py
     - the python utils wheel is currently called pygraph_utils-0.1.7-py3-none-any.whl
     - changes to DB schema, Azure Search indexes schema make deploying impacted libraries mandatory
 - update ADF entities (linked services, datasets, global parameters, pipelines, triggers etc)
-    - detailed deployment steps provided in "Deploying individual components" section
+    - detailed deployment steps provided in the [Deploying individual components](#deploying-azure-datafactory-entities) section
     - changes to DB schema, Azure Search indexes schema or to simulated data can impact the ADF deployment steps
 - update the App Service
-    - detailed deployment steps provided in "Deploying individual components" section
+    - detailed deployment steps provided in the [Deploying individual components](#deploying-the-skillsfinder-docker-image) section
     - changes to DB schema (and some changes to Azure Search indexes schema) make deploying the application mandatory
 
 ### Deploying individual components

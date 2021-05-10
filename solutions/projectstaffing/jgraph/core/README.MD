@@ -4,6 +4,8 @@
 The SkillsFinder application is meant to be run as an Azure App Service, and is deployed as such by the deployment script.  
 The URL of the AppService can be set during the initial deployment process.  
 You can also find it by going to the deployment resource group, opening the jgraph App Service and going to the Overview page.  
+The application automatically gets started during deployment, however, you can also stop it, start it and restart it
+from the App Service Overview page.
 Preconditions:
 - An environment variable with the Azure Key Vault uri has to be set in Azure App Service Settings -> Configurations -> Application Settings e.g. `AZURE_KEY_VAULT_URI=https://gdckeyvault.vault.azure.net/`
 - A secret with the name `azure-search-api-key` has to be set in an Azure Key Vault instance. 
@@ -13,14 +15,22 @@ Preconditions:
 
 ## Running the Application locally
 Although a completely standalone local deployment is not possible (the app still needs to rely on certain services,
-such as Azure Search, from an existing development deployment Azure), it is useful to run the application locally
-as this allows both fast development and testing of new features, as well as debugging in case of problems.  
+such as Azure Search and Active Directory, from an existing development deployment in Azure), it is useful to run the
+app locally as this allows both fast development and testing of new features, as well as debugging in case of problems.  
 
-In order for the application authentication mechanism to work locally, there is a manual step that has to be done:  
-From the JGraph application running in Azure, the `AppServiceAuthSession` cookie will have to be copied and set to the JGraph application running on localhost.  
-This can be done using the browser developer tools.
+### Preconditions
+The following steps need to be taken for the local app to be fully functional. 
+Some of these steps need to be performed after the local application was started.
 
-### Azure Search connection configuration
+#### Defining a Run Configuration in your favorite IDE
+We used IntelliJ IDEA for the development process, so that is what will be used as reference. 
+However, the equivalent steps can be done in your favorite IDE.  
+- Go to `Run` -> `Edit Configurations` -> Add New Configuration -> `Application` and choose a name for your configuration (e.g. `SkillsFinder`)
+- Set the classpath of the `jgraph-core` module
+- Set `com.microsoft.graphdataconnect.skillsfinder.Runner` as the main class
+- Set under `Environment variables` all the environment variables mentioned in the sections below
+
+#### Azure Search connection configuration
 When running the application locally, we currently rely on the Azure Search service from an existing development application deployment in Azure.  
 This approach is safe, as the local application only reads the data from Azure Search, so there is no risk of interfering with
 the development application running in Azure. The only exception is performing an ingestion mode switch (described below). 
@@ -43,11 +53,16 @@ This requires us to disable Azure KeyVault to prevent a connection error.
 AZURE_KEYVAULT_ENABLED=false
 ```
 
-### Mssql local database configuration
-- In order to set up a local database run the deployment/local/docker-compose.yml file. Two docker containers will start each running a 
-mssql server. One will be used for running the application locally the other for running tests locally.
-After the containers have started run the following commands in order to create the `gdc_database` in each mssql server:
+#### Mssql local database configuration
+- In order to set up a local database run the deployment/local/docker-compose.yml file
+```shell script
+cd deployment/local
+docker-compose -f ./docker-compose.yml up -d
 ```
+- Two docker containers will start each running a mssql server. One will be used for running the application locally, the other for running tests locally
+  
+- After the containers have started for the first time, run the following commands in order to create the `gdc_database` in each mssql server:
+```shell script
 docker exec -i $(docker ps -aqf "name=gdc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
 docker exec -i $(docker ps -aqf "name=gdc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
 ```
@@ -61,6 +76,29 @@ The following tables are necessary in order for the application to be fully func
 ```
 SQLCONNSTR_GDC_SERVER=jdbc:sqlserver://localhost:1433;databaseName=gdc_database;user=sa;password=BDE_great!23;
 ```
+
+#### Copy the app service auth cookie locally
+In order for the application authentication mechanism to work locally, the auth cookie from the App Service needs to be
+set locally every time it got refreshed in the App Service (e.g. because the session expired).  
+From the JGraph application running in Azure, the `AppServiceAuthSession` cookie has to be copied and set in the
+JGraph application running on localhost.  
+This can be done using the browser developer tools:
+- in Chrome:
+    - open the SkillsFinder UI of the development App Service in the browser
+    - right click in the page -> `Inspect` -> go to the `Application` tab -> `Storage` -> `Cookies` -> copy the whole value of the `AppServiceAuthSession` cookie
+    - after the local application is started, open the local SkillsFinder UI in the browser (localhost:7655)
+    - right click in the page -> `Inspect` -> go to the `Application` tab -> `Storage` -> `Cookies` -> create a cookie named `AppServiceAuthSession` and paste the copied string as its value
+- in Firefox
+    - open the SkillsFinder UI of the development App Service in the browser
+    - right click in the page -> `Inspect` -> go to the `Storage` tab -> `Cookies` -> copy the whole value of the `AppServiceAuthSession` cookie
+    - after the local application is started, open the local SkillsFinder UI in the browser (localhost:7655)
+    - right click in the page -> `Inspect` -> go to the `Storage` tab -> `Cookies` -> create a cookie named `AppServiceAuthSession` and paste the copied string as its value
+
+
+### Starting the application from your IDE
+Now that all the prerequisites have been met, start the previously defined run configuration from our IDE.  
+E.g. in IntelliJ IDEA, start the `SkillsFinder` run configuration defined previously either in Run or Debug mode.
+
 
 ### Testing the "Ingestion Mode Switch" and "HR Data Upload" functionalities locally
 The `Ingestion Mode` and `Upload HR Data` menus from the `Settings` panel are only accessible to administrators of the app.  
@@ -130,6 +168,14 @@ AZURE_SEARCH_APIKEY=<key_value>
 (although, at the moment, there are no tests that interact with Azure Search, so AZURE_SEARCH_APIKEY isn't used)  
 The gdc_database-test docker container needs to be running for the tests to work.  
 The tests can then be run either using maven or the IDE.  
+To run the tests via maven, simply run the following command from the `jgraph` folder, or the specific module which you want to test
+```
+mvn test
+```
+Alternatively, the unit tests automatically get run when you build a module, as long as the `-DskipTests` flag is not used
+```
+mvn clean install
+```
 
 ---
 

@@ -140,7 +140,7 @@ In order to inspect the logs you have to perform the following steps:
   
 
 The ui should look like the following:
-![Logging interface](./imgs/logging.png "logging interface")
+![Logging interface](./imgs/tracing.png "logging interface")
 
 
 - run query:
