@@ -121,5 +121,5 @@ the `Settings -> Ingestion Mode` menu.
 [Searching for relevant employees](./docs/searching_for_relevant_employees.md)  
 [Search results sorting and paging](./docs/SearchResultsSortingAndPaging.MD)  
 [Test track](./docs/test_track.md)  
-[Testing locally](./jgraph/core/README.MD#running-the-tests-locally)
+[Testing locally](./jgraph/core/README.MD#running-the-tests-locally)  
 [UI](./jgraph/ui/README.md)  
