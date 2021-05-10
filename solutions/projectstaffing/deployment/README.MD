@@ -113,16 +113,16 @@ and in the [deployment overview](../docs/SkillsFinder%20Deployment%20Overview.pp
 ### Updating app release version over existing deployment
 Depending on what changed form one release to another, some or all of the steps below need to be performed:
 - update ADB libraries (jars, python scripts and python utils wheel)
-    - detailed deployment steps provided in the [Deploying individual components](#Deploying jars and python scripts and python utils wheel to Azure Databricks cluster) section
+    - detailed deployment steps provided in the [Deploying individual components](#deploying-jars-python-scripts-and-python-utils-wheel-to-azure-databricks-cluster) section
     - the jars current are: cleanup-jgraph.jar, latest-reply-extractor.jar, airtable-to-hr-data.jar, hr-data-to-azure-sql.jar, m365-user-to-azure-sql.jar, replace-current-search-index.jar, update-azure-sql-data-version.jar
     - the python scripts are: create_azure_search_index.py, mail_enrichment_processor.py, mail_role_detection_taxo.py, profiles_enrichment_processor.py
     - the python utils wheel is currently called pygraph_utils-0.1.7-py3-none-any.whl
     - changes to DB schema, Azure Search indexes schema make deploying impacted libraries mandatory
 - update ADF entities (linked services, datasets, global parameters, pipelines, triggers etc)
-    - detailed deployment steps provided in the [Deploying individual components](#Deploying Azure DataFactory entities) section
+    - detailed deployment steps provided in the [Deploying individual components](#deploying-azure-datafactory-entities) section
     - changes to DB schema, Azure Search indexes schema or to simulated data can impact the ADF deployment steps
 - update the App Service
-    - detailed deployment steps provided in the [Deploying individual components](#Deploying the SkillsFinder docker image) section
+    - detailed deployment steps provided in the [Deploying individual components](#deploying-the-skillsfinder-docker-image) section
     - changes to DB schema (and some changes to Azure Search indexes schema) make deploying the application mandatory
 
 ### Deploying individual components
@@ -187,7 +187,7 @@ Updating Azure DataFactory entities:
 > Flyway does this automatically when the application starts.  
 > If the update scripts are run manually, then the application will fail at start-up because the flyway checksums won't match.  
 
-#### Deploying jars and python scripts and python utils wheel to Azure Databricks cluster
+#### Deploying jars, python scripts and python utils wheel to Azure Databricks cluster
 These libraries need to be deployed on the ADB cluster so that they can be run as spark jobs or used as utility code by such jobs.
 In production, these spark jobs in turn, are only run by ADF pipelines.  
 Any such library can be deployed separately (e.g. on a development environment) to check that the latest changes work as expected.  

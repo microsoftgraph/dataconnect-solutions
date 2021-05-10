@@ -11,24 +11,24 @@ services/resources from an existing full development deployment from Azure.
 
 Here is an overview of the steps required to build the application locally, perform a full development deployment in 
 Azure and then run the application locally while using the resources from the Azure development deployment:
-- build the SkillsFinder App Service jar and all the ADB jars, by following [these steps](./deployment/README.MD#Building all the project's jars at once) 
+- build the SkillsFinder App Service jar and all the ADB jars, by following [these steps](./deployment/README.MD#building-all-the-projects-jars-at-once) 
 - build the pygraph utils wheel, by following [these steps](./pygraph/azure_processing/pygraph_utils/README.md) 
-- prepare the zip with all the resulting artifacts (required for deployment), by following [these steps](./deployment/README.MD#Building the artifacts zip)
+- prepare the zip with all the resulting artifacts (required for deployment), by following [these steps](./deployment/README.MD#building-the-artifacts-zip)
 - to perform a fresh full deployment in Azure, please follow the steps described in the deployment script's [readme file](./deployment/arm/README.md)
   and in the [deployment overview document](./docs/SkillsFinder%20Deployment%20Overview.pptx)
-- to run the application in Azure, please follow [these steps](./jgraph/core/README.MD#Running the Application in Azure)
-- to run the application locally, please follow [these steps](./jgraph/core/README.MD#Running the Application locally)
+- to run the application in Azure, please follow [these steps](./jgraph/core/README.MD#running-the-application-in-azure)
+- to run the application locally, please follow [these steps](./jgraph/core/README.MD#running-the-application-locally)
 
 #### Development
-Please follow the following links to learn more details about the project [architecture](#Architectural Components), 
-[components](./deployment/README.MD#Project components) and [deliverables](./deployment/README.MD#Project deliverables).
+Please follow the following links to learn more details about the project [architecture](#architectural-components), 
+[components](./deployment/README.MD#project-components) and [deliverables](./deployment/README.MD#project-deliverables).
 
 In case changes are done to individual project components (the SkillsFinder App Service, ADF pipelines, ADB libraries etc),
 these components can can either be:
-- built individually, as described in the subsections of the [local build documentation](./deployment/README.MD#Building the project locally), 
-  and [deployed individually](./deployment/README.MD#Deploying individual components)
+- built individually, as described in the subsections of the [local build documentation](./deployment/README.MD#building-the-project-locally), 
+  and [deployed individually](./deployment/README.MD#deploying-individual-components)
 - built together with the entire project (either locally as described above or via a [build pipeline](./docs/build_pipeline.md))
-  and deployed as part of a [full application update](./deployment/README.MD#Updating app release version over existing deployment) 
+  and deployed as part of a [full application update](./deployment/README.MD#updating-app-release-version-over-existing-deployment) 
 
 After the deployment, changes to the App Service usually only require restarting the service.  
 Changes to ADF pipelines or ADB libraries require running the impacted ADF pipelines for the changes to take effect in the SkillsFinder app service.   
@@ -90,19 +90,19 @@ the `Settings -> Ingestion Mode` menu.
 [ADF pipelines](./docs/AzureDataFactory.MD)  
 [ADF triggers](./docs/ADF_trigger_creation_policy.md)  
 [Admin permissions](./docs/AdminPermissions.MD)  
-[Building the project locally](./deployment/README.MD#Building the project locally)  
+[Building the project locally](./deployment/README.MD#building-the-project-locally)  
 [Building the project via the build pipeline](./docs/build_pipeline.md)  
 [CI track](./docs/build_pipeline.md)  
-[Components](./deployment/README.MD#Project components)  
+[Components](./deployment/README.MD#project-components)  
 [Data enrichment](./docs/enrichment_pipelines.md)  
-[Deliverables](./deployment/README.MD#Project deliverables)  
-[Deployment](./deployment/README.MD#Deployment)  
+[Deliverables](./deployment/README.MD#project-deliverables)  
+[Deployment](./deployment/README.MD#deployment)  
 [Deployment on fresh environments](./docs/SkillsFinder Deployment Overview.pptx)  
 [Deployment script](./deployment/arm/README.md)  
 [Employee profile Azure Search schema](./docs/Employee_profile_schema_example.md)  
 [Full deployment](./docs/SkillsFinder Deployment Overview.pptx)  
 [HR Data](./docs/HR_Data.md)  
-[Ingestion modes](#Data Ingestion Modes)  
+[Ingestion modes](#data-ingestion-modes)  
 [Production mode preconditions](./docs/AdminPermissions.MD)  
 [Python utils wheel](./pygraph/azure_processing/pygraph_utils/README.md)  
 [Releasing a new version](./jgraph/README.md)  
@@ -111,5 +111,5 @@ the `Settings -> Ingestion Mode` menu.
 [Searching for relevant employees](./docs/searching_for_relevant_employees.md)  
 [Search results sorting and paging](./docs/SearchResultsSortingAndPaging.MD)  
 [Test track](./docs/test_track.md)  
-[Testing locally](./jgraph/core/README.MD#Running the tests locally)
+[Testing locally](./jgraph/core/README.MD#running-the-tests-locally)
 [UI](./jgraph/ui/README.md)  
