@@ -1,17 +1,3 @@
-package com.microsoft.graphdataconnect.skillsfinder.replyextractor.parser.text;
-
-import com.google.common.collect.ImmutableList;
-import com.microsoft.graphdataconnect.skillsfinder.replyextractor.parser.EmailBodyParser;
-import com.microsoft.graphdataconnect.skillsfinder.replyextractor.regex.HeaderRegexFactory;
-import com.microsoft.graphdataconnect.skillsfinder.replyextractor.regex.Language;
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /*
 The MIT License (MIT)
 
@@ -34,6 +20,20 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+package com.microsoft.graphdataconnect.skillsfinder.replyextractor.parser.text;
+
+import com.google.common.collect.ImmutableList;
+import com.microsoft.graphdataconnect.skillsfinder.replyextractor.parser.EmailBodyParser;
+import com.microsoft.graphdataconnect.skillsfinder.replyextractor.regex.HeaderRegexFactory;
+import com.microsoft.graphdataconnect.skillsfinder.replyextractor.regex.Language;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PlainTextEmailBodyParser implements EmailBodyParser {
 

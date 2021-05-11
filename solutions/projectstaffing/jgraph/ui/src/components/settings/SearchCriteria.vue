@@ -1,3 +1,8 @@
+<!--
+  - Copyright (c) Microsoft Corporation. All rights reserved.
+  - Licensed under the MIT license. See LICENSE file in the project root for full license information.
+  -->
+
 <template>
   <div class="search-criteria">
     <h5 class="text-sb mb-3">Search Criteria</h5>
