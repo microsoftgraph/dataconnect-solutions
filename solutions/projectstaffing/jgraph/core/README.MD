@@ -1,7 +1,7 @@
-# The SkillsFinder (JGraph) App Service
+# The ProjectStaffing (JGraph) App Service
 
 ## Running the Application in Azure
-The SkillsFinder application is meant to be run as an Azure App Service, and is deployed as such by the deployment script.  
+The ProjectStaffing application is meant to be run as an Azure App Service, and is deployed as such by the deployment script.  
 The URL of the AppService can be set during the initial deployment process.  
 You can also find it by going to the deployment resource group, opening the jgraph App Service and going to the Overview page.  
 The application automatically gets started during deployment, however, you can also stop it, start it and restart it
@@ -25,7 +25,7 @@ Some of these steps need to be performed after the local application was started
 #### Defining a Run Configuration in your favorite IDE
 We used IntelliJ IDEA for the development process, so that is what will be used as reference. 
 However, the equivalent steps can be done in your favorite IDE.  
-- Go to `Run` -> `Edit Configurations` -> Add New Configuration -> `Application` and choose a name for your configuration (e.g. `SkillsFinder`)
+- Go to `Run` -> `Edit Configurations` -> Add New Configuration -> `Application` and choose a name for your configuration (e.g. `ProjectStaffing`)
 - Set the classpath of the `jgraph-core` module
 - Set `com.microsoft.graphdataconnect.skillsfinder.Runner` as the main class
 - Set under `Environment variables` all the environment variables mentioned in the sections below
@@ -84,20 +84,20 @@ From the JGraph application running in Azure, the `AppServiceAuthSession` cookie
 JGraph application running on localhost.  
 This can be done using the browser developer tools:
 - in Chrome:
-    - open the SkillsFinder UI of the development App Service in the browser
+    - open the ProjectStaffing UI of the development App Service in the browser
     - right click in the page -> `Inspect` -> go to the `Application` tab -> `Storage` -> `Cookies` -> copy the whole value of the `AppServiceAuthSession` cookie
-    - after the local application is started, open the local SkillsFinder UI in the browser (localhost:7655)
+    - after the local application is started, open the local ProjectStaffing UI in the browser (localhost:7655)
     - right click in the page -> `Inspect` -> go to the `Application` tab -> `Storage` -> `Cookies` -> create a cookie named `AppServiceAuthSession` and paste the copied string as its value
 - in Firefox
-    - open the SkillsFinder UI of the development App Service in the browser
+    - open the ProjectStaffing UI of the development App Service in the browser
     - right click in the page -> `Inspect` -> go to the `Storage` tab -> `Cookies` -> copy the whole value of the `AppServiceAuthSession` cookie
-    - after the local application is started, open the local SkillsFinder UI in the browser (localhost:7655)
+    - after the local application is started, open the local ProjectStaffing UI in the browser (localhost:7655)
     - right click in the page -> `Inspect` -> go to the `Storage` tab -> `Cookies` -> create a cookie named `AppServiceAuthSession` and paste the copied string as its value
 
 
 ### Starting the application from your IDE
 Now that all the prerequisites have been met, start the previously defined run configuration from our IDE.  
-E.g. in IntelliJ IDEA, start the `SkillsFinder` run configuration defined previously either in Run or Debug mode.
+E.g. in IntelliJ IDEA, start the `ProjectStaffing` run configuration defined previously either in Run or Debug mode.
 
 
 ### Testing the "Ingestion Mode Switch" and "HR Data Upload" functionalities locally

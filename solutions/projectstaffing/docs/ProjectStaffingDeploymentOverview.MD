@@ -1,8 +1,8 @@
-## Skills Finder deployment overview
+## Project Staffing deployment overview
 
-### Skills finder deployment architecture
+### Project Staffing deployment architecture
 
-![Image](imgs/skills-finder-high-level-architecture.png)
+![Image](imgs/project-staffing-high-level-architecture.png)
 
 
 ### Deployment tools and dependencies

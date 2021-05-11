@@ -1,6 +1,6 @@
 ## Azure Data Factory
 
-As part of the SkillsFinder application, Azure Data Factory (ADF) is used to perform ETL work, namely to ingest raw information
+As part of the ProjectStaffing application, Azure Data Factory (ADF) is used to perform ETL work, namely to ingest raw information
 related to employees (M365 user profiles, email, information about managers, HR data), filter out irrelevant information,
 join data from several sources, [enrich it](enrichment_pipelines.md) with related information from several domains (taxonomies),
 transform its schema and push it to the target systems (AzureSql, Azure Search) from where it's consumed by the AppService.
@@ -13,7 +13,7 @@ More information regarding triggers can be found [here](ADF_trigger_creation_pol
 
 ### Pipelines
 
-There are 4 pipelines that are started either by triggers or by the Skills Finder application when an ingestion mode switch 
+There are 4 pipelines that are started either by triggers or by the Project Staffing application when an ingestion mode switch 
 operation is performed.  
 The definition of each one of these pipelines is stored in a separate folder in the Azure Data Factory Pipelines section.  
 Some of these pipelines are structured as a main orchestrating pipeline, which in turn starts and coordinates other

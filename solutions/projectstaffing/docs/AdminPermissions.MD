@@ -1,4 +1,4 @@
-###Running Skills Finder in production mode
+###Running Project Staffing in production mode
 
 In order to run the application in production mode there are 4 steps that have to be made:
 1. The `gdc-m365-reader` and `gdc-service` app registrations (service principals) need admin consent from a user with `Global administrator` role.  

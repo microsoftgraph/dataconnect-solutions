@@ -1,7 +1,7 @@
-## SkillsFinder test track
+## ProjectStaffing test track
 
 ### About
-The SkillsFinder test track uses JMeter to run a suite of API tests against an existing SkillsFinder deployment.
+The ProjectStaffing test track uses JMeter to run a suite of API tests against an existing ProjectStaffing deployment.
 
 Files:
 - `Dockerfile`
@@ -18,7 +18,7 @@ Files:
 
 - `smoke-test_v01_upd.jmx`
 
-  The JMeter test used to verify and validate an existing SkillsFinder deployment.
+  The JMeter test used to verify and validate an existing ProjectStaffing deployment.
 
 ### Pre-requisites
 The JMeter test relies on the Selenium plugin of JMeter. In the `run_test.sh` script the docker image for this is being built.

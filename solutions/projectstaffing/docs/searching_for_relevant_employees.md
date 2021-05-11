@@ -1,9 +1,9 @@
-**The goal of the 'Skills Finder' app is to facilitate precision and flexible searches for employees with certain
+**The goal of the 'Project Staffing' app is to facilitate precision and flexible searches for employees with certain
 skills**
 
 ------------
 
-**Skills Finder Functionality**:
+**Project Staffing Functionality**:
 
 - search by skills + inferring possible skills
 - search by name
@@ -13,7 +13,7 @@ skills**
 
 The UI looks like the following:
 
-![Skills Finder Main Page](./imgs/skills_finder_main_page.png "skills finder main page")
+![Project Staffing Main Page](imgs/project_staffing_main_page.png "Project Staffing main page")
 
 The search configuration offers the user the possibility to select only specific fields for searches and also to
 consider different search results ordering for send/received mail search (volume/relevance/freshness)
