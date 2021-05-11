@@ -22,22 +22,22 @@ from monitoring import DeploymentState, Stages
 
 
 def init_active_directory_entities(deployment_name: str, install_config: InstallConfiguration, resource_group: str):
-    print("GDC requires several records in your Active Directory. Let's verify it now... ")
+    print("GDC requires several records in your Active Directory. Let's verify them now... ")
 
     graph_user_read_permission = ad_ops.find_graph_user_read_all_role()
     if not graph_user_read_permission:
         raise RuntimeError("Couldn't find 'User.Read' permission in 'Microsoft Graph' for your tenant ")
 
     if not install_config.gdc_admin_ad_group:
-        print("Deployment Admin group defines list of AD users which are going to have Owner role over all Azure resources created by this deployment.")
-        print("This Security group is mandatory and needs to be created before continue. You can pause and create it now")
+        print("The deployment admins group defines list of AD users which are going to have Owner role over all Azure resources created by this deployment.")
+        print("This Security group is mandatory and needs to be created before continuing. You can pause and create it now")
         admin_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name or id of an existing Active Directory group for deployment admins: ",
                                                           add_signed_user=False, create_if_not_exists=False)
         install_config.gdc_admin_ad_group = admin_ad_group
 
     if not install_config.gdc_employees_ad_group:
-        print("SkillsFinder exports and indexes employee data from M365 Email and Profile to infer skills and build better teams. You should select an AD group to restrict list of accounts.")
-        print("This Security group is mandatory and needs to be created before continue. You can pause and create it now")
+        print("SkillsFinder exports and indexes employee data from M365 Email and Profile to infer skills and build better teams. You should select an AD group to restrict the list of accounts.")
+        print("This Security group is mandatory and needs to be created before continuing. You can pause and create it now")
         employees_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name or id of an existing Active Directory group for employees: ",
                                                               add_signed_user=False, create_if_not_exists=False)
         install_config.gdc_employees_ad_group = employees_ad_group
@@ -175,7 +175,7 @@ if __name__ == '__main__':
     arg_parser.add_argument('--log-analytic-enabled', default=False, required=False, type=lambda x: bool(strtobool(str(x))))
     arg_parser.add_argument('--debug', default=False, required=False, type=lambda x: bool(strtobool(str(x))))
     arg_parser.add_argument('--sql-auth', required=True, type=lambda x: bool(strtobool(str(x))),
-                            help='SQL Server authentication mode for schema init. true for SQL Server mode, false for Windows Auth mode( via Active Directory)')
+                            help='SQL Server authentication mode for schema init: true for SQL Server mode, false for Windows Auth mode (via Active Directory)')
 
     parsed_args = arg_parser.parse_args()
     deployment_name = parsed_args.deployment_name
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     install_config.sql_auth = parsed_args.sql_auth
 
     if install_state.is_user_prompts_taken():
-        if install_state.prompt_stage_repeat("Previously entered values have been found. Would you like to re-enter deployment parameters? (Y/n) "):
+        if install_state.prompt_stage_repeat("Previously entered values have been found. Would you like to ignore them and re-enter deployment parameters? (Y/n) "):
             execute_user_prompts(deployment_name=deployment_name, install_config=install_config, resource_group=resource_group)
             install_state.complete_stage(Stages.USER_PROMPTS_TAKEN)
         else:
@@ -206,6 +206,6 @@ if __name__ == '__main__':
         install_state.complete_stage(Stages.RESOURCES_DEPLOYMENT_DONE)
         print("GDC Azure resources have been created")
     else:
-        print("GDC Azure resources had been created already. Skipping this stage")
+        print("GDC Azure resources had been already created. Skipping this stage")
 
 
