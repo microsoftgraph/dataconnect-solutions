@@ -1,10 +1,3 @@
-package com.microsoft.graphdataconnect.skillsfinder.replyextractor.parser.text;
-
-import org.apache.commons.lang3.StringUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /*
 The MIT License (MIT)
 
@@ -27,6 +20,13 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
+
+package com.microsoft.graphdataconnect.skillsfinder.replyextractor.parser.text;
+
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Email {
     private List<Fragment> fragments = new ArrayList<Fragment>();

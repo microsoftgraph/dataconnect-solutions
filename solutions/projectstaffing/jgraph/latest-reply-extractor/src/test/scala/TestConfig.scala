@@ -1,6 +1,11 @@
 import com.microsoft.graphdataconnect.logging.{GdcLogger, GdcLoggerFactory}
 import com.microsoft.graphdataconnect.skillsfinder.replyextractor.job.config.GDCConfiguration
 import org.apache.commons.lang3.StringUtils
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
+
 import org.apache.spark.SparkContext
 
 class TestConfig extends GDCConfiguration {

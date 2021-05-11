@@ -12,6 +12,11 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.junit.{After, Assert, Test}
 import org.slf4j.{Logger, LoggerFactory}
 
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
+
 import scala.reflect.io.Directory
 
 object LatestReplyExtractorJobTest {

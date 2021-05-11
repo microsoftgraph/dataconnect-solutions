@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
+
 import axios from 'axios';
 import { Module } from 'vuex';
 // eslint-disable-next-line no-unused-vars

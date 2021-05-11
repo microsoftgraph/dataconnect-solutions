@@ -1,3 +1,8 @@
+<!--
+  - Copyright (c) Microsoft Corporation. All rights reserved.
+  - Licensed under the MIT license. See LICENSE file in the project root for full license information.
+  -->
+
 <template>
   <b-dropdown class="user-avatar-wrapper" right ref="editProfileDropdown">
     <template v-slot:button-content>
