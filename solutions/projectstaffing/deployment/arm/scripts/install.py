@@ -29,12 +29,16 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
         raise RuntimeError("Couldn't find 'User.Read' permission in 'Microsoft Graph' for your tenant ")
 
     if not install_config.gdc_admin_ad_group:
-        admin_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name of an existing Active Directory group for GDC admins: ",
+        print("Deployment Admin group defines list of AD users which are going to have Owner role over all Azure resources created by this deployment.")
+        print("This Security group is mandatory and needs to be created before continue. You can pause and create it now")
+        admin_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name or id of an existing Active Directory group for deployment admins: ",
                                                           add_signed_user=False, create_if_not_exists=False)
         install_config.gdc_admin_ad_group = admin_ad_group
 
     if not install_config.gdc_employees_ad_group:
-        employees_ad_group = ad_ops.prompt_or_create_ad_group("GDC is able to export employee data which belongs to a particular AD group. Enter the name of an existing Active Directory group for GDC employees: ",
+        print("SkillsFinder exports and indexes employee data from M365 Email and Profile to infer skills and build better teams. You should select an AD group to restrict list of accounts.")
+        print("This Security group is mandatory and needs to be created before continue. You can pause and create it now")
+        employees_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name or id of an existing Active Directory group for employees: ",
                                                               add_signed_user=False, create_if_not_exists=False)
         install_config.gdc_employees_ad_group = employees_ad_group
 

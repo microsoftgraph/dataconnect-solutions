@@ -95,6 +95,20 @@ if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
     fi
 fi
 
+REQUIRED_ROLE="Owner"
+LOGGED_USER_ID=$(az ad signed-in-user show --query objectId  --output tsv )
+ASSIGNMENTS_LIST=$(az role assignment list --scope /subscriptions/${SUBSCRIPTION_ID} --assignee ${LOGGED_USER_ID} --include-classic-administrators true --include-groups --include-inherited --role "${REQUIRED_ROLE}" --query [].{id:id} --output tsv)
+
+if [[ -z "${ASSIGNMENTS_LIST}" ]]; then
+    echo "You don't have enough permissions within selected subscription ${SUBSCRIPTION_ID}, required role: ${REQUIRED_ROLE}"
+    read -p "Would you still like to try to deploy into this subscription ?(Y/n) " -n 1 -r
+    echo    # move to a new line
+    if [[ ! $REPLY =~ ^[Yy]$ ]]
+    then
+        [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+    fi
+fi
+
 DEFAULT_VM_TYPE="standardDSv2Family"
 MINIMAL_vCPU=12
 vCPU_USED=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID} -o tsv --query "[].{Name:name, currentValue:currentValue}[?contains(Name.value, '${DEFAULT_VM_TYPE}')]" | awk '{ print $1 }')

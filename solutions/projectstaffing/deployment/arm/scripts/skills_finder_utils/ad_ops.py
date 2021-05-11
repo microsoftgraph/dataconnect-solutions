@@ -26,6 +26,9 @@ def prompt_or_create_ad_group(msg: str, tenant_id='default', create_if_not_exist
     while not group_accepted:
         ad_group = input(msg)
         print('\n')
+        if not ad_group:
+            continue
+
         if is_valid_uuid(ad_group):
             rsp = az_cli("ad group list ", "--filter", "objectId eq '%s' " % ad_group)
         else:
