@@ -95,6 +95,61 @@ if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
     fi
 fi
 
+REQUIRED_ROLE="Owner"
+LOGGED_USER_ID=$(az ad signed-in-user show --query objectId  --output tsv )
+ASSIGNMENTS_LIST=$(az role assignment list --scope /subscriptions/${SUBSCRIPTION_ID} --assignee ${LOGGED_USER_ID} --include-classic-administrators true --include-groups --include-inherited --role "${REQUIRED_ROLE}" --query [].{id:id} --output tsv)
+
+if [[ -z "${ASSIGNMENTS_LIST}" ]]; then
+    echo "You don't have enough permissions within selected subscription ${SUBSCRIPTION_ID}, required role: ${REQUIRED_ROLE}"
+    read -p "Would you still like to try to deploy into this subscription ?(Y/n) " -n 1 -r
+    echo    # move to a new line
+    if [[ ! $REPLY =~ ^[Yy]$ ]]
+    then
+        [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+    fi
+fi
+
+DEFAULT_VM_TYPE="standardDSv2Family"
+MINIMAL_vCPU=12
+vCPU_USED=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID} -o tsv --query "[].{Name:name, currentValue:currentValue}[?contains(Name.value, '${DEFAULT_VM_TYPE}')]" | awk '{ print $1 }')
+vCPU_LIMIT=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID}  -o tsv --query "[].{Name:name, limit:limit}[?contains(Name.value, '${DEFAULT_VM_TYPE}' )]" | awk '{ print $1 }')
+if (( ${vCPU_USED} + ${MINIMAL_vCPU} > ${vCPU_LIMIT} ));  then
+    read -p "It's not enough vCPU available at ${LOCATION} region. You use ${vCPU_USED} out of ${vCPU_LIMIT} but ${MINIMAL_vCPU} is required. Would you like to still try to install ?(Y/n) " -n 1 -r
+    echo    # move to a new line
+    if [[ ! $REPLY =~ ^[Yy]$ ]]
+    then
+        echo "Canceling deployment due to lack of vCPU available"
+        exit 5
+    fi
+fi
+
+declare -a services=("Microsoft.Network" "Microsoft.OperationalInsights" "Microsoft.Databricks" "Microsoft.Sql" "Microsoft.Authorization" "Microsoft.Compute" )
+
+## now loop through the service namespaces to make sure all are enabled
+for service in "${services[@]}"
+do
+   SERVICE_STATE=$(az provider show --namespace $service --query registrationState -o tsv)
+   if [[ "${SERVICE_STATE}" -ne "Registered" ]]; then
+      echo "The subscription  ${SUBSCRIPTION_ID} is not registered to use $service. "
+      while true; do
+          read -p "Would you like to activate $service and continue installation (Y/n) " $enable_yn
+          case $enable_yn in
+              [Yy]* )
+                echo "Registering $service for  subscription $SUBSCRIPTION_ID ..."
+                az provider register  --subscription $SUBSCRIPTION_ID --namespace $service --wait
+                REGISTER_RESULT = $?
+                if [[ $REGISTER_RESULT != 0]]; then
+                    echo "Failed to register $service, bailing out..."
+                    exit $REGISTER_RESULT
+                fi
+                break;;
+              [Nn]* ) echo "Installation has been terminated";  exit;;
+              * ) echo "Please answer yes or no.";;
+          esac
+      done
+  fi
+done
+
 LOG_INSIGHTS_REGISTRATION_STATE=$(az provider show --namespace microsoft.insights --query registrationState -o tsv)
 LOG_INSIGHTS_PARAM="--log-analytic-enabled true"
 if [[ "${LOG_INSIGHTS_REGISTRATION_STATE}" -ne "Registered" ]]; then
