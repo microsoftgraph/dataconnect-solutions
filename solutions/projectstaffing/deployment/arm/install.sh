@@ -100,7 +100,7 @@ LOGGED_USER_ID=$(az ad signed-in-user show --query objectId  --output tsv )
 ASSIGNMENTS_LIST=$(az role assignment list --scope /subscriptions/${SUBSCRIPTION_ID} --assignee ${LOGGED_USER_ID} --include-classic-administrators true --include-groups --include-inherited --role "${REQUIRED_ROLE}" --query [].{id:id} --output tsv)
 
 if [[ -z "${ASSIGNMENTS_LIST}" ]]; then
-    echo "You don't have enough permissions within selected subscription ${SUBSCRIPTION_ID}, required role: ${REQUIRED_ROLE}"
+    echo "You don't have enough permissions within selected subscription ${SUBSCRIPTION_ID}. Required role: ${REQUIRED_ROLE}"
     read -p "Would you still like to try to deploy into this subscription ?(Y/n) " -n 1 -r
     echo    # move to a new line
     if [[ ! $REPLY =~ ^[Yy]$ ]]
@@ -114,11 +114,11 @@ MINIMAL_vCPU=12
 vCPU_USED=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID} -o tsv --query "[].{Name:name, currentValue:currentValue}[?contains(Name.value, '${DEFAULT_VM_TYPE}')]" | awk '{ print $1 }')
 vCPU_LIMIT=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID}  -o tsv --query "[].{Name:name, limit:limit}[?contains(Name.value, '${DEFAULT_VM_TYPE}' )]" | awk '{ print $1 }')
 if (( ${vCPU_USED} + ${MINIMAL_vCPU} > ${vCPU_LIMIT} ));  then
-    read -p "It's not enough vCPU available at ${LOCATION} region. You use ${vCPU_USED} out of ${vCPU_LIMIT} but ${MINIMAL_vCPU} is required. Would you like to still try to install ?(Y/n) " -n 1 -r
+    read -p "The are not enough vCPUs available at ${LOCATION} region. You're using ${vCPU_USED} out of ${vCPU_LIMIT}, but ${MINIMAL_vCPU} are required. Would you still like to try to install ?(Y/n) " -n 1 -r
     echo    # move to a new line
     if [[ ! $REPLY =~ ^[Yy]$ ]]
     then
-        echo "Canceling deployment due to lack of vCPU available"
+        echo "Canceling deployment due to lack of available vCPUs "
         exit 5
     fi
 fi
@@ -137,8 +137,8 @@ do
               [Yy]* )
                 echo "Registering $service for  subscription $SUBSCRIPTION_ID ..."
                 az provider register  --subscription $SUBSCRIPTION_ID --namespace $service --wait
-                REGISTER_RESULT = $?
-                if [[ $REGISTER_RESULT != 0]]; then
+                REGISTER_RESULT=$?
+                if [[ $REGISTER_RESULT != 0 ]]; then
                     echo "Failed to register $service, bailing out..."
                     exit $REGISTER_RESULT
                 fi
@@ -154,9 +154,9 @@ LOG_INSIGHTS_REGISTRATION_STATE=$(az provider show --namespace microsoft.insight
 LOG_INSIGHTS_PARAM="--log-analytic-enabled true"
 if [[ "${LOG_INSIGHTS_REGISTRATION_STATE}" -ne "Registered" ]]; then
   echo "The subscription  ${SUBSCRIPTION_ID} is not registered to use microsoft.insights. "
-  echo "Access to log will be limited for this deployment  "
+  echo "Access to logs will be limited for this deployment  "
   while true; do
-      read -p "Do you to continue without Log Analytic Workspace  (Y/n) " log_yn
+      read -p "Do you want to continue without Log Analytics Workspace (Y/n) " log_yn
       case $log_yn in
           [Yy]* ) LOG_INSIGHTS_PARAM="--log-analytic-enabled false";  break;;
           [Nn]* ) echo "Installation has been terminated";  exit;;
@@ -199,10 +199,10 @@ echo -e "#######################################################################
 
 echo "GDC Service supports both Windows (via managed identity and service principal in your AD) and SQL Server (user/password) authentication modes."
 echo "For Windows authentication, the Directory Readers role must be assigned to managed instance identity of SQL server before you can set up an Azure AD admin for the managed instance. If the role isn't assigned to the SQL logical server identity, creating Azure AD users in Azure SQL will fail. For more information, see Azure Active Directory service principal with Azure SQL https://docs.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-service-principal "
-echo "Windows authentication is considered to be more secure approach. 'Directory Readers' AD role assigment is a manual process and requires *Global Administrator* AD permission"
+echo "Windows authentication is considered to be the more secure approach. 'Directory Readers' AD role assignment is a manual process and requires *Global Administrator* AD permission"
 
 while true; do
-    read -p "Would you like to use SQL Server (user/password) authentication mode ? Select N to use Windows authentication  (Y/n) " use_sql_pass_yn
+    read -p "Would you like to use SQL Server (user/password) authentication mode? Select N to use Windows authentication (Y/n) " use_sql_pass_yn
     case ${use_sql_pass_yn} in
         [Yy]* ) USE_SQL_PASS_MODE_PARAM="true"; echo "SQL Server (user/password) authentication mode is selected";  break;;
         [Nn]* ) USE_SQL_PASS_MODE_PARAM="false"; echo "Windows authentication mode is selected";  break;;
@@ -284,8 +284,8 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
     set -e
     if [[ "${AUTO_GENERATION_SUCCESSFUL}"  == "false"  || "${SCHEMA_GENERATION_MODE}" == "manual" ]]; then
         if [[ "${AUTO_GENERATION_SUCCESSFUL}"  == "false" &&  "${SCHEMA_GENERATION_MODE}" == "auto" ]]; then
-            echo "Automated SQL schema initialization has failed or cancel. Falling back to manual mode"
-            echo -e "We've generated generated SQL schema files and saved at ${WORKDIR}/sql-server/ }. Please connect to $dbserver.database.windows.net using your SQL administrator credentials or AD admin  and sequentially execute the following scripts: \n schema.sql, \n stored_procedures.sql, \n data.sql, \n custom-init.sql  "
+            echo "Automated SQL schema initialization has failed or has been canceled. Falling back to manual mode"
+            echo -e "We've generated generated SQL schema files and saved them at ${WORKDIR}/sql-server/ }. Please connect to $dbserver.database.windows.net using your SQL administrator credentials or AD admin  and sequentially execute the following scripts: \n schema.sql, \n stored_procedures.sql, \n data.sql, \n custom-init.sql  "
             while true; do
               read -p "Confirm SQL schema has been manually initialized. Select N if you would like to skip this step and execute it later by running post-deployment script again (Y/N)" manual_schema_completed
               case $manual_schema_completed in

@@ -24,10 +24,11 @@ This is the reference approach as far as Databricks is considered.
 3. Three new directories will be generated under `/pygraph_utils`.
     + Set the current directory to `/pygraph_utils/dist`
 4. Run the following command to install the package:
-    + ```pip install pygraph_utils-0.1.0-py3-none-any.whl```
-
+    + ```pip install pygraph_utils-0.1.7-py3-none-any.whl```
 5. Import `LogAnalyticsLogger` class wherever is needed:
     + ```from log_analytics_client.logger import LogAnalyticsLogger```
+    
+> Note: If `pip` is linked to Python 2 on your system, then use `pip3` instead
 
 # Bibliography
 + https://stackoverflow.com/questions/7522250/how-to-include-package-data-with-setuptools-distutils
