@@ -1,23 +1,24 @@
-## SkillsFinder application
+## ProjectStaffing application
 
-The purpose of the application is to allow engagement managers to build the best suited teams for projects, by finding
-employees that are available and have the best set of skills for the project, as well as the most relevant set of potential skills.  
-The application ingests data from several data sources offline using Azure Data Factory (ADF) pipelines and uses this
-to build a model based on which the most relevant employees are recommended.
+The Project Staffing application is a Microsoft Graph Data Connect based solution which allows engagement managers 
+to build the best suited teams for projects, by finding employees that are available and have the best set of skills 
+for the project, as well as the most relevant set of potential skills.  
+The application ingests data from Microsoft Graph Data Connect and complementary data sources using Azure Data Factory (ADF)
+pipelines and uses this to build a model based on which the most relevant employees are recommended.
 
 ### Setting up the application
 
-The SkillsFinder application can be run locally for development purposes, but it needs to make use of some
+The ProjectStaffing application can be run locally for development purposes, but it needs to make use of some
 services/resources from an existing full development deployment from Azure.
 
 Here is an overview of the steps required to build the application locally, perform a full development deployment in
 Azure and then run the application locally while using the resources from the Azure development deployment:
 
-- build the SkillsFinder App Service jar and all the ADB jars, by following [these steps](./deployment/README.MD#building-all-the-projects-jars-at-once)
+- build the ProjectStaffing App Service jar and all the ADB jars, by following [these steps](./deployment/README.MD#building-all-the-projects-jars-at-once)
 - build the pygraph utils wheel, by following [these steps](./pygraph/azure_processing/pygraph_utils/README.md)
 - prepare the zip with all the resulting artifacts (required for deployment), by following [these steps](./deployment/README.MD#building-the-artifacts-zip)
 - to perform a fresh full deployment in Azure, please follow the steps described in the deployment script's [readme file](./deployment/arm/README.md)
-  and in the [deployment overview document](./docs/SkillsFinderDeploymentOverview.MD)
+  and in the [deployment overview document](docs/ProjectStaffingDeploymentOverview.MD)
 - to run the application in Azure, please follow [these steps](./jgraph/core/README.MD#running-the-application-in-azure)
 - to run the application locally, please follow [these steps](./jgraph/core/README.MD#running-the-application-locally)
 
@@ -26,7 +27,7 @@ Azure and then run the application locally while using the resources from the Az
 Please follow the following links to learn more details about the project [architecture](#architectural-components), 
 [components](./deployment/README.MD#project-components) and [deliverables](./deployment/README.MD#project-deliverables).
 
-In case changes are done to individual project components (the SkillsFinder App Service, ADF pipelines, ADB libraries etc),
+In case changes are done to individual project components (the ProjectStaffing App Service, ADF pipelines, ADB libraries etc),
 these components can can either be:
 - built individually, as described in the subsections of the [local build documentation](./deployment/README.MD#building-the-project-locally),
   and [deployed individually](./deployment/README.MD#deploying-individual-components)
@@ -34,8 +35,8 @@ these components can can either be:
   and deployed as part of a [full application update](./deployment/README.MD#updating-app-release-version-over-existing-deployment)
   
 After the deployment, changes to the App Service usually only require restarting the service.  
-Changes to ADF pipelines or ADB libraries require running the impacted ADF pipelines for the changes to take effect in the SkillsFinder app service.  
-If running the ADF pipelines resulted in changes in Azure SQL database, and you want to see the latest changes in the SkillsFinder
+Changes to ADF pipelines or ADB libraries require running the impacted ADF pipelines for the changes to take effect in the ProjectStaffing app service.  
+If running the ADF pipelines resulted in changes in Azure SQL database, and you want to see the latest changes in the ProjectStaffing
 running locally, then the latest version of the data from Azure SQL database needs to be exported and written to the local database.
 
 ### Architectural components
@@ -57,7 +58,7 @@ sent to Azure Search, and it enhances and filters this information using queries
 It also uses the Azure SQL database to store and retrieve information about configurations, user settings, user teams, 
 state of long-running operations, etc.  
 
-![Architecture Diagram](docs/imgs/skills-finder-high-level-architecture.png)
+![Architecture Diagram](docs/imgs/project-staffing-high-level-architecture.png)
 
 ### Data sources
 
@@ -112,7 +113,7 @@ out of which two modes rely on example datasets:
 The initial ingestion mode can be chosen during deployment via the deployment script, 
 by typing `production_mode`/`simulated_mode`/`sample_mode` when prompted for the ingestion mode.
 
-The switch from one ingestion mode to another can be performed by application admins from the SkillsFinder UI via 
+The switch from one ingestion mode to another can be performed by application admins from the ProjectStaffing UI via
 the `Settings -> Ingestion Mode` menu.
 
 ### Documentation index
@@ -129,10 +130,10 @@ the `Settings -> Ingestion Mode` menu.
 [Data enrichment](./docs/enrichment_pipelines.md)  
 [Deliverables](./deployment/README.MD#project-deliverables)  
 [Deployment](./deployment/README.MD#deployment)  
-[Deployment on fresh environments](./docs/SkillsFinderDeploymentOverview.MD)  
+[Deployment on fresh environments](docs/ProjectStaffingDeploymentOverview.MD)  
 [Deployment script](./deployment/arm/README.md)  
 [Employee profile Azure Search schema](./docs/Employee_profile_schema_example.md)  
-[Full deployment](./docs/SkillsFinderDeploymentOverview.MD)  
+[Full deployment](docs/ProjectStaffingDeploymentOverview.MD)  
 [HR Data](./docs/HR_Data.md)  
 [Ingestion modes](#data-ingestion-modes)  
 [Production mode preconditions](./docs/AdminPermissions.MD)  

@@ -23,7 +23,7 @@ use all available data as input, we should use scheduled triggers for these.
 Since the email data gets processed in an accumulative manner (we accumulate each new batch of emails to the output index), 
 a tumbling window trigger fits naturally for this use case.
 
-A challenge is populating the initial data to be used by the SkillsFinder App Service immediately (or at least as soon 
+A challenge is populating the initial data to be used by the ProjectStaffing App Service immediately (or at least as soon 
 as possible) after deployment, or after an ingestion mode switch has been performed.  
 Since the scheduled triggers do not perform backfill, the first data that they will populate will arrive during the first weekend,
 which makes the app unusable until then.  

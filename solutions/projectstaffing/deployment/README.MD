@@ -1,7 +1,7 @@
 # Build and Deployment Process
 
 ## Project components
-The SkillsFinder application consists of 2 kinds of components:  
+The ProjectStaffing application consists of 2 kinds of components:  
 - the "dynamic" ones which define the behavior of the application
 - the "static" ones which define underlying infrastructure upon which the application is built
 
@@ -22,7 +22,7 @@ The dynamic components are the ones that change most often and can be divided in
 
 ## Project deliverables
 There are two main project deliverables:
-- the docker image used for the Skills Finder AppService
+- the docker image used for the Project Staffing AppService
     - needs to be uploaded to a docker repository (Azure Container Registry is recommended) from where it can be accessed by the deployment script and the App Service
 - the project artifacts zip
     - build via bin/prepare_artifacts.sh 
@@ -39,13 +39,13 @@ There are two main project deliverables:
 ## Building the project locally
 
 ### Building the App Service
-Building the SkillsFinder App Service jar requires the following two modules to have been previously built:
+Building the ProjectStaffing App Service jar requires the following two modules to have been previously built:
 - the UI module
     - the steps required to build the UI module are described in the [UI documentation](../jgraph/ui/README.md)
-    - when the UI is built, the resulting artifacts are meant to get integrated into the SkillsFinder App Service jar. This is done in two steps:
+    - when the UI is built, the resulting artifacts are meant to get integrated into the ProjectStaffing App Service jar. This is done in two steps:
         1. building the UI module
             - the relevant resulting artifacts are placed in `ui/target/dist`
-        2. building the SkillsFinder "core" module, as described below
+        2. building the ProjectStaffing "core" module, as described below
             - this first uses the `maven-resources-plugin` to copy the artifacts in the `core` module's resources folder in `resources/public`
             - a later step of the build process copies the module resources to `target/classes` to get packed into the resulting jar
 - the jgraph-common module
@@ -56,8 +56,8 @@ Building the SkillsFinder App Service jar requires the following two modules to 
 
 Unless you plan to run build the app without running the unit test, you will have to first start the docker containers
 used while the tests are run (the test db container).  
-This is explained in the "Mssql local database configuration" section of the SkillsFinder `core` module [README file](../jgraph/core/README.MD).    
-To build the SkillsFinder app (i.e. the `core` module), run the following commands:
+This is explained in the "Mssql local database configuration" section of the ProjectStaffing `core` module [README file](../jgraph/core/README.MD).    
+To build the ProjectStaffing app (i.e. the `core` module), run the following commands:
 ```shell script
 cd ./jgraph/core
 mvn clean install
@@ -65,7 +65,7 @@ mvn clean install
 This approach also runs the unit tests. To build the app without running the tests, run `mvn clean install -DskipTests`  
 The resulting jar (jgraph-core-<version>.jar) can be found in `jgraph/core/target/`  
 The resulting jar can then be [run locally](../jgraph/core/README.MD)  
-Normally, the SkillsFinder App Service jar is not built as a standalone artifact, but instead it is built by  
+Normally, the ProjectStaffing App Service jar is not built as a standalone artifact, but instead it is built by  
 the [CI build pipeline](../docs/build_pipeline.md) into a docker image, and deployed as such into the App Service.
 > Note: if changes were performed to the jgraph-common module, it will have to be rebuilt before building the current module
 
@@ -81,7 +81,7 @@ The resulting jar can then be [run locally](../jgraph/hr-data/README.MD) or depl
 > Note: if changes were performed to the jgraph-common module, it will have to be rebuilt before building the current module
 
 ### Building all the project's jars at once
-To build the SkillsFinder App Service jar and all the ADB jars in one go, run the following commands:
+To build the ProjectStaffing App Service jar and all the ADB jars in one go, run the following commands:
 ```shell script
 cd ./jgraph
 mvn clean install
@@ -108,7 +108,7 @@ Please see the [build pipeline documentation](../docs/build_pipeline.md) for det
 ### Performing deployment on a new environment
 This creates all the required infrastructure ("static") components and deploys the "dynamic" components mentioned above on top of them.   
 The deployment steps are described in the deployment script [readme file](../deployment/arm/README.md) 
-and in the [deployment overview ](../docs/SkillsFinderDeploymentOverview.MD)
+and in the [deployment overview ](../docs/ProjectStaffingDeploymentOverview.MD)
 
 ### Updating app release version over existing deployment
 Depending on what changed form one release to another, some or all of the steps below need to be performed:
@@ -122,7 +122,7 @@ Depending on what changed form one release to another, some or all of the steps 
     - detailed deployment steps provided in the [Deploying individual components](#deploying-azure-datafactory-entities) section
     - changes to DB schema, Azure Search indexes schema or to simulated data can impact the ADF deployment steps
 - update the App Service
-    - detailed deployment steps provided in the [Deploying individual components](#deploying-the-skillsfinder-docker-image) section
+    - detailed deployment steps provided in the [Deploying individual components](#deploying-the-projectstaffing-docker-image) section
     - changes to DB schema (and some changes to Azure Search indexes schema) make deploying the application mandatory
 
 ### Deploying individual components
@@ -170,7 +170,7 @@ Updating Azure DataFactory entities:
 > NOTE: When updating pipelines/datasets/triggers in ADF using `ARM Template -> Import ARM Template`, remove all linked services dependencies ("dependsOn": [...]) from pipelines/datasets/triggers in order to avoid defining them in the update json file.  
 > The dependencies are only needed when deploying on a new ADF where the order in which linked service and pipelines/datasets are created counts.  
 
-#### Deploying the SkillsFinder docker image
+#### Deploying the ProjectStaffing docker image
 - stop jGraph application from the App Service Overview page
 - apply required DB migrations (DB schema or stored procedure changes made in the code, but not yet present on the target environment)
     - this only needs to be explicitly done manually if the target env does not have flyway enabled

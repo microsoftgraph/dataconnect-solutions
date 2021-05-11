@@ -27,14 +27,14 @@ The following steps must be performed in order:
             - Select the group and copy the `Object Id`
         - Change the `gdc_employees_group_id` global parameter:
             - Search for Azure Data Factory in the Azure Portal
-            - Select the data factory from the SkillsFinder App resource group
+            - Select the data factory from the ProjectStaffing App resource group
             - Select `Author & Monitor`
             - Select `Manage` from the for icons on the left
             - Select `Global parameters`
             - Select the `gdc_employees_group_id` global parameter and set the value to be the object id of the `GDC Employees` group
 
 3. Virtual network configurations
-    - In the Virtual network resource, from the SkillsFinder App resource group, a subnet has to be modified manually (from the Azure Portal). Follow the steps below in order to
+    - In the Virtual network resource, from the ProjectStaffing App resource group, a subnet has to be modified manually (from the Azure Portal). Follow the steps below in order to
     make the necessary change:
         - Got to section `Subnets`
         - Select the subnet with the name `jgraph-vnet`
@@ -54,13 +54,13 @@ The following steps must be performed in order:
     - In the list shown, search for `Mail`, and then check the checkbox next to `Mail.Read` permission
     - In the list shown, search for `User`, and then check the checkbox next to `User.Read.All` permission
  
-5. Stop SkillsFinder App Service
+5. Stop ProjectStaffing App Service
 
-6. Perform necessary changes to SkillsFinder App Service
+6. Perform necessary changes to ProjectStaffing App Service
     - Add a new env variable EMAILS_BACKFILL_TIME_SPAN with the same value added for `emails.backfill.time.span` parameter in ADF update file
     - Update Jgraph app image by running the following command:
         ```
         az webapp config container set --name <app-service-name> --resource-group <existing_gdc_resource_group_name> --docker-custom-image-name <docker_image_name> --docker-registry-server-url <docker_resitry_url>  -u <username> -p <password>
       ```
   
-7. Start SkillsFinder App Service
+7. Start ProjectStaffing App Service
