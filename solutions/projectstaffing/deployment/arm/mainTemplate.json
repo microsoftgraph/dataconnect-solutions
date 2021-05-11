@@ -5,7 +5,7 @@
         "sqlserver.admin.login": {
             "type": "String",
             "metadata": {
-                "description": "SQL Server Admin login "
+                "description": "SQL Server Admin username "
             }
         },
         "sqlserver.admin.password": {
@@ -38,7 +38,7 @@
             "type": "string",
             "defaultValue": "GdcBackend",
             "metadata": {
-                "description": " Preferable Azure KeyVault for offline pipeline ( unique across Azure, alphanumerics and hyphens)"
+                "description": " Preferable Azure KeyVault for offline pipeline properties( unique across Azure, alphanumerics and hyphens)"
             }
         },
         "keyvault.enableSoftDelete": {
@@ -53,7 +53,7 @@
             "type": "string",
             "defaultValue": "gdcstorage",
             "metadata": {
-                "description": " Preferable Azure Storage Account name for GDC data ( unique across Azure, lowcase letters only)"
+                "description": " Preferable Azure Storage Account name for pipeline proccessing data ( unique across Azure, lowcase letters only)"
             }
         },
         "testStorageAccount.name": {
@@ -67,7 +67,7 @@
             "type": "string",
             "defaultValue": "gdc-search-service",
             "metadata": {
-                "description": " Preferable Azure Search name for GDC data ( unique across Azure, letters, digits, underscores are allowed) "
+                "description": " Preferable Azure Search name to store indexed data ( unique across Azure, letters, digits, underscores are allowed) "
             }
         },
         "search-service.sku": {
@@ -143,7 +143,6 @@
         },
         "appservice.name": {
             "type": "String",
-            "defaultValue": "jgraph-app",
             "metadata": {
                 "description": " Deployment Name for JGraph app (unique across Azure), it will be available at https://{appservice.name}.azurewebsites.net "
             }
