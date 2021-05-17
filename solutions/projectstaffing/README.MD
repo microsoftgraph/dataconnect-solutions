@@ -14,13 +14,14 @@ services/resources from an existing full development deployment from Azure.
 Here is an overview of the steps required to build the application locally, perform a full development deployment in
 Azure and then run the application locally while using the resources from the Azure development deployment:
 
-1. build the ProjectStaffing App Service jar and all the ADB jars, by following [these steps](./deployment/README.MD#building-all-the-projects-jars-at-once)
-2. build the pygraph utils wheel, by following [these steps](./pygraph/azure_processing/pygraph_utils/README.md)
-3. prepare the zip with all the resulting artifacts (required for deployment), by following [these steps](./deployment/README.MD#building-the-artifacts-zip)
-4. to perform a fresh full deployment in Azure, please follow the steps described in the deployment script's [readme file](./deployment/arm/README.md)
+1. make sure all prerequisites for building the project are fulfilled, by following [these steps](./deployment/README.MD#prerequisites)
+2. build the ProjectStaffing App Service jar and all the ADB jars, by following [these steps](./deployment/README.MD#building-all-the-projects-jars-at-once)
+3. build the pygraph utils wheel, by following [these steps](./pygraph/azure_processing/pygraph_utils/README.md)
+4. prepare the zip with all the resulting artifacts (required for deployment), by following [these steps](./deployment/README.MD#building-the-artifacts-zip)
+5. to perform a fresh full deployment in Azure, please follow the steps described in the deployment script's [readme file](./deployment/arm/README.md)
    and in the [deployment overview document](docs/ProjectStaffingDeploymentOverview.MD)
-5. to run the application in Azure, please follow [these steps](./jgraph/core/README.MD#running-the-application-in-azure)
-6. to run the application locally, please follow [these steps](./jgraph/core/README.MD#running-the-application-locally)
+6. to run the application in Azure, please follow [these steps](./jgraph/core/README.MD#running-the-application-in-azure)
+7. to run the application locally, please follow [these steps](./jgraph/core/README.MD#running-the-application-locally)
 
 #### Development
 

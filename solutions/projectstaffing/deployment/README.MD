@@ -38,6 +38,28 @@ There are two main project deliverables:
     
 ## Building the project locally
 
+### Prerequisites
+1. Install JDK 1.8
+    - go to https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html, if necessary, accept the license 
+      agreement and download the appropriate installer for your OS
+    - follow the appropriate installation steps from https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html
+      or search online for a more detailed Oracle JDK 8 installation guide, matching your OS
+2. Install latest Maven 3 version
+    - download the latest maven 3 version from https://maven.apache.org/download.cgi
+    - installation steps: https://maven.apache.org/install.html
+3. Install docker
+    - this is required for running tests locally
+    - follow the installation steps specific to your OS from https://docs.docker.com/get-docker/
+4. Install nodejs 14.x, npm and yarn 1.22
+    - this is required to build and run the UI
+    - for details please follow the [UI setup steps](../jgraph/ui/README.md#project-setup)
+5. Install pyenv
+    - https://wilsonmar.github.io/pyenv/
+    - https://www.liquidweb.com/kb/how-to-install-pyenv-on-ubuntu-18-04/
+6. Install Python 3.7 using pyenv
+    - `pyenv install 3.7.8; pyenv global 3.7.8`
+    - this will also install pip
+    
 ### Building the App Service
 Building the ProjectStaffing App Service jar requires the following two modules to have been previously built:
 - the UI module
