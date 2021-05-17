@@ -2,15 +2,16 @@
 
 ## Running the Application in Azure
 The ProjectStaffing application is meant to be run as an Azure App Service, and is deployed as such by the deployment script.  
-The URL of the AppService can be set during the initial deployment process.  
+The AppService name (which determines the URL of the AppService UI) can be set during the initial deployment process. 
+The default value is `project-staffing-app`, so the default URL is `https://project-staffing-app.azurewebsites.net`.  
 You can also find it by going to the deployment resource group, opening the jgraph App Service and going to the Overview page.  
 The application automatically gets started during deployment, however, you can also stop it, start it and restart it
 from the App Service Overview page.
-Preconditions:
-- An environment variable with the Azure Key Vault uri has to be set in Azure App Service Settings -> Configurations -> Application Settings e.g. `AZURE_KEY_VAULT_URI=https://gdckeyvault.vault.azure.net/`
-- A secret with the name `azure-search-api-key` has to be set in an Azure Key Vault instance. 
-- The managed identity of the application needs to have Reader role (defined in "Access Control (IAM)" tab of the Azure Key Vault instance page) 
-  and Get & List access policies (defined in Settings -> "Access Policies" tab) for that particular Azure Key Vault instance.
+
+### User Authentication
+The ProjectStaffing AppService uses the [built-in authentication mechanism of the AppService](https://docs.microsoft.com/en-us/azure/app-service/overview-authentication-authorization).   
+Anonymous access is not permitted.
+In order to log in, you need to access the AppService UI URL and use your Azure ActiveDirectory identity to log in.
 
 
 ## Running the Application locally
@@ -20,7 +21,7 @@ app locally as this allows both fast development and testing of new features, as
 
 ### Preconditions
 The following steps need to be taken for the local app to be fully functional. 
-Some of these steps need to be performed after the local application was started.
+Some of these steps need to be performed after the local application was started, for it to be fully functional.
 
 #### Defining a Run Configuration in your favorite IDE
 We used IntelliJ IDEA for the development process, so that is what will be used as reference. 
@@ -36,21 +37,24 @@ This approach is safe, as the local application only reads the data from Azure S
 the development application running in Azure. The only exception is performing an ingestion mode switch (described below). 
 This approach works as long as the same employee data is used to populate the local database, as for the database (Azure Sql) in that development environment.  
 This way, the data in the local DB and in Azure Search is in sync.  
+
 When running the application locally, we bypass the azure key vault library and instead we directly provide the api key to Azure Search as an environment variable.  
+To obtain this, go to the "app key vault" (`GdcApp<deployment-hash>`) in your deployment resource group and copy the value of the secret `gdc-search-service-key`.  
 **Make sure NOT to commit the key, and only use keys of non-critical development environments that only contain simulated data**
 ```
 AZURE_SEARCH_APIKEY=<key_value>
 ```
 
-Also, the Azure Search URL and emails index name have to be set:
+This requires us to disable Azure KeyVault to prevent a connection error.
+```
+AZURE_KEYVAULT_ENABLED=false
+```
+
+Also, the Azure Search URL and emails index name have to be set. The URL can be obtained from the Search Service resource
+in the deployment resource group, from the Overview page:
 ```
 AZURE_SEARCH_BASE_URL=<url>
 AZURE_SEARCH_EMAILS_INDEX=gdc-emails
-```
-
-This requires us to disable Azure KeyVault to prevent a connection error. 
-```
-AZURE_KEYVAULT_ENABLED=false
 ```
 
 #### Mssql local database configuration
@@ -74,25 +78,44 @@ The following tables are necessary in order for the application to be fully func
 
 - The following env variable has to be set in order for the app to connect to the local mssql container:
 ```
-SQLCONNSTR_GDC_SERVER=jdbc:sqlserver://localhost:1433;databaseName=gdc_database;user=sa;password=BDE_great!23;
+SQLCONNSTR_GDC_SERVER=jdbc:sqlserver://localhost:1433;databaseName=gdc_database;user=sa;password=password_!23;
 ```
 
 #### Copy the app service auth cookie locally
-In order for the application authentication mechanism to work locally, the auth cookie from the App Service needs to be
-set locally every time it got refreshed in the App Service (e.g. because the session expired).  
-From the JGraph application running in Azure, the `AppServiceAuthSession` cookie has to be copied and set in the
-JGraph application running on localhost.  
-This can be done using the browser developer tools:
-- in Chrome:
-    - open the ProjectStaffing UI of the development App Service in the browser
-    - right click in the page -> `Inspect` -> go to the `Application` tab -> `Storage` -> `Cookies` -> copy the whole value of the `AppServiceAuthSession` cookie
-    - after the local application is started, open the local ProjectStaffing UI in the browser (localhost:7655)
-    - right click in the page -> `Inspect` -> go to the `Application` tab -> `Storage` -> `Cookies` -> create a cookie named `AppServiceAuthSession` and paste the copied string as its value
-- in Firefox
-    - open the ProjectStaffing UI of the development App Service in the browser
-    - right click in the page -> `Inspect` -> go to the `Storage` tab -> `Cookies` -> copy the whole value of the `AppServiceAuthSession` cookie
-    - after the local application is started, open the local ProjectStaffing UI in the browser (localhost:7655)
-    - right click in the page -> `Inspect` -> go to the `Storage` tab -> `Cookies` -> create a cookie named `AppServiceAuthSession` and paste the copied string as its value
+Since while running in an AppService the ProjectStaffing app uses the built-in authentication mechanism of the AppService,
+when running the application locally (i.e. outside the AppService), there is no authentication functionality to rely on.  
+However, most of the functionality of the application is dependent on the identity of the current user, which is 
+derived by the application code from the `X-MS-CLIENT-PRINCIPAL-NAME` request header or, alternatively, from the 
+authentication cookie (`AppServiceAuthSession`). These get created by the AppService authentication process and are thus 
+not available locally.  
+Therefore, while running locally you will need to explicitly provide your identity to the application, by manually  
+setting the authentication cookie. This must be previously generated by logging into the development App Service
+
+To retrieve the authentication cookie from the App Service:
+1. open the ProjectStaffing UI of the development App Service in the browser
+    - Please see the section about [Running the Application in Azure](#running-the-application-in-azure) for details 
+      about how to obtain the URL of the AppService UI
+2. log into the application if required
+3. use the browser developer tools to obtain the cookie's value
+    - in Chrome:
+        - right click in the page -> `Inspect` -> go to the `Application` tab -> `Storage` -> `Cookies`
+        - copy the whole value of the `AppServiceAuthSession` cookie
+    - in Firefox
+        - right click in the page -> `Inspect` -> go to the `Storage` tab -> `Cookies`
+        - copy the whole value of the `AppServiceAuthSession` cookie
+
+Set the cookie in the ProjectStaffing application running on localhost:
+1. after the local application is started, open the local ProjectStaffing UI in the browser (localhost:7655)
+2. use the browser developer tools to set the cookie's value
+    - in Chrome:
+        - right click in the page -> `Inspect` -> go to the `Application` tab -> `Storage` -> `Cookies`
+        - create a cookie named `AppServiceAuthSession` and paste the copied string as its value
+    - in Firefox
+        - right click in the page -> `Inspect` -> go to the `Storage` tab -> `Cookies`
+        - create a cookie named `AppServiceAuthSession` and paste the copied string as its value
+
+> Note: The auth cookie from the App Service needs to be updated locally every time it got refreshed in the App Service 
+> (e.g. because the session expired).
 
 
 ### Starting the application from your IDE
