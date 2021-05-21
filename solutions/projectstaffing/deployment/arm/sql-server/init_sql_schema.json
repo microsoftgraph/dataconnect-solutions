@@ -29,9 +29,9 @@
     },
     "appservice.name": {
       "type": "String",
-      "defaultValue": "jgraph-app",
+      "defaultValue": "project-staffing-app",
       "metadata": {
-        "description": " Deployment Name for JGraph app, it will be available at https://{appservice.name}.azurewebsites.net "
+        "description": " Deployment Name for the Project Staffing app, it will be available at https://{appservice.name}.azurewebsites.net "
       }
     },
     "gdc-service.sp.name": {

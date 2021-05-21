@@ -26,16 +26,18 @@ case "${unameOut}" in
     Darwin*)  ;;
     *) echo "Unsupported platform"; exit 4 ;;
 esac
-echo "Installing Azure CLI extension for Databricks and Data Factory..."
 
-az extension add --only-show-errors --name  databricks
-az extension add --only-show-errors --name  datafactory
 # create virtual env
 pip3 install virtualenv -q
 echo "Installing python virtual environment for deployment scripts..."
 virtualenv -p python3  ~/.gdc-env -q
 source ~/.gdc-env/bin/activate
+~/.gdc-env/bin/python -m pip install --upgrade pip
 ~/.gdc-env/bin/pip install -r $WORKDIR/scripts/requirements.txt -q
+
+echo "Installing Azure CLI extension for Databricks and Data Factory..."
+az extension add --only-show-errors --upgrade --name databricks
+az extension add --only-show-errors --upgrade --name datafactory
 
 mkdir -p ~/.gdc
 
@@ -114,7 +116,7 @@ MINIMAL_vCPU=12
 vCPU_USED=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID} -o tsv --query "[].{Name:name, currentValue:currentValue}[?contains(Name.value, '${DEFAULT_VM_TYPE}')]" | awk '{ print $1 }')
 vCPU_LIMIT=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID}  -o tsv --query "[].{Name:name, limit:limit}[?contains(Name.value, '${DEFAULT_VM_TYPE}' )]" | awk '{ print $1 }')
 if (( ${vCPU_USED} + ${MINIMAL_vCPU} > ${vCPU_LIMIT} ));  then
-    read -p "The are not enough vCPUs available at ${LOCATION} region. You're using ${vCPU_USED} out of ${vCPU_LIMIT}, but ${MINIMAL_vCPU} are required. Would you still like to try to install ?(Y/n) " -n 1 -r
+    read -p "There are not enough vCPUs available at ${LOCATION} region. You're using ${vCPU_USED} out of ${vCPU_LIMIT}, but ${MINIMAL_vCPU} are required. Would you still like to try to install ?(Y/n) " -n 1 -r
     echo    # move to a new line
     if [[ ! $REPLY =~ ^[Yy]$ ]]
     then
@@ -197,9 +199,10 @@ echo -e "\n\n\n ################################################################
 echo "###############################     IMPORTANT!  DO NOT IGNORE! ##################################################"
 echo -e "#################################################################################################################\n\n\n"
 
-echo "GDC Service supports both Windows (via managed identity and service principal in your AD) and SQL Server (user/password) authentication modes."
-echo "For Windows authentication, the Directory Readers role must be assigned to managed instance identity of SQL server before you can set up an Azure AD admin for the managed instance. If the role isn't assigned to the SQL logical server identity, creating Azure AD users in Azure SQL will fail. For more information, see Azure Active Directory service principal with Azure SQL https://docs.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-service-principal "
-echo "Windows authentication is considered to be the more secure approach. 'Directory Readers' AD role assignment is a manual process and requires *Global Administrator* AD permission"
+echo "The Project Staffing application supports both Windows authentication (via managed identity and service principal in your AD) and SQL Server (user/password) authentication modes."
+echo "For Windows authentication, the Directory Readers role must be assigned to managed instance identity of SQL Server before you can set up an Azure AD admin for the managed instance. If the role isn't assigned to the SQL logical server identity, creating Azure AD users in Azure SQL will fail. For more information, see Azure Active Directory service principal with Azure SQL https://docs.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-service-principal "
+echo "Windows authentication is considered to be the more secure approach. However, 'Directory Readers' AD role assignment is a manual process and requires *Global Administrator* AD permission, so only choose this if you have the proper permissions."
+echo "SQL Server authentication mode is the more straightforward approach, as it does not require any additional manual setup steps."
 
 while true; do
     read -p "Would you like to use SQL Server (user/password) authentication mode? Select N to use Windows authentication (Y/n) " use_sql_pass_yn

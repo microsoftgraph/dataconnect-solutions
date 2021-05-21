@@ -27,10 +27,16 @@
 
 ### Key Concepts
 
-- install.sh orchestrates python scripts and runs them in the right order
-- Python scripts (install.py, run_db_stage.py, post-deployment.py) use Azure CLI python-binding to execute [az commands](https://docs.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest) to perform changes in Azure
+- install.sh orchestrates python scripts and runs them in the right order
+- Python scripts (install.py, run_db_stage.py, post-deployment.py) use Azure CLI python-binding to execute 
+  [az commands](https://docs.microsoft.com/en-us/cli/azure/reference-index?view=azure-cli-latest) to perform changes in Azure
 - Deployment scripts persist the deployment state in the `~/.gdc` folder, in order to be able to continue deployment after a failure or interruption (depending on the failed stage)
 
 ### ARM template resource dependency graph
 
 ![Image](imgs/resource-dependency-graph.png)
+
+-the resource group with all its resources gets created first
+    - this is done solely based on the ARM template from mainTemplate.json
+    - none of the python deployment code is used up to this point
+    

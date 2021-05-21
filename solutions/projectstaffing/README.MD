@@ -40,6 +40,10 @@ Changes to ADF pipelines or ADB libraries require running the impacted ADF pipel
 If running the ADF pipelines resulted in changes in Azure SQL database, and you want to see the latest changes in the ProjectStaffing
 running locally, then the latest version of the data from Azure SQL database needs to be exported and written to the local database.
 
+> Note: For developing the application, only macOS/Linux based systems were used.  
+> Bash (and Python 3) was used for scripting and deployment.  
+> There has been no testing on Windows, nor deployments from PowerShell.
+
 ### Architectural components
 
 - The [ADF pipelines](docs/AzureDataFactory.MD) process the data from several sources using mainly Azure Databricks (ADB) 

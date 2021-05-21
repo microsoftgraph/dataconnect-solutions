@@ -53,21 +53,21 @@
             "type": "string",
             "defaultValue": "gdcstorage",
             "metadata": {
-                "description": " Preferable Azure Storage Account name for pipeline proccessing data ( unique across Azure, lowcase letters only)"
+                "description": " Preferable Azure Storage Account name for data processed by the ADF pipelines ( unique across Azure, lowercase letters only)"
             }
         },
         "testStorageAccount.name": {
             "type": "string",
             "defaultValue": "demodata",
             "metadata": {
-                "description": " Preferable Azure Storage Account name for GDC sample and simulated data ( unique across Azure, lowcase letters only)"
+                "description": " Preferable Azure Storage Account name for Project Staffing sample and simulated data ( unique across Azure, lowercase letters only)"
             }
         },
         "search-service.name": {
             "type": "string",
             "defaultValue": "gdc-search-service",
             "metadata": {
-                "description": " Preferable Azure Search name to store indexed data ( unique across Azure, letters, digits, underscores are allowed) "
+                "description": " Preferable Azure Search service name to store indexed data ( unique across Azure, letters, digits, underscores are allowed) "
             }
         },
         "search-service.sku": {
@@ -143,8 +143,9 @@
         },
         "appservice.name": {
             "type": "String",
+            "defaultValue": "project-staffing-app",
             "metadata": {
-                "description": " Deployment Name for JGraph app (unique across Azure), it will be available at https://{appservice.name}.azurewebsites.net "
+                "description": " Deployment Name for the Project Staffing app (unique across Azure), it will be available at https://{appservice.name}.azurewebsites.net "
             }
         },
         "appservice.aad.clientId": {
@@ -157,7 +158,7 @@
             "type": "string",
             "defaultValue": "1.4.2",
             "metadata": {
-                "description": " Release version "
+                "description": " Application docker image version to be pulled from the container registry  "
             }
         },
         "adf.name": {
@@ -211,7 +212,7 @@
                 "production_mode"
             ],
             "metadata": {
-                "description": "Choose data ingestion mode. Allowed options: simulated_mode, sample_mode or production_mode)  "
+                "description": "Choose the data ingestion mode. (Allowed options: simulated_mode, sample_mode or production_mode) "
             }
         },
         "pygraph_utils_library.name": {

@@ -204,8 +204,11 @@ def get_or_create_service_principal(name: str, create_if_not_exists: bool = True
                 print("%s\t%s" % (sp['appId'], sp['displayName']))
         elif len(existing_sps) == 1:
             sp = existing_sps[0]
-            sp_accepted = yes_no(
-                "Found an existing service principal : %s, appId: %s, would you like to reuse it ( secret needs to be provided) (y/n)" % (sp['displayName'], sp['appId']))
+            print("\nFound an existing service principal : %s, appId: %s. " % (sp['displayName'], sp['appId']))
+            print("The service principal with this name is required for the deployment process. You can either reuse this service principal or abort the deployment.")
+            print("Reusing it requires you to provide a service principal client secret. ")
+            print("If you are an owner of the service principal, you also have the option of creating a new secret and providing that (e.g. if you don't know the current one).")
+            sp_accepted = yes_no("Would you like to reuse the existing service principal? Replying 'No' will abort the deployment process (y/n)")
             print("\n")
             if sp_accepted:
                 password = getpass.getpass(prompt="Service Principal Secret")
@@ -216,6 +219,8 @@ def get_or_create_service_principal(name: str, create_if_not_exists: bool = True
                     "name": name
                 }
                 sp_accepted = password != "" and password == conf_password
+            else:
+                raise RuntimeError("Required service principal secret not provided. Aborting deployment")
         else:
             if create_if_not_exists:
                 if is_web_app:
