@@ -19,7 +19,7 @@ from monitoring import DeploymentState, Stages
 
 
 def initialize_secrets(install_config: InstallConfiguration, resource_group_name: str):
-    print("Initializing keyvault secrets... ")
+    print("Initializing KeyVault secrets... ")
     app_keyvault_name = install_config.app_keyvault_name
     if not app_keyvault_name:
         app_keyvault_name = input("Enter Preferable Azure KeyVault for application properties: ")
@@ -68,7 +68,7 @@ def initialize_secrets(install_config: InstallConfiguration, resource_group_name
             secrets_ops.set_secret(keyvault_name=app_keyvault_name, secret_name="azure-sql-password",
                                    value=install_config.jgraph_db_user_password)
         else:
-            print("WARNING: SQL Sever Authentication mode is selected but no user/password for JGraph defined")
+            print("WARNING: SQL Sever Authentication mode is selected but no user/password for the Project Staffing AppService defined")
 
         if install_config.gdc_service_db_user_password:
             secrets_ops.set_secret(keyvault_name=backend_keyvault_name, secret_name="azure-sql-backend-user",
@@ -100,4 +100,4 @@ if __name__ == '__main__':
 
     initialize_secrets(install_config=config, resource_group_name=resource_group)
     install_state.complete_stage(Stages.KEY_VAULT_SECRETS_SET)
-    print("GDC secrets has been initialized successfully")
+    print("Project Staffing secrets have been initialized successfully")

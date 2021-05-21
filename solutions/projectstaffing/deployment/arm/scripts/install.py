@@ -32,16 +32,18 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
         raise RuntimeError("Couldn't find 'User.Read' permission in 'Microsoft Graph' for your tenant ")
 
     if not install_config.gdc_admin_ad_group:
-        print("The deployment admins group defines list of AD users which are going to have Owner role over all Azure resources created by this deployment.")
+        print("\nThe Project Staffing admins group defines a list of AD users which are going to have Owner role over all Azure resources created by this deployment.")
+        print("They will also have access to restricted application functionalities such as switching the ingestion mode or uploading new HR Data files.")
         print("This Security group is mandatory and needs to be created before continuing. You can pause and create it now")
-        admin_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name or id of an existing Active Directory group for deployment admins: ",
+        admin_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name or id of an existing Active Directory group for Project Staffing admins: ",
                                                           add_signed_user=False, create_if_not_exists=False)
         install_config.gdc_admin_ad_group = admin_ad_group
 
     if not install_config.gdc_employees_ad_group:
-        print("SkillsFinder exports and indexes employee data from M365 Email and Profile to infer skills and build better teams. You should select an AD group to restrict the list of accounts.")
+        print("\nThe Project Staffing application ingests and processes employee M365 profiles and email data to infer skills and build better teams.")
+        print("You should select an AD group to restrict the list of processed accounts. Only the data of the members of this group will be processed by the application, and therefore, only the employees in this group will be recommended by the application in searches.")
         print("This Security group is mandatory and needs to be created before continuing. You can pause and create it now")
-        employees_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name or id of an existing Active Directory group for employees: ",
+        employees_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name or id of an existing Active Directory group for processed employees: ",
                                                               add_signed_user=False, create_if_not_exists=False)
         install_config.gdc_employees_ad_group = employees_ad_group
 
@@ -207,8 +209,8 @@ if __name__ == '__main__':
     if not install_state.is_azure_resources_deployed():
         execute_deploy_mainTemplate(parsed_args)
         install_state.complete_stage(Stages.RESOURCES_DEPLOYMENT_DONE)
-        print("GDC Azure resources have been created")
+        print("Project Staffing Azure resources have been created")
     else:
-        print("GDC Azure resources had been already created. Skipping this stage")
+        print("Project Staffing Azure resources had been already created. Skipping this stage")
 
 

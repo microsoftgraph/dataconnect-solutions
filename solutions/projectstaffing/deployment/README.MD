@@ -40,10 +40,8 @@ There are two main project deliverables:
 
 ### Prerequisites
 1. Install JDK 1.8
-    - go to https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html, if necessary, accept the license 
-      agreement and download the appropriate installer for your OS
-    - follow the appropriate installation steps from https://docs.oracle.com/javase/8/docs/technotes/guides/install/install_overview.html
-      or search online for a more detailed Oracle JDK 8 installation guide, matching your OS
+    - for example, to install the OpenJDK, follow the appropriate installation steps from https://openjdk.java.net/install/ 
+      or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your OS
 2. Install latest Maven 3 version
     - download the latest maven 3 version from https://maven.apache.org/download.cgi
     - installation steps: https://maven.apache.org/install.html
@@ -115,7 +113,7 @@ The resulting jars can be found in the `target` folder of the corresponding modu
 The steps required to build the pygraph utils wheel are defined in the pygraph_utils [readme file](../pygraph/azure_processing/pygraph_utils/README.md)
 
 ### Building the artifacts zip
-From the project root folder run `./bin/prepare_artifacts.sh`  
+After all the project artifacts were build as described above, from the project root folder run `./bin/prepare_artifacts.sh`  
 After this is complete, go to target/output and rename the `arm` folder into `gdc-<release_version>` (e.g. gdc-x.y.z)  
 Compress this folder into a zip archive (e.g. gdc-x.y.z.zip).  
 If desired, upload the archive to the project deliverables AZBS storage account, to make it available for download and deployment
