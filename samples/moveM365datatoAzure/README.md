@@ -31,6 +31,7 @@ This module has been recorded and is available in the Office Development YouTube
 
 | Version |       Date        |                     Comments                     |
 | ------- | ----------------- | ------------------------------------------------ |
+| 1.7     | May 24, 2021      | Updated laboratory and branding references       |
 | 1.6     | June 18, 2019     | Updated readme to refreshed screencast recording |
 | 1.5     | June 14, 2019     | 2019Q4 content refresh                           |
 | 1.4     | March 18, 2019    | 2019Q3 content refresh                           |
