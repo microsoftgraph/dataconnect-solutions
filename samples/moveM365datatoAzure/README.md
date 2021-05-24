@@ -25,6 +25,7 @@ This module has been recorded and is available in the Office Development YouTube
 | Lab Manuals / Slides | Andrew Connell (Microsoft MVP, Voitanos) [@andrewconnell](//github.com/andrewconnell) |
 | QA                   | Rob Windsor (Microsoft MVP, PAIT Group) [@rob-windsor](//github.com/rob-windsor)      |
 | Sponsor / Support    | Tyler Lenig (Microsoft) [@tlenig](//github.com/tlenig)                                |
+| Content Developer    | Fernando Cobo (Microsoft) [@fercobo-msft](//github.com/fercobo-msft)
 
 ## Version history
 
