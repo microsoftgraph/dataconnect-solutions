@@ -46,6 +46,7 @@ popd
   pushd "${PROJECT_ROOT}"/pygraph/azure_processing/pygraph_utils
     pip3 install wheel
     pip3 install -U pip setuptools
+    rm -rf ./build ./dist
     python3 setup.py sdist bdist_wheel
     cp dist/pygraph_utils-*.whl "${ARTIFACTS_DIR}"
   popd

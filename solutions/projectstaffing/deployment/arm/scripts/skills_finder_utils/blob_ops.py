@@ -75,7 +75,7 @@ def _copy_data(resource_group: str, runtime_storage: str, source_subfolder: str,
             # make sure there is no leading slash otherwise blob path is going to be broken with double slashes
             target_file_path = destination_path_prefix.lstrip("/") + target_file_path
 
-        print("Copying %s into %s%s " % (blob_path, dest_container_name, target_file_path))
+        print("Copying %s into %s/%s " % (blob_path, dest_container_name, target_file_path))
         # We must wait until copying completely finished so that the next deployment steps have all the required data,
         # however, setting requires_sync=True does not support blobs larger than 256MB.
         # Therefore, we need to use async copy together with copied blob properties polling
