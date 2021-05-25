@@ -8,11 +8,11 @@ for the project, as well as the most relevant set of potential skills.
 The application ingests data from Microsoft Graph Data Connect and complementary data sources using Azure Data Factory (ADF)
 pipelines and uses this to build a model based on which the most relevant employees are recommended.
 
-## [Analyze Microsoft 365 emails](samples/moveO365datatoazure/README.md)
+## [Analyze Microsoft 365 emails](solutions/moveO365datatoazure/README.md)
 
 In this sample you will use Microsoft Graph Data Connect to analyze emails from an organization in Microsoft 365 to find subject matter experts on specific topics.
 
-## [Using Microsoft 365 data with Azure analytics to build intelligent applications](samples/whoknowswho/README.md)
+## [Using Microsoft 365 data with Azure analytics to build intelligent applications](solutions/whoknowswho/README.md)
 
 In this sample you will use Microsoft Graph Data Connect brings Microsoft 365 data and Azure resources to independent software vendors (ISVs). This system enables ISVs to build intelligent applications with Microsoft's most valuable data and best development tools. Microsoft 365 customers will gain innovative or industry-specific applications that enhance their productivity while keeping full control over their data. For more information, see [Overview](https://github.com/OfficeDev/MS-Graph-Data-Connect/wiki)
 
