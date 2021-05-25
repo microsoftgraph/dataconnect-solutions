@@ -16,7 +16,7 @@
       <b-icon-x @click="close"> </b-icon-x>
     </template>
     <b-col class="p-0">
-      <img src="@/assets/about-logo.svg" />
+      <img style="width:135px" src="@/assets/logo.png" />
     </b-col>
     <b-col class="p-0 ml-4" cols="6">
       <b-row
