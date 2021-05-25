@@ -7,8 +7,8 @@
   <div class="custom-navbar">
     <div class="navbar-view">
       <router-link class="navbar-logo" to="/">
-        <img src="@/assets/navbar-logo.png"
-      /></router-link>
+        <img src="@/assets/logo.png" /> Project Staffing</router-link
+      >
       <div v-for="item in items" :key="item.name" class="navbar-item">
         {{ item.name }}
       </div>
@@ -111,8 +111,16 @@ export default class Navbar extends Vue {
       margin-left: auto;
     }
     .navbar-logo {
+      display: flex;
+      align-items: center;
+      color: white !important;
+      font-size: 18px !important;
+      &:hover {
+        text-decoration: none;
+      }
       img {
-        height: 20px;
+        height: 40px;
+        margin-right: 5px;
       }
     }
     .navbar-info {
