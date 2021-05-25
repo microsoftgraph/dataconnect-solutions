@@ -1,6 +1,6 @@
-# Contribute to Microsoft Graph data connect
+# Contribute to Microsoft Graph Data Connect
 
-Thank you for your interest in Microsoft Graph data connect!
+Thank you for your interest in Microsoft Graph Data Connect!
 
 - [Ways to contribute](#ways-to-contribute)
 - [Before we can accept your pull request](#before-we-can-accept-your-pull-request)
@@ -10,9 +10,9 @@ Thank you for your interest in Microsoft Graph data connect!
 
 ## Ways to contribute
 
-You can contribute to [Microsoft Graph data connect](https://developer.microsoft.com/graph/docs) in these ways:
+You can contribute to [Microsoft Graph Data Connect](https://developer.microsoft.com/graph/docs) in these ways:
 
-- Contribute to articles via the [public Microsoft Graph data connect repository](https://github.com/microsoftgraph/dataconnect-solutions).
+- Contribute to articles via the [public Microsoft Graph Data Connect repository](https://github.com/microsoftgraph/dataconnect-solutions).
 - Report documentation bugs via [GitHub Issues](https://github.com/microsoftgraph/dataconnect-solutions/issues).
 - Add or vote for documentation requests at [Microsoft Tech Community](https://techcommunity.microsoft.com/t5/microsoft-365-developer-platform/idb-p/Microsoft365DeveloperPlatform/label-name/Microsoft%20Graph).
 
