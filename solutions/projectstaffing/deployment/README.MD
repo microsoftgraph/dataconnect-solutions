@@ -1,7 +1,27 @@
 # Build and Deployment Process
 
+## Table of contents
+- [Project components](#project-components)
+- [Project deliverables](#project-deliverables)
+- [Building the project](#building-the-project)
+    - [Building from source using the local development environment](#building-from-source-using-the-local-development-environment)
+        1. [Prerequisites](#prerequisites)
+        2. [Building the App Service](#building-the-app-service)
+        3. [Building the ADB jars](#building-the-adb-jars)
+        4. [Building all the project's jars at once](#building-all-the-projects-jars-at-once)
+        5. [Building the python utils wheel](#building-the-python-utils-wheel)
+        6. [Building the artifacts zip](#building-the-artifacts-zip)
+    - [Building the project using Azure DevOps pipelines](#building-the-project-using-azure-devops-pipelines)
+- [Deployment](#deployment)
+    - [Performing deployment on a new environment](#performing-deployment-on-a-new-environment)
+    - [Updating app release version over existing deployment](#updating-app-release-version-over-existing-deployment)
+    - [Deploying individual components](#deploying-individual-components)
+        - [Deploying Azure DataFactory entities](#deploying-azure-datafactory-entities)
+        - [Deploying the ProjectStaffing docker image](#deploying-the-projectstaffing-docker-image)
+        - [Deploying jars, python scripts and python utils wheel to Azure Databricks cluster](#deploying-jars-python-scripts-and-python-utils-wheel-to-azure-databricks-cluster)
+
 ## Project components
-The ProjectStaffing application consists of 2 kinds of components:  
+The ProjectStaffing application consists of 2 kinds of components:
 - the "dynamic" ones which define the behavior of the application
 - the "static" ones which define underlying infrastructure upon which the application is built
 
@@ -18,14 +38,14 @@ The dynamic components are the ones that change most often and can be divided in
     - python scripts delivered as they are
 - common python code used by the python ADB jobs
     - built into a python wheel
-    
+
 
 ## Project deliverables
 There are two main project deliverables:
 - the docker image used for the Project Staffing AppService
     - needs to be uploaded to a docker repository (Azure Container Registry is recommended) from where it can be accessed by the deployment script and the App Service
 - the project artifacts zip
-    - build via bin/prepare_artifacts.sh 
+    - build via bin/prepare_artifacts.sh
     - needs to be uploaded to a "project deliverables AZBS storage account", to make it easily accessible to admins performing deployments
     - contains:
         - the jars, python scripts and python wheel files, defining Spark jobs run on ADB by ADF pipelines
@@ -34,13 +54,19 @@ There are two main project deliverables:
         - the stored_procedures.sql file, containing the MS SQL stored procedure used for relevant employee retrieval and enhancement
         - the data.sql file, containing the insert statements which populate the database when deploying on a new environment
         - all the scripts and ARM templates used to deploy the application on a new environment
-    
-    
-## Building the project locally
+
+# Building the project
+You have two options for building the project:
+- building from source using local development environment
+- building the project using Azure DevOps pipelines
+
+## Building from source using the local development environment
 
 ### Prerequisites
+> NOTE: Only macOS and Linux (Ubuntu LTS 18.04) are supported at this time!  
+> If you are using Windows, the simplest way to build the project is to use a VM or Docker container running Ubuntu.
 1. Install JDK 1.8
-    - for example, to install the OpenJDK, follow the appropriate installation steps from https://openjdk.java.net/install/ 
+    - for example, to install the OpenJDK, follow the appropriate installation steps from https://openjdk.java.net/install/
       or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your OS
 2. Install latest Maven 3 version
     - download the latest maven 3 version from https://maven.apache.org/download.cgi
@@ -57,7 +83,7 @@ There are two main project deliverables:
 6. Install Python 3.7 using pyenv
     - `pyenv install 3.7.8; pyenv global 3.7.8`
     - this will also install pip
-    
+
 ### Building the App Service
 Building the ProjectStaffing App Service jar requires the following two modules to have been previously built:
 - the UI module
@@ -97,7 +123,7 @@ mvn clean install
 ```
 This approach also runs the unit tests. To build the jar without running the tests, run `mvn clean install -DskipTests`  
 The resulting jar (hr-data-to-azure-sql.jar) can be found in `jgraph/hr-data/target/`  
-The resulting jar can then be [run locally](../jgraph/hr-data/README.MD) or deployed to ADB as described below.  
+The resulting jar can then be [run locally](../jgraph/hr-data/README.MD) or deployed to ADB as described below.
 > Note: if changes were performed to the jgraph-common module, it will have to be rebuilt before building the current module
 
 ### Building all the project's jars at once
@@ -127,7 +153,7 @@ Please see the [build pipeline documentation](../docs/build_pipeline.md) for det
 ## Deployment
 ### Performing deployment on a new environment
 This creates all the required infrastructure ("static") components and deploys the "dynamic" components mentioned above on top of them.   
-The deployment steps are described in the deployment script [readme file](../deployment/arm/README.md) 
+The deployment steps are described in the deployment script [readme file](../deployment/arm/README.md)
 and in the [deployment overview ](../docs/ProjectStaffingDeploymentOverview.MD)
 
 ### Updating app release version over existing deployment
@@ -151,7 +177,7 @@ Perform the next steps if the existing data is to be overwritten (e.g. for deplo
 1. Stop ADF triggers
 2. Delete ADF triggers (mainly delete triggers that are window based and which would not run again automatically after deployment)
 3. Stop ongoing trigger runs and running pipelines (use "Cancel Recursive" where appropriate)
-4. Run cleanup pipeline End2EndCleanup  
+4. Run cleanup pipeline End2EndCleanup
 
 Updating Azure DataFactory entities:
 - if a new version of simulated data was released, replace it in the "demodata<deploymentHash>" storage account, in the "simulated-data" container
@@ -185,10 +211,10 @@ Updating Azure DataFactory entities:
 > In order to be able to update ADF using `ARM Template -> Import ARM Template`, you have to first disconnect ADF from git. Execute the update and then reconnect ADF to git.  
 > Sometimes, importing the template from the ADF UI can fail, so, alternatively, the import can be done from the Azure Bash Cloud Shell using the command  
 > `az deployment group create --resource-group <adf_resource_group> --template-file <arm_template_file_containing_relevant_changes>.json`  
-> The template file must first be uploaded to the Cloud Shell using the "Upload/Download files" button.  
+> The template file must first be uploaded to the Cloud Shell using the "Upload/Download files" button.
 
 > NOTE: When updating pipelines/datasets/triggers in ADF using `ARM Template -> Import ARM Template`, remove all linked services dependencies ("dependsOn": [...]) from pipelines/datasets/triggers in order to avoid defining them in the update json file.  
-> The dependencies are only needed when deploying on a new ADF where the order in which linked service and pipelines/datasets are created counts.  
+> The dependencies are only needed when deploying on a new ADF where the order in which linked service and pipelines/datasets are created counts.
 
 #### Deploying the ProjectStaffing docker image
 - stop jGraph application from the App Service Overview page
@@ -196,36 +222,36 @@ Updating Azure DataFactory entities:
     - this only needs to be explicitly done manually if the target env does not have flyway enabled
 - deploy latest jGraph docker image into AppServices
     - this can be done in several ways:
-        -from the App Service UI -> Deployment Center, using Azure Container Registry
+        - from the App Service UI -> Deployment Center, using Azure Container Registry
             - for this to work, the App Service and the Container Registry must be in the same subscription
-        -from the Azure CLI using the following command
+        - from the Azure CLI using the following command  
             `az webapp config container set --name <app-service-name> --resource-group <existing_gdc_resource_group_name> --docker-custom-image-name blueprint.azurecr.io/bpcs/jgraph:<docker_image_tag> --docker-registry-server-url https://blueprint.azurecr.io  -u gdc-readonly-token -p <password>`
 - update required AppService env variables (Application Settings, Connection Settings) from the Configuration page 
 - start the application
 
 > NOTE: The database update scripts don't have to be run manually on environments where flyway is enabled.  
 > Flyway does this automatically when the application starts.  
-> If the update scripts are run manually, then the application will fail at start-up because the flyway checksums won't match.  
+> If the update scripts are run manually, then the application will fail at start-up because the flyway checksums won't match.
 
 #### Deploying jars, python scripts and python utils wheel to Azure Databricks cluster
 These libraries need to be deployed on the ADB cluster so that they can be run as spark jobs or used as utility code by such jobs.
 In production, these spark jobs in turn, are only run by ADF pipelines.  
 Any such library can be deployed separately (e.g. on a development environment) to check that the latest changes work as expected.  
 The libraries can be deployed either from a project artifacts zip or from the local development environment.  
-Since deploying individual components (as opposed to deploying whole new project build) is done on development environments 
+Since deploying individual components (as opposed to deploying whole new project build) is done on development environments
 to quickly ensure a fix or feature works as expected before creating a new official build of the entire project, most often
-individual components will be deployed from the local environment. However, there might be cases when deploying from the 
+individual components will be deployed from the local environment. However, there might be cases when deploying from the
 project artifacts zip (downloaded from the project deliverables AZBS storage account) would make sense, therefore we are
-also going to briefly describe this scenario.  
+also going to briefly describe this scenario.
 
-**Deploying from the local environment**  
+**Deploying from the local environment**
 1. open a terminal
 2. change the current directory to the location of the library to upload
 3. deploying the python utils wheel or jars (unlike python scripts) requires uninstalling the former artifact(s) from the ADB cluster first
     - option 1: from the ADB UI, go to _Clusters_ -> target cluster -> _Libraries_, select the libraries to update, hit _Uninstall_ and restart the cluster
     - option 2: from ADB CLI, by building the `uninstall` command specific to each type of artifact using the instructions from [Libraries CLI](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/cli/libraries-cli)
 4. make sure you have the [Databricks CLI](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/cli/) installed and
-  configured to point to the desired ADB cluster
+   configured to point to the desired ADB cluster
     - connecting to several ADB clusters can be achieved by defining [Connection Profiles](https://docs.microsoft.com/en-us/azure/databricks/dev-tools/cli/#--connection-profiles)
     - to check the currently defined profiles, as well as the default one, run `cat ~/.databrickscfg`
 5. upload the desired artifact using the following command `dbfs cp --overwrite --profile <profile> ./<artifact_to_upload> dbfs:/mnt/gdc-artifacts/`
@@ -235,7 +261,7 @@ also going to briefly describe this scenario.
       If you are going to simply run the ADF pipeline which depends on the library (more specifically, the pipeline which runs the ADB job
       that makes use of the library), then this step is not required, as the Databricks actions of the ADF pipelines will trigger
       the library installation themselves (as long as they have the library mentioned in the "Append libraries" Settings section).
-8. now you can run the Spark job or ADF pipeline which is meant to make use of the new library 
+8. now you can run the Spark job or ADF pipeline which is meant to make use of the new library
 
 **Deploying from the project artifacts zip**  
 This approach might be well suited when having a slow internet connection locally or when you are in a different geographical
