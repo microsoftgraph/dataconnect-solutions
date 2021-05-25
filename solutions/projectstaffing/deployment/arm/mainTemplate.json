@@ -156,7 +156,7 @@
         },
         "appservice.version": {
             "type": "string",
-            "defaultValue": "1.4.2",
+            "defaultValue": "1.4.3",
             "metadata": {
                 "description": " Application docker image version to be pulled from the container registry  "
             }
