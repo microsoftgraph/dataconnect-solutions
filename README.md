@@ -8,7 +8,7 @@ for the project, as well as the most relevant set of potential skills.
 The application ingests data from Microsoft Graph Data Connect and complementary data sources using Azure Data Factory (ADF)
 pipelines and uses this to build a model based on which the most relevant employees are recommended.
 
-## [Analyze Microsoft 365 emails](solutions/moveO365datatoazure/README.md)
+## [Analyze Microsoft 365 emails](solutions/moveM365datatoazure/README.md)
 
 In this sample you will use Microsoft Graph Data Connect to analyze emails from an organization in Microsoft 365 to find subject matter experts on specific topics.
 
