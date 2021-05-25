@@ -71,10 +71,14 @@ az login
 
 One of the last steps of the installation process is to define and start Azure DataFactory triggers, which in turn start
 and orchestrate ADF pipelines, which provision the initial set of data for the application.  
+__These pipelines keep on running after the deployment script completed, so monitoring them until completion is required!__  
 This process takes about 30-45 minutes on the default installed configuration (using simulated data), and can be monitored
-in the Azure DataFactory UI. If production mode was chosen, then this process can take a lot longer.  
-The application UI can be accessed at `https://<appServiceName>.azurewebsites.net` as soon as the installation script
-completes. However, the application is fully usable only once the ADF pipelines finished providing it with the initial data.
+in the Azure DataFactory UI, in the "Monitor" tab. 
+If production mode was chosen, then this process can take a lot longer.
+
+The application UI can be accessed at `https://<appServiceName>.azurewebsites.net` as soon as the installation script completes.  
+However, the application is fully usable only once the ADF pipelines finished running, thus providing it with the initial data.  
+The last pipeline to complete is the `End2EndMailsToRolesPipeline`. Once this has finished successfully, the application is ready to use.  
 
 
 ### Notes
