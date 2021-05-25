@@ -49,6 +49,10 @@ az login
       Most of them have default values which are good enough to go with.  
       Please read prompted instructions carefully.
     - Using the `--debug` option will expose the output of all AzureCLI commands the script executes during deployment.
+    - In case you want to be explicit about which tenant and/or subscription should be used for the deployment (for example, 
+      if the current user is associated with multiple tenants/subscriptions), you can provide this information to the 
+      script by adding the arguments `--tenant <tenant-id>` and/or `--subscription <subscription-id>`. 
+      Otherwise, the default tenant and subscription associated with the current account are used
 ```
 ./install.sh --deployment-name project-staffing --location westus --docker-password <docker-registry-password> --debug
 ```

@@ -45,12 +45,16 @@ DEPLOYMENT_NAME=
 LOCATION=
 DEBUG=
 DOCKER_PASSWORD=
+TENANT_ID=
+SUBSCRIPTION_ID=
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
       -n | --deployment-name ) DEPLOYMENT_NAME="$2"; shift ;;
       -l | --location ) LOCATION="$2"; shift ;;
       -p | --docker-password ) DOCKER_PASSWORD="$2"; shift ;;
+      -t | --tenant ) TENANT_ID="$2"; shift ;;
+      -s | --subscription ) SUBSCRIPTION_ID="$2"; shift ;;
       -d | --debug ) DEBUG="--debug true"; ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
@@ -78,23 +82,28 @@ az login
 # -------- Deployment ------------------------------
 #
 #
-TENANT_ID=$(az account show --query tenantId -o tsv)
-SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
-    echo "Multiple subscription found"
-    az account list --output table
-    echo "--------------------------------------------------"
-    echo "Current subscription: "
-    az account list --output table | grep ${SUBSCRIPTION_ID}
+if [[ -z "$TENANT_ID" ]]; then
+  TENANT_ID=$(az account show --query tenantId -o tsv)
+fi
 
-    read -p "Would you like to deploy into this subscription ?(Y/n) " -n 1 -r
-    echo    # move to a new line
-    if [[ ! $REPLY =~ ^[Yy]$ ]]
-    then
-        echo "Use the following command to switch subscription:"
-        echo "    az account set --subscription your_subscription_id "
-        [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-    fi
+if [[ -z "$SUBSCRIPTION_ID" ]]; then
+  SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+  if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
+      echo "Multiple subscriptions found"
+      az account list --output table
+      echo "--------------------------------------------------"
+      echo "Current subscription: "
+      az account list --output table | grep "${SUBSCRIPTION_ID}"
+
+      read -p "Would you like to deploy into this subscription ?(Y/n) " -n 1 -r
+      echo    # move to a new line
+      if [[ ! $REPLY =~ ^[Yy]$ ]]
+      then
+          echo "Use the following command to switch the current subscription:"
+          echo "    az account set --subscription your_subscription_id "
+          [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+      fi
+  fi
 fi
 
 REQUIRED_ROLE="Owner"
@@ -220,9 +229,10 @@ SCHEMA_GENERATION_MODE=$([ "$SQL_SCHEMA_GENERATION_LOCAL" == 0 ] && echo "auto" 
 pushd $WORKDIR/scripts
   echo "Starting deployment script.... "
   # install dependencies
-  ~/.gdc-env/bin/python ./install.py --deployment-name $DEPLOYMENT_NAME --resource-group $RESOURCE_GROUP \
-                              --template-base-uri ${TEMPLATE_BASE_URI} --sas-token $SAS_TOKEN \
-                              --docker-login "gdc-readonly-token" --docker-password $DOCKER_PASSWORD ${LOG_INSIGHTS_PARAM} ${DEBUG} ${SQL_PASS_MODE_PARAM}
+  ~/.gdc-env/bin/python ./install.py --deployment-name "$DEPLOYMENT_NAME" --tenant-id "$TENANT_ID" \
+                              --subscription-id "$SUBSCRIPTION_ID" --resource-group "$RESOURCE_GROUP" \
+                              --template-base-uri "${TEMPLATE_BASE_URI}" --sas-token "$SAS_TOKEN" \
+                              --docker-login "gdc-readonly-token" --docker-password "$DOCKER_PASSWORD" "${LOG_INSIGHTS_PARAM}" "${DEBUG}" "${SQL_PASS_MODE_PARAM}"
 popd
 
 dbserver=$(az sql server  list --resource-group ${RESOURCE_GROUP} --query "[].name" -o tsv)
@@ -308,7 +318,8 @@ fi
 echo "Running post-deployment script...";
 ### run post-deployment script
 pushd $WORKDIR/scripts
-  ~/.gdc-env/bin/python post-deployment.py --resource-group $RESOURCE_GROUP ${DEBUG}
+  ~/.gdc-env/bin/python post-deployment.py --tenant-id "$TENANT_ID" --subscription-id "$SUBSCRIPTION_ID" \
+                                           --resource-group "$RESOURCE_GROUP" "${DEBUG}"
   echo " Post deployment script completed successfully at $(date)"
 popd
 

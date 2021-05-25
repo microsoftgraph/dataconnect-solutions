@@ -140,20 +140,25 @@ if __name__ == '__main__':
     args = sys.argv
 
     current_account = az.az_cli("account show")
-    tenant_id = current_account['tenantId']
-    subscription_id = current_account['id']
-    subscription_name = current_account['name']
     install_config: InstallConfiguration = InstallConfiguration.load()
     install_state = DeploymentState.load()
 
     # Create the parser
-    arg_parser = argparse.ArgumentParser(description='Install GDC service')
+    arg_parser = argparse.ArgumentParser(description='Install Project Staffing service')
 
     # Add the arguments
     arg_parser.add_argument('--deployment-name',
                             metavar='deployment-name',
                             type=str,
                             help='Name of deployment', required=True)
+    arg_parser.add_argument('--tenant-id',
+                            metavar='tenant-id',
+                            type=str,
+                            help='Id of Azure tenant used for deployment', required=True)
+    arg_parser.add_argument('--subscription-id',
+                            metavar='subscription-id',
+                            type=str,
+                            help='Id of Azure subscription used for deployment', required=True)
     arg_parser.add_argument("--resource-group",
                             metavar='resource-group',
                             type=str,
@@ -184,6 +189,8 @@ if __name__ == '__main__':
 
     parsed_args = arg_parser.parse_args()
     deployment_name = parsed_args.deployment_name
+    tenant_id = parsed_args.tenant_id
+    subscription_id = parsed_args.subscription_id
     resource_group = parsed_args.resource_group
     debug_enabled = parsed_args.debug
     if debug_enabled:
