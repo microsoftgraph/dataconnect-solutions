@@ -104,13 +104,13 @@ if __name__ == '__main__':
         if not ws_url.startswith("https://"):
             ws_url = "https://" + ws_url
         arm_ops.update_linked_service(resource_group=resource_group, factory_name=install_config.gdc_datafactory_name,
-                                      service_name="databricks_linkedservice", prop_name="domain", value=ws_url)
+                                      service_name="databricks_linkedservice", prop_name="properties.domain", value=ws_url)
     else:
         print("No Databricks workspace found")
 
     if "cluster_id" in install_config.adb_cluster_details:
         arm_ops.update_linked_service(resource_group=resource_group, factory_name=install_config.gdc_datafactory_name,
-                                      service_name="databricks_linkedservice", prop_name="existingClusterId",
+                                      service_name="databricks_linkedservice", prop_name="properties.existingClusterId",
                                       value=install_config.adb_cluster_details['cluster_id'])
     else:
         print("No cluster id has been found in configuration. Please set it manually in Data Factory linked service")

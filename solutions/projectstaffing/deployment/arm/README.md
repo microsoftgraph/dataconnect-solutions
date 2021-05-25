@@ -73,7 +73,7 @@ The following service principals get created by the deployment script (if they d
     - this service principal is meant to be used by ADF linked service used to read Office 365 data via Graph Data Connect
     - this service principal and "gdc-service" have predefined names, therefore they might need to be reused from one
       deployment to another
-- <app-service-name>-jgraph-aad-web-app
+- <deployment-name>-jgraph-aad-web-app
     - this service principal is meant to be used by the AppService
     - this service principal has a globally unique name, since it relies on the app service name which is also unique
 
