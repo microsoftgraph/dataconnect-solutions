@@ -1,4 +1,4 @@
-# dataconnect-solutions
+# Microsoft Graph Data Connect - Solutions
 
 ## [Project Staffing application](solutions/projectstaffing/README.MD)
 
