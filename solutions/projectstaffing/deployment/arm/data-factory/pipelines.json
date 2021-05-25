@@ -4093,7 +4093,8 @@
                 "[concat(variables('factoryId'), '/pipelines/SimulatedManagerToBlob')]",
                 "[concat(variables('factoryId'), '/pipelines/SimulatedUserProfileToBlob')]",
                 "[concat(variables('factoryId'), '/pipelines/SampleManagerToBlob')]",
-                "[concat(variables('factoryId'), '/pipelines/SampleUserProfileToBlob')]"
+                "[concat(variables('factoryId'), '/pipelines/SampleUserProfileToBlob')]",
+                "[concat(variables('factoryId'), '/pipelines/ImportHRDataIntoSql')]"
             ]
         },
         {
