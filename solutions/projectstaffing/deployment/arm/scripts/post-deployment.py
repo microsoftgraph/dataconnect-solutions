@@ -30,9 +30,6 @@ def create_or_update_azure_search_indexes(search_search_endpoint: str, admin_key
 if __name__ == '__main__':
     args = sys.argv
     current_account = az.az_cli("account show")
-    tenant_id = current_account['tenantId']
-    subscription_id = current_account['id']
-    subscription_name = current_account['name']
     install_config: InstallConfiguration = InstallConfiguration.load()
 
     # Create the parser
@@ -43,6 +40,14 @@ if __name__ == '__main__':
     #                         metavar='azure-search-url',
     #                         type=str,
     #                         help='Azure search endpoint URL', required=True)
+    arg_parser.add_argument('--tenant-id',
+                            metavar='tenant-id',
+                            type=str,
+                            help='Id of Azure tenant used for deployment', required=True)
+    arg_parser.add_argument('--subscription-id',
+                            metavar='subscription-id',
+                            type=str,
+                            help='Id of Azure subscription used for deployment', required=True)
     arg_parser.add_argument("--resource-group",
                             metavar='resource-group',
                             type=str,
@@ -53,6 +58,8 @@ if __name__ == '__main__':
     arg_parser.add_argument('--debug', default=False, required=False, type=lambda x: bool(strtobool(str(x))))
 
     parsed_args = arg_parser.parse_args()
+    tenant_id = parsed_args.tenant_id
+    subscription_id = parsed_args.subscription_id
     resource_group = parsed_args.resource_group
     artifacts_path = parsed_args.artifacts_path
     debug_enabled = parsed_args.debug
@@ -71,7 +78,10 @@ if __name__ == '__main__':
 
     if should_provision_adb_cluster:
         try:
-            post_deploy_adb.initialize_databricks_cluster(install_config=install_config, resource_group=resource_group,
+            post_deploy_adb.initialize_databricks_cluster(install_config=install_config,
+                                                          tenant_id=tenant_id,
+                                                          subscription_id=subscription_id,
+                                                          resource_group=resource_group,
                                                           artifacts_path=artifacts_path)
             install_state.complete_stage(Stages.DATABRICKS_CLUSTER_INITIALIZED)
         except Exception as adb_err:

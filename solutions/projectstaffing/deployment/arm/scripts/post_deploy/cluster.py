@@ -18,7 +18,8 @@ from config import InstallConfiguration
 from monitoring import DeploymentState, Stages
 
 
-def initialize_databricks_cluster(install_config: InstallConfiguration, resource_group: str, artifacts_path: str):
+def initialize_databricks_cluster(install_config: InstallConfiguration, resource_group: str, artifacts_path: str,
+                                  tenant_id: str = None, subscription_id: str = None):
     print("Creating Databricks cluster ... ")
     backend_keyvault_name = install_config.backend_keyvault_name
     gdc_sp_secret_value = install_config.gdc_service_principal['password']
@@ -26,7 +27,7 @@ def initialize_databricks_cluster(install_config: InstallConfiguration, resource
     ws_url = arm_ops.get_databricks_workspace_url(resource_group=resource_group, ws_name=adb_ws_name)
     if not ws_url.startswith("https://"):
         ws_url = "https://" + ws_url
-    adb_access_token = ad_ops.get_databricks_access_token()
+    adb_access_token = ad_ops.get_databricks_access_token(tenant_id, subscription_id)
     managed_libraries = []
     with open("cluster_libraries.json", "r") as libs_file:
         managed_libraries = json.load(libs_file)
@@ -49,14 +50,19 @@ if __name__ == '__main__':
     args = sys.argv
 
     current_account = az.az_cli("account show")
-    tenant_id = current_account['tenantId']
-    subscription_id = current_account['id']
-    subscription_name = current_account['name']
 
     # Create the parser
     arg_parser = argparse.ArgumentParser(description='Install GDC service')
 
     # Add the arguments
+    arg_parser.add_argument('--tenant-id',
+                            metavar='tenant-id',
+                            type=str,
+                            help='Id of Azure tenant used for deployment', required=True)
+    arg_parser.add_argument('--subscription-id',
+                            metavar='subscription-id',
+                            type=str,
+                            help='Id of Azure subscription used for deployment', required=True)
     arg_parser.add_argument("--resource-group",
                             metavar='resource-group',
                             type=str,
@@ -76,7 +82,8 @@ if __name__ == '__main__':
     if debug_enabled:
         az.DEBUG_ENABLED = True
 
-    initialize_databricks_cluster(install_config=config, resource_group=group, artifacts_path=artifacts_local_path)
+    initialize_databricks_cluster(install_config=config, resource_group=group, artifacts_path=artifacts_local_path,
+                                  tenant_id=parsed_args.tenant_id, subscription_id=parsed_args.subscription_id)
     install_state.complete_stage(Stages.DATABRICKS_CLUSTER_INITIALIZED)
     print("Databricks cluster has been initialized")
 

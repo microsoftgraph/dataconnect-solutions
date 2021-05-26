@@ -45,27 +45,31 @@ DEPLOYMENT_NAME=
 LOCATION=
 DEBUG=
 DOCKER_PASSWORD=
+SUBSCRIPTION_ID=
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
       -n | --deployment-name ) DEPLOYMENT_NAME="$2"; shift ;;
       -l | --location ) LOCATION="$2"; shift ;;
       -p | --docker-password ) DOCKER_PASSWORD="$2"; shift ;;
+      -s | --subscription ) SUBSCRIPTION_ID="$2"; shift ;;
       -d | --debug ) DEBUG="--debug true"; ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 if [[ -z "$DEPLOYMENT_NAME" ]]; then
-  read -p "Enter deployment name: " DEPLOYMENT_NAME
+  read -p "Enter deployment name: " -r DEPLOYMENT_NAME
 fi
 
 if [[ -z "$LOCATION" ]]; then
-  read -p "Enter Azure location: " LOCATION
+  read -p "Enter Azure location: " -r LOCATION
 fi
 
 if [[ -z "$DOCKER_PASSWORD" ]]; then
-  read -p "Enter docker repository password: " DOCKER_PASSWORD
+  #  read -p "Enter docker repository password: " -r -s DOCKER_PASSWORD
+  # For now, using hardcoded password to public ProjectStaffing docker images repository
+  DOCKER_PASSWORD="ymCNmmEJ1Zv=BieuVmkM90BYC36UemAg"
 fi
 
 
@@ -78,24 +82,27 @@ az login
 # -------- Deployment ------------------------------
 #
 #
-TENANT_ID=$(az account show --query tenantId -o tsv)
-SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
-    echo "Multiple subscription found"
-    az account list --output table
-    echo "--------------------------------------------------"
-    echo "Current subscription: "
-    az account list --output table | grep ${SUBSCRIPTION_ID}
 
-    read -p "Would you like to deploy into this subscription ?(Y/n) " -n 1 -r
-    echo    # move to a new line
-    if [[ ! $REPLY =~ ^[Yy]$ ]]
-    then
-        echo "Use the following command to switch subscription:"
-        echo "    az account set --subscription your_subscription_id "
-        [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-    fi
+if [[ -z "$SUBSCRIPTION_ID" ]]; then
+  SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+  if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
+      echo "Multiple subscriptions found"
+      az account list --output table
+      echo "--------------------------------------------------"
+      echo "Current subscription: "
+      az account list --output table | grep "${SUBSCRIPTION_ID}"
+      read -p "Would you like to deploy into this subscription? (Y/n) " -n 1 -r
+      echo    # move to a new line
+      if [[ ! $REPLY =~ ^[Yy]$ ]]
+      then
+          read -p "Please provide the desired SubscriptionId, from the list displayed above. " -r SUBSCRIPTION_ID
+      fi
+  fi
 fi
+
+TENANT_ID=$(az account show --subscription "$SUBSCRIPTION_ID" --query tenantId -o tsv)
+
+echo "Deploying in subscription $SUBSCRIPTION_ID from tenant $TENANT_ID"
 
 REQUIRED_ROLE="Owner"
 LOGGED_USER_ID=$(az ad signed-in-user show --query objectId  --output tsv )
@@ -134,11 +141,11 @@ do
    if [[ "${SERVICE_STATE}" -ne "Registered" ]]; then
       echo "The subscription  ${SUBSCRIPTION_ID} is not registered to use $service. "
       while true; do
-          read -p "Would you like to activate $service and continue installation (Y/n) " $enable_yn
+          read -p "Would you like to activate $service and continue installation (Y/n) " -r enable_yn
           case $enable_yn in
               [Yy]* )
                 echo "Registering $service for  subscription $SUBSCRIPTION_ID ..."
-                az provider register  --subscription $SUBSCRIPTION_ID --namespace $service --wait
+                az provider register  --subscription "$SUBSCRIPTION_ID" --namespace "$service" --wait
                 REGISTER_RESULT=$?
                 if [[ $REGISTER_RESULT != 0 ]]; then
                     echo "Failed to register $service, bailing out..."
@@ -158,7 +165,7 @@ if [[ "${LOG_INSIGHTS_REGISTRATION_STATE}" -ne "Registered" ]]; then
   echo "The subscription  ${SUBSCRIPTION_ID} is not registered to use microsoft.insights. "
   echo "Access to logs will be limited for this deployment  "
   while true; do
-      read -p "Do you want to continue without Log Analytics Workspace (Y/n) " log_yn
+      read -p "Do you want to continue without Log Analytics Workspace (Y/n) " -r log_yn
       case $log_yn in
           [Yy]* ) LOG_INSIGHTS_PARAM="--log-analytic-enabled false";  break;;
           [Nn]* ) echo "Installation has been terminated";  exit;;
@@ -205,7 +212,7 @@ echo "Windows authentication is considered to be the more secure approach. Howev
 echo "SQL Server authentication mode is the more straightforward approach, as it does not require any additional manual setup steps."
 
 while true; do
-    read -p "Would you like to use SQL Server (user/password) authentication mode? Select N to use Windows authentication (Y/n) " use_sql_pass_yn
+    read -p "Would you like to use SQL Server (user/password) authentication mode? Select N to use Windows authentication (Y/n) " -r use_sql_pass_yn
     case ${use_sql_pass_yn} in
         [Yy]* ) USE_SQL_PASS_MODE_PARAM="true"; echo "SQL Server (user/password) authentication mode is selected";  break;;
         [Nn]* ) USE_SQL_PASS_MODE_PARAM="false"; echo "Windows authentication mode is selected";  break;;
@@ -220,9 +227,10 @@ SCHEMA_GENERATION_MODE=$([ "$SQL_SCHEMA_GENERATION_LOCAL" == 0 ] && echo "auto" 
 pushd $WORKDIR/scripts
   echo "Starting deployment script.... "
   # install dependencies
-  ~/.gdc-env/bin/python ./install.py --deployment-name $DEPLOYMENT_NAME --resource-group $RESOURCE_GROUP \
-                              --template-base-uri ${TEMPLATE_BASE_URI} --sas-token $SAS_TOKEN \
-                              --docker-login "gdc-readonly-token" --docker-password $DOCKER_PASSWORD ${LOG_INSIGHTS_PARAM} ${DEBUG} ${SQL_PASS_MODE_PARAM}
+  ~/.gdc-env/bin/python ./install.py --deployment-name "$DEPLOYMENT_NAME" --tenant-id "$TENANT_ID" \
+                              --subscription-id "$SUBSCRIPTION_ID" --resource-group "$RESOURCE_GROUP" \
+                              --template-base-uri "${TEMPLATE_BASE_URI}" --sas-token "$SAS_TOKEN" \
+                              --docker-login "gdc-readonly-token" --docker-password "$DOCKER_PASSWORD" ${LOG_INSIGHTS_PARAM} ${DEBUG} ${SQL_PASS_MODE_PARAM}
 popd
 
 dbserver=$(az sql server  list --resource-group ${RESOURCE_GROUP} --query "[].name" -o tsv)
@@ -240,7 +248,7 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
       echo "NOTE: SQL schema initialization will fail if you don't add SQL Server into 'Directory Readers' role and installation procedure have to be started over after deployment resource group is deleted"
       echo "Azure CLI doesn't support operations that allow to verify this permission. You have to confirm it manually"
       while true; do
-        read -p "Confirm SQL server identity was added to 'Directory Readers' role in order to proceed with Azure SQL Server schema creation. Select N if you would like to skip this step and retry later by running post-deployment script again (Y/N) " sql_server_yn
+        read -p "Confirm SQL server identity was added to 'Directory Readers' role in order to proceed with Azure SQL Server schema creation. Select N if you would like to skip this step and retry later by running post-deployment script again (Y/N) " -r sql_server_yn
         case $sql_server_yn in
             [Yy]* ) SCHEMA_GENERATION_MODE="auto"; break;;
             [Nn]* ) SCHEMA_GENERATION_MODE="manual"; break;;
@@ -290,7 +298,7 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
             echo "Automated SQL schema initialization has failed or has been canceled. Falling back to manual mode"
             echo -e "We've generated generated SQL schema files and saved them at ${WORKDIR}/sql-server/ }. Please connect to $dbserver.database.windows.net using your SQL administrator credentials or AD admin  and sequentially execute the following scripts: \n schema.sql, \n stored_procedures.sql, \n data.sql, \n custom-init.sql  "
             while true; do
-              read -p "Confirm SQL schema has been manually initialized. Select N if you would like to skip this step and execute it later by running post-deployment script again (Y/N)" manual_schema_completed
+              read -p "Confirm SQL schema has been manually initialized. Select N if you would like to skip this step and execute it later by running post-deployment script again (Y/N)" -r manual_schema_completed
               case $manual_schema_completed in
                   [Yy]* )
                     pushd "$WORKDIR/scripts"
@@ -308,7 +316,8 @@ fi
 echo "Running post-deployment script...";
 ### run post-deployment script
 pushd $WORKDIR/scripts
-  ~/.gdc-env/bin/python post-deployment.py --resource-group $RESOURCE_GROUP ${DEBUG}
+  ~/.gdc-env/bin/python post-deployment.py --tenant-id "$TENANT_ID" --subscription-id "$SUBSCRIPTION_ID" \
+                                           --resource-group "$RESOURCE_GROUP" ${DEBUG}
   echo " Post deployment script completed successfully at $(date)"
 popd
 

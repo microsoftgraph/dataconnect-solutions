@@ -61,10 +61,12 @@ You have two options for building the project:
 - building the project using Azure DevOps pipelines
 
 ## Building from source using the local development environment
+> NOTE: For developing the application, only macOS/Linux based systems were used.  
+> Building the application is possible from Windows systems (using Powershell, not the command-line interpreter), however 
+> solid knowledge of your development environment and of the differences between Windows/Unix systems is required. Some
+> adaptations of the provided instructions might be required as well, as well as some additional steps during deployment.
 
 ### Prerequisites
-> NOTE: Only macOS and Linux (Ubuntu LTS 18.04) are supported at this time!  
-> If you are using Windows, the simplest way to build the project is to use a VM or Docker container running Ubuntu.
 1. Install JDK 1.8
     - for example, to install the OpenJDK, follow the appropriate installation steps from https://openjdk.java.net/install/
       or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your OS

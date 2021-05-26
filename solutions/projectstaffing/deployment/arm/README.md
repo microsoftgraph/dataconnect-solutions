@@ -2,8 +2,8 @@
 
 ### Prerequisites
 
-- log into your Azure portal and start the Cloud Shell terminal in Bash mode
-    - Powershell is not supported!
+- log into your Azure portal and start the Cloud Shell terminal in __Bash__ mode
+    - Powershell is __not__ supported!
 - ensure Azure CLI is already installed, and the version is at least `2.16.0` (run `az version` command)
     - to update the Azure CLI to the latest version run `az upgrade`
     - Azure Cloud Shell usually comes with the latest Azure CLI version
@@ -40,7 +40,19 @@ Please read the full contents of this file before proceeding with the deployment
 az login
 ```
 
-4. Run deployment script from the working dir
+4. Ensure you are deploying to the desired tenant and subscription
+    - Run the following command to determine which is the default subscription assigned to your account
+    `az account list --output table`
+    - The result will have the following columns: Name, CloudName, SubscriptionId, State, IsDefault
+    - To visualize the tenant related to each subscription, you can use a different output mode, like `tsv` or `json`
+    - If you have multiple subscriptions tied to the current account, then the one for which `IsDefault` is `True`
+      will be the one the deployment script will offer to use by default to perform the deployment into
+    - If you desire to use a different subscription, you can pass it explicitly to the script, by providing the optional 
+      argument `--subscription <subscription-id>`
+        - Alternatively, if this argument is not provided, and the script encounters multiple subscriptions, then you 
+        will be prompted to choose between the default subscription and a different one
+
+5. Run deployment script from the working dir
     - You may change the deployment name and the region in the command below.
         - The deployment name is used for naming the Azure resource group.
         - The name of the App Service will be prompted for during the installation.
@@ -59,10 +71,14 @@ az login
 
 One of the last steps of the installation process is to define and start Azure DataFactory triggers, which in turn start
 and orchestrate ADF pipelines, which provision the initial set of data for the application.  
+__These pipelines keep on running after the deployment script completed, so monitoring them until completion is required!__  
 This process takes about 30-45 minutes on the default installed configuration (using simulated data), and can be monitored
-in the Azure DataFactory UI. If production mode was chosen, then this process can take a lot longer.  
-The application UI can be accessed at `https://<appServiceName>.azurewebsites.net` as soon as the installation script
-completes. However, the application is fully usable only once the ADF pipelines finished providing it with the initial data.
+in the Azure DataFactory UI, in the "Monitor" tab. 
+If production mode was chosen, then this process can take a lot longer.
+
+The application UI can be accessed at `https://<appServiceName>.azurewebsites.net` as soon as the installation script completes.  
+However, the application is fully usable only once the ADF pipelines finished running, thus providing it with the initial data.  
+The last pipeline to complete is the `End2EndMailsToRolesPipeline`. Once this has finished successfully, the application is ready to use.  
 
 
 ### Notes

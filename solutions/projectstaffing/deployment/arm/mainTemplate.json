@@ -143,9 +143,8 @@
         },
         "appservice.name": {
             "type": "String",
-            "defaultValue": "project-staffing-app",
             "metadata": {
-                "description": " Deployment Name for the Project Staffing app (unique across Azure), it will be available at https://{appservice.name}.azurewebsites.net "
+                "description": " Deployment Name for the Project Staffing app (has to be unique across the entire Azure, globally). It will be available at https://{appservice.name}.azurewebsites.net "
             }
         },
         "appservice.aad.clientId": {
