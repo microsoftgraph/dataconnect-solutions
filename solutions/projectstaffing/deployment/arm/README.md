@@ -33,6 +33,26 @@ Please read the full contents of this file before proceeding with the deployment
 
 2. Upload prebuilt package (e.g. gdc-x.y.z.zip ) onto Azure CloudShell storage and unzip into your working dir.
    It will contain install.sh which is an entrypoint of deployment script.
+   
+   If the artifacts zip was ___built on a Windows machine___, you will have to perform the next steps in CloudShell:
+   - because the file permissions are different on Windows as opposed to Unix based systems, you have to run the  
+     following commands in order to make the `install.sh` and `uninstall.sh` scripts executable:
+     
+       ```chmod +x install.sh```
+       
+       ```chmod +x uninstall.sh```
+   - the Windows OS uses different line termination symbols than Unix systems, and thus modifies `.sh` files by adding
+     a `\r` character at the end of lines. As a result, the scripts can't be executed.  
+     In order to remove the trailing `\r` character, run the following commands:
+    
+        ```sed -i 's/\r$//' install.sh ```
+        
+        ```sed -i 's/\r$//' uninstall.sh ```
+   
+   - also, because of file permissions differences between Windows and Unix based systems, the permissions to 
+     the `scripts/schema/` directory has to be set explicitly by running the following command:
+   
+        ```chmod 777 -R scripts/schema/```
 
 3. Log into your account using Azure CLI
    > Note: make sure you've logged OUT from all other Azure accounts (if any) before login.
@@ -135,6 +155,12 @@ clean state, you can either run the uninstall script (described below) or perfor
         - should be deleted only if they were created by the deployment process (i.e. they are not used elsewhere)
         - providing their secrets during the next deployment is a better approach than deleting them
 
+If the artifacts used for installation were __built on a Windows machine__, and you want to delete the folder containing
+the artifacts, you might not be able to do that straight away, because of differences between Windows and Unix systems
+file permissions. Run the following command in order to solve the problem:  
+```chmod 777 -R <directory_path_where_artifacts_were_decompressed>/```  
+Then run the following command to delete the folder containing the artifacts:  
+```rm -rf <directory_path_where_artifacts_were_decompressed>/```  
 
 ### Uninstalling a deployment
 A project deployment might need to be cleared, for example, either following a deployment failure (so that you might
@@ -193,3 +219,5 @@ Are you sure you want to perform this operation? (y/n): y
 Deleting the jgraph-aad-web-app app registration from Active Directory.
 Would you like delete local files related to previous deployments (if any)? Recommended if you want to redeploy from scratch (Y/n) y
 ```
+
+
