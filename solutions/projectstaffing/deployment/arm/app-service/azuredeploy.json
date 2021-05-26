@@ -3,7 +3,6 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "appservice.name": {
-      "defaultValue": "project-staffing-app",
       "type": "string"
     },
     "vnet.name": {
