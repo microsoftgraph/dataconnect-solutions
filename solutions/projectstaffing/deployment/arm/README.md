@@ -141,14 +141,39 @@ A project deployment might need to be cleared, for example, either following a d
 start a new deployment from a clean environment) or to free up resources on Azure once a deployment is no longer needed.  
 In order to un-install the deployment you have to execute the uninstall script:
 ```
-./uninstall.sh
+./uninstall.sh [--subscription-id <subscription_id_string>]
 ```
+
+The subscription id of the subscription where the deployment was made, can be passed as an argument.
 
 The uninstall script will ask for the name of the deployment to be cleaned up, in order to perform all the necessary steps.  
 The name can be obtained from the resource group name which is to be cleaned, by removing the "-resources" suffix.
 ```
 Enter deployment name: <installed-deployment-name> [press Enter]
 ```
+
+If the user is a member of multiple subscriptions the uninstall script will ask for the subscription id where the deployment resides.
+The user will be shown the entire list of subscriptions to which he has access:
+```
+Name                   CloudName    SubscriptionId                        State    IsDefault
+---------------------  -----------  ------------------------------------  -------  -----------
+subscription1          AzureCloud   subscription1_id                      Enabled  True
+subscription2          AzureCloud   subscription2_id                      Enabled  False
+...
+```
+
+The user will be shown the current subscription:
+```
+Current subscription: 
+subscription_name  AzureCloud   subscription_id  Enabled  True
+```
+
+Then the script will ask if the current subscription is the one where the deployment resides:
+```
+Is the deploy part of this subscription? (Y/n) 
+```
+
+If the answer is `No` then the specific subscription id will have to be provided. 
 
 Uninstall script will also ask if the 'gdc-service' and 'gdc-m365-reader' service principals should be deleted. The
 next deployment will create them again. Alternatively, you could leave them in place, and simply provide their secrets

@@ -3,9 +3,11 @@
 set -e
 
 DEPLOYMENT_NAME=
+SUBSCRIPTION_ID=
 while [[ "$#" -gt 0 ]]; do
     case $1 in
       -n | --deployment-name ) DEPLOYMENT_NAME="$2"; shift ;;
+      -s | --subscription ) SUBSCRIPTION_ID="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -14,9 +16,26 @@ if [[ -z "$DEPLOYMENT_NAME" ]]; then
   read -p "Enter deployment name: " DEPLOYMENT_NAME
 fi
 
+
+if [[ -z "$SUBSCRIPTION_ID" ]]; then
+  SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+  if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
+      echo "Multiple subscriptions found"
+      az account list --output table
+      echo "--------------------------------------------------"
+      echo "Current subscription: "
+      az account list --output table | grep "${SUBSCRIPTION_ID}"
+      read -p "Would you like to uninstall the deploy on this subscription? (Y/n) " -n 1 -r
+      echo    # move to a new line
+      if [[ ! $REPLY =~ ^[Yy]$ ]]
+      then
+          read -p "Please provide the desired SubscriptionId, from the list displayed above. " -r SUBSCRIPTION_ID
+      fi
+  fi
+fi
+
+SUBSCRIPTION_NAME=$(az account subscription show --id "$SUBSCRIPTION_ID" --query displayName  -o tsv)
 TENANT_ID=$(az account show --query tenantId -o tsv)
-SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-SUBSCRIPTION_NAME=$(az account show --query name -o tsv)
 
 GDC_SERVICE_SP_OBJ_ID=$(az ad sp list  --all --display-name gdc-service --query "[].{objectId: objectId}" -o tsv)
 GDC_M365_SERVICE_SP_OBJ_ID=$(az ad sp list  --all --display-name gdc-m365-reader --query "[].{objectId: objectId}" -o tsv)
