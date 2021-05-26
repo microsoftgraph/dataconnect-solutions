@@ -71,7 +71,7 @@ You have two options for building the project:
     - for example, to install the OpenJDK, follow the appropriate installation steps from https://openjdk.java.net/install/
       or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your OS
 2. Install latest Maven 3 version
-    - download the latest maven 3 version from https://maven.apache.org/download.cgi
+    - download the latest maven 3 binary distribution archive from https://maven.apache.org/download.cgi
     - installation steps: https://maven.apache.org/install.html
 3. Install docker
     - this is required for running tests locally
@@ -80,8 +80,8 @@ You have two options for building the project:
     - this is required to build and run the UI
     - for details please follow the [UI setup steps](../jgraph/ui/README.md#project-setup)
 5. Install pyenv
-    - https://wilsonmar.github.io/pyenv/
-    - https://www.liquidweb.com/kb/how-to-install-pyenv-on-ubuntu-18-04/
+    - please see the [installation section](https://github.com/pyenv/pyenv#installation) of the project's [github page](https://github.com/pyenv/pyenv)
+    - for an installation guide covering several systems, please read https://wilsonmar.github.io/pyenv/
 6. Install Python 3.7 using pyenv
     - `pyenv install 3.7.8; pyenv global 3.7.8`
     - this will also install pip
