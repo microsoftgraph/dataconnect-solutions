@@ -332,13 +332,11 @@ def add_service_principal_delegated_permission(sp_app_id: str, api_resource_id: 
 
 
 @retry(tries=5, delay=1, backoff=2)
-def _get_access_token(resource_id: str = None, tenant_id: str = None, subscription_id: str = None):
+def _get_access_token(resource_id: str = None, subscription_id: str = None):
     rsp = dict()
     az_cli_args = []
     if resource_id:
         az_cli_args.extend(["--resource", resource_id])
-    if tenant_id:
-        az_cli_args.extend(["--tenant", tenant_id])
     if subscription_id:
         az_cli_args.extend(["--subscription", subscription_id])
     rsp = az_cli(" account get-access-token ", *az_cli_args)
@@ -359,7 +357,7 @@ def get_databricks_access_token(tenant_id: str = None, subscription_id: str = No
     # az ad sp list --all --filter "displayName eq 'AzureDatabricks'" --query "[].appId"
     # The resource id for Azure Databricks is a constant value in Azure https://docs.microsoft.com/en-us/azure/databricks/dev-tools/api/latest/aad/service-prin-aad-token
     resource_id = "2ff814a6-3304-4ab8-85cb-cd0e6f879c1d"
-    return _get_access_token(resource_id=resource_id, tenant_id=tenant_id, subscription_id=subscription_id)
+    return _get_access_token(resource_id=resource_id, subscription_id=subscription_id)
 
 
 def get_loggedin_user(fields: list):
