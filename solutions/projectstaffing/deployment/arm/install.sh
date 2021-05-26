@@ -67,7 +67,9 @@ if [[ -z "$LOCATION" ]]; then
 fi
 
 if [[ -z "$DOCKER_PASSWORD" ]]; then
-  read -p "Enter docker repository password: " -r -s DOCKER_PASSWORD
+  #  read -p "Enter docker repository password: " -r -s DOCKER_PASSWORD
+  # For now, using hardcoded password to public ProjectStaffing docker images repository
+  DOCKER_PASSWORD="ymCNmmEJ1Zv=BieuVmkM90BYC36UemAg"
 fi
 
 
@@ -99,6 +101,8 @@ if [[ -z "$SUBSCRIPTION_ID" ]]; then
 fi
 
 TENANT_ID=$(az account show --subscription "$SUBSCRIPTION_ID" --query tenantId -o tsv)
+
+echo "Deploying in subscription $SUBSCRIPTION_ID from tenant $TENANT_ID"
 
 REQUIRED_ROLE="Owner"
 LOGGED_USER_ID=$(az ad signed-in-user show --query objectId  --output tsv )
@@ -226,7 +230,7 @@ pushd $WORKDIR/scripts
   ~/.gdc-env/bin/python ./install.py --deployment-name "$DEPLOYMENT_NAME" --tenant-id "$TENANT_ID" \
                               --subscription-id "$SUBSCRIPTION_ID" --resource-group "$RESOURCE_GROUP" \
                               --template-base-uri "${TEMPLATE_BASE_URI}" --sas-token "$SAS_TOKEN" \
-                              --docker-login "gdc-readonly-token" --docker-password "$DOCKER_PASSWORD" "${LOG_INSIGHTS_PARAM}" "${DEBUG}" "${SQL_PASS_MODE_PARAM}"
+                              --docker-login "gdc-readonly-token" --docker-password "$DOCKER_PASSWORD" ${LOG_INSIGHTS_PARAM} ${DEBUG} ${SQL_PASS_MODE_PARAM}
 popd
 
 dbserver=$(az sql server  list --resource-group ${RESOURCE_GROUP} --query "[].name" -o tsv)
@@ -313,7 +317,7 @@ echo "Running post-deployment script...";
 ### run post-deployment script
 pushd $WORKDIR/scripts
   ~/.gdc-env/bin/python post-deployment.py --tenant-id "$TENANT_ID" --subscription-id "$SUBSCRIPTION_ID" \
-                                           --resource-group "$RESOURCE_GROUP" "${DEBUG}"
+                                           --resource-group "$RESOURCE_GROUP" ${DEBUG}
   echo " Post deployment script completed successfully at $(date)"
 popd
 
