@@ -1,19 +1,20 @@
-numpy==1.19.1
-dill==0.3.3
-
-gensim==3.8.0
-nltk==3.5
-spacy==2.3.1
-spacy-lookups-data==0.3.2
-# ??
-# fse==0.1.15
-
 adal==1.2.5
-# azure-core==1.9.0
-# azure-identity==1.4.1
+azure-common==1.1.26
+azure-core==1.9.0
 azure-identity==1.5.0
 azure-keyvault==4.1.0
-# azure-keyvault-secrets==4.2.0
-# azure-storage-blob==12.5.0
+azure-keyvault-certificates==4.2.1
+azure-keyvault-keys==4.3.1
+azure-keyvault-secrets==4.2.0
 azure-storage-blob==12.6.0
-# pyspark==3.0.1
+databricks-connect==6.6.0
+dill==0.3.3
+gensim==3.8.0
+nltk==3.5
+numpy==1.19.1
+pandas==1.2.0
+setuptools==51.0.0
+smart_open==1.8.0
+spacy==2.3.1
+tqdm==4.55.1
+wheel==0.36.2
