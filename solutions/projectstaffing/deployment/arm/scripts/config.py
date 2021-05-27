@@ -35,7 +35,8 @@ class InstallConfiguration:
     ]
 
     __fields_validators = {
-        "sqlserver.admin.password": common.check_complex_password
+        "sqlserver.admin.password": common.check_complex_password,
+        "appservice.name": common.check_azure_appname_available
     }
 
     def __init__(self):
@@ -227,6 +228,10 @@ class InstallConfiguration:
     def appservice_name(self):
         def_param = self._arm_params.get("appservice.name") or dict()
         return self._required_arm_params.get("appservice.name") or def_param.get("defaultValue")
+
+    def appservice_url(self):
+        app_name = self.appservice_name
+        return "https://%s.azurewebsites.net" % app_name
 
     @property
     def appservice_version(self):

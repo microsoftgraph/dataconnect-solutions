@@ -144,3 +144,4 @@ if __name__ == '__main__':
 
         print("No pipeline triggers have not been activated due to previous stage failures. Please proceed with starting '*_backfill_*' triggers manually in Data Factory")
 
+    print("Project staffing web app is available at %s " % install_config.appservice_url)

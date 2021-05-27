@@ -8,6 +8,8 @@ import uuid
 
 from random import shuffle, choice
 
+import requests
+
 
 def is_valid_uuid(val):
     try:
@@ -86,3 +88,12 @@ def check_complex_password(password: str):
         return False
 
     return True
+
+def check_azure_appname_available(app_name: str):
+    try:
+        if app_name:
+            requests.get("http://%s.azurewebsites.net" % app_name)
+
+        return False
+    except BaseException as er:
+        return True
