@@ -122,8 +122,8 @@ skipping certain previously completed steps.
 Please note that if failures occur in certain inconsistent states, then this folder needs to be deleted, and the deployment
 started from a clean state.
 
-If you experience errors during the deployment process, and you want to make sure you start the next attempt from a
-fully clean state, then you will need to do the following:
+If you experience errors during the deployment process, and you want to make sure you start the next attempt from a fully
+clean state, you can either run the uninstall script (described below) or perform manual cleanup by doing the following:
 - delete the resource group created by your previous deployment attempt (regardless if it was partially or fully created)
 - delete the internal state of the deployment, by deleting the `~/.gdc` folder in the Cloud Shell home folder
     - `rm -rf ~/.gdc`
@@ -134,4 +134,37 @@ fully clean state, then you will need to do the following:
     - gdc-service, gdc-m365-reader
         - should be deleted only if they were created by the deployment process (i.e. they are not used elsewhere)
         - providing their secrets during the next deployment is a better approach than deleting them
-     
+
+
+### Uninstalling a deployment
+A project deployment might need to be cleared, for example, either following a deployment failure (so that you might
+start a new deployment from a clean environment) or to free up resources on Azure once a deployment is no longer needed.  
+In order to un-install the deployment you have to execute the uninstall script:
+```
+./uninstall.sh
+```
+
+The uninstall script will ask for the name of the deployment to be cleaned up, in order to perform all the necessary steps.  
+The name can be obtained from the resource group name which is to be cleaned, by removing the "-resources" suffix.
+```
+Enter deployment name: <installed-deployment-name> [press Enter]
+```
+
+Uninstall script will also ask if the 'gdc-service' and 'gdc-m365-reader' service principals should be deleted. The
+next deployment will create them again. Alternatively, you could leave them in place, and simply provide their secrets
+when performing the next deployment.  
+__Since these service principals are global and could be used by multiple deployments, deleting them should only be done
+with caution, if you are sure they are only used by the deployment which is about to be deleted!__
+```
+Would you like delete the 'gdc-service' and 'gdc-m365-reader' service principals? This is only recommended if you want to redeploy from scratch and these principals are not used elsewhere! (Y/n)
+```
+The script will also delete the jgraph-aad-web-app AD app registration.
+
+Confirmation will be asked to delete deployment's the resourced group `<installed-deployment-name>-resources` and the
+install script's local internal files (in `~/.gdc` and `~/.gdc-env`)
+```
+Deleting resource group <installed-deployment-name>-resources
+Are you sure you want to perform this operation? (y/n): y
+Deleting the jgraph-aad-web-app app registration from Active Directory.
+Would you like delete local files related to previous deployments (if any)? Recommended if you want to redeploy from scratch (Y/n) y
+```
