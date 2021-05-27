@@ -70,21 +70,21 @@ You have two options for building the project:
 1. Install JDK 1.8
     - for example, to install the OpenJDK, follow the appropriate installation steps from https://openjdk.java.net/install/
       or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your OS
+    - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark jobs)
 2. Install latest Maven 3 version
     - download the latest maven 3 binary distribution archive from https://maven.apache.org/download.cgi
     - installation steps: https://maven.apache.org/install.html
+    - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark jobs)
 3. Install docker
-    - this is required for running tests locally
     - follow the installation steps specific to your OS from https://docs.docker.com/get-docker/
+    - required for building and publishing the AppService docker image, and for running tests locally (the tests use database docker containers)
 4. Install nodejs 14.x, npm and yarn 1.22
-    - this is required to build and run the UI
+    - required to build and run the application's UI
     - for details please follow the [UI setup steps](../jgraph/ui/README.md#project-setup)
-5. Install pyenv
-    - please see the [installation section](https://github.com/pyenv/pyenv#installation) of the project's [github page](https://github.com/pyenv/pyenv)
-    - for an installation guide covering several systems, please read https://wilsonmar.github.io/pyenv/
-6. Install Python 3.7 using pyenv
-    - `pyenv install 3.7.8; pyenv global 3.7.8`
-    - this will also install pip
+5. Install Python 3 and related environment
+    - the python environment setup will differ if you plan to simply build the pygraph utils wheel locally or 
+      to do development and run pyspark jobs locally
+    - please follow the appropriate [python environment setup steps](../pygraph/azure_processing/README.md#setup-guide)
 
 ### Building the App Service
 Building the ProjectStaffing App Service jar requires the following two modules to have been previously built:
@@ -141,8 +141,8 @@ The resulting jars can be found in the `target` folder of the corresponding modu
 The steps required to build the pygraph utils wheel are defined in the pygraph_utils [readme file](../pygraph/azure_processing/pygraph_utils/README.md)
 
 ### Building the artifacts zip
-After all the project artifacts were build as described above, from the project root folder run `./bin/prepare_artifacts.sh`  
-After this is complete, go to target/output and rename the `arm` folder into `gdc-<release_version>` (e.g. gdc-x.y.z)  
+After all the project artifacts were build as described above, from the ProjectStaffing root folder run `./bin/prepare_artifacts.sh`  
+After this is complete, go to `target/output/gdc` and rename the `arm` folder into `gdc-<release_version>` (e.g. gdc-x.y.z)  
 Compress this folder into a zip archive (e.g. gdc-x.y.z.zip).  
 If desired, upload the archive to the project deliverables AZBS storage account, to make it available for download and deployment
 

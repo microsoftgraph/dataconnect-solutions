@@ -8,17 +8,10 @@ We are going to use a [python wheel](https://realpython.com/python-wheels/) to a
 
 > Note: Be mindful whether you install in root or virtualenv/conda environment.
 
-### During development
-The package development approach allows us to make changes in the wheel and to automatically have them available to
-all python scripts using them during the next run
-+ Run: `python setup.py develop`
-+ Package check oneliner: `python -c "from taxo_utils.test import tester;tester()"` (alternatives in `pygraph_utils/taxo_utils/test.py`)
-+ Check `./taxo_utils/test.py`, make some changes in the returned string.
-+ Rerun package check oneliner above, observe the changed string.
-
 ### Building the wheel
-Providing a wheel packaging the common code is the reference approach as far as Databricks is considered.
-
+Providing a wheel packaging the common code is the reference approach as far as Databricks is considered.  
+Depending on the python setup performed, you might need to activate a python virtualenv or a conda environment before
+performing the following steps:
 1. Set your current directory to `pygraph/azure_processing/pygraph_utils`
 2. Run the following command to create the `.whl` file:
     + ```pip install wheel``` (if not already installed)  
@@ -66,6 +59,14 @@ If the upload is not done as part of a full deployment, then you can simply uplo
 described in the section about [deploying individual python components](../../../deployment/README.MD#deploying-jars-python-scripts-and-python-utils-wheel-to-azure-databricks-cluster).
 If the contents of the wheel changed, while its API remained the same, then uploading the python scripts that use it
 is not required. Otherwise, the scripts impacted by the API change need to be uploaded as well.
+
+### During development
+The package development approach allows us to make changes in the wheel and to automatically have them available to
+all python scripts using them during the next run
++ Run: `python setup.py develop`
++ Package check oneliner: `python -c "from taxo_utils.test import tester;tester()"` (alternatives in `pygraph_utils/taxo_utils/test.py`)
++ Check `./taxo_utils/test.py`, make some changes in the returned string.
++ Rerun package check oneliner above, observe the changed string.
 
 # Bibliography
 + https://stackoverflow.com/questions/7522250/how-to-include-package-data-with-setuptools-distutils

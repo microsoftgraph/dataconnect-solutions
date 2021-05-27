@@ -21,38 +21,36 @@ During development, the pyspark jobs can be run either:
 + directly on the ADB cluster, or
 + remotely, from the local environment to a target ADB cluster using `databricks-connect`.
 
+
+---
 # Setup Guide
 
 ## Setting up environment for building from source
-Follow the instructions from the: [I. Python Setup](#python-setup)
+Follow the instructions from the [I. Python Setup](#python-setup) section.
 
-Navigate to [pygraph_utils](./pygraph_utils)
-
-Activate the gdc environment and execute the following commands:
-
-+ ```pip install wheel``` (if not already installed)  
-+ ```python setup.py sdist bdist_wheel ```
+Once this is done, the pygraph utils wheel can be built by following [these steps](./pygraph_utils/README.md#building-the-wheel)
 
 ## Setting up environment for Development
 Steps:
-+ [II. Set up jobs configuration for Databricks](#databricks-config)
-+ [III. Java Setup](#java-setup)
-+ [IV. Spark / Databricks Setup](#spark-setup)
-+ [V. Setup Sanity Checks](#finishing-setup)
-
++ [I. Python Setup](#python-setup)
++ [II. Development conda environment setup](#development-conda-environment-setup)
++ [III. Set up jobs configuration for Databricks](#databricks-config)
++ [IV. Java Setup](#java-setup)
++ [V. Spark / Databricks Setup](#spark-setup)
++ [VI. Setup Sanity Checks](#finishing-setup)
 
 Additionally, you can consider the following steps:
 + [Java Multiple Environment Setup (jenv)](#jenv-setup) - if you intend to have separate versions of Java in the same environment (eg: having both jgraph and a local Spark for pygraph development & debugging),
 + [Python Multiple Environment Setup (pyenv)](#pyenv-setup) - in case you need multiple Python versions and/or databricks-connect might require a virtualenv or other version of python for compatibility.
 
+
 ---
-
-
-# Setting up environment for building from source
+# Detailed setup steps
 ## I. Python Setup
 <span id="python-setup"></span>
 
-### 1. Linux and MacOS
+### 1. Install Python bundled with Anaconda
+#### Linux and MacOS
 Install the reference Python:
 + `wget https://repo.anaconda.com/archive/Anaconda3-2021.05-Linux-x86_64.sh`
 or
@@ -61,17 +59,19 @@ or
 + `./Anaconda3-2021.05-Linux-x86_64.sh`
   + you can do a silent install by adding the `-b` parameter, but PATH will remain unmodified, so you'll need to run `eval "$(~/anaconda3/bin/conda shell.bash hook)"`
 
-### 2. Windows
+#### Windows
 Install using the install instruction from here https://docs.anaconda.com/anaconda/install/windows/
 
 
-### 3. Environment setup 
-
+### 3. Environment setup
 Set up your environment, and activate it both in your shell and in your IDE:
 + `conda create --name gdc python=3.7`
 + `conda activate gdc`
 
-### 4. Development environment setup
+
+
+## II. Development conda environment setup
+<span id="development-conda-environment-setup"></span>
 + `pip install -r requirements_conda.txt`
 
 If any changes to the setup are needed, remember to document changes in requirements:
@@ -81,19 +81,11 @@ Any subsequent installs have to be made in the:
 + activated conda environment - `conda install package-name=2.3.4`
 + outside conda environment - `conda install package-name=2.3.4 -n gdc`
 
-Note: Latest requirements file has the `smart_open` import bug from gensim patched by upgrading smart_open (`conda update smart_open`). You shouldn't encounter this error unless `gensim` reinstalls the faulty `smart_open` version.
+> Note: Latest requirements file has the `smart_open` import bug from gensim patched by upgrading smart_open (`conda update smart_open`). 
+> You shouldn't encounter this error unless `gensim` reinstalls the faulty `smart_open` version.
 
 
-
-
-
----
----
-
-# Development
-
-
-## II. Set up jobs configuration for Databricks
+## III. Set up jobs configuration for Databricks
 <span id="databricks-config"></span>
 The environment specific configuration for each job can be provided via a configurations file.  
 
@@ -121,19 +113,16 @@ Be mindful if cluster is active/inactive, in order to:
 + minimize load - if cluster is used for upgrade / demo
 + Total Cost of Ownership (abbrev. TCO) - cluster doesn't have to be spun up needlessly, costs should be limited.
 
-## III. Java Setup
+
+## IV. Java Setup
 <span id="java-setup"></span>
-Oracle changed the licensing in 2019, so these will not work ([source](https://github.com/Homebrew/homebrew-cask-versions/issues/7253)):
-+ `brew cask install java` or
-+ `brew install --cask java8`
-
-Installer links:
-+ [JRE](https://www.java.com/en/download/)
-+ [JDK8](https://www.oracle.com/ro/java/technologies/javase/javase-jdk8-downloads.html)
-+ [JDK15](https://www.oracle.com/java/technologies/javase-jdk15-downloads.html)
+Please install a JDK 8 appropriate to your OS, if you haven't done so already. License terms differ from one JDK supplier 
+to another (e.g. Oracle vs OpenJDK), so please read license conditions carefully when choosing supplier.  
+For example, to install the OpenJDK, follow the appropriate installation steps from https://openjdk.java.net/install/
+or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your OS.  
 
 
-## IV. Spark / Databricks Setup
+## V. Spark / Databricks Setup
 <span id="spark-setup"></span>
 
 + install - `brew install apache-spark`
@@ -154,7 +143,7 @@ Optional objective:
 
 ---
 
-## V. Setup Sanity Checks
+## VI. Setup Sanity Checks
 <span id="finishing-setup"></span>
 Check your PATH:
 + `echo $PATH | tr ":" "\n"`
@@ -222,7 +211,10 @@ Set JDK needed for Spark:
 
 ## Python Multiple Environment Setup (pyenv)
 <span id="pyenv-setup"></span>
-Similar to what we did for Java, in this case for Python:
+Similar to what we did for Java, in this case for Python.  
+Please see the [installation section](https://github.com/pyenv/pyenv#installation) of the project's [github page](https://github.com/pyenv/pyenv)  
+For an installation guide covering several systems, please read https://wilsonmar.github.io/pyenv/  
+The steps below describe the installation process for mac:
 + install - `brew install pyenv pyenv-virtualenv`
 + append the following to config file (`~/.bashrc` or `~/.zshrc`) and run `source` or restart/open new shell:
 ```shell script
