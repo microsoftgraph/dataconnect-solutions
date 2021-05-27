@@ -1,0 +1,77 @@
+{
+  "--storage-account-name": {
+    "help": "storage account name", "default": "", "type": "str"
+  },
+  "--hr-data-storage-account-name": {
+    "help": "hr storage account name", "default": "", "type": "str"
+  },
+  "--output-container-name": {
+    "help": "output container name", "default": "", "type": "str"
+  },
+  "--output-folder-path": {
+    "help": "output folder path", "default": "", "type": "str"
+  },
+  "--input-container-name": {
+    "help": "input container name", "default": "simulated-data", "type": "str"
+  },
+  "--input-folder-path": {
+    "help": "input folder path", "default": "m365_users", "type": "str"
+  },
+  "--hr-data-input-container-name": {
+    "help": "hr data input container name", "default": "simulated-data", "type": "str"
+  },
+  "--hr-data-input-folder-path": {
+    "help": "hr data input folder path", "default": "airtable", "type": "str"
+  },
+  "--domain-expert-container-name": {
+    "help": "domain expert container name", "default": "domain-experts", "type": "str"
+  },
+  "--domain-expert-folder-path": {
+    "help": "domain expert folder path", "default": "domain_experts", "type": "str"
+  },
+  "--domain-expert-file-name": {
+    "help": "domain expert file name", "default": "so_domain_expert.bin", "type": "str"
+  },
+  "--jdbc-host": {
+    "help": "jdbc host", "default": "", "type": "str"
+  },
+  "--jdbc-port": {
+    "help": "jdbc port", "default": "1433", "type": "str"
+  },
+  "--jdbc-database": {
+    "help": "database name", "default": "gdc_database", "type": "str"
+  },
+  "--jdbc-username": {
+    "help": "database username", "default": "gdc-admin", "type": "str"
+  },
+  "--application-id": {
+    "help": "application id", "default": "", "type": "str"
+  },
+  "--directory-id": {
+    "help": "directory id", "default": "", "type": "str"
+  },
+  "--adb-secret-scope-name": {
+    "help": "ADB secret scope name", "default": "gdc", "type": "str"
+  },
+  "--adb-sp-client-key-secret-name": {
+    "help": "Azure Databricks Service Principal client key secret name in Databricks Secrets", "default": "gdc-service-principal-secret", "type": "str"
+  },
+  "--log-analytics-workspace-id": {
+    "help": "Log Analytics workspace id", "default": " ", "type": "str"
+  },
+  "--log-analytics-workspace-key-name": {
+    "help": "Log Analytics workspace key secret name", "default": "log-analytics-api-key", "type": "str"
+  },
+  "--key-vault-url": {
+    "help": "Azure Key Vault url", "default": "", "type": "str"
+  },
+  "--jdbc-username-key-name": {
+    "help": "JDBC Username Key Name", "default": "azure-sql-backend-user", "type": "str"
+  },
+  "--jdbc-password-key-name": {
+    "help": "JDBC Password Key Name", "default": "azure-sql-backend-password", "type": "str"
+  },
+  "--use-msi-azure-sql-auth": {
+    "help": "Use Managed Service Identity (MSI) to authenticate into AzureSql or use user and password read from KeyVault instead", "default": "False", "type": "str2bool"
+  }
+}

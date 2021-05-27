@@ -102,9 +102,6 @@ if __name__ == '__main__':
           f'\033[4mpygraph_utils.egg-info\033[24m still exists, '
           f'pkg_resources still has the version cached.{ansi_reset}')
 
-    # TODO: run `python setup.py sdist bdist_wheel`
-    # TODO: run `cd dist/ ; pip install pygraph_utils-0.1.0-py3-none-any.whl`, move wheel to current folder
-
     print(f'{ansi_ok}\nBuilding pygraph-utils wheel... {ansi_reset}')
     out = sp.check_output('python setup.py sdist bdist_wheel'.split(' '))
     print(out.decode('utf-8'))

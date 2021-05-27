@@ -13,8 +13,11 @@ clean:
 
 make_env:
 	# python environment setup
-	conda create --name gdc --file requirements_conda.txt
-	python pygraph_utils/script_install.py
+	conda create --name gdc python=3.7
+	conda activate gdc
+	pip install -r requirements_conda.txt
+	cd ./pygraph_utils
+	python script_install.py
 
 test_local:
 	# currently no "--local" flag exists

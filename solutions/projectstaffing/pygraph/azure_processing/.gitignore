@@ -18,3 +18,7 @@ taxo_de.dill.gz
 
 # Ignore debug folders
 debug_*/
+
+# Ignore parameter files
+mail_enrichment_params.json
+profiles_enrichment_params.json
