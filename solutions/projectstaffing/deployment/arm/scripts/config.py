@@ -36,7 +36,7 @@ class InstallConfiguration:
 
     __fields_validators = {
         "sqlserver.admin.password": common.check_complex_password,
-        "appservice.name": common.check_azure_appname_available
+        "appservice.name": common.is_azure_app_service_name_valid
     }
 
     def __init__(self):

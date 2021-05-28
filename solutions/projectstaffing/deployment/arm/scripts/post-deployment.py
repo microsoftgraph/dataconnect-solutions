@@ -55,6 +55,8 @@ if __name__ == '__main__':
     arg_parser.add_argument("--artifacts-path",
                             metavar="artifacts-path",
                             default=join(dirname(__file__), "artifacts"))
+    arg_parser.add_argument("--remote-artifacts-storage-name",
+                            metavar="remote-artifacts-storage-name")
     arg_parser.add_argument('--debug', default=False, required=False, type=lambda x: bool(strtobool(str(x))))
 
     parsed_args = arg_parser.parse_args()
@@ -62,6 +64,7 @@ if __name__ == '__main__':
     subscription_id = parsed_args.subscription_id
     resource_group = parsed_args.resource_group
     artifacts_path = parsed_args.artifacts_path
+    demo_data_storage_account_name = parsed_args.remote_artifacts_storage_name
     debug_enabled = parsed_args.debug
     if debug_enabled:
         az.DEBUG_ENABLED = True
@@ -105,8 +108,11 @@ if __name__ == '__main__':
     arm_ops.enable_webapp_alert(resource_group=resource_group, alert_name="JGraph HTTP Errors Alert")
     print("Uploading simulated and domain expert data...")
     test_storage_account_name = install_config.test_data_storage_name
-    blob_ops.copy_domain_expert_data(resource_group=resource_group, runtime_storage=runtime_storage)
-    blob_ops.copy_simulated_data(resource_group=resource_group, testdata_storage=test_storage_account_name)
+
+    blob_ops.copy_domain_expert_data(resource_group=resource_group, runtime_storage=runtime_storage,
+                                     source_storage_account_name=demo_data_storage_account_name, source_container_name="public-artifacts")
+    blob_ops.copy_simulated_data(resource_group=resource_group, testdata_storage=test_storage_account_name,
+                                 source_storage_account_name=demo_data_storage_account_name, source_container_name="public-artifacts")
     print("Updating DataFactory pipeline configuration ...")
     adb_ws_name = install_config.databricks_workspace_name
     if install_state.is_azure_resources_deployed():
@@ -144,4 +150,4 @@ if __name__ == '__main__':
 
         print("No pipeline triggers have not been activated due to previous stage failures. Please proceed with starting '*_backfill_*' triggers manually in Data Factory")
 
-    print("Project staffing web app is available at %s " % install_config.appservice_url)
+    print("Project staffing web app is available at %s " % install_config.appservice_url())
