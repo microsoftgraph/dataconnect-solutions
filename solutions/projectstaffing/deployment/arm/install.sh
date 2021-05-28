@@ -28,7 +28,7 @@ case "${unameOut}" in
 esac
 
 # create virtual env
-pip3 install virtualenv -q
+pip3 install  --disable-pip-version-check virtualenv -q
 echo "Installing python virtual environment for deployment scripts..."
 virtualenv -p python3  ~/.gdc-env -q
 source ~/.gdc-env/bin/activate
@@ -174,6 +174,27 @@ if [[ "${LOG_INSIGHTS_REGISTRATION_STATE}" -ne "Registered" ]]; then
   done
 fi
 
+echo "This deployment script configures ProjectStaffing by default to run in simulated data mode. It requires synthetic input data to be copied from one of our public storages."
+PS3="Select preferred location to copy domain expert and synthetic input data from based on your deployment location :"
+select opt in westus westeurope southeastasia brazilsouth; do
+   case $opt in
+      westus)
+        DEMO_DATA_STORAGE_ACCOUNT="prjstaffingnortham"
+        break;;
+      westeurope)
+        DEMO_DATA_STORAGE_ACCOUNT="prjstaffingeu"
+        break;;
+      southeastasia)
+         DEMO_DATA_STORAGE_ACCOUNT="prjstaffingsoutheastasia"
+         break;;
+      brazilsouth)
+         DEMO_DATA_STORAGE_ACCOUNT="prjstaffingsoutham"
+        break;;
+      *)
+        echo "Invalid option $opt ";;
+  esac
+done
+
 echo "Creating resource group  $RESOURCE_GROUP in $LOCATION"
 
 TMP_AZURE_STORAGE_ACCOUNT="gdcdeploy$( lex_hash $DEPLOYMENT_NAME )"
@@ -202,25 +223,10 @@ connection=$(az storage account show-connection-string --resource-group ${RESOUR
 SAS_TOKEN=$( az storage container  generate-sas --name $CONTAINER --account-name ${TMP_AZURE_STORAGE_ACCOUNT} --expiry $expiretime  --https-only --permissions dlr --output tsv --connection-string $connection )
 TEMPLATE_URL=$(az storage blob url --container-name $CONTAINER --name mainTemplate.json --output tsv --connection-string $connection )
 TEMPLATE_BASE_URI=https://${TMP_AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${CONTAINER}/
-echo -e "\n\n\n #################################################################################################################"
-echo "###############################     IMPORTANT!  DO NOT IGNORE! ##################################################"
-echo -e "#################################################################################################################\n\n\n"
 
-echo "The Project Staffing application supports both Windows authentication (via managed identity and service principal in your AD) and SQL Server (user/password) authentication modes."
-echo "For Windows authentication, the Directory Readers role must be assigned to managed instance identity of SQL Server before you can set up an Azure AD admin for the managed instance. If the role isn't assigned to the SQL logical server identity, creating Azure AD users in Azure SQL will fail. For more information, see Azure Active Directory service principal with Azure SQL https://docs.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-service-principal "
-echo "Windows authentication is considered to be the more secure approach. However, 'Directory Readers' AD role assignment is a manual process and requires *Global Administrator* AD permission, so only choose this if you have the proper permissions."
-echo "SQL Server authentication mode is the more straightforward approach, as it does not require any additional manual setup steps."
-
-while true; do
-    read -p "Would you like to use SQL Server (user/password) authentication mode? Select N to use Windows authentication (Y/n) " -r use_sql_pass_yn
-    case ${use_sql_pass_yn} in
-        [Yy]* ) USE_SQL_PASS_MODE_PARAM="true"; echo "SQL Server (user/password) authentication mode is selected";  break;;
-        [Nn]* ) USE_SQL_PASS_MODE_PARAM="false"; echo "Windows authentication mode is selected";  break;;
-        * ) echo "Please answer yes or no.";;
-    esac
-done
 command -v pwsh --version &> /dev/null && which sqlcmd &> /dev/null
 SQL_SCHEMA_GENERATION_LOCAL=$?
+USE_SQL_PASS_MODE_PARAM="true"
 SQL_PASS_MODE_PARAM="--sql-auth ${USE_SQL_PASS_MODE_PARAM}"
 SCHEMA_GENERATION_MODE=$([ "$SQL_SCHEMA_GENERATION_LOCAL" == 0 ] && echo "auto" || echo "manual")
 
@@ -238,24 +244,6 @@ set +e
 # address local mode first
 AUTO_GENERATION_SUCCESSFUL=$([ -f ~/.gdc/db_stage_successful ] && echo "true" || echo "false" )
 if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
-    if [[ "${USE_SQL_PASS_MODE_PARAM}" == "false" ]]; then
-      echo -e "\n\n\n#################################################################################################################"
-      echo "###############################     IMPORTANT!  DO NOT IGNORE! ##################################################"
-      echo -e "#################################################################################################################\n\n\n"
-      echo "Deployment has been set on hold. This manual step is mandatory otherwise the deployment won't operate properly. "
-      echo "Follow this instruction to add SQL Server '${dbserver}' managed Identity into Directory Readers"
-      echo "https://docs.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-directory-readers-role-tutorial#add-azure-sql-managed-identity-to-the-group"
-      echo "NOTE: SQL schema initialization will fail if you don't add SQL Server into 'Directory Readers' role and installation procedure have to be started over after deployment resource group is deleted"
-      echo "Azure CLI doesn't support operations that allow to verify this permission. You have to confirm it manually"
-      while true; do
-        read -p "Confirm SQL server identity was added to 'Directory Readers' role in order to proceed with Azure SQL Server schema creation. Select N if you would like to skip this step and retry later by running post-deployment script again (Y/N) " -r sql_server_yn
-        case $sql_server_yn in
-            [Yy]* ) SCHEMA_GENERATION_MODE="auto"; break;;
-            [Nn]* ) SCHEMA_GENERATION_MODE="manual"; break;;
-            * ) echo "Please answer yes or no.";;
-        esac
-      done
-    fi
     pushd "$WORKDIR/scripts"
       python ./run_db_stage.py  ${SQL_PASS_MODE_PARAM} --mode manual --only-generate-schema true
       echo -e "SQL schema has been saved to:\n $( ls $WORKDIR/sql-server/*.sql ) "
@@ -293,30 +281,37 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
     fi
 
     set -e
-    if [[ "${AUTO_GENERATION_SUCCESSFUL}"  == "false"  || "${SCHEMA_GENERATION_MODE}" == "manual" ]]; then
-        if [[ "${AUTO_GENERATION_SUCCESSFUL}"  == "false" &&  "${SCHEMA_GENERATION_MODE}" == "auto" ]]; then
+    if [[ "${AUTO_GENERATION_SUCCESSFUL}"  == "false" ]]; then
+        if [[ "${SCHEMA_GENERATION_MODE}" == "auto" ]]; then
             echo "Automated SQL schema initialization has failed or has been canceled. Falling back to manual mode"
-            echo -e "We've generated generated SQL schema files and saved them at ${WORKDIR}/sql-server/ }. Please connect to $dbserver.database.windows.net using your SQL administrator credentials or AD admin  and sequentially execute the following scripts: \n schema.sql, \n stored_procedures.sql, \n data.sql, \n custom-init.sql  "
-            while true; do
-              read -p "Confirm SQL schema has been manually initialized. Select N if you would like to skip this step and execute it later by running post-deployment script again (Y/N)" -r manual_schema_completed
-              case $manual_schema_completed in
-                  [Yy]* )
-                    pushd "$WORKDIR/scripts"
-                      python ./run_db_stage.py  ${SQL_PASS_MODE_PARAM} --mode manual
-                      touch ~/.gdc/db_stage_successful
-                    popd
-                    break;;
-                  [Nn]* ) echo "SQL schema wasn't initialized "; break;;
-                  * ) echo "Please answer yes or no.";;
-              esac
-            done
         fi
+        AUTH_MODE_MSG=""
+        if [[  "${USE_SQL_PASS_MODE_PARAM}" == "true" ]]; then
+          AUTH_MODE_MSG="using your SQL administrator credentials"
+        else
+          AUTH_MODE_MSG="using your Active Directory account"
+        fi
+        echo -e "We've generated generated SQL schema files and saved them at ${WORKDIR}/sql-server/ }.\nYou need to connect to $dbserver.database.windows.net $AUTH_MODE_MSG and sequentially execute the following scripts: \n $( ls $WORKDIR/sql-server/*.sql ) "
+        while true; do
+          read -p "Confirm SQL schema has been manually initialized. Select N if you would like to skip this step and proceed with post-deployment script instead (Y/N)" -r manual_schema_completed
+          case $manual_schema_completed in
+              [Yy]* )
+                pushd "$WORKDIR/scripts"
+                  python ./run_db_stage.py  ${SQL_PASS_MODE_PARAM} --mode manual
+                  touch ~/.gdc/db_stage_successful
+                popd
+                break;;
+              [Nn]* ) echo "Skipping schema initialization step..."; break;;
+              * ) echo "Please answer yes or no.";;
+          esac
+        done
     fi
 fi
 echo "Running post-deployment script...";
 ### run post-deployment script
 pushd $WORKDIR/scripts
   ~/.gdc-env/bin/python post-deployment.py --tenant-id "$TENANT_ID" --subscription-id "$SUBSCRIPTION_ID" \
+                                           --remote-artifacts-storage-name  "$DEMO_DATA_STORAGE_ACCOUNT" \
                                            --resource-group "$RESOURCE_GROUP" ${DEBUG}
   echo " Post deployment script completed successfully at $(date)"
 popd

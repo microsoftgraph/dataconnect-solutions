@@ -24,13 +24,15 @@ def list_blobs_in(container_url: str, subfolder: str):
     return blob_list
 
 
-def copy_domain_expert_data(resource_group: str, runtime_storage: str):
+def copy_domain_expert_data(resource_group: str, runtime_storage: str, source_storage_account_name: str, source_container_name: str):
     _copy_data(resource_group=resource_group, runtime_storage=runtime_storage,
+               source_storage_account_name=source_storage_account_name, source_container_name=source_container_name,
                source_subfolder="domain-experts", dest_container_name="domain-experts", destination_path_prefix="domain_experts/")
 
 
-def copy_simulated_data(resource_group: str, testdata_storage: str):
+def copy_simulated_data(resource_group: str, testdata_storage: str, source_storage_account_name: str, source_container_name: str):
     _copy_data(resource_group=resource_group, runtime_storage=testdata_storage,
+               source_storage_account_name=source_storage_account_name, source_container_name=source_container_name,
                source_subfolder="simulated-data", dest_container_name="simulated-data")
 
 
@@ -57,8 +59,7 @@ def _upload_data_from_local(runtime_storage: str, dest_container_name: str,
 
 @retry(tries=5, delay=1, backoff=2)
 def _copy_data(resource_group: str, runtime_storage: str, source_subfolder: str, dest_container_name,
-               destination_path_prefix: str = None, source_storage_account_name: str = "bpartifactstorage",
-               source_container_name: str = "gdc-artifacts"):
+               source_storage_account_name: str, source_container_name: str, destination_path_prefix: str = None):
     source_container_url: str = f"https://{source_storage_account_name}.blob.core.windows.net/{source_container_name}"
     files = list_blobs_in(container_url=source_container_url, subfolder=source_subfolder)
 
