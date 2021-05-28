@@ -89,7 +89,25 @@ def check_complex_password(password: str):
 
     return True
 
-def check_azure_appname_available(app_name: str):
+def is_azure_app_service_name_valid(app_name: str):
+
+    permitted_characters = string.ascii_lowercase + string.ascii_uppercase + string.digits + '-'
+    for char in app_name:
+        if char not in permitted_characters:
+            print("Invalid character ", char, " in app service name")
+            return False
+
+    # the max limit of characters for App Service name is 60
+    # but the App Service name parameter is also used as App Service Plan name, for which the max limit of characters is 40
+    # so the maximum character length for this parameter is 40 - len("-app-plan") = 31 , see deployment/arm/app-service/azuredeploy.json line 140
+    if len(app_name) > 31 or len(app_name) < 2:
+        print("App service name must be at least 2 characters and fewer than 31 characters")
+        return False
+
+    if app_name[0] == '-' or app_name[-1] == '-':
+        print(f"The app name {app_name} is not available")
+        return False
+
     try:
         if app_name:
             requests.get("http://%s.azurewebsites.net" % app_name)
