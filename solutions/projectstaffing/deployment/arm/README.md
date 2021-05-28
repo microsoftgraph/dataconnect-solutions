@@ -1,7 +1,6 @@
 ## Project Staffing deployment script
 
 ### Prerequisites
-
 - log into your Azure portal and start the Cloud Shell terminal in __Bash__ mode
     - Powershell is __not__ supported!
 - ensure Azure CLI is already installed, and the version is at least `2.16.0` (run `az version` command)
@@ -26,7 +25,7 @@ Ideally, the groups should be created before running the script.
     - this security group is mandatory for the deployment process
 
 
-### Install
+### Performing a full deployment
 Please read the full contents of this file before proceeding with the deployment
 
 1. Build artifacts  (required for deployment), by following [these steps]( ../README.MD#building-the-artifacts-zip)
@@ -85,7 +84,10 @@ az login
 > so please monitor the installation progress to avoid the script being interrupted by Cloud Shell.  
 > Otherwise, you'll have to perform cleanup and **start all over**!
 
-One of the last steps of the installation process is to define and start Azure DataFactory triggers, which in turn start
+### Checking the deployment finished successfully
+The deployment process is not yet actually finished when the deployment script completes, as the application does not
+yet have any of the data that it needs to serve search requests.  
+One of the last steps of the installation script is to define and start Azure DataFactory triggers, which in turn start
 and orchestrate ADF pipelines, which provision the initial set of data for the application.  
 __These pipelines keep on running after the deployment script completed, so monitoring them until completion is required!__  
 This process takes about 30-45 minutes on the default installed configuration (using simulated data), and can be monitored
@@ -94,10 +96,25 @@ If production mode was chosen, then this process can take a lot longer.
 
 The application UI can be accessed at `https://<appServiceName>.azurewebsites.net` as soon as the installation script completes.  
 However, the application is fully usable only once the ADF pipelines finished running, thus providing it with the initial data.  
-The last pipeline to complete is the `End2EndMailsToRolesPipeline`. Once this has finished successfully, the application is ready to use.  
+The last pipeline to complete is `End2EndMailsToRolesPipeline`. Once this has finished successfully, the application is ready to use.  
+
+The required Azure DataFactory pipelines are complete once the `End2EndMailsToRolesPipeline` pipeline (which is the last
+to run) finished successfully. This can be found by opening the Data Factory resource of the deployed resource group, 
+selecting "Author & Monitor", then the "Monitor" tab and going to the "Pipeline Runs" section, as shown below:
+![Select the ADF from the resource group](../../docs/imgs/select_adf.png)
+![Press the Author & Monitor button](../../docs/imgs/adf_author_and_monitor.png)
+![Wait for pipeline to succeed](../../docs/imgs/last_pipeline_to_complete.png)
+
+You can tell that the application is ready, if the employees from the selected source can be seen in the app's main page.  
+The application URL can also be found by opening the App Service resource of the deployed resource group, and looking 
+for the URL in the Overview tab, as shown below:
+![Select the AppService from the resource group](../../docs/imgs/select_app_service.png)
+![Look for the URL](../../docs/imgs/app_service_url.png)
+
 
 
 ### Notes
+#### Service Principals
 The following service principals get created by the deployment script (if they didn't already exist)
 - gdc-service
     - this service principal is meant to be used mainly by the ADB jobs run by the ADF pipelines
@@ -117,17 +134,7 @@ If the “gdc-service” and “gdc-m365-reader” service principals already ex
       SPs, you could create a new secret and provide that one)
     - reply 'No', and cause the deployment process to be aborted
 
-The Project Staffing application supports both Windows authentication (via managed identity and service principal in
-your AD) and SQL Server authentication (user/password) modes.  
-For Windows authentication, the `Directory Readers` role must be assigned to managed instance identity of SQL Server
-before you can set up an Azure AD admin for the managed instance. If the role isn't assigned to the SQL logical server
-identity, creating Azure AD users in Azure SQL will fail.  
-For more information, see Azure Active Directory service principal with Azure SQL https://docs.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-service-principal  
-Windows authentication is considered to be the more secure approach. However, `Directory Readers` AD role assignment is
-a manual process and requires ***Global Administrator*** AD permission, so only choose this if you have proper permissions.  
-SQL Server authentication mode is the more straightforward approach, as it does not require any additional manual setup steps.  
-We recommend SQL Server authentication.
-
+#### Deployment script state and virtualenv
 The script creates its own python virtualenv, rooted in `~/.gdc-env`.  
 Once the script has been run for the first time on a given environment (on the Cloud Shell of a given account), in case
 you want to perform changes to the python environment impacting the script, make sure to do them in the virtual env.
@@ -138,6 +145,7 @@ skipping certain previously completed steps.
 Please note that if failures occur in certain inconsistent states, then this folder needs to be deleted, and the deployment
 started from a clean state.
 
+#### Manual deployment cleanup
 If you experience errors during the deployment process, and you want to make sure you start the next attempt from a fully
 clean state, you can either run the uninstall script (described below) or perform manual cleanup by doing the following:
 - delete the resource group created by your previous deployment attempt (regardless if it was partially or fully created)
@@ -159,6 +167,7 @@ file permissions. Run the following commands in order to solve the problem:
 ```chown -R <user> <directory_path_where_artifacts_were_decompressed>/```    
 Then run the following command to delete the folder containing the artifacts:  
 ```rm -rf <directory_path_where_artifacts_were_decompressed>/```  
+
 
 ### Uninstalling a deployment
 A project deployment might need to be cleared, for example, either following a deployment failure (so that you might
