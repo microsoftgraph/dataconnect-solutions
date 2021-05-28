@@ -34,7 +34,7 @@ Once this is done, the pygraph utils wheel can be built by following [these step
 Steps:
 + [I. Python Setup](#python-setup)
 + [II. Development conda environment setup](#development-conda-environment-setup)
-+ [III. Set up jobs configuration for Databricks](#databricks-config)
++ [III. Configure local python scripts to run with Databricks](#local-development-config)
 + [IV. Java Setup](#java-setup)
 + [V. Spark / Databricks Setup](#spark-setup)
 + [VI. Setup Sanity Checks](#finishing-setup)
@@ -85,25 +85,30 @@ Any subsequent installs have to be made in the:
 > You shouldn't encounter this error unless `gensim` reinstalls the faulty `smart_open` version.
 
 
-## III. Set up jobs configuration for Databricks
-<span id="databricks-config"></span>
+## III. Configure local python scripts to run with Databricks
+<span id="local-development-config"></span>
 The environment specific configuration for each job can be provided via a configurations file.  
 
-For local debugging and execution you should have a configuration file named `config.json`, with the following structure:
+For local debugging and execution of the scripts, the following configuration file templates are provided: `config_default.json`,
+`profiles_enrichment_params_default.json`,`mail_enrichment_params_default.json`.
+Those should be cloned to : `config.json`, `profiles_enrichment_params.json`, `mail_enrichment_params.json` and filled with the appropriate values.
+
+The config file `config.json` has the following structure and is being used by all the spark job python scripts:
 ```
 {
-  "key": "",
-  "sas_token": "",
-  "de_key": "",
-  "datasource_connection_string": "",
-  "azure_search_api_key": "",
-  "endpoint": "",
-  "SERVICE_PRINCIPAL_SECRET": "[...]"
+  "key": "jX+YA2[...]",
+  "datasource_connection_string": "DefaultEndpointsProtocol=https;AccountName=[...];AccountKey=jX+YA2[...];EndpointSuffix=core.windows.net",
+  "azure_search_api_key": "83E4C[...]",
+  "endpoint": "https://[...].search.windows.net/",
+  "SERVICE_PRINCIPAL_SECRET": "J65H1[...]"
 }
 ```
 
 The following fields need to be filled:
-- `SERVICE_PRINCIPAL_SECRET` - the secret for the `gdc-service` service principal, that is used by all spark jobs to connect to Azure services (AZBS, AzureSql, KeyVault etc) 
+- `SERVICE_PRINCIPAL_SECRET` - the secret for the `gdc-service` service principal, that is used by all spark jobs to connect to Azure services (AZBS, AzureSql, KeyVault etc)
+- `key` - azure storage key
+- `azure_search_api_key` - azure search api key
+- `endpoint` - azure search service URL
 
 > **Make sure not to commit this file** since it will contain sensitive information! Check if the rules from the `.gitignore` file cover your file name.  
 > Only store locally information for non-critical environments, which don't contain sensitive data and which can be easily decommissioned!
@@ -180,6 +185,8 @@ eval "$(pyenv virtualenv-init -)"
 ---
 ---
 # Additional
+In case there's a need for a different environments (example: jgraph uses a newer java version different than java needed for spark) 
+then follow the steps below:
 
 ## Java Multiple Environment Setup (jenv)
 <span id="jenv-setup"></span>

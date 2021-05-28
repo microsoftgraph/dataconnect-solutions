@@ -1,0 +1,7 @@
+{
+  "key": "jX+YA2[...]",
+  "datasource_connection_string": "DefaultEndpointsProtocol=https;AccountName=[...];AccountKey=jX+YA2[...];EndpointSuffix=core.windows.net",
+  "azure_search_api_key": "83E4C[...]",
+  "endpoint": "https://[...].search.windows.net/",
+  "SERVICE_PRINCIPAL_SECRET": "J65H1[...]"
+}
