@@ -8,6 +8,8 @@ ms.topic: tutorial
 ms.custom: scenarios:getting-started, languages:ASP.NET
 ---
 
+<a name="configure-app-reg-aad"></a>
+
 # Set up your Azure Active Directory App registration
 
 In this exercise you will create, run, and approve an Azure Data Factory pipeline to extract data from Microsoft 365 to an Azure Storage Blob for additional processing.

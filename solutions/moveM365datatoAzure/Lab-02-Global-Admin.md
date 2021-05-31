@@ -8,6 +8,8 @@ ms.topic: tutorial
 ms.custom: scenarios:getting-started, languages:ASP.NET
 ---
 
+<a name="configure-global-admin"></a>
+
 # Set up your Microsoft 365 tenant and enable Microsoft Graph Data Connect
 
 Prior to using Microsoft Graph Data Connect for the first time, you need to configure your Microsoft 365 tenant. This involves turning on the service and configuring a security group with permissions to approve data extraction requests.

@@ -13,12 +13,13 @@ This module has been recorded and is available in the Office Development YouTube
 ### Modules
 
 - [Prerequisites](./Lab-01-Pre-requisites.md#prereqs)
-- Setup your Global Admin accounts
-- Configure your App Registration in Azure Active Directory
-- Configure your Data Factory resource in Azure
-- Approve consent requests via Microsoft 365 Admin Center
-- Approve consent requests via PowerShell
-- Create your application for Data Connect
+- [Setup your Global Admin accounts](./Lab-02-Global-Admin.md#configure-global-admin)
+- [Configure your App Registration in Azure Active Directory](./Lab-03-App-Registration-AAD.md#configure-app-reg-aad)
+- [Configure your Azure Storage resource in Azure](./Lab-04-Configure-Storage.md#configure-sa)
+- [Configure your Data Factory resource in Azure](./Lab-05-Configure-Data-Factory.md#configure-sa)
+- [Approve consent requests via Microsoft 365 Admin Center](./Lab-06-Approve-Consent-Requests.md#approve-m365admin)
+- [Approve consent requests via PowerShell](./Lab-06-Approve-Consent-Requests.md#approve-powershell)
+- [Create your application for Data Connect](./Lab-07-Create-Application.md#create-app)
 
 ## Contributors
 
