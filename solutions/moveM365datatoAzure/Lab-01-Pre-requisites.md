@@ -22,6 +22,8 @@ You can use Data Connect to enable machine learning scenarios for your organizat
 
 In this tutorial, you will be creating your first Microsoft Graph Data Connect application. Exciting, right? We think so too! To get started, you'll need to set up a few things first.
 
+<a name="prereqs"></a>
+
 ### Prerequisites
 
 To complete this lab, you will need the following subscriptions or licenses.
