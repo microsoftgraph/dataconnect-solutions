@@ -8,6 +8,8 @@ ms.topic: tutorial
 ms.custom: scenarios:getting-started, languages:ASP.NET
 ---
 
+<a name="create-app"></a>
+
 # Create your ASP.NET Web Application to process the exported data
 
 In this section we will be building your first ASP.NET project application for to process the Microsoft Graph Data Connect data that was exported.

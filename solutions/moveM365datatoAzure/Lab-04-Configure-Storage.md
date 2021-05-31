@@ -8,6 +8,8 @@ ms.topic: tutorial
 ms.custom: scenarios:getting-started, languages:ASP.NET
 ---
 
+<a name="configure-sa"></a>
+
 # Set up your Azure Storage resource
 
 In this step you will create an Azure Storage account where Microsoft Graph data connect will store the data extracted from Microsoft 365 for further processing.

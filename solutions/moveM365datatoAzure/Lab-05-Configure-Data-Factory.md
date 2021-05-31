@@ -8,6 +8,8 @@ ms.topic: tutorial
 ms.custom: scenarios:getting-started, languages:ASP.NET
 ---
 
+<a name="configure-adf"></a>
+
 # Set up your Azure Data Factory resource
 
 The next step is to use the Azure Data Factory to create a pipeline to extract the data from Microsoft 365 to the Azure Storage account using Microsoft Graph data connect.

@@ -14,6 +14,8 @@ A Microsoft 365 administrator has the ability to approve or deny consent request
 
 ## Approve consent requests
 
+<a name="approve-m365admin"></a>
+
 ### Approve via Microsoft 365 Admin Center
 
 1. Open a browser and go to your [Microsoft 365 Admin Portal](https://admin.microsoft.com).
@@ -25,6 +27,8 @@ A Microsoft 365 administrator has the ability to approve or deny consent request
 1. In the **Data Access Request** call out, select the **Approve** button.
 
     ![A screenshot showing a data access request pending consent approval in the Microsoft 365 admin center.](images/data-connect-m365-approve.png)
+
+<a name="approve-powershell"></a>
 
 ### Approve via PowerShell
 
