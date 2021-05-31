@@ -10,6 +10,16 @@ In this lab you will use Microsoft Graph Data Connect to analyze emails from an 
 
 This module has been recorded and is available in the Office Development YouTube channel: [Microsoft Graph Data Connect](https://youtu.be/6IJ7W8IXeJ4)
 
+### Modules
+
+- [Prerequisites](./Lab-01-Pre-requisites.md#prereqs)
+- Setup your Global Admin accounts
+- Configure your App Registration in Azure Active Directory
+- Configure your Data Factory resource in Azure
+- Approve consent requests via Microsoft 365 Admin Center
+- Approve consent requests via PowerShell
+- Create your application for Data Connect
+
 ## Contributors
 
 |        Roles         |                                       Author(s)                                       |
