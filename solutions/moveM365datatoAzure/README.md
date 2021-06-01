@@ -49,7 +49,6 @@ This module has been recorded and is available in the Office Development YouTube
 
 <img src="https://telemetry.sharepointpnp.com/msgraph-training-dataconnect" />
 
-
 # Copyright
 
 Copyright (c) 2021 Microsoft Corporation. All rights reserved.
