@@ -93,8 +93,10 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
         install_config.jgraph_aad_app = jgraph_aad_app
 
 
-def execute_user_prompts(deployment_name: str, install_config: InstallConfiguration, resource_group: str):
-    install_config.prompt_all_required(deployment_name=deployment_name)
+def execute_user_prompts(deployment_name: str, install_config: InstallConfiguration, resource_group: str, subscription_id: str, validate_default_params: bool = True):
+    install_config.prompt_all_required(deployment_name=deployment_name,
+                                       subscription_id=subscription_id,
+                                       validate_default_params=validate_default_params)
     install_config.prompt_airtable_config(deployment_name=deployment_name)
     if install_config.sql_auth:
         # let's generate service password without prompting, it will be saved in key vaults
@@ -200,12 +202,13 @@ if __name__ == '__main__':
 
     if install_state.is_user_prompts_taken():
         if install_state.prompt_stage_repeat("Previously entered values have been found. Would you like to ignore them and re-enter deployment parameters? (Y/n) "):
-            execute_user_prompts(deployment_name=deployment_name, install_config=install_config, resource_group=resource_group)
+            execute_user_prompts(deployment_name=deployment_name, install_config=install_config, resource_group=resource_group,
+                                 subscription_id=subscription_id, validate_default_params=(not install_state.is_azure_resources_deployed()))
             install_state.complete_stage(Stages.USER_PROMPTS_TAKEN)
         else:
             print("Reusing previously entered parameters")
     else:
-        execute_user_prompts(deployment_name=deployment_name, install_config=install_config, resource_group=resource_group)
+        execute_user_prompts(deployment_name=deployment_name, install_config=install_config, resource_group=resource_group, subscription_id=subscription_id)
         install_state.complete_stage(Stages.USER_PROMPTS_TAKEN)
 
     init_active_directory_entities(deployment_name=deployment_name, install_config=install_config, resource_group=resource_group)

@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
-###### utils #########
-function lex_hash() {
-    # should be consistent with python skills_finder_utils/common.py#lex_hash
-    echo "$1" | openssl md5 | sed 's/^.* //' | tr '[:upper:]' '[:lower:]' | cut -c1-7
-}
+
 set -e
 WORKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
@@ -197,9 +193,15 @@ done
 
 echo "Creating resource group  $RESOURCE_GROUP in $LOCATION"
 
-TMP_AZURE_STORAGE_ACCOUNT="gdcdeploy$( lex_hash $DEPLOYMENT_NAME )"
 CONTAINER="gdc-artifacts"
 az group create --name ${RESOURCE_GROUP} --location "$LOCATION" --output none
+
+TMP_AZURE_STORAGE_ACCOUNT=$(az storage account list --resource-group ${RESOURCE_GROUP} --query "[?starts_with(name, 'gdcdeploy')].name" -o tsv)
+
+if [[ -z "$TMP_AZURE_STORAGE_ACCOUNT" ]]; then
+  RANDOM_STRING=$(head /dev/urandom | tr -dc a-z0-9 | head -c10)
+  TMP_AZURE_STORAGE_ACCOUNT="gdcdeploy$RANDOM_STRING"
+fi
 
 echo "Creating temporal storage account for deployment  $TMP_AZURE_STORAGE_ACCOUNT in $LOCATION  "
 

@@ -12,7 +12,8 @@ from os.path import expanduser
 import pathlib
 
 from skills_finder_utils import common
-from skills_finder_utils.common import lex_hash
+from skills_finder_utils.common import lex_hash, get_random_string
+from skills_finder_utils import ad_ops
 
 
 class InstallConfiguration:
@@ -36,7 +37,14 @@ class InstallConfiguration:
 
     __fields_validators = {
         "sqlserver.admin.password": common.check_complex_password,
-        "appservice.name": common.is_azure_app_service_name_valid
+        "appservice.name": common.is_azure_app_service_name_valid,
+        "sqlserver.name": common.is_sql_server_name_valid,
+        "search-service.name": common.is_search_service_name_valid,
+        "keyvault.name": common.is_key_vault_resource_name_valid,
+        "m365Adf-keyvault.name": common.is_key_vault_resource_name_valid,
+        "storageAccount.name": common.is_storage_account_name_valid,
+        "adf.name": common.is_data_factory_name_valid,
+        "testStorageAccount.name": common.is_storage_account_name_valid
     }
 
     def __init__(self):
@@ -308,13 +316,20 @@ class InstallConfiguration:
         def_param = self._arm_params.get(param_name)
         return def_param and 'type' in def_param and str(def_param['type']).lower() == 'securestring'
 
-    def _get_def_value(self, param_name: str, deployment_name: str):
+    def _get_def_value(self, param_name: str, deployment_name: str, random_suffix: bool = False):
         param_def = self._arm_params.get(param_name)
         if param_def and "defaultValue" in param_def:
             default_value = param_def["defaultValue"]
             if param_name in self.__unique_properties and deployment_name:
                 # see for details https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules
-                return default_value + lex_hash(deployment_name)
+                if param_name == 'adf.name' or random_suffix:
+                    # the data factory name has to be globally unique
+                    # and there is no api for checking the name availability
+                    # so we will use a random string just to make the collision probability is as small as possible
+                    recommended_default_value = default_value + get_random_string()
+                else:
+                    recommended_default_value = default_value + lex_hash(deployment_name)
+                return recommended_default_value
             else:
                 return default_value
         return None
@@ -334,10 +349,16 @@ class InstallConfiguration:
         return None
 
     def _prompt_param(self, param_name: str, deployment_name: str, is_secure: bool = False, _description: str = None,
-                      allow_empty: bool = False):
+                      allow_empty: bool = False, subscription_id: str = None, token: common.AccessToken = None,
+                      validate_default_params: bool = True):
         description = _description or self._param_description(param_name=param_name)
-        def_value = self._get_def_value(param_name=param_name, deployment_name=deployment_name)
         validator_func = self.__fields_validators.get(param_name)
+
+        def_value = self._get_def_value(param_name=param_name, deployment_name=deployment_name)
+        if validator_func and def_value and validate_default_params:
+            while not validator_func(def_value, subscription_id, token, False):
+                def_value = self._get_def_value(param_name=param_name, deployment_name=deployment_name, random_suffix=True)
+
         value = None
         while value is None:
             value = self._required_arm_params.get(param_name) or def_value
@@ -353,11 +374,12 @@ class InstallConfiguration:
             else:
                 msg = "Enter %s : " % param_name
 
+
             if is_secure:
                 msg = "Enter %s, %s : " % (param_name, description)
                 entered_value = getpass.getpass(prompt=msg)
                 if validator_func:
-                    if not validator_func(entered_value):
+                    if not validator_func(entered_value, subscription_id, token):
                         print("Entered value is invalid, try again")
                         entered_value = None
 
@@ -377,23 +399,34 @@ class InstallConfiguration:
                     if max_value and entered_value > max_value:
                         entered_value = None
 
-                if validator_func:
-                    if not validator_func(entered_value):
-                        entered_value = None
-
             print("\n")
             if entered_value:
                 value = entered_value
             elif allow_empty:
                 value = ""
 
+            # if the selected value is the default one
+            # we don't have to validate it again because it's already been validated
+            if validator_func and value != def_value and value != self._required_arm_params.get(param_name):
+                if not validator_func(value, subscription_id, token):
+                    print("Entered value is invalid, try again")
+                    value = None
+
         return value
 
-    def prompt_all_required(self, deployment_name: str):
+    def prompt_all_required(self, deployment_name: str, subscription_id: str, validate_default_params: bool = True):
         param_names = self._get_required_arm_params_name()
+        az_access_token = ad_ops._get_access_token(subscription_id=subscription_id)
+        token = common.AccessToken(az_access_token)
         for param_name in sorted(param_names):
             is_secure = self._is_secure_param(param_name=param_name)
-            entered_value = self._prompt_param(param_name=param_name, is_secure=is_secure, deployment_name=deployment_name)
+            entered_value = self._prompt_param(param_name=param_name,
+                                               is_secure=is_secure,
+                                               deployment_name=deployment_name,
+                                               subscription_id=subscription_id,
+                                               token=token,
+                                               validate_default_params=validate_default_params)
+
             self._required_arm_params[param_name] = entered_value
             self._save()
 
