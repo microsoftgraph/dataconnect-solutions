@@ -47,6 +47,19 @@ running locally, then the latest version of the data from Azure SQL database nee
 > Bash (and Python 3) was used for scripting and deployment.  
 > There has been no testing on Windows, nor deployments from PowerShell.
 
+
+### User guide
+
+The application provides the following functionalities to users:  
+search by skills&availability, search by availability alone, searching by name, provide information about each 
+recommended employee (profile&inferred data), results filtering&sorting, search term autocompletion,
+using search domains for skills inference and search results matching, exporting search results, 
+creating teams, adding/removing members to teams, exporting team members, 
+settings (data sources, filter settings, search criteria, emails search), 
+admin only functionalities (ingestion mode switch, HR data upload).  
+For more details please read the full [User Guide](docs/user_guide.md)
+
+
 ### Architectural components
 
 - The [ADF pipelines](docs/AzureDataFactory.MD) process the data from several sources using mainly Azure Databricks (ADB)
