@@ -1,0 +1,15 @@
+{
+  "taxonomiesList": [
+    "${taxonomiesList}"
+  ],
+  "searchCriteria": "${searchCriteria}",
+  "searchTerms": [
+    "${searchTerms}"
+  ],
+  "sortBy": "relevance",
+  "searchFilterValues": {},
+  "requiredAvailability": {
+    "minPercentage": 0,
+    "availableAtTheLatestOn": "2021-04-26"
+  }
+}

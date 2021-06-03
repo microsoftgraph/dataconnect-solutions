@@ -1,0 +1,8 @@
+{
+  "skills":
+  ["${skills}"]
+  ,
+  "name": "${name}",
+  "employeeId": "${employeeId}",
+  "email": "${email}"
+}
