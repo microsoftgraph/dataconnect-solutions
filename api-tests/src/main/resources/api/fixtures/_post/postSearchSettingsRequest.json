@@ -1,0 +1,121 @@
+{
+  "dataSourceSettings": {
+    "dataSourcesPriority": [
+      "${dataSourcesPriority}"
+    ],
+    "isHRDataMandatory": "${isHRDataMandatory}"
+  },
+  "searchCriteria": [
+    {
+      "searchCriterionType": "PROFILE_SKILLS",
+      "isActive": "${PROFILE_SKILLS_active}"
+    },
+    {
+      "searchCriterionType": "PROFILE_ABOUT_ME",
+      "isActive": "${PROFILE_ABOUT_ME_active}"
+    },
+    {
+      "searchCriterionType": "PROFILE_TOPICS",
+      "isActive": "${PROFILE_TOPICS_active}"
+    },
+    {
+      "searchCriterionType": "EMAIL_CONTENT",
+      "isActive": "${EMAIL_CONTENT_active}"
+    }
+  ],
+  "searchResultsFilters": [
+    {
+      "dataSource": "M365",
+      "filters": [
+        {
+          "filterType": "m365_country",
+          "isActive": "${country_active}"
+        },
+        {
+          "filterType": "m365_state",
+          "isActive": "${state_active}"
+        },
+        {
+          "filterType": "m365_city",
+          "isActive": "${city_active}"
+        },
+        {
+          "filterType": "m365_department",
+          "isActive": "${department_city}"
+        },
+        {
+          "filterType": "m365_role",
+          "isActive": "${role_active}"
+        }
+      ]
+    },
+    {
+      "dataSource": "${dataSource}",
+      "filters": [
+        {
+          "filterType": "hr_data_location",
+          "isActive": "${data_location_active}"
+        },
+        {
+          "filterType": "hr_data_role",
+          "isActive": "${data_role_active}"
+        }
+      ]
+    }
+  ],
+  "useReceivedEmailsContent": "${useReceivedEmailsContent}",
+  "freshness": "${freshness}",
+  "freshnessEnabled": "${freshnessEnabled}",
+  "volume": "${volume}",
+  "volumeEnabled": "${volumeEnabled}",
+  "relevanceScore": "${relevanceScore}",
+  "relevanceScoreEnabled": "${relevanceScoreEnabled}",
+  "freshnessBeginDate": "2020-04-13T00:00:00+03:00",
+  "freshnessBeginDateEnabled": "${freshnessBeginDateEnabled}",
+  "includedEmailDomains": [
+    "${includedEmailDomains}"
+  ],
+  "includedEmailDomainsEnabled": "${includedEmailDomainsEnabled}",
+  "excludedEmailDomains": [
+    "${excludedEmailDomains}"
+  ],
+  "excludedEmailDomainsEnabled": "${excludedEmailDomainsEnabled}",
+  "taxonomyList": [
+    {
+      "enumClass": "com.microsoft.graphdataconnect.skillsfinder.models.TaxonomyType",
+      "value": "software"
+    },
+    {
+      "enumClass": "com.microsoft.graphdataconnect.skillsfinder.models.TaxonomyType",
+      "value": "data_science"
+    },
+    {
+      "enumClass": "com.microsoft.graphdataconnect.skillsfinder.models.TaxonomyType",
+      "value": "facilities"
+    },
+    {
+      "enumClass": "com.microsoft.graphdataconnect.skillsfinder.models.TaxonomyType",
+      "value": "finance"
+    },
+    {
+      "enumClass": "com.microsoft.graphdataconnect.skillsfinder.models.TaxonomyType",
+      "value": "human_relations"
+    },
+    {
+      "enumClass": "com.microsoft.graphdataconnect.skillsfinder.models.TaxonomyType",
+      "value": "legal"
+    },
+    {
+      "enumClass": "com.microsoft.graphdataconnect.skillsfinder.models.TaxonomyType",
+      "value": "sales_marketing"
+    },
+    {
+      "enumClass": "com.microsoft.graphdataconnect.skillsfinder.models.TaxonomyType",
+      "value": "oilgas"
+    },
+    {
+      "enumClass": "com.microsoft.graphdataconnect.skillsfinder.models.TaxonomyType",
+      "value": "healthcare"
+    }
+  ]
+}

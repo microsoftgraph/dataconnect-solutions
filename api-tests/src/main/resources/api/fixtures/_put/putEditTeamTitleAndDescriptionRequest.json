@@ -1,0 +1,4 @@
+{
+  "teamName": "${teamName}",
+  "teamDescription": "<p>${teamDescription}</p>"
+}
