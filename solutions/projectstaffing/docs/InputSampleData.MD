@@ -13,9 +13,9 @@ The `sample-data` container has to have 4 folders with data, out of which only 3
 - `m365_emails/`
     - This folder contains the employee emails in json format 
     - There can be multiple files 
-    - **Each email json object has to be printed on a separate line**
+    - **Each email json object has to be written on a separate, single line !!!**
     - The format of each email json object is the standard email format used by Office 365, more details are available in the [Microsoft Graph API documentation](https://docs.microsoft.com/en-us/graph/api/resources/message?view=graph-rest-1.0#properties).
-    - An example of an email object:
+    - An example of an email object (here displayed on multiple lines for readability):
     ```
         {
           "Id": "85bf0cb8-933d-4ec9-8396-e0ce8a24fc7a",
@@ -80,13 +80,13 @@ The `sample-data` container has to have 4 folders with data, out of which only 3
 - `m365_managers/`
     - This folder contains the managers' information in json format
     - There can be multiple files 
-    - **Each email json object has to be printed on a separate line**
+    - **Each manager json object has to be written on a separate, single line !!!**
     - Each object has to contain the following fields:
         - `id` is the manager id
         - `puser` represents the id of a user that is a subordinate of this manager
         - `displayName` complete name of the manager
         - `mail` is the email address of the manager
-    - An example of a manager object:
+    - An example of a manager object (here displayed on multiple lines for readability):
     ```
         {
           "id": "092a053e-9322-11eb-9e60-309c23afbf01",
@@ -99,9 +99,9 @@ The `sample-data` container has to have 4 folders with data, out of which only 3
 - `m365_users/`
     - This folder has to contain the profile information of all the employees 
     - There can be multiple files
-    - **Each email json object has to be printed on a separate line**
+    - **Each user json object has to be written on a separate, single line !!!**
     - The format of the user json object is the standard user format used in Office 365, more details are available in the [Microsoft Graph API documentation](https://docs.microsoft.com/en-us/graph/api/resources/user?view=graph-rest-1.0#properties).
-    - An example of a user json object:
+    - An example of a user json object (here displayed on multiple lines for readability):
     
     ```
         {
@@ -141,5 +141,6 @@ The `sample-data` container has to have 4 folders with data, out of which only 3
     - This folder contains information about employees in csv format 
     - It's called "hr_data" because the format is similar to what an HR department might use to store employee related information
     - This folder is optional
+    - If this folder is not provided, the `ImportHRDataIntoSql` stage of `End2EndEmployeeProfilePipeline` will fail,
+      however this is normal, and will still allow the pipeline to finish successfully
     - The schema required for the data within the folder is defined in the [HR Data documentation](./HR_Data.md)
-    
