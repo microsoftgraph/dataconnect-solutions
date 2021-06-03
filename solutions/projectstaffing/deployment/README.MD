@@ -62,14 +62,15 @@ You have two options for building the project:
 
 ## Building from source using the local development environment
 > NOTE: For developing the application, only macOS/Linux based systems were used.  
-> Building the application is possible from Windows systems (using Powershell, not the command-line interpreter), however 
+> Building the application is possible from Windows 10 systems (using Powershell, not the command-line interpreter), however 
 > solid knowledge of your development environment and of the differences between Windows/Unix systems is required. Some
 > adaptations of the provided instructions might be required as well, as well as some additional steps during deployment.
 
 ### Prerequisites
 1. Install JDK 1.8
-    - for example, to install the OpenJDK, follow the appropriate installation steps from https://openjdk.java.net/install/
-      or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your OS
+    - for example, to install the OpenJDK, follow the appropriate installation steps from: https://openjdk.java.net/install/
+      (Ubuntu), https://wiki.openjdk.java.net/display/jdk8u (Windows 10), https://adoptopenjdk.net/?variant=openjdk8 (macOS), 
+      or search online for a more detailed installation guide, matching your OS
     - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark jobs)
 2. Install latest Maven 3 version
     - download the latest maven 3 binary distribution archive from https://maven.apache.org/download.cgi
