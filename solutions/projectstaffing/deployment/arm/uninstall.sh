@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+echo -e "\n\n###################Authenticating to Azure #####################\n\n "
+az login
+
 set -e
 
 DEPLOYMENT_NAME=
@@ -25,9 +28,9 @@ if [[ -z "$SUBSCRIPTION_ID" ]]; then
       echo "--------------------------------------------------"
       echo "Current subscription: "
       az account list --output table | grep "${SUBSCRIPTION_ID}"
-      read -p "Would you like to uninstall the deploy on this subscription? (Y/n) " -n 1 -r
+      read -p "Would you like to uninstall the deployment from this subscription? (Y/n) " -r
       echo    # move to a new line
-      if [[ ! $REPLY =~ ^[Yy]$ ]]
+      if [[ ! $REPLY =~ ^[Yy].*$ ]]
       then
           read -p "Please provide the desired SubscriptionId, from the list displayed above. " -r SUBSCRIPTION_ID
       fi
@@ -44,18 +47,18 @@ found_apps_count=$(az ad app list --all --filter " displayName eq '${DEPLOYMENT_
 RESOURCE_GROUP=$(az group list --subscription "${SUBSCRIPTION_ID}" --query "[?name=='${DEPLOYMENT_NAME}-resources'].{name:name}" -o tsv )
 
 echo "You are about to uninstall the Project Staffing project from current Azure Subscription: ${SUBSCRIPTION_NAME}, ID: ${SUBSCRIPTION_ID} , resource group: ${RESOURCE_GROUP} "
-  read -p "Would you like continue (Y/n) " -n 1 -r
+  read -p "Would you like continue (Y/n) " -r
   echo -e "\n"
-  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  if [[ ! $REPLY =~ ^[Yy].*$ ]]
       then
           echo -e "\n Aborting operations..."
           exit 1
   fi
 
 if [[ -n "${GDC_SERVICE_SP_OBJ_ID}" && -n "${GDC_M365_SERVICE_SP_OBJ_ID}" ]]; then
-  read -p "Would you like delete the 'gdc-service' and 'gdc-m365-reader' service principals? This is only recommended if you want to redeploy from scratch and these principals are not used elsewhere! (Y/n) " -n 1 -r
+  read -p "Would you like delete the 'gdc-service' and 'gdc-m365-reader' service principals? This is only recommended if you want to redeploy from scratch and these principals are not used elsewhere! (Y/n) " -r
   echo -e "\n"
-  if [[ $REPLY =~ ^[Yy]$ ]]; then
+  if [[ $REPLY =~ ^[Yy].*$ ]]; then
       echo "Deleting service principals."
       az ad sp delete --id "${GDC_SERVICE_SP_OBJ_ID}"
       az ad sp delete --id "${GDC_M365_SERVICE_SP_OBJ_ID}"
@@ -79,9 +82,9 @@ else
 fi
 
 
-read -p "Would you like delete local files related to previous deployments (if any)? Recommended if you want to redeploy from scratch (Y/n) " -n 1 -r
+read -p "Would you like delete local files related to previous deployments (if any)? Recommended if you want to redeploy from scratch (Y/n) " -r
 echo -e "\n"
-if [[ $REPLY =~ ^[Yy]$ ]]; then
+if [[ $REPLY =~ ^[Yy].*$ ]]; then
   rm -rf ~/.gdc
   rm -rf ~/.gdc-env
   echo "Deleted local files."
