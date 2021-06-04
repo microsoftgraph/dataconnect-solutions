@@ -223,10 +223,10 @@
         "emails.backfill.time.span": {
             "type": "int",
             "defaultValue": 30,
-            "minValue": 1,
+            "minValue": 7,
             "maxValue": 3650,
             "metadata": {
-                "description": "Time span of processed emails from the past. Provide a value between 1 and 3650 days. For larger values, make sure your infrastructure can scale to such high loads"
+                "description": "Time span of processed emails from the past. Provide a value between 7 and 3650 days. For larger values, make sure your infrastructure can scale to such high loads"
             }
         }
     },

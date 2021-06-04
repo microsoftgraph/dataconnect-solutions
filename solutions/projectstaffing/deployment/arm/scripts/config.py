@@ -22,8 +22,9 @@ class InstallConfiguration:
     __artifacts_path = str(pathlib.Path(__file__).parent.absolute()) + "/artifacts/"
 
     """
-        List of parameters we need guarantee uniqueness, 
-        InstallConfiguration will suffix its default with hash based on deployment name 
+        List of parameters for which we need to guarantee uniqueness. 
+        InstallConfiguration will suffix the default value with a hash based on the deployment name 
+        or, if this yields an unavailable name, with a random string
     """
     __unique_properties = [
         "sqlserver.name",
@@ -394,10 +395,14 @@ class InstallConfiguration:
                     # check if the int value is contained in the defined limits, if present
                     min_value = self._get_parameter_attribute(param_name=param_name, attribute_name="minValue")
                     if min_value and entered_value < min_value:
-                        entered_value = None
+                        print("Entered value is invalid, try again")
+                        value = None
+                        continue
                     max_value = self._get_parameter_attribute(param_name=param_name, attribute_name="maxValue")
                     if max_value and entered_value > max_value:
-                        entered_value = None
+                        print("Entered value is invalid, try again")
+                        value = None
+                        continue
 
             print("\n")
             if entered_value:
