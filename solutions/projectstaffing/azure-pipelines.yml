@@ -20,11 +20,11 @@ resources:
 variables:
   tag: ${{ parameters.tag_override }}
   skipTests: ${{ parameters.skipTests  }}
-  containerRegistryServConn: TODO_define_missing_value
-  blobStorageServConn: TODO_define_missing_value
-  dockerRepositoryName: TODO_define_missing_value
-  storageName: TODO_define_missing_value
-  containerName: TODO_define_missing_value
+  containerRegistryServConn: contosohub_docker_registry
+  blobStorageServConn: contoso_devops_arm_connection
+  dockerRepositoryName: microsoft-gdc/project-staffing
+  storageName: prjstfartifacts
+  containerName: repository
   testDBUser: sa
   testDBPass: password_!23
   databaseName: gdc_database
