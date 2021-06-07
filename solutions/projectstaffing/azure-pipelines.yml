@@ -60,8 +60,8 @@ stages:
           targetType: 'inline'
           script: |
             sleep 20s
-            docker exec -i $(docker ps -aqf "name=gdc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <solutions/projectstaffing/deployment/local/tests/create_mssql/create-database.sql
-            docker exec -i $(docker ps -aqf "name=gdc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <solutions/projectstaffing/deployment/local/tests/create_mssql/create-database.sql
+            docker exec -i $(docker ps -aqf "name=gdc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <solutions/projectstaffing/deployment/local/create-database.sql
+            docker exec -i $(docker ps -aqf "name=gdc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <solutions/projectstaffing/deployment/local/create-database.sql
       - task: Maven@3
         displayName: Running maven build
         inputs:
