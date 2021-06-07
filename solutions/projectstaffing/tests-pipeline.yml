@@ -8,39 +8,32 @@ trigger: none
 pool:
   vmImage: 'ubuntu-latest'
 
+parameters:
+  - name: 'AppServiceAuthSession'
+    type: string
+    default: 'AppServiceAuthSession'
+  - name: 'AppServiceUrl'
+    type: string
+    default: 'AppServiceUrl'
+variables:
+  token: ${{ parameters.AppServiceAuthSession }}
+  url: ${{ parameters.AppServiceUrl }}
 stages:
-- stage: jmeter_test
-  pool:
-    vmImage: 'ubuntu-latest'
-  displayName: Running jmeter tests for SkillsFinder
-  jobs:  
-  - job: run_jmeter_tests
-    displayName: 'Running jmeter test'
-    steps:
-      - task: Bash@3
-        displayName: 'Executing jmeter'
-        inputs:
-          filePath: 'jmeter_scripts/run_test.sh'
-          arguments: 'smoke-test_v01_upd.jmx'
-          workingDirectory: 'jmeter_scripts'
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: 'jmeter_scripts/smoke-test_v01_upd_report'
-          publishLocation: 'pipeline'
-- stage: selenium_test
-  pool:
-    vmImage: 'ubuntu-latest'
-  displayName: Running selenium tests for SkillsFinder
-  jobs:  
-  - job: run_selenium_tests
-    displayName: 'Running selenium test'
-    steps:
-      - task: Bash@3
-        displayName: 'Executing selenium'
-        inputs:
-          filePath: 'selenium/run_tests.sh'
-          workingDirectory: 'selenium'
-      - task: PublishPipelineArtifact@1
-        inputs:
-          targetPath: 'selenium/target'
-          publishLocation: 'pipeline'
+  - stage: Carina_API_test
+    pool:
+      vmImage: 'ubuntu-latest'
+    displayName: Running Carina API tests for ProjectStaffing
+    jobs:
+      - job: run_API_tests
+        displayName: 'Running Carina API test'
+        steps:
+          - task: Bash@3
+            displayName: 'Executing API tests'
+            inputs:
+              filePath: 'api-tests/run_tests.sh'
+              arguments: $(token) $(url)
+              workingDirectory: 'api-tests'
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: 'api-tests/target'
+              publishLocation: 'pipeline'
