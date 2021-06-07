@@ -30,10 +30,10 @@ stages:
           - task: Bash@3
             displayName: 'Executing API tests'
             inputs:
-              filePath: 'api-tests/run_tests.sh'
+              filePath: 'solutions/projectstaffing/api-tests/run_tests.sh'
               arguments: $(token) $(url)
-              workingDirectory: 'api-tests'
+              workingDirectory: 'solutions/projectstaffing/api-tests'
           - task: PublishPipelineArtifact@1
             inputs:
-              targetPath: 'api-tests/target'
+              targetPath: 'solutions/projectstaffing/api-tests/target'
               publishLocation: 'pipeline'
