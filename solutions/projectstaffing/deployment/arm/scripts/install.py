@@ -8,6 +8,8 @@
 #   +   * gdc-service SP with Graph.ReadAll permission
 #   +   * gdc-m365-reader
 #   +   * gdc-jgraph-aad-app web app registration with Graph.Read permissions
+from json import JSONDecodeError
+
 import argparse
 import json
 import os
@@ -24,7 +26,8 @@ from skills_finder_utils.common import make_strong_password
 from monitoring import DeploymentState, Stages
 
 
-def init_active_directory_entities(deployment_name: str, install_config: InstallConfiguration, resource_group: str):
+def init_active_directory_entities(deployment_name: str, install_config: InstallConfiguration, resource_group: str,
+                                   non_interactive_mode: bool = False):
     print("GDC requires several records in your Active Directory. Let's verify them now... ")
 
     graph_user_read_permission = ad_ops.find_graph_user_read_all_role()
@@ -32,19 +35,28 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
         raise RuntimeError("Couldn't find 'User.Read' permission in 'Microsoft Graph' for your tenant ")
 
     if not install_config.gdc_admin_ad_group:
-        print("\nThe Project Staffing admins group defines a list of AD users which are going to have Owner role over all Azure resources created by this deployment.")
-        print("They will also have access to restricted application functionalities such as switching the ingestion mode or uploading new HR Data files.")
-        print("This Security group is mandatory and needs to be created before continuing. You can pause and create it now")
+        if not non_interactive_mode:
+            print("\nThe Project Staffing admins group defines a list of AD users which are going to have Owner role over all Azure resources created by this deployment.")
+            print("They will also have access to restricted application functionalities such as switching the ingestion mode or uploading new HR Data files.")
+            print("This Security group is mandatory and needs to be created before continuing. You can pause and create it now")
+
+        provided_admin_group_id = install_config.get_provided_param_value("gdcAdmins.groupId")
         admin_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name or id of an existing Active Directory group for Project Staffing admins: ",
-                                                          add_signed_user=False, create_if_not_exists=False)
+                                                          add_signed_user=False, provided_ad_group_id=provided_admin_group_id,
+                                                          no_input=non_interactive_mode, create_if_not_exists=False)
+
         install_config.gdc_admin_ad_group = admin_ad_group
 
     if not install_config.gdc_employees_ad_group:
-        print("\nThe Project Staffing application ingests and processes employee M365 profiles and email data to infer skills and build better teams.")
-        print("You should select an AD group to restrict the list of processed accounts. Only the data of the members of this group will be processed by the application, and therefore, only the employees in this group will be recommended by the application in searches.")
-        print("This Security group is mandatory and needs to be created before continuing. You can pause and create it now")
+        if not non_interactive_mode:
+            print("\nThe Project Staffing application ingests and processes employee M365 profiles and email data to infer skills and build better teams.")
+            print("You should select an AD group to restrict the list of processed accounts. Only the data of the members of this group will be processed by the application, and therefore, only the employees in this group will be recommended by the application in searches.")
+            print("This Security group is mandatory and needs to be created before continuing. You can pause and create it now")
+
+        provided_employee_group_id = install_config.get_provided_param_value("gdc_employees_ad_group_id")
         employees_ad_group = ad_ops.prompt_or_create_ad_group("Enter the name or id of an existing Active Directory group for processed employees: ",
-                                                              add_signed_user=False, create_if_not_exists=False)
+                                                              add_signed_user=False, provided_ad_group_id=provided_employee_group_id,
+                                                              no_input=non_interactive_mode, create_if_not_exists=False)
         install_config.gdc_employees_ad_group = employees_ad_group
 
     if not install_config.gdc_service_principal:
@@ -93,7 +105,8 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
         install_config.jgraph_aad_app = jgraph_aad_app
 
 
-def execute_user_prompts(deployment_name: str, install_config: InstallConfiguration, resource_group: str, subscription_id: str, validate_default_params: bool = True):
+def execute_user_prompts(deployment_name: str, install_config: InstallConfiguration, resource_group: str,
+                         subscription_id: str, validate_default_params: bool = True):
     install_config.prompt_all_required(deployment_name=deployment_name,
                                        subscription_id=subscription_id,
                                        validate_default_params=validate_default_params)
@@ -117,15 +130,21 @@ def execute_deploy_mainTemplate(parsed_args):
         log_analytic_ws_name = "gdc-logs-" + lex_hash(deployment_name)
         install_config.log_analytics_workspace_name = log_analytic_ws_name
     current_user = ad_ops.get_loggedin_user(fields=["givenName", "surname", "mail", "userPrincipalName"])
-    full_name = "%s %s" % (current_user['givenName'], current_user['surname'])
-    admin_email = current_user.get('mail') or current_user.get('userPrincipalName')
+    if not current_user:
+        install_config.prompt_admin_contact_info(deployment_name=deployment_name)
+        full_name = install_config.required_arm_params.get("alert.admin.fullname")
+        alert_admin_email = install_config.required_arm_params.get("alert.admin.email")
+    else:
+        full_name = "%s %s" % (current_user['givenName'], current_user['surname'])
+        alert_admin_email = current_user.get('mail') or current_user.get('userPrincipalName')
+
     json_params = arm_ops.create_main_arm_parameters(install_config=install_config, base_uri=template_base_uri,
                                                      sas_token=sas_token,
                                                      docker_login=docker_login,
                                                      app_version=install_config.appservice_version,
                                                      docker_password=docker_password,
                                                      log_analytic_ws_name=log_analytic_ws_name,
-                                                     admin_full_name=full_name, admin_email=admin_email)
+                                                     admin_full_name=full_name, admin_email=alert_admin_email)
     arm_params_json_file = os.path.join(install_config.get_gdc_dir(), "gdc_arm_params.json")
     with open(arm_params_json_file, "w") as param_file:
         param_file.write(json_params)
@@ -142,8 +161,6 @@ if __name__ == '__main__':
     args = sys.argv
 
     current_account = az.az_cli("account show")
-    install_config: InstallConfiguration = InstallConfiguration.load()
-    install_state = DeploymentState.load()
 
     # Create the parser
     arg_parser = argparse.ArgumentParser(description='Install Project Staffing service')
@@ -183,11 +200,16 @@ if __name__ == '__main__':
                             metavar='docker-password',
                             type=str,
                             help='Docker registry password', required=True)
+    arg_parser.add_argument("--parameter-file",
+                            metavar='parameter-file',
+                            type=str,
+                            help='Default ARM parameters json file', required=False, default=None)
 
     arg_parser.add_argument('--log-analytic-enabled', default=False, required=False, type=lambda x: bool(strtobool(str(x))))
     arg_parser.add_argument('--debug', default=False, required=False, type=lambda x: bool(strtobool(str(x))))
     arg_parser.add_argument('--sql-auth', required=True, type=lambda x: bool(strtobool(str(x))),
                             help='SQL Server authentication mode for schema init: true for SQL Server mode, false for Windows Auth mode (via Active Directory)')
+    arg_parser.add_argument('--no-input', default=False, required=False, type=lambda x: bool(strtobool(str(x))))
 
     parsed_args = arg_parser.parse_args()
     deployment_name = parsed_args.deployment_name
@@ -195,13 +217,22 @@ if __name__ == '__main__':
     subscription_id = parsed_args.subscription_id
     resource_group = parsed_args.resource_group
     debug_enabled = parsed_args.debug
+    parameter_file = parsed_args.parameter_file
+    no_input = parsed_args.no_input
+
     if debug_enabled:
         az.DEBUG_ENABLED = True
 
+    install_config: InstallConfiguration = InstallConfiguration.load(default_param_file=parameter_file)
+    install_state = DeploymentState.load()
     install_config.sql_auth = parsed_args.sql_auth
 
     if install_state.is_user_prompts_taken():
-        if install_state.prompt_stage_repeat("Previously entered values have been found. Would you like to ignore them and re-enter deployment parameters? (Y/n) "):
+        prompt_again = False
+        if not no_input:
+            prompt_again = install_state.prompt_stage_repeat("Previously entered values have been found. Would you like to ignore them and re-enter deployment parameters? (Y/n) ")
+
+        if prompt_again:
             execute_user_prompts(deployment_name=deployment_name, install_config=install_config, resource_group=resource_group,
                                  subscription_id=subscription_id, validate_default_params=(not install_state.is_azure_resources_deployed()))
             install_state.complete_stage(Stages.USER_PROMPTS_TAKEN)
@@ -211,7 +242,8 @@ if __name__ == '__main__':
         execute_user_prompts(deployment_name=deployment_name, install_config=install_config, resource_group=resource_group, subscription_id=subscription_id)
         install_state.complete_stage(Stages.USER_PROMPTS_TAKEN)
 
-    init_active_directory_entities(deployment_name=deployment_name, install_config=install_config, resource_group=resource_group)
+    init_active_directory_entities(deployment_name=deployment_name, install_config=install_config,
+                                   resource_group=resource_group, non_interactive_mode=no_input)
     print("Adding role assignment for %s on resource group %s" % (install_config.gdc_admin_ad_group['ad_group_name'],
                                                                   resource_group))
     ad_ops.add_role_assigment(role="Owner", ad_group_id=install_config.gdc_admin_ad_group["objectId"],

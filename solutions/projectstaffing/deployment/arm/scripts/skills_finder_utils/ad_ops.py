@@ -15,7 +15,8 @@ from skills_finder_utils.common import make_strong_password
 from skills_finder_utils.common import yes_no
 
 
-def prompt_or_create_ad_group(msg: str, tenant_id='default', create_if_not_exists=False, add_signed_user: bool = False):
+def prompt_or_create_ad_group(msg: str, tenant_id='default', provided_ad_group_id: str = None, create_if_not_exists=False,
+                              no_input: bool = False, add_signed_user: bool = False):
     """
      Prompt for existing or create a new AD group
     :param msg:
@@ -25,12 +26,11 @@ def prompt_or_create_ad_group(msg: str, tenant_id='default', create_if_not_exist
     :return:
     """
     group_accepted = False
-    ad_group = None
+    ad_group = provided_ad_group_id
     while not group_accepted:
-        ad_group = input(msg)
-        print('\n')
         if not ad_group:
-            continue
+            ad_group = input(msg)
+            print('\n')
 
         if is_valid_uuid(ad_group):
             rsp = az_cli("ad group list ", "--filter", "objectId eq '%s' " % ad_group)
@@ -47,8 +47,14 @@ def prompt_or_create_ad_group(msg: str, tenant_id='default', create_if_not_exist
                 print("%s\t%s" % (group['objectId'], group['displayName']))
         elif len(rsp) == 1:
             group = rsp[0]
-            group_accepted = yes_no("Selected group: %s, objectId: %s, confirm (y/n)" % (group['displayName'],
-                                                                                         group['objectId']))
+            if not no_input:
+                group_accepted = yes_no("Selected group: %s, objectId: %s, confirm (y/n)" % (group['displayName'],
+                                                                                             group['objectId']))
+                # reset selection if not accepted to prompt again
+                ad_group = ad_group if group_accepted else None
+            else:
+                # no confirmation needed for non-interactive mode
+                group_accepted = True
         else:
             if create_if_not_exists:
                 desc = "AD group for GDC app administrators. It manages full access to App resources and SQL database"
@@ -364,8 +370,12 @@ def get_loggedin_user(fields: list):
     query = ""
     if fields:
         query = "{" + ",".join(list(map(lambda s: s + " : " + s, fields))) + " }"
-    rsp = az_cli("ad signed-in-user show", "--query", query)
-    return rsp
+    try:
+        rsp = az_cli("ad signed-in-user show", "--query", query)
+        return rsp
+    except BaseException:
+        print("WARN: Can't resolve signed in user, are you running as service principal?")
+    return None
 
 
 def get_service_principal_object_id(app_id: str):

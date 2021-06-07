@@ -1,7 +1,25 @@
 #!/usr/bin/env bash
 
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)  ;;
+    Darwin*)  ;;
+    *) echo "Unsupported platform"; exit 4 ;;
+esac
+
+###### utils #########
+DEPLOYMENT_NAME=
+LOCATION=
+DEBUG=
+DOCKER_PASSWORD=
+SUBSCRIPTION_ID=
+NO_INPUT=
+DEMO_DATA_STORAGE_ACCOUNT=
+
 set -e
 WORKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+source ${WORKDIR}/functions.sh
 
 if ! command -v az &> /dev/null
 then
@@ -16,32 +34,19 @@ if [[ $python_version < 37 ]]; then
     exit 3
 fi
 
-unameOut="$(uname -s)"
-case "${unameOut}" in
-    Linux*)  ;;
-    Darwin*)  ;;
-    *) echo "Unsupported platform"; exit 4 ;;
-esac
-
 # create virtual env
 pip3 install  --disable-pip-version-check virtualenv -q
 echo "Installing python virtual environment for deployment scripts..."
 virtualenv -p python3  ~/.gdc-env -q
 source ~/.gdc-env/bin/activate
-~/.gdc-env/bin/python -m pip install --upgrade pip
-~/.gdc-env/bin/pip install -r $WORKDIR/scripts/requirements.txt -q
+~/.gdc-env/bin/python -m pip install  --no-input --upgrade pip
+~/.gdc-env/bin/pip install -r $WORKDIR/scripts/requirements.txt -q --no-input
 
 echo "Installing Azure CLI extension for Databricks and Data Factory..."
-az extension add --only-show-errors --upgrade --name databricks
-az extension add --only-show-errors --upgrade --name datafactory
+az extension add --only-show-errors --upgrade --name databricks --yes
+az extension add --only-show-errors --upgrade --name datafactory --yes
 
 mkdir -p ~/.gdc
-
-DEPLOYMENT_NAME=
-LOCATION=
-DEBUG=
-DOCKER_PASSWORD=
-SUBSCRIPTION_ID=
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
@@ -50,16 +55,19 @@ while [[ "$#" -gt 0 ]]; do
       -p | --docker-password ) DOCKER_PASSWORD="$2"; shift ;;
       -s | --subscription ) SUBSCRIPTION_ID="$2"; shift ;;
       -d | --debug ) DEBUG="--debug true"; ;;
+      -y | --no-input ) NO_INPUT="--no-input true"; ;;
+      -r | --remote-artifacts-location ) DEMO_DATA_STORAGE_ACCOUNT="$2"; shift ;;
+      -f | --parameter-file) PARAMETERS_FILE_PATH="${2}"; shift;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 if [[ -z "$DEPLOYMENT_NAME" ]]; then
-  read -p "Enter deployment name: " -r DEPLOYMENT_NAME
+  prompt_non_empty_str_value "Enter deployment name: " DEPLOYMENT_NAME
 fi
 
 if [[ -z "$LOCATION" ]]; then
-  read -p "Enter Azure location: " -r LOCATION
+  prompt_non_empty_str_value "Enter Azure location: " LOCATION
 fi
 
 if [[ -z "$DOCKER_PASSWORD" ]]; then
@@ -71,8 +79,12 @@ fi
 
 RESOURCE_GROUP="${DEPLOYMENT_NAME}-resources"
 
-echo -e "\n\n###################Authenticating to Azure #####################\n\n "
-az login
+echo -e "\n\n################### Authenticating to Azure #####################\n\n "
+if [[ -z "${NO_INPUT}" ]]; then
+  az login
+else
+  echo "Non-interactive mode is enabled. Reusing exiting authentication session"
+fi
 
 #
 # -------- Deployment ------------------------------
@@ -87,11 +99,10 @@ if [[ -z "$SUBSCRIPTION_ID" ]]; then
       echo "--------------------------------------------------"
       echo "Current subscription: "
       az account list --output table | grep "${SUBSCRIPTION_ID}"
-      read -p "Would you like to deploy into this subscription? (Y/n) " -n 1 -r
-      echo    # move to a new line
-      if [[ ! $REPLY =~ ^[Yy]$ ]]
+      yes_no_confirmation "Would you still like to try to deploy into this subscription ?(Y/n) " reply_yn
+      if [[ "${reply_yn}" == false ]]
       then
-          read -p "Please provide the desired SubscriptionId, from the list displayed above. " -r SUBSCRIPTION_ID
+          prompt_non_empty_str_value "Please provide the desired SubscriptionId, from the list displayed above. " SUBSCRIPTION_ID
       fi
   fi
 fi
@@ -100,18 +111,21 @@ TENANT_ID=$(az account show --subscription "$SUBSCRIPTION_ID" --query tenantId -
 
 echo "Deploying in subscription $SUBSCRIPTION_ID from tenant $TENANT_ID"
 
-REQUIRED_ROLE="Owner"
-LOGGED_USER_ID=$(az ad signed-in-user show --query objectId  --output tsv )
-ASSIGNMENTS_LIST=$(az role assignment list --scope /subscriptions/${SUBSCRIPTION_ID} --assignee ${LOGGED_USER_ID} --include-classic-administrators true --include-groups --include-inherited --role "${REQUIRED_ROLE}" --query [].{id:id} --output tsv)
-
-if [[ -z "${ASSIGNMENTS_LIST}" ]]; then
-    echo "You don't have enough permissions within selected subscription ${SUBSCRIPTION_ID}. Required role: ${REQUIRED_ROLE}"
-    read -p "Would you still like to try to deploy into this subscription ?(Y/n) " -n 1 -r
-    echo    # move to a new line
-    if [[ ! $REPLY =~ ^[Yy]$ ]]
-    then
-        [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-    fi
+if [[ -z "${NO_INPUT}" ]];then
+  REQUIRED_ROLE="Owner"
+  LOGGED_USER_ID=$(az ad signed-in-user show --query objectId  --output tsv )
+  ASSIGNMENTS_LIST=$(az role assignment list --scope /subscriptions/${SUBSCRIPTION_ID} --assignee ${LOGGED_USER_ID} --include-classic-administrators true --include-groups --include-inherited --role "${REQUIRED_ROLE}" --query [].{id:id} --output tsv)
+  if [[ -z "${ASSIGNMENTS_LIST}" ]]; then
+      echo "You don't have enough permissions within selected subscription ${SUBSCRIPTION_ID}. Required role: ${REQUIRED_ROLE}"
+      yes_no_confirmation "Would you still like to try to deploy into this subscription ?(Y/n) " CONTINUE
+      if [[ "${CONTINUE}" == false ]]
+      then
+        echo "Terminating deployment"
+          [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+      fi
+  fi
+else
+    echo "Non-interactive mode is enabled, skipping permissions verification "
 fi
 
 DEFAULT_VM_TYPE="standardDSv2Family"
@@ -119,9 +133,9 @@ MINIMAL_vCPU=12
 vCPU_USED=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID} -o tsv --query "[].{Name:name, currentValue:currentValue}[?contains(Name.value, '${DEFAULT_VM_TYPE}')]" | awk '{ print $1 }')
 vCPU_LIMIT=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID}  -o tsv --query "[].{Name:name, limit:limit}[?contains(Name.value, '${DEFAULT_VM_TYPE}' )]" | awk '{ print $1 }')
 if (( ${vCPU_USED} + ${MINIMAL_vCPU} > ${vCPU_LIMIT} ));  then
-    read -p "There are not enough vCPUs available at ${LOCATION} region. You're using ${vCPU_USED} out of ${vCPU_LIMIT}, but ${MINIMAL_vCPU} are required. Would you still like to try to install ?(Y/n) " -n 1 -r
-    echo    # move to a new line
-    if [[ ! $REPLY =~ ^[Yy]$ ]]
+    prompt_msg="There are not enough vCPUs available at ${LOCATION} region. You're using ${vCPU_USED} out of ${vCPU_LIMIT}, but ${MINIMAL_vCPU} are required. Would you still like to try to install ?(Y/n) "
+    yes_no_confirmation "${prompt_msg}" CONTINUE true
+    if [[ "${CONTINUE}" == false ]]
     then
         echo "Canceling deployment due to lack of available vCPUs "
         exit 5
@@ -136,23 +150,20 @@ do
    SERVICE_STATE=$(az provider show --namespace $service --query registrationState -o tsv)
    if [[ "${SERVICE_STATE}" -ne "Registered" ]]; then
       echo "The subscription  ${SUBSCRIPTION_ID} is not registered to use $service. "
-      while true; do
-          read -p "Would you like to activate $service and continue installation (Y/n) " -r enable_yn
-          case $enable_yn in
-              [Yy]* )
-                echo "Registering $service for  subscription $SUBSCRIPTION_ID ..."
-                az provider register  --subscription "$SUBSCRIPTION_ID" --namespace "$service" --wait
-                REGISTER_RESULT=$?
-                if [[ $REGISTER_RESULT != 0 ]]; then
-                    echo "Failed to register $service, bailing out..."
-                    exit $REGISTER_RESULT
-                fi
-                break;;
-              [Nn]* ) echo "Installation has been terminated";  exit;;
-              * ) echo "Please answer yes or no.";;
-          esac
-      done
-  fi
+      yes_no_confirmation "Would you like to activate $service and continue installation (Y/n) " enable_yn true
+      if [[ "${enable_yn}" == true ]]; then
+        echo "Registering $service for  subscription $SUBSCRIPTION_ID ..."
+        az provider register  --subscription "$SUBSCRIPTION_ID" --namespace "$service" --wait
+        REGISTER_RESULT=$?
+        if [[ $REGISTER_RESULT != 0 ]]; then
+            echo "Failed to register $service, bailing out..."
+            exit $REGISTER_RESULT
+        fi
+      else
+        echo "Installation has been terminated"
+        exit 9
+      fi
+   fi
 done
 
 LOG_INSIGHTS_REGISTRATION_STATE=$(az provider show --namespace microsoft.insights --query registrationState -o tsv)
@@ -160,36 +171,42 @@ LOG_INSIGHTS_PARAM="--log-analytic-enabled true"
 if [[ "${LOG_INSIGHTS_REGISTRATION_STATE}" -ne "Registered" ]]; then
   echo "The subscription  ${SUBSCRIPTION_ID} is not registered to use microsoft.insights. "
   echo "Access to logs will be limited for this deployment  "
-  while true; do
-      read -p "Do you want to continue without Log Analytics Workspace (Y/n) " -r log_yn
-      case $log_yn in
-          [Yy]* ) LOG_INSIGHTS_PARAM="--log-analytic-enabled false";  break;;
-          [Nn]* ) echo "Installation has been terminated";  exit;;
-          * ) echo "Please answer yes or no.";;
-      esac
-  done
+  yes_no_confirmation "Do you want to continue without Log Analytics Workspace (Y/n) " log_yn true
+  if [[ "${enable_yn}" == true ]]; then
+    LOG_INSIGHTS_PARAM="--log-analytic-enabled false";
+  else
+    echo "Installation has been terminated";
+    exit 10
+  fi
 fi
 
-echo "This deployment script configures ProjectStaffing by default to run in simulated data mode. It requires synthetic input data to be copied from one of our public storages."
-PS3="Select preferred location to copy domain expert and synthetic input data from based on your deployment location :"
-select opt in westus westeurope southeastasia brazilsouth; do
-   case $opt in
-      westus)
-        DEMO_DATA_STORAGE_ACCOUNT="prjstaffingnortham"
-        break;;
-      westeurope)
-        DEMO_DATA_STORAGE_ACCOUNT="prjstaffingeu"
-        break;;
-      southeastasia)
-         DEMO_DATA_STORAGE_ACCOUNT="prjstaffingsoutheastasia"
-         break;;
-      brazilsouth)
-         DEMO_DATA_STORAGE_ACCOUNT="prjstaffingsoutham"
-        break;;
-      *)
-        echo "Invalid option $opt ";;
-  esac
-done
+if [[ -z "${DEMO_DATA_STORAGE_ACCOUNT}" ]]; then
+  if [[ -z "${NO_INPUT}" ]]; then
+      echo "This deployment script configures ProjectStaffing by default to run in simulated data mode. It requires synthetic input data to be copied from one of our public storages."
+      PS3="Select preferred location to copy domain expert and synthetic input data from based on your deployment location :"
+      select opt in westus westeurope southeastasia brazilsouth; do
+         case $opt in
+            westus)
+              DEMO_DATA_STORAGE_ACCOUNT="prjstaffingnortham"
+              break;;
+            westeurope)
+              DEMO_DATA_STORAGE_ACCOUNT="prjstaffingeu"
+              break;;
+            southeastasia)
+               DEMO_DATA_STORAGE_ACCOUNT="prjstaffingsoutheastasia"
+               break;;
+            brazilsouth)
+               DEMO_DATA_STORAGE_ACCOUNT="prjstaffingsoutham"
+              break;;
+            *)
+              echo "Invalid option $opt ";;
+        esac
+      done
+  else
+    echo "Non-interactive mode is enabled, falling back to westus remote artifacts storage"
+    DEMO_DATA_STORAGE_ACCOUNT="prjstaffingnortham"
+  fi
+fi
 
 echo "Creating resource group  $RESOURCE_GROUP in $LOCATION"
 
@@ -220,7 +237,6 @@ case "${unameOut}" in
     Darwin*) expiretime=$(date -v+1d +%Y-%m-%dT%H:%MZ) ;;
 esac
 
-
 connection=$(az storage account show-connection-string --resource-group ${RESOURCE_GROUP} --name ${TMP_AZURE_STORAGE_ACCOUNT}  --query connectionString)
 SAS_TOKEN=$( az storage container  generate-sas --name $CONTAINER --account-name ${TMP_AZURE_STORAGE_ACCOUNT} --expiry $expiretime  --https-only --permissions dlr --output tsv --connection-string $connection )
 TEMPLATE_URL=$(az storage blob url --container-name $CONTAINER --name mainTemplate.json --output tsv --connection-string $connection )
@@ -231,6 +247,10 @@ SQL_SCHEMA_GENERATION_LOCAL=$?
 USE_SQL_PASS_MODE_PARAM="true"
 SQL_PASS_MODE_PARAM="--sql-auth ${USE_SQL_PASS_MODE_PARAM}"
 SCHEMA_GENERATION_MODE=$([ "$SQL_SCHEMA_GENERATION_LOCAL" == 0 ] && echo "auto" || echo "manual")
+PARAMETERS_FILE_ARG=""
+if [[ -f "${PARAMETERS_FILE_PATH}" ]]; then
+  PARAMETERS_FILE_ARG=" --parameter-file $PARAMETERS_FILE_PATH "
+fi
 
 pushd $WORKDIR/scripts
   echo "Starting deployment script.... "
@@ -238,7 +258,8 @@ pushd $WORKDIR/scripts
   ~/.gdc-env/bin/python ./install.py --deployment-name "$DEPLOYMENT_NAME" --tenant-id "$TENANT_ID" \
                               --subscription-id "$SUBSCRIPTION_ID" --resource-group "$RESOURCE_GROUP" \
                               --template-base-uri "${TEMPLATE_BASE_URI}" --sas-token "$SAS_TOKEN" \
-                              --docker-login "gdc-readonly-token" --docker-password "$DOCKER_PASSWORD" ${LOG_INSIGHTS_PARAM} ${DEBUG} ${SQL_PASS_MODE_PARAM}
+                              --docker-login "gdc-readonly-token" --docker-password "$DOCKER_PASSWORD" \
+                               ${PARAMETERS_FILE_ARG} ${LOG_INSIGHTS_PARAM} ${DEBUG} ${SQL_PASS_MODE_PARAM} ${NO_INPUT}
 popd
 
 dbserver=$(az sql server  list --resource-group ${RESOURCE_GROUP} --query "[].name" -o tsv)
@@ -254,9 +275,16 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
         if [[ "${USE_SQL_PASS_MODE_PARAM}" == "true" ]]; then
           if [[ $SQL_SCHEMA_GENERATION_LOCAL == 0 ]]; then
             pushd $WORKDIR/sql-server
-              echo "Initializing database schema using powershell locally "
               # script assumes SQL schema files have been generated and placed in the same folder
-              pwsh ./run_init_schema_local.ps1 -sqlServerName $dbserver -ResourceGroup $RESOURCE_GROUP -subscriptionId $SUBSCRIPTION_ID
+              if [[ -n "${NO_INPUT}" && -f ${PARAMETERS_FILE_PATH} ]]; then
+                echo "Initializing database schema using powershell locally in non-interactive mode "
+                SQL_ADMIN_LOGIN=$( jq  --raw-output '.parameters."sqlserver.admin.login".value' ${PARAMETERS_FILE_PATH} )
+                SQL_ADMIN_PASS=$( jq  --raw-output '.parameters."sqlserver.admin.password".value' ${PARAMETERS_FILE_PATH} )
+                pwsh ./run_init_schema_local.ps1 -sqlServerName $dbserver -ResourceGroup $RESOURCE_GROUP -subscriptionId $SUBSCRIPTION_ID -sqlAdminLogin "${SQL_ADMIN_LOGIN}" -sqlAdminPasword "${SQL_ADMIN_PASS}"
+              else
+               echo "Initializing database schema using powershell locally "
+               pwsh ./run_init_schema_local.ps1 -sqlServerName $dbserver -ResourceGroup $RESOURCE_GROUP -subscriptionId $SUBSCRIPTION_ID
+              fi
               AUTO_GENERATION_SUCCESSFUL=$([ "$?" == 0 ] && echo "true" || echo "false")
             popd
             # initiate db_state in manual mode to complete stage state
@@ -284,6 +312,11 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
 
     set -e
     if [[ "${AUTO_GENERATION_SUCCESSFUL}"  == "false" ]]; then
+        if [[ -n "${NO_INPUT}" ]]; then
+          echo "Schema initialization failed, bailing out "
+          exit 8
+        fi
+
         if [[ "${SCHEMA_GENERATION_MODE}" == "auto" ]]; then
             echo "Automated SQL schema initialization has failed or has been canceled. Falling back to manual mode"
         fi
