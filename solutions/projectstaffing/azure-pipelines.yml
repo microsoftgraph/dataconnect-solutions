@@ -47,7 +47,7 @@ stages:
         displayName: Run test db
         inputs:
           action: Run services
-          dockerComposeFile: deployment/local/docker-compose.yml
+          dockerComposeFile: solutions/projectstaffing/deployment/local/docker-compose.yml
           projectName: $(Build.Repository.Name)-tests
           qualifyImageNames: true
           serviceName: gdc_database-test
@@ -60,12 +60,12 @@ stages:
           targetType: 'inline'
           script: |
             sleep 20s
-            docker exec -i $(docker ps -aqf "name=gdc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <deployment/local/tests/create_mssql/create-database.sql
-            docker exec -i $(docker ps -aqf "name=gdc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <deployment/local/tests/create_mssql/create-database.sql
+            docker exec -i $(docker ps -aqf "name=gdc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <solutions/projectstaffing/deployment/local/tests/create_mssql/create-database.sql
+            docker exec -i $(docker ps -aqf "name=gdc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <solutions/projectstaffing/deployment/local/tests/create_mssql/create-database.sql
       - task: Maven@3
         displayName: Running maven build
         inputs:
-          mavenPomFile: 'jgraph/pom.xml'
+          mavenPomFile: 'solutions/projectstaffing/jgraph/pom.xml'
           mavenOptions: '-Xmx3072m'
           javaHomeOption: 'JDKVersion'
           jdkVersionOption: '1.8'
@@ -79,21 +79,21 @@ stages:
           command: buildAndPush
           containerRegistry: $(containerRegistryServConn)
           repository: $(dockerRepositoryName)
-          buildContext: '$(Build.SourcesDirectory)/jgraph/core'
-          dockerfile: '$(Build.SourcesDirectory)/jgraph/core/Dockerfile'
+          buildContext: '$(Build.SourcesDirectory)/solutions/projectstaffing/jgraph/core'
+          dockerfile: '$(Build.SourcesDirectory)/solutions/projectstaffing/jgraph/core/Dockerfile'
           tags: |
             $(tag)
       - task: Bash@3
         displayName: Preparing artifacts
         condition: ${{ parameters.uploadArtifacts }}
         inputs:
-          filePath: 'bin/prepare_artifacts.sh'
+          filePath: 'solutions/projectstaffing/bin/prepare_artifacts.sh'
           arguments: '--skip-maven'
       - task: ArchiveFiles@2
         displayName: Archiving artifacts
         condition: ${{ parameters.uploadArtifacts }}
         inputs:
-          rootFolderOrFile: 'target/output/gdc/arm'
+          rootFolderOrFile: 'solutions/projectstaffing/target/output/gdc/arm'
           includeRootFolder: false
           archiveType: 'zip'
           archiveFile: 'gdc-$(tag).zip'
