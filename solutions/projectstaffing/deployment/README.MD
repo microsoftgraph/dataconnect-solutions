@@ -84,7 +84,7 @@ You have two options for building the project:
     - for details please follow the [UI setup steps](../jgraph/ui/README.md#project-setup)
 5. Install Python 3 and related environment
     - the python environment setup will differ if you plan to simply build the pygraph utils wheel locally or 
-      to do development and run pyspark jobs locally
+      if you want to do development and run pyspark jobs locally
     - please follow the appropriate [python environment setup steps](../pygraph/azure_processing/README.md#setup-guide)
 
 ### Building the App Service

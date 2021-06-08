@@ -25,8 +25,9 @@ It is a custom data format which can be derived from the systems used by the HR 
     - `mail,name,availableStartingFrom,role,employeeType,currentEngagement,department,companyName,managerName,managerEmail,country,state,city,location,officeLocation,linkedInProfile`
 - the data must be in csv format
 - the data can be delivered in one or more files, as long as they have the correct schema
-- the files can either be manually uploaded to the deployment specific AZBS path or, if a single file is used, 
-  it can be uploaded by an admin from the application UI, from `Settings -> Upload HR Data`
+- the files can either be manually uploaded to the deployment specific AZBS path (the `hr_data` folder, of the 
+  `production-data`/`simulated-data`/`sample-data` container, in the `demodata<deploymenthash>` storage account) or, 
+  if a single file is used, it can be uploaded by an admin from the application UI, from `Settings -> Upload HR Data`
 - any fields containing commas or special characters must be quoted between double quotes
 - quote characters within a quoted field's contents can be escaped by doubling them (e.g. "John ""Anonymous"" Doe")
 - the mail and name columns must be populated, or the entire row will be ignored
