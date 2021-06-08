@@ -26,7 +26,7 @@ from skills_finder_utils.common import make_strong_password
 from monitoring import DeploymentState, Stages
 
 
-def init_active_directory_entities(deployment_name: str, install_config: InstallConfiguration, resource_group: str,
+def init_active_directory_entities(deployment_name: str, install_config: InstallConfiguration, resource_group: str, tenant_id: str,
                                    non_interactive_mode: bool = False):
     print("GDC requires several records in your Active Directory. Let's verify them now... ")
 
@@ -60,24 +60,34 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
         install_config.gdc_employees_ad_group = employees_ad_group
 
     if not install_config.gdc_service_principal:
-        print("Creating %s service principal " % "gdc-service")
+        gdc_service_sp_name = None
+        if non_interactive_mode:
+            gdc_service_sp_name = install_config.get_provided_param_value("gdc-service-sp.name")
+        if not gdc_service_sp_name:
+            gdc_service_sp_name = install_config.appservice_name + "-gdc-service"
+        print("Creating %s service principal " % gdc_service_sp_name)
         graph_read_all_role = ad_ops.find_graph_user_read_all_role()
         if not graph_read_all_role:
             raise RuntimeError("Couldn't find 'User.Read.All' permission in 'Microsoft Graph' for your tenant ")
-        gdc_sp = ad_ops.get_or_create_service_principal("gdc-service")
+        gdc_sp = ad_ops.get_or_create_service_principal(name=gdc_service_sp_name, tenant_id=tenant_id, non_interactive_mode=non_interactive_mode)
         install_config.gdc_service_principal = gdc_sp
         ad_ops.add_service_principal_app_permission(sp_app_id=gdc_sp['appId'], api_resource_id=graph_read_all_role['appId'],
                                                     permission_id=graph_read_all_role['id'])
 
     if not install_config.m365_reader_service_principal:
-        print("Creating %s service principal " % "gdc-m365-reader")
+        gdc_m365_reader_sp_name = None
+        if non_interactive_mode:
+            gdc_m365_reader_sp_name = install_config.get_provided_param_value("gdc-m365-reader-sp.name")
+        if not gdc_m365_reader_sp_name:
+            gdc_m365_reader_sp_name = install_config.appservice_name + "-gdc-m365-reader"
+        print("Creating %s service principal " % gdc_m365_reader_sp_name)
         graph_user_read_all_role = ad_ops.find_graph_user_read_all_role()
         if not graph_user_read_all_role:
             raise RuntimeError("Couldn't find 'User.Read.All' permission in 'Microsoft Graph' for your tenant ")
         graph_mail_read_role = ad_ops.find_graph_mail_read_role()
         if not graph_mail_read_role:
             raise RuntimeError("Couldn't find 'Mail.Read' permission in 'Microsoft Graph' for your tenant ")
-        m365_reader_sp = ad_ops.get_or_create_service_principal("gdc-m365-reader")
+        m365_reader_sp = ad_ops.get_or_create_service_principal(gdc_m365_reader_sp_name, tenant_id=tenant_id, non_interactive_mode=non_interactive_mode)
         install_config.m365_reader_service_principal = m365_reader_sp
         ad_ops.add_service_principal_app_permission(sp_app_id=m365_reader_sp['appId'],
                                                     api_resource_id=graph_user_read_all_role['appId'],
@@ -91,7 +101,7 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
             for member in admin_group_members:
                 ad_ops.make_user_owner_for_app(user_object_id=member['objectId'], app_id=m365_reader_sp['appId'])
         except Exception as azError:
-            print("Failed to make members of admin group owners over gdc-m365-reader service principal!")
+            print("Failed to make members of admin group owners over %s service principal!" % gdc_m365_reader_sp_name)
             print(azError)
 
     if not install_config.jgraph_aad_app:
@@ -101,7 +111,8 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
         jgraph_aad_app = ad_ops.\
             get_or_create_service_principal(app_registration_name, is_web_app=True, credentials_valid_years=3,
                                             reply_url="https://%s.azurewebsites.net/.auth/login/aad/callback" % appservice_name,
-                                            logout_url="https://%s.azurewebsites.net/.auth/logout" % appservice_name)
+                                            logout_url="https://%s.azurewebsites.net/.auth/logout" % appservice_name,
+                                            tenant_id=tenant_id, non_interactive_mode=non_interactive_mode)
         install_config.jgraph_aad_app = jgraph_aad_app
 
 
@@ -243,7 +254,7 @@ if __name__ == '__main__':
         install_state.complete_stage(Stages.USER_PROMPTS_TAKEN)
 
     init_active_directory_entities(deployment_name=deployment_name, install_config=install_config,
-                                   resource_group=resource_group, non_interactive_mode=no_input)
+                                   resource_group=resource_group, non_interactive_mode=no_input, tenant_id=tenant_id)
     print("Adding role assignment for %s on resource group %s" % (install_config.gdc_admin_ad_group['ad_group_name'],
                                                                   resource_group))
     ad_ops.add_role_assigment(role="Owner", ad_group_id=install_config.gdc_admin_ad_group["objectId"],

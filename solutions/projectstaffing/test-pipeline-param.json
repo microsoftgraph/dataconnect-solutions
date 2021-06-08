@@ -85,6 +85,12 @@
     },
     "emails.backfill.time.span": {
       "value": 7
+    },
+    "gdc-service-sp.name": {
+      "value": "prjstf-app-3ofyrz-gdc-service"
+    },
+    "gdc-m365-reader-sp.name": {
+      "value": "prjstf-app-3ofyrz-gdc-m365-reader"
     }
   }
 }
