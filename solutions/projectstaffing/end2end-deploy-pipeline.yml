@@ -16,7 +16,7 @@ variables:
   containerName: repository
   testDeploymentName: prj-stf-3ofyrz
   location: westus
-  subscriptionId: b815661c-550c-49dc-81ba-5bb40ee46ac4
+  subscriptionId: 894f56bb-ecf5-4a8b-a3e1-6b67703d7c1c
   artifactStorageAccountName: prjstfartifacts
   parameterFile: '$(Build.SourcesDirectory)/solutions/projectstaffing/test-pipeline-param.json'
 
