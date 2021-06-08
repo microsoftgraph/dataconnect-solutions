@@ -1,0 +1,52 @@
+parameters:
+  - name: 'tag_override'
+    type: string
+    default: '$(Build.BuildNumber)'
+  - name: 'dockerPassword'
+    type: string
+  - name: 'cleanUpAzureResources'
+    type: boolean
+    default: true
+
+variables:
+  tag: ${{ parameters.tag_override }}
+  containerRegistryServConn: contosohub_docker_registry
+  blobStorageServConn: contoso_devops_arm_connection
+  dockerRepositoryName: microsoft-gdc/project-staffing
+  storageName: prjstfartifacts
+  containerName: repository
+  testDeploymentName: prj-stf-3ofyrz
+  location: westus
+  subscriptionId: b815661c-550c-49dc-81ba-5bb40ee46ac4
+  artifactStorageAccountName: prjstfartifacts
+  parameterFile: '$(Build.SourcesDirectory)/solutions/projectstaffing/test-pipeline-param.json'
+
+trigger: none
+
+resources:
+  - repo: self
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: $(containerRegistryServConn)
+      scriptType: 'bash'
+      scriptLocation:  'scriptPath'
+      workingDirectory: solutions/projectstaffing/deployment/arm
+      scriptPath: ./install.sh
+      arguments: '--deployment-name $(testDeploymentName) --location $(location) --docker-password $(dockerPassword) --subscription $(subscriptionId) --remote-artifacts-location $(artifactStorageAccountName) --parameter-file $(parameterFile) --no-input'
+      addSpnToEnvironment: true
+
+  - task: AzureCLI@2
+    inputs:
+      condition: and(${{ parameters.cleanUpAzureResources }}, succeeded())
+      azureSubscription: $(containerRegistryServConn)
+      scriptType: 'bash'
+      scriptLocation:  'scriptPath'
+      workingDirectory: solutions/projectstaffing/deployment/arm
+      scriptPath: ./uninstall.sh
+      arguments: ' --deployment-name $(testDeploymentName) --subscription $(subscriptionId) --no-input '
+      addSpnToEnvironment: true
