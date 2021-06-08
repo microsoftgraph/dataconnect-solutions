@@ -3,60 +3,30 @@
 The Project Staffing application is a Microsoft Graph Data Connect based solution which allows engagement managers
 to build the best suited teams for projects, by finding employees that are available and have the best set of skills
 for the project, as well as the most relevant set of potential skills.  
-The application ingests data from Microsoft Graph Data Connect and complementary data sources using Azure Data Factory (ADF)
-pipelines and uses this to build a model based on which the most relevant employees are recommended.
+The application processes employee profile and email data from Microsoft Graph Data Connect and complementary data sources, 
+using Azure Data Factory (ADF). It uses this data to build a model based on which, given queries containing desired skills
+or topics of interest, the most relevant employees are recommended. For each of these employees, the information from
+their profile is provided, together with inferred information about their potential skills, topics of interest or roles.  
+The application's search rules are also highly customizable, allowing users to tailor configurations regarding data sources, 
+filters and search criteria, to best suit their needs.
 
-### Setting up the application
+![Application main page](docs/imgs/project_staffing_main_page.png)
 
-The ProjectStaffing application can be run locally for development purposes, but it needs to make use of some
-services/resources from an existing full development deployment from Azure.
+In a nutshell, the application provides the following functionalities to users:
+- searching by skills & availability
+- searching by availability alone
+- searching by name
+- provide information about each recommended employee (profile data & inferred data)
+- results filtering & sorting
+- search term autocompletion
+- using search domains for skills inference and search results matching
+- exporting search results
+- creating teams
+- adding/removing members to teams
+- exporting team members
+- search customization (data sources, filter settings, search criteria, emails search settings)
+- admin only functionalities (ingestion mode switch, HR data upload)
 
-> Warning: If you are using Windows to build the project, please make sure to use a code editor which does not
-> automatically alter the line endings from files, especially the bash scripts used for the project deployment
-
-Here is an overview of the steps required to build the application locally, perform a full development deployment in
-Azure and then run the application locally while using the resources from the Azure development deployment:
-
-1. make sure all prerequisites for building the project are fulfilled, by following [these steps](./deployment/README.MD#prerequisites)
-2. build the ProjectStaffing App Service jar and all the ADB jars, by following [these steps](./deployment/README.MD#building-all-the-projects-jars-at-once)
-3. build the pygraph utils wheel, by following [these steps](./pygraph/azure_processing/pygraph_utils/README.md)
-4. prepare the zip with all the resulting artifacts (required for deployment), by following [these steps](./deployment/README.MD#building-the-artifacts-zip)
-5. to perform a fresh full deployment in Azure, please follow the steps described in the deployment script's [readme file](./deployment/arm/README.md)
-   and in the [deployment overview document](docs/ProjectStaffingDeploymentOverview.MD)
-6. to run the application in Azure, please follow [these steps](./jgraph/core/README.MD#running-the-application-in-azure)
-7. to run the application locally, please follow [these steps](./jgraph/core/README.MD#running-the-application-locally)
-
-#### Development
-
-Please follow the following links to learn more details about the project [architecture](#architectural-components),
-[components](./deployment/README.MD#project-components) and [deliverables](./deployment/README.MD#project-deliverables).
-
-In case changes are done to individual project components (the ProjectStaffing App Service, ADF pipelines, ADB libraries etc),
-these components can can either be:
-- built individually, as described in the subsections of the [local build documentation](./deployment/README.MD#building-from-source-using-the-local-development-environment),
-  and [deployed individually](./deployment/README.MD#deploying-individual-components)
-- built together with the entire project (either locally as described above or via a [build pipeline](./docs/build_pipeline.md))
-  and deployed as part of a [full application update](./deployment/README.MD#updating-app-release-version-over-existing-deployment)
-
-After the deployment, changes to the App Service usually only require restarting the service.  
-Changes to ADF pipelines or ADB libraries require running the impacted ADF pipelines for the changes to take effect in the ProjectStaffing app service.  
-If running the ADF pipelines resulted in changes in Azure SQL database, and you want to see the latest changes in the ProjectStaffing
-running locally, then the latest version of the data from Azure SQL database needs to be exported and written to the local database.
-
-> Note: For developing the application, only macOS/Linux based systems were used.  
-> Bash (and Python 3) was used for scripting and deployment.  
-> There has been no testing on Windows, nor deployments from PowerShell.
-
-
-### User guide
-
-The application provides the following functionalities to users:  
-search by skills&availability, search by availability alone, searching by name, provide information about each 
-recommended employee (profile&inferred data), results filtering&sorting, search term autocompletion,
-using search domains for skills inference and search results matching, exporting search results, 
-creating teams, adding/removing members to teams, exporting team members, 
-settings (data sources, filter settings, search criteria, emails search), 
-admin only functionalities (ingestion mode switch, HR data upload).  
 For more details please read the full [User Guide](docs/user_guide.md)
 
 
@@ -81,6 +51,50 @@ state of long-running operations, etc.
 
 ![Architecture Diagram](docs/imgs/project-staffing-high-level-architecture.png)
 
+
+### Setting up the application
+
+The ProjectStaffing application can be run locally for development purposes, but it needs to make use of some
+services/resources from an existing full development deployment from Azure.
+
+> Warning: If you are using Windows to build the project, please make sure to use a code editor which does not
+> automatically alter the line endings from files, especially the bash scripts used for the project deployment
+
+Here is an overview of the steps required to build the application locally, perform a full development deployment in
+Azure and then run the application locally while using the resources from the Azure development deployment:
+
+1. make sure all prerequisites for building the project are fulfilled, by following [these steps](./deployment/README.MD#prerequisites)
+2. build the ProjectStaffing App Service jar and all the ADB jars, by following [these steps](./deployment/README.MD#building-all-the-projects-jars-at-once)
+3. build the pygraph utils wheel, by following [these steps](./pygraph/azure_processing/pygraph_utils/README.md)
+4. prepare the zip with all the resulting artifacts (required for deployment), by following [these steps](./deployment/README.MD#building-the-artifacts-zip)
+5. to perform a fresh full deployment in Azure, please follow the steps described in the deployment script's [readme file](./deployment/arm/README.md)
+   and in the [deployment overview document](docs/ProjectStaffingDeploymentOverview.MD)
+6. to run the application in Azure, please follow [these steps](./jgraph/core/README.MD#running-the-application-in-azure)
+7. to run the application locally, please follow [these steps](./jgraph/core/README.MD#running-the-application-locally)
+
+
+#### Development
+
+Please follow the following links to learn more details about the project [architecture](#architectural-components),
+[components](./deployment/README.MD#project-components) and [deliverables](./deployment/README.MD#project-deliverables).
+
+In case changes are done to individual project components (the ProjectStaffing App Service, ADF pipelines, ADB libraries etc),
+these components can can either be:
+- built individually, as described in the subsections of the [local build documentation](./deployment/README.MD#building-from-source-using-the-local-development-environment),
+  and [deployed individually](./deployment/README.MD#deploying-individual-components)
+- built together with the entire project (either locally as described above or via a [build pipeline](./docs/build_pipeline.md))
+  and deployed as part of a [full application update](./deployment/README.MD#updating-app-release-version-over-existing-deployment)
+
+After the deployment, changes to the App Service usually only require restarting the service.  
+Changes to ADF pipelines or ADB libraries require running the impacted ADF pipelines for the changes to take effect in the ProjectStaffing app service.  
+If running the ADF pipelines resulted in changes in Azure SQL database, and you want to see the latest changes in the ProjectStaffing
+running locally, then the latest version of the data from Azure SQL database needs to be exported and written to the local database.
+
+> Note: For developing the application, only macOS/Linux based systems were used.  
+> Bash (and Python 3) was used for scripting and deployment.  
+> There has been no testing on Windows, nor deployments from PowerShell.
+
+
 ### Data sources
 
 The following data sources are used:
@@ -98,6 +112,7 @@ The following data sources are used:
 
 The data from the above sources is retrieved and processed in batch by the ADF pipelines. Besides these sources, the
 profile picture of each individual employee is retrieved using Microsoft Graph API by the employee profiles ADF pipeline.
+
 
 ### Data ingestion modes
 
@@ -137,6 +152,7 @@ by typing `production_mode`/`simulated_mode`/`sample_mode` when prompted for the
 The switch from one ingestion mode to another can be performed by application admins from the ProjectStaffing UI via
 the `Settings -> Ingestion Mode` menu.
 
+
 ### Documentation index
 
 [ADB python scripts/PySpark jobs](./pygraph/azure_processing/README.md)  
@@ -167,3 +183,4 @@ the `Settings -> Ingestion Mode` menu.
 [Test track](./docs/test_track.md)  
 [Testing locally](./jgraph/core/README.MD#running-the-tests-locally)  
 [UI](./jgraph/ui/README.md)  
+[User Guide](./docs/user_guide.md)  
