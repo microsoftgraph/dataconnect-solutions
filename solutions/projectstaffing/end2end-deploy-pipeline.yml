@@ -10,8 +10,7 @@ parameters:
 
 variables:
   tag: ${{ parameters.tag_override }}
-  containerRegistryServConn: contosohub_docker_registry
-  blobStorageServConn: contoso_devops_arm_connection
+  armServiceConn: contoso_devops_arm_connection
   dockerRepositoryName: microsoft-gdc/project-staffing
   storageName: prjstfartifacts
   containerName: repository
@@ -32,7 +31,7 @@ pool:
 steps:
   - task: AzureCLI@2
     inputs:
-      azureSubscription: $(containerRegistryServConn)
+      azureSubscription: $(armServiceConn)
       scriptType: 'bash'
       scriptLocation:  'scriptPath'
       workingDirectory: solutions/projectstaffing/deployment/arm
