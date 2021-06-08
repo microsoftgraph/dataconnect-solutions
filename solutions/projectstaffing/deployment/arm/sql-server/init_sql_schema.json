@@ -35,7 +35,6 @@
     },
     "gdc-service.sp.name": {
       "type": "String",
-      "defaultValue": "gdc-service",
       "metadata": {
         "description": " Name of service principal for GDC deployment "
       }

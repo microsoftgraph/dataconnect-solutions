@@ -189,64 +189,99 @@ def _create_web_app_service_principal(display_name, reply_url, logout_url, crede
                 pass
 
 
-def get_or_create_service_principal(name: str, create_if_not_exists: bool = True, credentials_valid_years: int = 1,
+def get_or_create_service_principal(name: str, tenant_id: str, non_interactive_mode: bool, create_if_not_exists: bool = True, credentials_valid_years: int = 1,
                                     is_web_app: bool = False, **kwargs):
     if is_web_app:
         assert 'reply_url' in kwargs
         assert 'logout_url' in kwargs
 
-    service_principal = dict()
-    sp_accepted = False
-    while not sp_accepted:
-        existing_sps = az_cli("ad sp list ", "--all", "--filter", "displayName eq '%s' " % name)
-        if len(existing_sps) > 1:
-            print("There are multiple service principal found in your tenant ")
-            if create_if_not_exists:
-                print("Please select unique name/objectId or enter new one to create: ")
-            else:
-                print("Please select unique name/objectId : ")
-            print("appId\tName ")
-            for sp in existing_sps:
-                print("%s\t%s" % (sp['appId'], sp['displayName']))
-        elif len(existing_sps) == 1:
-            sp = existing_sps[0]
-            print("\nFound an existing service principal : %s, appId: %s. " % (sp['displayName'], sp['appId']))
-            print("The service principal with this name is required for the deployment process. You can either reuse this service principal or abort the deployment.")
-            print("Reusing it requires you to provide a service principal client secret. ")
-            print("If you are an owner of the service principal, you also have the option of creating a new secret and providing that (e.g. if you don't know the current one).")
-            sp_accepted = yes_no("Would you like to reuse the existing service principal? Replying 'No' will abort the deployment process (y/n)")
-            print("\n")
-            if sp_accepted:
-                password = getpass.getpass(prompt="Service Principal Secret")
-                conf_password = getpass.getpass(prompt="Confirm Service Principal Secret")
-                service_principal = {
-                    "appId": sp['appId'],
-                    "password": password,
-                    "name": name
-                }
-                sp_accepted = password != "" and password == conf_password
-            else:
-                raise RuntimeError("Required service principal secret not provided. Aborting deployment")
-        else:
-            if create_if_not_exists:
-                if is_web_app:
-                    service_principal = _create_web_app_service_principal(display_name=name,
-                                                                          reply_url=kwargs['reply_url'],
-                                                                          logout_url=kwargs['logout_url'],
-                                                                          credentials_valid_years=credentials_valid_years)
-                    sp_accepted = True
+    if not non_interactive_mode:
+        service_principal = dict()
+        sp_accepted = False
+        while not sp_accepted:
+            existing_sps = az_cli("ad sp list ", "--all", "--filter", "displayName eq '%s' " % name, "--query", "[?contains(appOwnerTenantId, '%s')]" % tenant_id)
+            if len(existing_sps) > 1:
+                print("There are multiple service principal found in your tenant ")
+                if create_if_not_exists:
+                    print("Please select unique name/objectId or enter new one to create: ")
                 else:
-                    sp = az_cli("ad sp create-for-rbac", "--name", name, "--years", str(credentials_valid_years))
+                    print("Please select unique name/objectId : ")
+                print("appId\tName ")
+                for sp in existing_sps:
+                    print("%s\t%s" % (sp['appId'], sp['displayName']))
+                app_id = input("If you want to use one of the service principals enter one of the app ids, otherwise press enter: ")
+                selected_sp = None
+                if app_id:
+                    for sp in existing_sps:
+                        if sp['appId'] == app_id:
+                            selected_sp = sp
+                            break
+                else:
+                    name = input("Enter a name for a new service principal: ")
+
+                if selected_sp:
+                    password = getpass.getpass(prompt="Service Principal Secret")
+                    conf_password = getpass.getpass(prompt="Confirm Service Principal Secret")
                     service_principal = {
                         "appId": sp['appId'],
-                        "password": sp['password'],
+                        "password": password,
                         "name": name
                     }
-                    sp_accepted = True
+                    sp_accepted = password != "" and password == conf_password
+            elif len(existing_sps) == 1:
+                sp = existing_sps[0]
+                print("\nFound an existing service principal : %s, appId: %s. " % (sp['displayName'], sp['appId']))
+                print("The service principal with this name is required for the deployment process. You can either reuse this service principal or abort the deployment.")
+                print("Reusing it requires you to provide a service principal client secret. ")
+                print("If you are an owner of the service principal, you also have the option of creating a new secret and providing that (e.g. if you don't know the current one).")
+                sp_accepted = yes_no("Would you like to reuse the existing service principal? (y/n)")
+                print("\n")
+                if sp_accepted:
+                    password = getpass.getpass(prompt="Service Principal Secret")
+                    conf_password = getpass.getpass(prompt="Confirm Service Principal Secret")
+                    service_principal = {
+                        "appId": sp['appId'],
+                        "password": password,
+                        "name": name
+                    }
+                    sp_accepted = password != "" and password == conf_password
+                else:
+                    name = input("Enter a name different from %s, that will be used to create a new service principal: " % name)
             else:
-                return None
+                if create_if_not_exists:
+                    if is_web_app:
+                        service_principal = _create_web_app_service_principal(display_name=name,
+                                                                              reply_url=kwargs['reply_url'],
+                                                                              logout_url=kwargs['logout_url'],
+                                                                              credentials_valid_years=credentials_valid_years)
+                        sp_accepted = True
+                    else:
+                        sp = az_cli("ad sp create-for-rbac", "--name", name, "--years", str(credentials_valid_years))
+                        service_principal = {
+                            "appId": sp['appId'],
+                            "password": sp['password'],
+                            "name": name
+                        }
+                        sp_accepted = True
+                else:
+                    return None
+    else:
+        # if the application is running in non interactive mode even if there is a service principal
+        # with the given name we will create a new one
+        if is_web_app:
+            service_principal = _create_web_app_service_principal(display_name=name,
+                                                                  reply_url=kwargs['reply_url'],
+                                                                  logout_url=kwargs['logout_url'],
+                                                                  credentials_valid_years=credentials_valid_years)
+        else:
+            sp = az_cli("ad sp create-for-rbac", "--name", name, "--years", str(credentials_valid_years))
+            service_principal = {
+                "appId": sp['appId'],
+                "password": sp['password'],
+                "name": name
+            }
 
-        return service_principal
+    return service_principal
 
 
 @retry(tries=5, delay=1, backoff=2)
