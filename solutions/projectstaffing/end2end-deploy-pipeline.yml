@@ -35,7 +35,7 @@ steps:
       scriptType: 'bash'
       scriptLocation:  'scriptPath'
       workingDirectory: solutions/projectstaffing/deployment/arm
-      scriptPath: ./install.sh
+      scriptPath: solutions/projectstaffing/deployment/arm/install.sh
       arguments: '--deployment-name $(testDeploymentName) --location $(location) --docker-password $(dockerPassword) --subscription $(subscriptionId) --remote-artifacts-location $(artifactStorageAccountName) --parameter-file $(parameterFile) --no-input'
       addSpnToEnvironment: true
 
@@ -46,6 +46,6 @@ steps:
       scriptType: 'bash'
       scriptLocation:  'scriptPath'
       workingDirectory: solutions/projectstaffing/deployment/arm
-      scriptPath: ./uninstall.sh
+      scriptPath: solutions/projectstaffing/deployment/arm/uninstall.sh
       arguments: ' --deployment-name $(testDeploymentName) --subscription $(subscriptionId) --no-input '
       addSpnToEnvironment: true
