@@ -7,6 +7,9 @@ parameters:
   - name: 'cleanUpAzureResources'
     type: boolean
     default: true
+  - name: 'buildPipelineRunId'
+    type: string
+    default: 'latest'
 
 variables:
   tag: ${{ parameters.tag_override }}
@@ -29,14 +32,31 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      source: 'specific'
+      project: 'MGDC Solutions'
+      # Project Staffing Build id
+      pipeline: 2
+      runId: ${{ parameters.buildPipelineRunId }}
+      artifact: 'deployment-package'
+      patterns: '**/project-staffing-*.zip'
+      path: '$(Pipeline.Workspace)'
+
+  - task: ExtractFiles@1
+    inputs:
+      archiveFilePatterns: '$(Pipeline.Workspace)/project-staffing-*.zip'
+      destinationFolder: '$(Pipeline.Workspace)/deployment-workdir'
+      cleanDestinationFolder: true
+
   - task: AzureCLI@2
     inputs:
       azureSubscription: $(armServiceConn)
       scriptType: 'bash'
       scriptLocation:  'scriptPath'
-      workingDirectory: solutions/projectstaffing/deployment/arm
-      scriptPath: solutions/projectstaffing/deployment/arm/install.sh
-      arguments: '--deployment-name $(testDeploymentName) --location $(location) --docker-password $(dockerPassword) --subscription $(subscriptionId) --remote-artifacts-location $(artifactStorageAccountName) --parameter-file $(parameterFile) --no-input'
+      workingDirectory: $(Pipeline.Workspace)/deployment-workdir
+      scriptPath:  $(Pipeline.Workspace)/deployment-workdir/install.sh
+      arguments: '--deployment-name $(testDeploymentName) --location $(location) --docker-password  ${{ parameters.dockerPassword }} --subscription $(subscriptionId) --remote-artifacts-location $(artifactStorageAccountName) --parameter-file $(parameterFile) --no-input'
       addSpnToEnvironment: true
 
   - task: AzureCLI@2
@@ -45,7 +65,7 @@ steps:
       azureSubscription: $(armServiceConn)
       scriptType: 'bash'
       scriptLocation:  'scriptPath'
-      workingDirectory: solutions/projectstaffing/deployment/arm
-      scriptPath: solutions/projectstaffing/deployment/arm/uninstall.sh
+      workingDirectory: $(Pipeline.Workspace)/deployment-workdir
+      scriptPath:  $(Pipeline.Workspace)/deployment-workdir/uninstall.sh
       arguments: ' --deployment-name $(testDeploymentName) --subscription $(subscriptionId) --no-input '
       addSpnToEnvironment: true

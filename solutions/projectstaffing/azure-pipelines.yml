@@ -96,13 +96,13 @@ stages:
           rootFolderOrFile: 'solutions/projectstaffing/target/output/gdc/arm'
           includeRootFolder: false
           archiveType: 'zip'
-          archiveFile: 'gdc-$(tag).zip'
+          archiveFile: 'project-staffing-$(tag).zip'
           replaceExistingArchive: true
       - task: PublishPipelineArtifact@1
         condition: ${{ parameters.uploadArtifacts }}
         inputs:
-          targetPath: '$(System.DefaultWorkingDirectory)/gdc-$(tag).zip'
-          artifact: 'archive'
+          targetPath: '$(System.DefaultWorkingDirectory)/project-staffing-$(tag).zip'
+          artifact: 'deployment-package'
           publishLocation: 'pipeline'
 - stage: uploadArtifacts
   pool:
@@ -116,14 +116,14 @@ stages:
       - task: DownloadPipelineArtifact@2
         inputs:
           buildType: 'current'
-          artifactName: 'archive'
-          patterns: '**/gdc-$(tag).zip'
+          artifactName: 'deployment-package'
+          patterns: '**/project-staffing-$(tag).zip'
           targetPath: '$(Pipeline.Workspace)'
       - task: AzureFileCopy@4
         inputs:
-          SourcePath: '$(Pipeline.Workspace)\gdc-$(tag).zip'
+          SourcePath: '$(Pipeline.Workspace)\project-staffing-$(tag).zip'
           azureSubscription: '$(blobStorageServConn)'
           Destination: 'AzureBlob'
           storage: '$(storageName)'
           ContainerName: '$(containerName)'
-          BlobPrefix: 'builds/gdc-$(tag).zip'
+          BlobPrefix: 'builds/project-staffing-$(tag).zip'
