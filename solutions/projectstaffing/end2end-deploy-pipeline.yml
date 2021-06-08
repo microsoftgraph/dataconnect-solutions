@@ -42,7 +42,7 @@ steps:
   - task: AzureCLI@2
     inputs:
       condition: and(${{ parameters.cleanUpAzureResources }}, succeeded())
-      azureSubscription: $(containerRegistryServConn)
+      azureSubscription: $(armServiceConn)
       scriptType: 'bash'
       scriptLocation:  'scriptPath'
       workingDirectory: solutions/projectstaffing/deployment/arm
