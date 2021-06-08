@@ -243,8 +243,12 @@ def restart_web_app(resource_group: str, app_name: str):
 
 
 def enable_webapp_alert(resource_group: str, alert_name: str, enabled: bool = True):
-    return az_cli("monitor metrics alert update", "--resource-group", resource_group, "--name", alert_name,
-                  "--enabled", str(enabled).lower())
+    try:
+        # This call will fail if alert does not exist
+        az_cli("monitor metrics alert show", "--resource-group", resource_group, "--name", alert_name)
+        return az_cli("monitor metrics alert update", "--resource-group", resource_group, "--name", alert_name, "--enabled", str(enabled).lower())
+    except BaseException as er:
+        return None
 
 
 def find_log_workspace_id(resource_group: str, workspace_name: str):
