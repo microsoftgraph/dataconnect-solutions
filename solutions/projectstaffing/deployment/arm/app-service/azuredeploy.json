@@ -45,9 +45,9 @@
       "type": "object",
       "defaultValue": {
         "password": "none",
-        "server": "blueprint.azurecr.io",
+        "server": "contosohub.azurecr.io",
         "username": "none",
-        "image": "bpcs/jgraph",
+        "image": "microsoft-gdc/project-staffing",
         "tag": "none"
       }
     },

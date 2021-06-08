@@ -15,6 +15,7 @@ DOCKER_PASSWORD=
 SUBSCRIPTION_ID=
 NO_INPUT=
 DEMO_DATA_STORAGE_ACCOUNT=
+DOCKER_USER="prj-staffing-reader"
 
 set -e
 WORKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
@@ -73,7 +74,7 @@ fi
 if [[ -z "$DOCKER_PASSWORD" ]]; then
   #  read -p "Enter docker repository password: " -r -s DOCKER_PASSWORD
   # For now, using hardcoded password to public ProjectStaffing docker images repository
-  DOCKER_PASSWORD="ymCNmmEJ1Zv=BieuVmkM90BYC36UemAg"
+  DOCKER_PASSWORD="WrldcSWhcrkQAdgqclsPATRw2DLbclW/"
 fi
 
 
@@ -187,16 +188,16 @@ if [[ -z "${DEMO_DATA_STORAGE_ACCOUNT}" ]]; then
       select opt in westus westeurope southeastasia brazilsouth; do
          case $opt in
             westus)
-              DEMO_DATA_STORAGE_ACCOUNT="prjstaffingnortham"
+              DEMO_DATA_STORAGE_ACCOUNT="prjstfartifacts"
               break;;
             westeurope)
-              DEMO_DATA_STORAGE_ACCOUNT="prjstaffingeu"
+              DEMO_DATA_STORAGE_ACCOUNT="prjstfartifactseu"
               break;;
             southeastasia)
-               DEMO_DATA_STORAGE_ACCOUNT="prjstaffingsoutheastasia"
+               DEMO_DATA_STORAGE_ACCOUNT="prjstfartifactsasia"
                break;;
             brazilsouth)
-               DEMO_DATA_STORAGE_ACCOUNT="prjstaffingsoutham"
+               DEMO_DATA_STORAGE_ACCOUNT="prjstfartifactssouth"
               break;;
             *)
               echo "Invalid option $opt ";;
@@ -204,7 +205,7 @@ if [[ -z "${DEMO_DATA_STORAGE_ACCOUNT}" ]]; then
       done
   else
     echo "Non-interactive mode is enabled, falling back to westus remote artifacts storage"
-    DEMO_DATA_STORAGE_ACCOUNT="prjstaffingnortham"
+    DEMO_DATA_STORAGE_ACCOUNT="prjstfartifacts"
   fi
 fi
 
@@ -258,7 +259,7 @@ pushd $WORKDIR/scripts
   ~/.gdc-env/bin/python ./install.py --deployment-name "$DEPLOYMENT_NAME" --tenant-id "$TENANT_ID" \
                               --subscription-id "$SUBSCRIPTION_ID" --resource-group "$RESOURCE_GROUP" \
                               --template-base-uri "${TEMPLATE_BASE_URI}" --sas-token "$SAS_TOKEN" \
-                              --docker-login "gdc-readonly-token" --docker-password "$DOCKER_PASSWORD" \
+                              --docker-login ${DOCKER_USER} --docker-password "$DOCKER_PASSWORD" \
                                ${PARAMETERS_FILE_ARG} ${LOG_INSIGHTS_PARAM} ${DEBUG} ${SQL_PASS_MODE_PARAM} ${NO_INPUT}
 popd
 

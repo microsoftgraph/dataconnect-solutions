@@ -477,8 +477,8 @@
                         "value": {
                             "username": "[parameters('docker.login')]",
                             "password": "[parameters('docker.password')]",
-                                "server": "blueprint.azurecr.io",
-                            "image": "bpcs/jgraph",
+                                "server": "contosohub.azurecr.io",
+                            "image": "microsoft-gdc/project-staffing",
                             "tag": "[parameters('appservice.version')]"
                         }
                     },
