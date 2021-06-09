@@ -233,8 +233,7 @@
       "name": "[concat(parameters('adf.name'),'/microsoft.insights/', parameters('adfSettingsName'))]",
       "condition": "[not(empty(parameters('logs.workspace.name')))]",
       "dependsOn": [
-        "[resourceId('Microsoft.DataFactory/factories', parameters('adf.name'))]",
-        "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logs.workspace.name'))]"
+        "[resourceId('Microsoft.DataFactory/factories', parameters('adf.name'))]"
       ],
       "properties": {
         "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logs.workspace.name'))]",
