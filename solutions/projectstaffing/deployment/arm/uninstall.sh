@@ -16,8 +16,8 @@ while [[ "$#" -gt 0 ]]; do
       -n | --deployment-name ) DEPLOYMENT_NAME="$2"; shift ;;
       -s | --subscription ) SUBSCRIPTION_ID="$2"; shift ;;
       -y | --no-input ) NO_INPUT="--no-input true"; ;;
-      -g | --gdc-sp-name ) GDC_SERVICE_SP_NAME="$2"; ;;
-      -r | --gdc-m365-sp-name ) GDC_M365_SERVICE_SP_NAME="$2"; ;;
+      -g | --gdc-sp-name ) GDC_SERVICE_SP_NAME="$2"; shift ;;
+      -r | --gdc-m365-sp-name ) GDC_M365_SERVICE_SP_NAME="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -107,6 +107,9 @@ if [[ -n "${GDC_M365_SERVICE_SP_NAME}" ]]; then
   fi
 
 fi
+
+echo "Remove VNET integration for app service ${APP_SERVICE_NAME} from  resource group ${RESOURCE_GROUP} "
+az webapp vnet-integration remove --name ${APP_SERVICE_NAME}  --resource-group ${RESOURCE_GROUP}
 
 if [[ -n "${RESOURCE_GROUP}" ]]; then
    echo "Deleting resource group ${RESOURCE_GROUP} "

@@ -148,13 +148,13 @@ declare -a services=("Microsoft.Network" "Microsoft.OperationalInsights" "Micros
 ## now loop through the service namespaces to make sure all are enabled
 for service in "${services[@]}"
 do
-   SERVICE_STATE=$(az provider show --namespace $service --query registrationState -o tsv)
-   if [[ "${SERVICE_STATE}" -ne "Registered" ]]; then
+   SERVICE_STATE=$(az provider show --subscription ${SUBSCRIPTION_ID} --namespace ${service} --query registrationState -o tsv)
+   if [[ "${SERVICE_STATE}" != "Registered" ]]; then
       echo "The subscription  ${SUBSCRIPTION_ID} is not registered to use $service. "
       yes_no_confirmation "Would you like to activate $service and continue installation (Y/n) " enable_yn true
       if [[ "${enable_yn}" == true ]]; then
         echo "Registering $service for  subscription $SUBSCRIPTION_ID ..."
-        az provider register  --subscription "$SUBSCRIPTION_ID" --namespace "$service" --wait
+        az provider register  --subscription ${SUBSCRIPTION_ID} --namespace ${service} --wait
         REGISTER_RESULT=$?
         if [[ $REGISTER_RESULT != 0 ]]; then
             echo "Failed to register $service, bailing out..."
