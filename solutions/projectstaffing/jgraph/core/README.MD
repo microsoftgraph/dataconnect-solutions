@@ -57,6 +57,22 @@ AZURE_SEARCH_BASE_URL=<url>
 AZURE_SEARCH_EMAILS_INDEX=gdc-emails
 ```
 
+The name of the employee index is computed by the employees ADF pipeline based on the current date (to support versioning).
+Therefore, the current name of the index has to be set in the local database (the local database setup is presented in 
+[the next step](#mssql-local-database-configuration)).  
+This can be done with the following command:
+```
+INSERT INTO gdc_database.dbo.configurations ([type], configs)
+VALUES('AzureSearchEmployeesIndex', '{"employeesIndexName":"<gdc-employees-version>"}');
+```
+Replace `<gdc-employees-version>` with the name of the employee index. The name can be found in the Azure Portal by 
+following the next steps:
+- Go to the search service (`gdc-search-service<deployment-hash>`) in your deployment resource group  
+- Select the "Overview" section on the left of the page
+- Select the "Indexes" tab from the middle of the page
+- After "Indexes" is selected, you should see the names of the two search indexes `gdc-emails` (which is always the 
+same), and `gdc-employees-<date>` which is the employees index name (the name has a date suffix)
+
 #### Mssql local database configuration
 - In order to set up a local database run the deployment/local/docker-compose.yml file
 ```shell script
@@ -113,6 +129,13 @@ Set the cookie in the ProjectStaffing application running on localhost:
     - in Firefox
         - right click in the page -> `Inspect` -> go to the `Storage` tab -> `Cookies`
         - create a cookie named `AppServiceAuthSession` and paste the copied string as its value
+        
+        
+The application will use the cookie to authenticate to a running AppService, the url of the JGraph App Service running 
+in Azure has to be set in `JGRAPH_APPSERVICE_URL` env variable as presented below:
+```
+JGRAPH_APPSERVICE_URL=<jgraph_url> 
+```
 
 > Note: The auth cookie from the App Service needs to be updated locally every time it got refreshed in the App Service 
 > (e.g. because the session expired).
