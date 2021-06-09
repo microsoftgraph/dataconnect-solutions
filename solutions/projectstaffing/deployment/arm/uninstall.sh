@@ -8,11 +8,16 @@ set -e
 
 DEPLOYMENT_NAME=
 SUBSCRIPTION_ID=
+CONFIG_DIR="~/.gdc-env/bin"
+GDC_SERVICE_SP_NAME=
+GDC_M365_SERVICE_SP_NAME=
 while [[ "$#" -gt 0 ]]; do
     case $1 in
       -n | --deployment-name ) DEPLOYMENT_NAME="$2"; shift ;;
       -s | --subscription ) SUBSCRIPTION_ID="$2"; shift ;;
       -y | --no-input ) NO_INPUT="--no-input true"; ;;
+      -g | --gdc-sp-name ) GDC_SERVICE_SP_NAME="$2"; ;;
+      -r | --gdc-m365-sp-name ) GDC_M365_SERVICE_SP_NAME="$2"; ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -47,10 +52,6 @@ if [[ "${reply_yn}" == false ]]; then
     echo -e "\n Aborting operations..."
     exit 1
 fi
-
-CONFIG_DIR="~/.gdc-env/bin"
-GDC_SERVICE_SP_NAME=
-GDC_M365_SERVICE_SP_NAME=
 
 ###########Deleting gdc service principal
 
@@ -106,8 +107,6 @@ if [[ -n "${GDC_M365_SERVICE_SP_NAME}" ]]; then
   fi
 
 fi
-
-
 
 if [[ -n "${RESOURCE_GROUP}" ]]; then
    echo "Deleting resource group ${RESOURCE_GROUP} "

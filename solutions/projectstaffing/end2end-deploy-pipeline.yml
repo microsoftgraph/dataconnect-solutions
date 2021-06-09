@@ -67,5 +67,5 @@ steps:
       scriptLocation:  'scriptPath'
       workingDirectory: $(Pipeline.Workspace)/deployment-workdir
       scriptPath:  $(Pipeline.Workspace)/deployment-workdir/uninstall.sh
-      arguments: ' --deployment-name $(testDeploymentName) --subscription $(subscriptionId) --no-input '
+      arguments: ' --deployment-name $(testDeploymentName) --subscription $(subscriptionId) --gdc-sp-name prjstf-app-3ofyrz-gdc-service --gdc-m365-sp-name prjstf-app-3ofyrz-gdc-m365-reader --no-input '
       addSpnToEnvironment: true
