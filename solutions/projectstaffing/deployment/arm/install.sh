@@ -264,7 +264,6 @@ pushd $WORKDIR/scripts
 popd
 
 dbserver=$(az sql server  list --resource-group ${RESOURCE_GROUP} --query "[].name" -o tsv)
-set +e
 # address local mode first
 AUTO_GENERATION_SUCCESSFUL=$([ -f ~/.gdc/db_stage_successful ] && echo "true" || echo "false" )
 if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
@@ -272,21 +271,25 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
       python ./run_db_stage.py  ${SQL_PASS_MODE_PARAM} --mode manual --only-generate-schema true
       echo -e "SQL schema has been saved to:\n $( ls $WORKDIR/sql-server/*.sql ) "
     popd
+    set +e
     if [[ "${SCHEMA_GENERATION_MODE}" == "auto" ]]; then
         if [[ "${USE_SQL_PASS_MODE_PARAM}" == "true" ]]; then
           if [[ $SQL_SCHEMA_GENERATION_LOCAL == 0 ]]; then
             pushd $WORKDIR/sql-server
               # script assumes SQL schema files have been generated and placed in the same folder
+              agentIP=$(curl  --silent  http://checkip.dyndns.com | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])')
+              az sql server firewall-rule create --name "deployment-agent-IP" --resource-group ${RESOURCE_GROUP} --server ${dbserver}  --start-ip-address  ${agentIP} --end-ip-address ${agentIP}  --subscription  ${SUBSCRIPTION_ID}
               if [[ -n "${NO_INPUT}" && -f ${PARAMETERS_FILE_PATH} ]]; then
                 echo "Initializing database schema using powershell locally in non-interactive mode "
                 SQL_ADMIN_LOGIN=$( jq  --raw-output '.parameters."sqlserver.admin.login".value' ${PARAMETERS_FILE_PATH} )
                 SQL_ADMIN_PASS=$( jq  --raw-output '.parameters."sqlserver.admin.password".value' ${PARAMETERS_FILE_PATH} )
-                pwsh ./run_init_schema_local.ps1 -sqlServerName $dbserver -ResourceGroup $RESOURCE_GROUP -subscriptionId $SUBSCRIPTION_ID -sqlAdminLogin "${SQL_ADMIN_LOGIN}" -sqlAdminPasword "${SQL_ADMIN_PASS}"
+                pwsh ./run_init_schema_local.ps1 -sqlServerName ${dbserver} -ResourceGroup ${RESOURCE_GROUP} -subscriptionId ${SUBSCRIPTION_ID} -sqlAdminLogin "${SQL_ADMIN_LOGIN}" -sqlAdminPasword "${SQL_ADMIN_PASS}"
               else
                echo "Initializing database schema using powershell locally "
-               pwsh ./run_init_schema_local.ps1 -sqlServerName $dbserver -ResourceGroup $RESOURCE_GROUP -subscriptionId $SUBSCRIPTION_ID
+               pwsh ./run_init_schema_local.ps1 -sqlServerName  ${dbserver} -ResourceGroup ${RESOURCE_GROUP} -subscriptionId ${SUBSCRIPTION_ID}
               fi
               AUTO_GENERATION_SUCCESSFUL=$([ "$?" == 0 ] && echo "true" || echo "false")
+              az sql server firewall-rule --name "deployment-agent-IP"
             popd
             # initiate db_state in manual mode to complete stage state
             if [[ "${AUTO_GENERATION_SUCCESSFUL}" == "true" ]]; then
