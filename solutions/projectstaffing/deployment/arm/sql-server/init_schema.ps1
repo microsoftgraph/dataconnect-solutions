@@ -19,7 +19,7 @@ Import-Module -Name SqlServer -ErrorAction Stop
 $agentIP = (Invoke-WebRequest -Uri "http://checkip.dyndns.com" -Method GET).Content -replace "[^\d\.]"
 Write-Output " Adding agentIp ${agentIP} to SQL server firewall "
 
-if ( $subscriptionId ) {
+if ( $subscriptionId -and !$useSqlAuth ) {
     if (-not (Get-Command Select-AzSubscription -ErrorAction SilentlyContinue)) {
         Write-Warning "Unabled to find Select-AzSubscription cmdlet"
         Write-Output "Installling Az module..."
