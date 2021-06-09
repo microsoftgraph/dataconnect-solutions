@@ -58,6 +58,8 @@ if __name__ == '__main__':
     arg_parser.add_argument("--remote-artifacts-storage-name",
                             metavar="remote-artifacts-storage-name")
     arg_parser.add_argument('--debug', default=False, required=False, type=lambda x: bool(strtobool(str(x))))
+    arg_parser.add_argument('--no-input', default=False, required=False, type=lambda x: bool(strtobool(str(x))))
+
 
     parsed_args = arg_parser.parse_args()
     tenant_id = parsed_args.tenant_id
@@ -66,6 +68,7 @@ if __name__ == '__main__':
     artifacts_path = parsed_args.artifacts_path
     demo_data_storage_account_name = parsed_args.remote_artifacts_storage_name
     debug_enabled = parsed_args.debug
+    no_input = parsed_args.no_input
     if debug_enabled:
         az.DEBUG_ENABLED = True
 
@@ -90,8 +93,11 @@ if __name__ == '__main__':
         except Exception as adb_err:
             print("Databricks cluster initialization has failed")
             print(adb_err)
-            if not common.yes_no(" Would you like to continue ?(Y/n) "):
+            if no_input:
                 raise adb_err
+            else:
+                if not common.yes_no(" Would you like to continue ?(Y/n) "):
+                    raise adb_err
 
     # ---- post-config phase -----------------
 

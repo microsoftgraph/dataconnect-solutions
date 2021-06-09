@@ -348,7 +348,7 @@ echo "Running post-deployment script...";
 pushd $WORKDIR/scripts
   ~/.gdc-env/bin/python post-deployment.py --tenant-id "$TENANT_ID" --subscription-id "$SUBSCRIPTION_ID" \
                                            --remote-artifacts-storage-name  "$DEMO_DATA_STORAGE_ACCOUNT" \
-                                           --resource-group "$RESOURCE_GROUP" ${DEBUG}
+                                           --resource-group "$RESOURCE_GROUP" ${DEBUG} ${NO_INPUT}
   echo " Post deployment script completed successfully at $(date)"
 popd
 

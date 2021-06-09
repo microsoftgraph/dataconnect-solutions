@@ -20,6 +20,12 @@ $agentIP = (Invoke-WebRequest -Uri "http://checkip.dyndns.com" -Method GET).Cont
 Write-Output " Adding agentIp ${agentIP} to SQL server firewall "
 
 if ( $subscriptionId ) {
+    if (-not (Get-Command Select-AzSubscription -ErrorAction SilentlyContinue)) {
+        Write-Warning "Unabled to find Select-AzSubscription cmdlet"
+        Write-Output "Installling Az module..."
+        Install-module Az -AllowClobber -Confirm:$False -Force
+    }
+    Import-Module -Name Az -ErrorAction Stop
     Write-Output " Switching to subscription $subscriptionId "
     Select-AzSubscription -Subscription $subscriptionId
 }
