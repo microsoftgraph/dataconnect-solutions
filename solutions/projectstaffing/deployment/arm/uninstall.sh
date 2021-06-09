@@ -38,8 +38,8 @@ if [[ -z "$SUBSCRIPTION_ID" ]]; then
   select_subscription "Would you like to uninstall the deployment from this subscription? (Y/n) " SUBSCRIPTION_ID $SUBSCRIPTION_ID
 fi
 
-SUBSCRIPTION_NAME=$(az account subscription show --id "$SUBSCRIPTION_ID" --query displayName  -o tsv)
-TENANT_ID=$(az account show --subscription "$SUBSCRIPTION_ID" --query tenantId -o tsv)
+SUBSCRIPTION_NAME=$(az account show --subscription ${SUBSCRIPTION_ID} --query name -o tsv)
+TENANT_ID=$(az account show --subscription ${SUBSCRIPTION_ID} --query tenantId -o tsv)
 
 GDC_WEB_APP_OBJ_ID=$(az ad app list --all --filter " displayName eq '${DEPLOYMENT_NAME}-jgraph-aad-web-app' " --query "[].{objectId:objectId}"   -o tsv)
 found_apps_count=$(az ad app list --all --filter " displayName eq '${DEPLOYMENT_NAME}-jgraph-aad-web-app' " --query "[].{objectId:objectId}" -o tsv | wc -l)
