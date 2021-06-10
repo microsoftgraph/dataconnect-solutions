@@ -29,8 +29,7 @@ while [[ "$#" -gt 0 ]]; do
 
 done
 
-#TODO: change wait time
-runtime="30 minute"
+runtime="60 minute"
 
 endtime=$(date -ud "$runtime" +%s)
 ALL_FINISHED=false
@@ -57,7 +56,7 @@ do
   containsElement "End2EndEmployeeProfilePipeline" employeePipelineFailed "${FAILED_PIPELINES_ARRAY[@]}"
   containsElement "End2EndMailsToRolesPipeline" rolesPipelineFailed "${FAILED_PIPELINES_ARRAY[@]}"
 
-  echo "${emailPipelineDone} , ${employeePipelineDone},  ${rolesPipelineDone}, $emailPipelineFailed , $employeePipelineFailed ,  $rolesPipelineFailed "
+  echo "DEBUG: emailPipelineDone=${emailPipelineDone} , employeePipelineDone=${employeePipelineDone},  rolesPipelineDone=${rolesPipelineDone}, emailPipelineFailed=$emailPipelineFailed , employeePipelineFailed=$employeePipelineFailed ,  rolesPipelineFailed=$rolesPipelineFailed "
 
   if [[ ${emailPipelineDone} == true && ${employeePipelineDone} == true && ${rolesPipelineDone} == true ]]; then
     ALL_FINISHED=true

@@ -290,7 +290,7 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
                pwsh ./run_init_schema_local.ps1 -sqlServerName  ${dbserver} -ResourceGroup ${RESOURCE_GROUP} -subscriptionId ${SUBSCRIPTION_ID}
                AUTO_GENERATION_SUCCESSFUL=$([ "$?" == 0 ] && echo "true" || echo "false")
               fi
-              az sql server firewall-rule --name 'deploymentAgentAccess' --resource-group ${RESOURCE_GROUP} --server ${dbserver} --subscription  ${SUBSCRIPTION_ID}
+              az sql server firewall-rule delete --name 'deploymentAgentAccess' --resource-group ${RESOURCE_GROUP} --server ${dbserver} --subscription  ${SUBSCRIPTION_ID}
             popd
             # initiate db_state in manual mode to complete stage state
             if [[ "${AUTO_GENERATION_SUCCESSFUL}" == "true" ]]; then
