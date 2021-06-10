@@ -28,12 +28,14 @@ trigger: none
 resources:
   - repo: self
 
-pool:
-  vmImage: ubuntu-latest
-  jobs:
+stages:
+  - stage: deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    displayName: deploy project staffing
+    jobs:
     - job: deploy
       displayName: End-to-end deployment job
-      timeoutInMinutes: 90
       steps:
         - task: DownloadPipelineArtifact@2
           inputs:
@@ -62,6 +64,9 @@ pool:
             arguments: '--deployment-name $(testDeploymentName) --location $(location) --docker-password  ${{ parameters.dockerPassword }} --subscription $(subscriptionId) --remote-artifacts-location $(artifactStorageAccountName) --parameter-file $(parameterFile) --no-input'
             addSpnToEnvironment: true
 
+    - job: verify
+      displayName: Verify prj-stf-3ofyrz deployment
+      steps:
         - task: AzureCLI@2
           inputs:
             azureSubscription: $(armServiceConn)
@@ -72,7 +77,9 @@ pool:
             arguments: ' --factory-name prjstf-adf-3ofyrz --resource-group prj-stf-3ofyrz-resources '
             addSpnToEnvironment: true
 
-
+    - job: cleanup
+      displayName: Cleanup prj-stf-3ofyrz deployment
+      steps:
         - task: AzureCLI@2
           inputs:
             condition: and(${{ parameters.cleanUpAzureResources }}, succeeded())
