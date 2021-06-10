@@ -278,18 +278,19 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
             pushd $WORKDIR/sql-server
               # script assumes SQL schema files have been generated and placed in the same folder
               agentIP=$(curl  --silent  http://checkip.dyndns.com | grep -oE '((1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\.){3}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])')
-              az sql server firewall-rule create --name "deployment-agent-IP" --resource-group ${RESOURCE_GROUP} --server ${dbserver}  --start-ip-address  ${agentIP} --end-ip-address ${agentIP}  --subscription  ${SUBSCRIPTION_ID}
+              az sql server firewall-rule create --name 'deploymentAgentAccess' --resource-group ${RESOURCE_GROUP} --server ${dbserver} --subscription  ${SUBSCRIPTION_ID}  --start-ip-address  ${agentIP} --end-ip-address ${agentIP}
               if [[ -n "${NO_INPUT}" && -f ${PARAMETERS_FILE_PATH} ]]; then
                 echo "Initializing database schema using powershell locally in non-interactive mode "
                 SQL_ADMIN_LOGIN=$( jq  --raw-output '.parameters."sqlserver.admin.login".value' ${PARAMETERS_FILE_PATH} )
                 SQL_ADMIN_PASS=$( jq  --raw-output '.parameters."sqlserver.admin.password".value' ${PARAMETERS_FILE_PATH} )
                 pwsh ./run_init_schema_local.ps1 -sqlServerName ${dbserver} -ResourceGroup ${RESOURCE_GROUP} -subscriptionId ${SUBSCRIPTION_ID} -sqlAdminLogin "${SQL_ADMIN_LOGIN}" -sqlAdminPasword "${SQL_ADMIN_PASS}"
+                AUTO_GENERATION_SUCCESSFUL=$([ "$?" == 0 ] && echo "true" || echo "false")
               else
                echo "Initializing database schema using powershell locally "
                pwsh ./run_init_schema_local.ps1 -sqlServerName  ${dbserver} -ResourceGroup ${RESOURCE_GROUP} -subscriptionId ${SUBSCRIPTION_ID}
+               AUTO_GENERATION_SUCCESSFUL=$([ "$?" == 0 ] && echo "true" || echo "false")
               fi
-              AUTO_GENERATION_SUCCESSFUL=$([ "$?" == 0 ] && echo "true" || echo "false")
-              az sql server firewall-rule --name "deployment-agent-IP"
+              az sql server firewall-rule --name 'deploymentAgentAccess' --resource-group ${RESOURCE_GROUP} --server ${dbserver} --subscription  ${SUBSCRIPTION_ID}
             popd
             # initiate db_state in manual mode to complete stage state
             if [[ "${AUTO_GENERATION_SUCCESSFUL}" == "true" ]]; then
@@ -297,6 +298,9 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
               pushd "$WORKDIR/scripts"
                 python ./run_db_stage.py  ${SQL_PASS_MODE_PARAM} --mode manual
               popd
+              echo "Successfully initialized SQL server schema"
+            else
+              echo "DEBUG: Automated SQL server schema initialization has finished with non-zero exit code: AUTO_GENERATION_SUCCESSFUL=${AUTO_GENERATION_SUCCESSFUL}"
             fi
           else
             echo "No Powershell and sqlcmd found on the host to initialize database schema automatically"

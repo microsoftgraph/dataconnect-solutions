@@ -26,8 +26,7 @@ if ( $subscriptionId -and !$useSqlAuth ) {
     Write-Output " Switching to subscription $subscriptionId "
     Select-AzSubscription -Subscription $subscriptionId
 }
-try
-{
+
     $access_token = $null
     if (!$useSqlAuth)
     {
@@ -60,5 +59,4 @@ try
             }
         }
     }
-}
 Write-Output "SqlServer ${sqlServerName} has been provisioned."

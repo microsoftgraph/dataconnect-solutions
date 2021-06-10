@@ -61,6 +61,17 @@ steps:
 
   - task: AzureCLI@2
     inputs:
+      azureSubscription: $(armServiceConn)
+      scriptType: 'bash'
+      scriptLocation:  'scriptPath'
+      workingDirectory: $(Pipeline.Workspace)/deployment-workdir
+      scriptPath:  '$(Build.SourcesDirectory)/solutions/projectstaffing/bin/wait-adf-pipelines-completion.sh'
+      arguments: ' --factory-name prjstf-adf-3ofyrz --resource-group prj-stf-3ofyrz-resources '
+      addSpnToEnvironment: true
+
+
+  - task: AzureCLI@2
+    inputs:
       condition: and(${{ parameters.cleanUpAzureResources }}, succeeded())
       azureSubscription: $(armServiceConn)
       scriptType: 'bash'
