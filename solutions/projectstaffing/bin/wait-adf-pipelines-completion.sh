@@ -28,6 +28,8 @@ while [[ "$#" -gt 0 ]]; do
     shift
 
 done
+echo "Installing Azure CLI extension for Data Factory..."
+az extension add --only-show-errors --upgrade --name datafactory --yes
 
 runtime="60 minute"
 
