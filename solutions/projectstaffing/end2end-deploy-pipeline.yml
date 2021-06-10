@@ -30,53 +30,56 @@ resources:
 
 pool:
   vmImage: ubuntu-latest
+  jobs:
+    - job: deploy
+      displayName: End-to-end deployment job
+      timeoutInMinutes: 90
+      steps:
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            source: 'specific'
+            project: 'MGDC Solutions'
+            # Project Staffing Build id
+            pipeline: 2
+            runId: ${{ parameters.buildPipelineRunId }}
+            artifact: 'deployment-package'
+            patterns: '**/project-staffing-*.zip'
+            path: '$(Pipeline.Workspace)'
 
-steps:
-  - task: DownloadPipelineArtifact@2
-    inputs:
-      source: 'specific'
-      project: 'MGDC Solutions'
-      # Project Staffing Build id
-      pipeline: 2
-      runId: ${{ parameters.buildPipelineRunId }}
-      artifact: 'deployment-package'
-      patterns: '**/project-staffing-*.zip'
-      path: '$(Pipeline.Workspace)'
+        - task: ExtractFiles@1
+          inputs:
+            archiveFilePatterns: '$(Pipeline.Workspace)/project-staffing-*.zip'
+            destinationFolder: '$(Pipeline.Workspace)/deployment-workdir'
+            cleanDestinationFolder: true
 
-  - task: ExtractFiles@1
-    inputs:
-      archiveFilePatterns: '$(Pipeline.Workspace)/project-staffing-*.zip'
-      destinationFolder: '$(Pipeline.Workspace)/deployment-workdir'
-      cleanDestinationFolder: true
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: $(armServiceConn)
+            scriptType: 'bash'
+            scriptLocation:  'scriptPath'
+            workingDirectory: $(Pipeline.Workspace)/deployment-workdir
+            scriptPath:  $(Pipeline.Workspace)/deployment-workdir/install.sh
+            arguments: '--deployment-name $(testDeploymentName) --location $(location) --docker-password  ${{ parameters.dockerPassword }} --subscription $(subscriptionId) --remote-artifacts-location $(artifactStorageAccountName) --parameter-file $(parameterFile) --no-input'
+            addSpnToEnvironment: true
 
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: $(armServiceConn)
-      scriptType: 'bash'
-      scriptLocation:  'scriptPath'
-      workingDirectory: $(Pipeline.Workspace)/deployment-workdir
-      scriptPath:  $(Pipeline.Workspace)/deployment-workdir/install.sh
-      arguments: '--deployment-name $(testDeploymentName) --location $(location) --docker-password  ${{ parameters.dockerPassword }} --subscription $(subscriptionId) --remote-artifacts-location $(artifactStorageAccountName) --parameter-file $(parameterFile) --no-input'
-      addSpnToEnvironment: true
-
-  - task: AzureCLI@2
-    inputs:
-      azureSubscription: $(armServiceConn)
-      scriptType: 'bash'
-      scriptLocation:  'scriptPath'
-      workingDirectory: $(Pipeline.Workspace)/deployment-workdir
-      scriptPath:  '$(Build.SourcesDirectory)/solutions/projectstaffing/bin/wait-adf-pipelines-completion.sh'
-      arguments: ' --factory-name prjstf-adf-3ofyrz --resource-group prj-stf-3ofyrz-resources '
-      addSpnToEnvironment: true
+        - task: AzureCLI@2
+          inputs:
+            azureSubscription: $(armServiceConn)
+            scriptType: 'bash'
+            scriptLocation:  'scriptPath'
+            workingDirectory: $(Pipeline.Workspace)/deployment-workdir
+            scriptPath:  '$(Build.SourcesDirectory)/solutions/projectstaffing/bin/wait-adf-pipelines-completion.sh'
+            arguments: ' --factory-name prjstf-adf-3ofyrz --resource-group prj-stf-3ofyrz-resources '
+            addSpnToEnvironment: true
 
 
-  - task: AzureCLI@2
-    inputs:
-      condition: and(${{ parameters.cleanUpAzureResources }}, succeeded())
-      azureSubscription: $(armServiceConn)
-      scriptType: 'bash'
-      scriptLocation:  'scriptPath'
-      workingDirectory: $(Pipeline.Workspace)/deployment-workdir
-      scriptPath:  $(Pipeline.Workspace)/deployment-workdir/uninstall.sh
-      arguments: ' --deployment-name $(testDeploymentName) --subscription $(subscriptionId) --gdc-sp-name prjstf-app-3ofyrz-gdc-service --gdc-m365-sp-name prjstf-app-3ofyrz-gdc-m365-reader --no-input '
-      addSpnToEnvironment: true
+        - task: AzureCLI@2
+          inputs:
+            condition: and(${{ parameters.cleanUpAzureResources }}, succeeded())
+            azureSubscription: $(armServiceConn)
+            scriptType: 'bash'
+            scriptLocation:  'scriptPath'
+            workingDirectory: $(Pipeline.Workspace)/deployment-workdir
+            scriptPath:  $(Pipeline.Workspace)/deployment-workdir/uninstall.sh
+            arguments: ' --deployment-name $(testDeploymentName) --subscription $(subscriptionId) --gdc-sp-name prjstf-app-3ofyrz-gdc-service --gdc-m365-sp-name prjstf-app-3ofyrz-gdc-m365-reader --no-input '
+            addSpnToEnvironment: true
