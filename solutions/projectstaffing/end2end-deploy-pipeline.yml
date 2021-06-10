@@ -38,6 +38,7 @@ stages:
       displayName: End-to-end deployment job
       steps:
         - task: DownloadPipelineArtifact@2
+          displayName: Download project-staffing package
           inputs:
             source: 'specific'
             project: 'MGDC Solutions'
@@ -49,12 +50,14 @@ stages:
             path: '$(Pipeline.Workspace)'
 
         - task: ExtractFiles@1
+          displayName: Extract package
           inputs:
             archiveFilePatterns: '$(Pipeline.Workspace)/project-staffing-*.zip'
             destinationFolder: '$(Pipeline.Workspace)/deployment-workdir'
             cleanDestinationFolder: true
 
         - task: AzureCLI@2
+          displayName: Run install.sh for $(testDeploymentName)
           inputs:
             azureSubscription: $(armServiceConn)
             scriptType: 'bash'
@@ -66,8 +69,10 @@ stages:
 
     - job: verify
       displayName: Verify prj-stf-3ofyrz deployment
+      dependsOn: deploy
       steps:
         - task: AzureCLI@2
+          displayName: Wait DataFactory pipeline
           inputs:
             azureSubscription: $(armServiceConn)
             scriptType: 'bash'
@@ -79,10 +84,12 @@ stages:
 
     - job: cleanup
       displayName: Cleanup prj-stf-3ofyrz deployment
+      dependsOn: verify
+      condition: and(${{ parameters.cleanUpAzureResources }}, succeeded())
       steps:
         - task: AzureCLI@2
+          displayName: Run uninstall.sh for $(testDeploymentName)
           inputs:
-            condition: and(${{ parameters.cleanUpAzureResources }}, succeeded())
             azureSubscription: $(armServiceConn)
             scriptType: 'bash'
             scriptLocation:  'scriptPath'
