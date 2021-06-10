@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) Microsoft Corporation. All rights reserved.
+  ~ Licensed under the MIT license. See LICENSE file in the project root for full license information.
+  -->
+
 <configuration packages="com.zebrunner.agent.core.logging.log4j2">
    <properties>
       <property name="pattern">[%d{HH:mm:ss}] %-5p (%F:%L) - %m%n</property>

@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+#
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+#
+
 [[ $@ =~ (^|[[:space:]])"--skip-maven"($|[[:space:]]) ]] && SKIP_MAVEN=1 || SKIP_MAVEN=0
 
 set -e
