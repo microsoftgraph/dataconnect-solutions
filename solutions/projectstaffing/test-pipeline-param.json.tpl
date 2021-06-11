@@ -72,7 +72,7 @@
       "value": "a269d31b-25d2-44b8-bca0-59b5fc423f31"
     },
     "alert.admin.email": {
-      "value": ""
+      "value": "gdc-test@bpcs.com"
     },
     "alert.admin.fullname": {
       "value": "Test pipeline"
