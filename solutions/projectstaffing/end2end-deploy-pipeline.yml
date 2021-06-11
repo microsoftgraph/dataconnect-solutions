@@ -1,7 +1,7 @@
 parameters:
   - name: 'tag_override'
     type: string
-    default: '$(Build.BuildNumber)'
+    default: 'ci-build-$(Build.BuildNumber)'
   - name: 'cleanUpAzureResources'
     type: boolean
     default: true
