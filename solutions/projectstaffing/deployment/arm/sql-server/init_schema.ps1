@@ -1,4 +1,9 @@
 #! /usr/bin/pwsh
+#
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+#
+
 param (
     [Parameter(Mandatory=$true)][string]$sqlServerName,
     [Parameter(Mandatory=$true)][string]$sqlDBName,
