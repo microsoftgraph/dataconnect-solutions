@@ -11,6 +11,9 @@ parameters:
   - name: 'uploadArtifacts'
     type: boolean
     default: false
+  - name: 'pushDockerImages'
+    type: boolean
+    default: false
 
 trigger: none
 
@@ -76,7 +79,10 @@ stages:
       - task: Docker@2
         displayName: 'Build an image $(dockerRepositoryName):$(tag)'
         inputs:
-          command: buildAndPush
+          ${{ if eq(parameters.pushDockerImages, true) }}:
+            command: buildAndPush
+          ${{ if not(eq(parameters.pushDockerImages, true)) }}:
+            command: build
           containerRegistry: $(containerRegistryServConn)
           repository: $(dockerRepositoryName)
           buildContext: '$(Build.SourcesDirectory)/solutions/projectstaffing/jgraph/core'

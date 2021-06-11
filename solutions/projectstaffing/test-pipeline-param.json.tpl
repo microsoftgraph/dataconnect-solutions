@@ -54,7 +54,7 @@
       "value": "prjstf-app-3ofyrz"
     },
     "appservice.version": {
-      "value": "1.4.3"
+      "value": "{{ TAG }}"
     },
     "adf.name": {
       "value": "prjstf-adf-3ofyrz"
@@ -72,10 +72,10 @@
       "value": "a269d31b-25d2-44b8-bca0-59b5fc423f31"
     },
     "alert.admin.email": {
-      "value": "gdc-test@bpcs.com"
+      "value": ""
     },
     "alert.admin.fullname": {
-      "value": "GDC Tester"
+      "value": "Test pipeline"
     },
     "airtable.base-id": {
       "value": ""
