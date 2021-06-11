@@ -133,7 +133,7 @@ stages:
 
         - script: |
             DEPLOYMENT_SUFFIX=$(head /dev/urandom | tr -dc a-z0-9 | head -c6)
-            testDeploymentName="prj-stf-${DEPOYMENT_SUFFIX}"
+            testDeploymentName="prj-stf-${DEPLOYMENT_SUFFIX}"
             mkdir -p $(Pipeline.Workspace)/variables
             echo "##vso[task.setvariable variable=DEPLOYMENT_SUFFIX]${DEPLOYMENT_SUFFIX}"
             echo "##vso[task.setvariable variable=testDeploymentName]${testDeploymentName}"
