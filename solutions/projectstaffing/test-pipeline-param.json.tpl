@@ -9,25 +9,25 @@
       "value": "9lrxB74_en!6"
     },
     "sqlserver.name": {
-      "value": "prjstfdb3ofyrz"
+      "value": "prjstf-db-{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}"
     },
     "keyvault.name": {
-      "value": "prjstfapp3ofyrz"
+      "value": "prjstf-app-{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}"
     },
     "m365Adf-keyvault.name": {
-      "value": "prjstfbackend3ofyrz"
+      "value": "prjstf-backend-{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}"
     },
     "keyvault.enableSoftDelete": {
       "value": false
     },
     "storageAccount.name": {
-      "value": "prjstfstorage3ofyrz"
+      "value": "prjstfstorage{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}z"
     },
     "testStorageAccount.name": {
-      "value": "prjstfdemodata3ofyrz"
+      "value": "prjstfdemodata{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}"
     },
     "search-service.name": {
-      "value": "prjstf-search-3ofyrz"
+      "value": "prjstf-search-{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}"
     },
     "search-service.sku": {
       "value": "basic"
@@ -51,16 +51,16 @@
       "value": true
     },
     "appservice.name": {
-      "value": "prjstf-app-3ofyrz"
+      "value": "prjstf-app-{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}"
     },
     "appservice.version": {
       "value": "{{ TAG }}"
     },
     "adf.name": {
-      "value": "prjstf-adf-3ofyrz"
+      "value": "prjstf-adf-{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}"
     },
     "adb.workspace.name": {
-      "value": "prjstf-adb-workspace-3ofyrz"
+      "value": "prjstf-adb-workspace-{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}"
     },
     "gdc_data_ingestion_mode": {
       "value": "simulated_mode"
@@ -87,10 +87,10 @@
       "value": 7
     },
     "gdc-service-sp.name": {
-      "value": "prjstf-app-3ofyrz-gdc-service"
+      "value": "prjstf-app-{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}-gdc-service"
     },
     "gdc-m365-reader-sp.name": {
-      "value": "prjstf-app-3ofyrz-gdc-m365-reader"
+      "value": "prjstf-app-{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}-gdc-m365-reader"
     }
   }
 }
