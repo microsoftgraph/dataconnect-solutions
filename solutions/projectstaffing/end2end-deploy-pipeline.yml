@@ -150,7 +150,7 @@ stages:
             script: |
                 echo "Installing envtpl on agent VM "
                 pip  install -q --no-input  envtpl
-                mkdir $(Pipeline.Workspace)/parameterFile
+                mkdir $(Pipeline.Workspace)/parameters
                 envtpl < $(parameterFileTemplate) > $(parameterFile)
                 echo "Test parameters have been saved to $(parameterFile) "
                 cp  $(parameterFile)  $(Pipeline.Workspace)/parameters/
