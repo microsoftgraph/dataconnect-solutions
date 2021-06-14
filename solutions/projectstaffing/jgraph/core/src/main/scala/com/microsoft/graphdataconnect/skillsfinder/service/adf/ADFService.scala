@@ -6,18 +6,8 @@
 package com.microsoft.graphdataconnect.skillsfinder.service.adf
 
 import java.time.format.DateTimeFormatter
-import java.time.{ZoneOffset, ZonedDateTime}
-
-import com.github.jsontemplate.JsonTemplate
-import com.microsoft.graphdataconnect.model.admin.IngestionMode.IngestionMode
-import com.microsoft.graphdataconnect.model.admin.{ADFTrigger, IngestionMode}
-import com.microsoft.graphdataconnect.skillsfinder.exceptions.{ADFPipelineRunFailed, ResourceNotFoundException}
-import com.microsoft.graphdataconnect.skillsfinder.models.dto.adf.{PipelineRun, TriggerRun}
-import com.microsoft.graphdataconnect.skillsfinder.models.dto.admin.UserToken
-import com.microsoft.graphdataconnect.skillsfinder.utils.FileUtils
-import org.slf4j.{Logger, LoggerFactory}
-import org.springframework.beans.factory.annotation.{Autowired, Value}
-import org.springframework.stereotype.Service
+import java.time.ZoneOffset
+import java.time.ZonedDateTime
 
 @Service
 class ADFService(@Autowired val adfRestClient: AdfRestClient) {
@@ -398,5 +388,4 @@ object ADFService {
 
     mostRecentDayInThePast6AM
   }
-
 }
