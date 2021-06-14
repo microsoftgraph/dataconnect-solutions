@@ -228,7 +228,7 @@ Updating Azure DataFactory entities:
         - from the App Service UI -> Deployment Center, using Azure Container Registry
             - for this to work, the App Service and the Container Registry must be in the same subscription
         - from the Azure CLI using the following command  
-            `az webapp config container set --name <app-service-name> --resource-group <existing_gdc_resource_group_name> --docker-custom-image-name blueprint.azurecr.io/bpcs/jgraph:<docker_image_tag> --docker-registry-server-url https://blueprint.azurecr.io  -u gdc-readonly-token -p <password>`
+            `az webapp config container set --name <app-service-name> --resource-group <existing_gdc_resource_group_name> --docker-custom-image-name contosohub.azurecr.io/microsoft-gdc/project-staffing:<docker_image_tag> --docker-registry-server-url https://contosohub.azurecr.io  -u prj-staffing-reader -p <password>`
 - update required AppService env variables (Application Settings, Connection Settings) from the Configuration page 
 - start the application
 

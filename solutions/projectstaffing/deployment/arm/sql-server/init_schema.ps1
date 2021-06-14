@@ -18,19 +18,20 @@ if (-not (Get-Command Invoke-Sqlcmd -ErrorAction SilentlyContinue)) {
     Write-Output "Installling SqlServer module..."
     Install-Module -Name SqlServer -Confirm:$False -Force
 }
-$ErrorActionPreference = "Stop"
 
 Import-Module -Name SqlServer -ErrorAction Stop
-$agentIP = (Invoke-WebRequest -Uri "http://checkip.dyndns.com" -Method GET).Content -replace "[^\d\.]"
-Write-Output " Adding agentIp ${agentIP} to SQL server firewall "
 
-if ( $subscriptionId ) {
+if ( $subscriptionId -and !$useSqlAuth ) {
+    if (-not (Get-Command Select-AzSubscription -ErrorAction SilentlyContinue)) {
+        Write-Warning "Unabled to find Select-AzSubscription cmdlet"
+        Write-Output "Installling Az module..."
+        Install-module Az -AllowClobber -Confirm:$False -Force
+    }
+    Import-Module -Name Az -ErrorAction Stop
     Write-Output " Switching to subscription $subscriptionId "
     Select-AzSubscription -Subscription $subscriptionId
 }
-New-AzSqlServerFirewallRule -ResourceGroupName $ResourceGroup -ServerName $sqlServerName -FirewallRuleName "GdcDeployerIP" -StartIPAddress $agentIp -EndIPAddress $agentIp
-try
-{
+
     $access_token = $null
     if (!$useSqlAuth)
     {
@@ -63,8 +64,4 @@ try
             }
         }
     }
-} Finally {
-    Remove-AzSqlServerFirewallRule -ResourceGroupName $ResourceGroup -ServerName $sqlServerName -FirewallRuleName "GdcDeployerIP"
-    Write-Output "agentIp ${agentIP} has been removed from SQL server firewall "
-}
 Write-Output "SqlServer ${sqlServerName} has been provisioned."

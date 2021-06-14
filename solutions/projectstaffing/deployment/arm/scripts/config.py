@@ -48,7 +48,7 @@ class InstallConfiguration:
         "testStorageAccount.name": common.is_storage_account_name_valid
     }
 
-    def __init__(self):
+    def __init__(self, provided_param_file: str = None):
         self._gdc_admin_ad_group = dict()
         self._gdc_employees_ad_group = dict()
         self._gdc_service_principal = dict()
@@ -58,6 +58,7 @@ class InstallConfiguration:
         self._jgraph_aad_app = dict()
         self._deployment_name = None
         self._required_arm_params = dict()
+        self._provided_arm_params = dict()
         self._has_changes = False
         self._arm_params = dict()
         self._adb_cluster_details = dict()
@@ -66,7 +67,7 @@ class InstallConfiguration:
         self._airtable_api_key = None
         self._log_analytics_workspace_name = None
         self._sql_auth_mode = True
-        InstallConfiguration._load_arm_params(self)
+        InstallConfiguration._load_arm_params(self, provided_param_file=provided_param_file)
 
     def get_gdc_dir(self):
         return os.path.dirname(self.__dump_file_name)
@@ -84,17 +85,38 @@ class InstallConfiguration:
                 return file
 
     @classmethod
-    def _load_arm_params(cls, self):
-        default_template_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "mainTemplate.json")
+    def _load_arm_params(cls, self, provided_param_file: str = None):
+        current_dir = os.path.dirname(os.path.dirname(__file__))
+        default_template_path = os.path.join(current_dir, "mainTemplate.json")
         try:
             if os.path.exists(default_template_path):
+                print("Loading required deployment parameters from %s" % default_template_path)
                 with open(default_template_path, "r") as f:
                     self._arm_params = json.load(f)['parameters']
             else:
+                print("No required mainTemplate.json found in %s " % current_dir)
                 self._arm_params = dict()
         except JSONDecodeError as pe:
             print(pe)
             raise pe
+
+        if provided_param_file and os.path.exists(provided_param_file):
+            self._provided_arm_params = cls._load_provided_parameters(param_file=provided_param_file)
+        else:
+            print("No parameter file provided or it doesn't exists at %s ", provided_param_file)
+
+    @classmethod
+    def _load_provided_parameters(cls, param_file: str):
+        try:
+            with open(param_file, "r") as f:
+                provided_params = {k: v["value"] for k, v in json.load(f)['parameters'].items()}
+                return provided_params
+        except BaseException as pe:
+            print(pe)
+            raise pe
+
+    def get_provided_param_value(self, param_name: str):
+        return self._provided_arm_params.get(param_name)
 
     @property
     def gdc_admin_ad_group(self):
@@ -300,14 +322,14 @@ class InstallConfiguration:
             pickle.dump(self, param_file)
 
     @classmethod
-    def load(cls):
+    def load(cls, default_param_file: str = None):
         if path.exists(InstallConfiguration.__dump_file_name):
             with open(InstallConfiguration.__dump_file_name, "rb") as param_file:
                 config = pickle.load(param_file)
-                InstallConfiguration._load_arm_params(self=config)
+                InstallConfiguration._load_arm_params(self=config, provided_param_file=default_param_file)
                 return config
         else:
-            return InstallConfiguration()
+            return InstallConfiguration(provided_param_file=default_param_file)
 
     def _get_required_arm_params_name(self):
         return list(filter(lambda x: not x.startswith("_") and "metadata" in self._arm_params[x],
@@ -425,23 +447,50 @@ class InstallConfiguration:
         token = common.AccessToken(az_access_token)
         for param_name in sorted(param_names):
             is_secure = self._is_secure_param(param_name=param_name)
-            entered_value = self._prompt_param(param_name=param_name,
-                                               is_secure=is_secure,
-                                               deployment_name=deployment_name,
-                                               subscription_id=subscription_id,
-                                               token=token,
-                                               validate_default_params=validate_default_params)
+            if param_name not in self._provided_arm_params:
+                entered_value = self._prompt_param(param_name=param_name,
+                                                   is_secure=is_secure,
+                                                   deployment_name=deployment_name,
+                                                   subscription_id=subscription_id,
+                                                   token=token,
+                                                   validate_default_params=validate_default_params)
+            else:
+                entered_value = self._provided_arm_params[param_name]
 
             self._required_arm_params[param_name] = entered_value
             self._save()
 
     def prompt_airtable_config(self, deployment_name: str):
-        airtable_base_id = self._prompt_param(param_name="airtable.base-id", deployment_name=deployment_name, is_secure=True,
-                                              _description="Airtable Base Id for your employee data (Optional)", allow_empty=True)
+        if "airtable.base-id" not in self._provided_arm_params:
+            airtable_base_id = self._prompt_param(param_name="airtable.base-id", deployment_name=deployment_name, is_secure=True,
+                                                  _description="Airtable Base Id for your employee data (Optional)", allow_empty=True)
+        else:
+            airtable_base_id = self._provided_arm_params["airtable.base-id"] if self._provided_arm_params["airtable.base-id"] else None
+
         self._airtable_base_id = airtable_base_id
         self._save()
+        if "airtable.api-key" not in self._provided_arm_params:
+            airtable_api_key = self._prompt_param(param_name="airtable.api-key", deployment_name=deployment_name, is_secure=True,
+                                                  _description="Airtable API key  (Optional) ", allow_empty=True)
+        else:
+            airtable_api_key = self._provided_arm_params["airtable.api-key"] if self._provided_arm_params.get("airtable.api-key") else None
 
-        airtable_api_key = self._prompt_param(param_name="airtable.api-key", deployment_name=deployment_name, is_secure=True,
-                                              _description="Airtable API key  (Optional) ", allow_empty=True)
         self._airtable_api_key = airtable_api_key
         self._save()
+
+    def prompt_admin_contact_info(self, deployment_name: str):
+        if "alert.admin.email" not in self._provided_arm_params:
+            self._prompt_param(param_name="alert.admin.email", deployment_name=deployment_name,
+                               _description="Admin Email for alert notification")
+        else:
+            admin_email = self._provided_arm_params["alert.admin.email"] if self._provided_arm_params.get("alert.admin.email") else None
+            self._required_arm_params["alert.admin.email"] = admin_email
+            self._save()
+
+        if "alert.admin.fullname" not in self._provided_arm_params:
+            self._prompt_param(param_name="alert.admin.fullname", deployment_name=deployment_name,
+                               _description="Admin full name  for communication purpose")
+        else:
+            admin_name = self._provided_arm_params["alert.admin.fullname"] if self._provided_arm_params.get("alert.admin.fullname") else None
+            self._required_arm_params["alert.admin.fullname"] = admin_name
+            self._save()

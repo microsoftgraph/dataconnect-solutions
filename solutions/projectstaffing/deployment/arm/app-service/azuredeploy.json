@@ -45,9 +45,9 @@
       "type": "object",
       "defaultValue": {
         "password": "none",
-        "server": "blueprint.azurecr.io",
+        "server": "contosohub.azurecr.io",
         "username": "none",
-        "image": "bpcs/jgraph",
+        "image": "microsoft-gdc/project-staffing",
         "tag": "none"
       }
     },
@@ -462,6 +462,7 @@
       }
     },
     {
+      "condition": "[and(not(empty(parameters('alert.admin.email'))), not(empty(parameters('alert.admin.fullname'))))]",
       "name": "[parameters('alert.name')]",
       "type": "Microsoft.Insights/metricAlerts",
       "location": "global",
@@ -501,6 +502,7 @@
       }
     },
     {
+      "condition": "[and(not(empty(parameters('alert.admin.email'))), not(empty(parameters('alert.admin.fullname'))))]",
       "name": "adminEmailActionGroup",
       "type": "microsoft.insights/actionGroups",
       "apiVersion": "2019-06-01",

@@ -477,8 +477,8 @@
                         "value": {
                             "username": "[parameters('docker.login')]",
                             "password": "[parameters('docker.password')]",
-                                "server": "blueprint.azurecr.io",
-                            "image": "bpcs/jgraph",
+                                "server": "contosohub.azurecr.io",
+                            "image": "microsoft-gdc/project-staffing",
                             "tag": "[parameters('appservice.version')]"
                         }
                     },
@@ -556,7 +556,8 @@
             "apiVersion": "2019-10-01",
             "name": "DataFactory-Stage",
             "dependsOn": [
-                "[resourceId('Microsoft.Resources/deployments','GdcKeyVault-Stage')]"
+                "[resourceId('Microsoft.Resources/deployments','GdcKeyVault-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','LogAnalytics-Stage')]"
             ],
             "properties": {
                 "mode": "Incremental",

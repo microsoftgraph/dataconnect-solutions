@@ -1,0 +1,224 @@
+parameters:
+  - name: 'tag_override'
+    type: string
+    default: 'ci-build-$(Build.BuildNumber)'
+  - name: 'cleanUpAzureResources'
+    type: boolean
+    default: true
+
+variables:
+  tag: ${{ parameters.tag_override }}
+  armServiceConn: contoso_devops_arm_connection
+  dockerRepositoryName: microsoft-gdc/project-staffing
+  storageName: prjstfartifacts
+  containerName: repository
+  location: westus
+  subscriptionId: 894f56bb-ecf5-4a8b-a3e1-6b67703d7c1c
+  artifactStorageAccountName: prjstfartifacts
+  parameterFileTemplate: '$(Build.SourcesDirectory)/solutions/projectstaffing/test-pipeline-param.json.tpl'
+  parameterFile: '$(Pipeline.Workspace)/deployment-workdir/test-pipeline-param.json'
+  skipTests: false
+  containerRegistryServConn: contosohub_docker_registry
+  testDBUser: sa
+  testDBPass: password_!23
+  databaseName: gdc_database
+
+trigger: none
+
+schedules:
+  - cron: "0 0 * * 1,2,3,4,5"
+    displayName: Daily midnight build
+    branches:
+      include:
+        - main
+    always: true
+
+resources:
+  - repo: self
+
+stages:
+  - stage: build
+    pool:
+      vmImage: 'ubuntu-latest'
+    displayName: Build gdc
+    jobs:
+    - job: jgraph_build
+      displayName: Building jgraph
+      steps:
+        - task: Docker@2
+          displayName: Login to $(containerRegistryServConn)
+          inputs:
+            command: login
+            containerRegistry: $(containerRegistryServConn)
+        - task: DockerCompose@0
+          displayName: Run test db
+          inputs:
+            action: Run services
+            dockerComposeFile: solutions/projectstaffing/deployment/local/docker-compose.yml
+            projectName: $(Build.Repository.Name)-tests
+            qualifyImageNames: true
+            serviceName: gdc_database-test
+            buildImages: false
+            abortOnContainerExit: true
+            detached: true
+        - task: Bash@3
+          displayName: Create the test DB
+          inputs:
+            targetType: 'inline'
+            script: |
+              sleep 20s
+              docker exec -i $(docker ps -aqf "name=gdc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <solutions/projectstaffing/deployment/local/create-database.sql
+              docker exec -i $(docker ps -aqf "name=gdc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <solutions/projectstaffing/deployment/local/create-database.sql
+        - task: Maven@3
+          displayName: Running maven build
+          inputs:
+            mavenPomFile: 'solutions/projectstaffing/jgraph/pom.xml'
+            mavenOptions: '-Xmx3072m'
+            javaHomeOption: 'JDKVersion'
+            jdkVersionOption: '1.8'
+            publishJUnitResults: true
+            testResultsFiles: '**/TEST-*.xml'
+            options: '-DskipTests=$(skipTests) -DdockerTag=$(tag)'
+            goals: 'clean package'
+        - task: Docker@2
+          displayName: 'Build an image $(dockerRepositoryName):$(tag)'
+          inputs:
+            command: buildAndPush
+            containerRegistry: $(containerRegistryServConn)
+            repository: $(dockerRepositoryName)
+            buildContext: '$(Build.SourcesDirectory)/solutions/projectstaffing/jgraph/core'
+            dockerfile: '$(Build.SourcesDirectory)/solutions/projectstaffing/jgraph/core/Dockerfile'
+            tags: |
+              $(tag)
+        - task: Bash@3
+          displayName: Preparing artifacts
+          inputs:
+            filePath: 'solutions/projectstaffing/bin/prepare_artifacts.sh'
+            arguments: '--skip-maven'
+        - task: ArchiveFiles@2
+          displayName: Archiving artifacts
+          inputs:
+            rootFolderOrFile: 'solutions/projectstaffing/target/output/gdc/arm'
+            includeRootFolder: false
+            archiveType: 'zip'
+            archiveFile: 'project-staffing-$(tag).zip'
+            replaceExistingArchive: true
+        - task: PublishPipelineArtifact@1
+          inputs:
+            targetPath: '$(System.DefaultWorkingDirectory)/project-staffing-$(tag).zip'
+            artifact: 'deployment-package'
+            publishLocation: 'pipeline'
+  - stage: deploy
+    pool:
+      vmImage: 'ubuntu-latest'
+    displayName: deploy project staffing
+    jobs:
+    - job: deploy
+      displayName: End-to-end deployment job
+      steps:
+        - task: DownloadPipelineArtifact@2
+          displayName: Download project-staffing package
+          inputs:
+            source: 'current'
+            artifact: 'deployment-package'
+            patterns: '**/project-staffing-*.zip'
+            path: '$(Pipeline.Workspace)'
+
+        - task: ExtractFiles@1
+          displayName: Extract package
+          inputs:
+            archiveFilePatterns: '$(Pipeline.Workspace)/project-staffing-*.zip'
+            destinationFolder: '$(Pipeline.Workspace)/deployment-workdir'
+            cleanDestinationFolder: true
+
+        - script: |
+            DEPLOYMENT_SUFFIX=$(head /dev/urandom | tr -dc a-z0-9 | head -c6)
+            testDeploymentName="prj-stf-${DEPLOYMENT_SUFFIX}"
+            mkdir -p $(Pipeline.Workspace)/variables
+            echo "##vso[task.setvariable variable=DEPLOYMENT_SUFFIX]${DEPLOYMENT_SUFFIX}"
+            echo "##vso[task.setvariable variable=testDeploymentName]${testDeploymentName}"
+            echo "${DEPLOYMENT_SUFFIX}" > $(Pipeline.Workspace)/variables/DEPLOYMENT_SUFFIX
+            echo "${testDeploymentName}" > $(Pipeline.Workspace)/variables/testDeploymentName
+
+        - publish: $(Pipeline.Workspace)/variables
+          artifact: variables
+
+        - task: Bash@3
+          inputs:
+            displayName: Preprocess test parameter file
+            targetType: inline
+            script: |
+                echo "Installing envtpl on agent VM "
+                pip  install -q --no-input  envtpl
+                mkdir $(Pipeline.Workspace)/parameters
+                envtpl < $(parameterFileTemplate) > $(parameterFile)
+                echo "Test parameters have been saved to $(parameterFile) "
+                cp  $(parameterFile)  $(Pipeline.Workspace)/parameters/
+        # publish parameter file for debug purpose
+        - publish: $(Pipeline.Workspace)/parameters
+          artifact: parameters
+
+        - task: AzureKeyVault@1
+          displayName: Import docker password from keyvault
+          inputs:
+            azureSubscription:  $(armServiceConn)
+            keyVaultName: prj-stf-system-vault
+            secretsFilter: 'prj-staffing-reader-password'
+
+        - task: AzureCLI@2
+          displayName: Run install.sh for $(testDeploymentName)
+          inputs:
+            azureSubscription: $(armServiceConn)
+            scriptType: 'bash'
+            scriptLocation:  'scriptPath'
+            workingDirectory: $(Pipeline.Workspace)/deployment-workdir
+            scriptPath:  $(Pipeline.Workspace)/deployment-workdir/install.sh
+            arguments: '--deployment-name $(testDeploymentName) --location $(location) --docker-password  $(prj-staffing-reader-password) --subscription $(subscriptionId) --remote-artifacts-location $(artifactStorageAccountName) --parameter-file $(parameterFile) --no-input'
+            addSpnToEnvironment: true
+
+    - job: verify
+      displayName: Verify prj-stf-3ofyrz deployment
+      dependsOn: deploy
+      steps:
+        - download: current
+          artifact: variables
+
+        - bash: |
+            DEPLOYMENT_SUFFIX=$(cat $(Pipeline.Workspace)/variables/DEPLOYMENT_SUFFIX )
+            echo "##vso[task.setvariable variable=DEPLOYMENT_SUFFIX]${DEPLOYMENT_SUFFIX}"
+
+        - task: AzureCLI@2
+          displayName: Wait DataFactory pipeline
+          inputs:
+            azureSubscription: $(armServiceConn)
+            scriptType: 'bash'
+            scriptLocation:  'scriptPath'
+            workingDirectory: $(Pipeline.Workspace)/deployment-workdir
+            scriptPath:  '$(Build.SourcesDirectory)/solutions/projectstaffing/bin/wait-adf-pipelines-completion.sh'
+            arguments: ' --factory-name prjstf-adf-$(DEPLOYMENT_SUFFIX) --resource-group prj-stf-$(DEPLOYMENT_SUFFIX)-resources '
+            addSpnToEnvironment: true
+
+    - job: cleanup
+      displayName: Cleanup prj-stf-3ofyrz deployment
+      dependsOn: verify
+      condition: and(${{ parameters.cleanUpAzureResources }}, succeeded())
+      steps:
+        - download: current
+          artifact: variables
+
+        - bash: |
+            testDeploymentName=$(cat $(Pipeline.Workspace)/variables/testDeploymentName )
+            DEPLOYMENT_SUFFIX=$(cat $(Pipeline.Workspace)/variables/DEPLOYMENT_SUFFIX )
+            echo "##vso[task.setvariable variable=testDeploymentName]${testDeploymentName}"
+            echo "##vso[task.setvariable variable=DEPLOYMENT_SUFFIX]${DEPLOYMENT_SUFFIX}"
+
+        - task: AzureCLI@2
+          displayName: Run uninstall.sh for $(testDeploymentName)
+          inputs:
+            azureSubscription: $(armServiceConn)
+            scriptType: 'bash'
+            scriptLocation:  'scriptPath'
+            workingDirectory: $(Build.SourcesDirectory)/solutions/projectstaffing/deployment/arm/
+            scriptPath:  $(Build.SourcesDirectory)/solutions/projectstaffing/deployment/arm/uninstall.sh
+            arguments: ' --deployment-name $(testDeploymentName) --subscription $(subscriptionId) --gdc-sp-name prjstf-app-$(DEPLOYMENT_SUFFIX)-gdc-service --gdc-m365-sp-name prjstf-app-$(DEPLOYMENT_SUFFIX)-gdc-m365-reader --no-input '
+            addSpnToEnvironment: true

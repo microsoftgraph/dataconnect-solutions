@@ -72,7 +72,7 @@ def initialize_secrets(install_config: InstallConfiguration, resource_group_name
 
         if install_config.gdc_service_db_user_password:
             secrets_ops.set_secret(keyvault_name=backend_keyvault_name, secret_name="azure-sql-backend-user",
-                                   value="gdc-service")
+                                   value=install_config.gdc_service_principal['name'])
             secrets_ops.set_secret(keyvault_name=backend_keyvault_name, secret_name="azure-sql-backend-password",
                                    value=install_config.gdc_service_db_user_password)
         else:
