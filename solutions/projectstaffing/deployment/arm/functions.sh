@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 function boolean() {
   case $1 in
     TRUE) echo true ;;
@@ -18,11 +17,15 @@ function yes_no_confirmation() {
     while true; do
       read -p "$MSG" -r YN
       case $YN in
-          [Yy]* )
-            eval "$2=true"; break;;
-          [Nn]* )
-            eval "$2=false"; break;;
-          * ) echo "Please answer yes/y/Y or no/n/N.";;
+      [Yy]*)
+        eval "$2=true"
+        break
+        ;;
+      [Nn]*)
+        eval "$2=false"
+        break
+        ;;
+      *) echo "Please answer yes/y/Y or no/n/N." ;;
       esac
     done
   else
@@ -35,44 +38,44 @@ function yes_no_confirmation() {
 }
 
 function prompt_non_empty_str_value() {
-    MSG=$1
-    DEFAULT_ANSWER="$3"
-    if [[ -z "${NO_INPUT}" ]]; then
-      while true; do
-        read -p "$MSG" -r PROMPT_VALUE
-        if [[ -n "${PROMPT_VALUE}" ]]; then
-          eval "$2=\"${PROMPT_VALUE}\""
-          break;
-        else
-          echo "Please enter non-empty "
-        fi
-      done
-    else
-      if [[ -z "${DEFAULT_ANSWER}" ]]; then
-        echo "ERROR: Enable to determine default value for prompt: $MSG"
-        exit 6
+  MSG=$1
+  DEFAULT_ANSWER="$3"
+  if [[ -z "${NO_INPUT}" ]]; then
+    while true; do
+      read -p "$MSG" -r PROMPT_VALUE
+      if [[ -n "${PROMPT_VALUE}" ]]; then
+        eval "$2=\"${PROMPT_VALUE}\""
+        break
+      else
+        echo "Please enter non-empty "
       fi
-      echo "Non-interactive mode is enabled, setting default value to ${DEFAULT_ANSWER} "
-      eval "$2=\"${DEFAULT_ANSWER}\""
+    done
+  else
+    if [[ -z "${DEFAULT_ANSWER}" ]]; then
+      echo "ERROR: Enable to determine default value for prompt: $MSG"
+      exit 6
     fi
+    echo "Non-interactive mode is enabled, setting default value to ${DEFAULT_ANSWER} "
+    eval "$2=\"${DEFAULT_ANSWER}\""
+  fi
 }
 
 function prompt_str_value() {
-    MSG=$1
-    DEFAULT_ANSWER="$3"
-    if [[ -z "${NO_INPUT}" ]]; then
-        read -p "$MSG" -r PROMPT_VALUE
-        if [[ -n "${PROMPT_VALUE}" ]]; then
-          eval "$2=\"${PROMPT_VALUE}\""
-        fi
-    else
-      if [[ -z "${DEFAULT_ANSWER}" ]]; then
-        echo "ERROR: Enable to determine default value for prompt: $MSG"
-        exit 6
-      fi
-      echo "Non-interactive mode is enabled, setting default value to ${DEFAULT_ANSWER} "
-      eval "$2=\"${DEFAULT_ANSWER}\""
+  MSG=$1
+  DEFAULT_ANSWER="$3"
+  if [[ -z "${NO_INPUT}" ]]; then
+    read -p "$MSG" -r PROMPT_VALUE
+    if [[ -n "${PROMPT_VALUE}" ]]; then
+      eval "$2=\"${PROMPT_VALUE}\""
     fi
+  else
+    if [[ -z "${DEFAULT_ANSWER}" ]]; then
+      echo "ERROR: Enable to determine default value for prompt: $MSG"
+      exit 6
+    fi
+    echo "Non-interactive mode is enabled, setting default value to ${DEFAULT_ANSWER} "
+    eval "$2=\"${DEFAULT_ANSWER}\""
+  fi
 }
 
 function select_subscription() {
@@ -80,18 +83,16 @@ function select_subscription() {
   OUTPUT_VAR_NAME=$2
   DEFAULT_ANSWER="$3"
 
-
-    if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
-      echo "Multiple subscriptions found"
-      az account list --output table
-      echo "--------------------------------------------------"
-      echo "Current subscription: "
-      az account list --output table | grep "${SUBSCRIPTION_ID}"
-      yes_no_confirmation $MSG reply_yn
-      if [[ "${reply_yn}" == false ]]
-      then
-          prompt_non_empty_str_value "Please provide the desired SubscriptionId, from the list displayed above. " ${OUTPUT_VAR_NAME} ${DEFAULT_ANSWER}
-      fi
+  if [[ $(az account list --output tsv | wc -l) -gt "1" ]]; then
+    echo "Multiple subscriptions found"
+    az account list --output table
+    echo "--------------------------------------------------"
+    echo "Current subscription: "
+    az account list --output table | grep "${SUBSCRIPTION_ID}"
+    yes_no_confirmation $MSG reply_yn
+    if [[ "${reply_yn}" == false ]]; then
+      prompt_non_empty_str_value "Please provide the desired SubscriptionId, from the list displayed above. " ${OUTPUT_VAR_NAME} ${DEFAULT_ANSWER}
     fi
+  fi
 
 }

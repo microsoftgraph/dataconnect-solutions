@@ -398,5 +398,4 @@ object ADFService {
 
     mostRecentDayInThePast6AM
   }
-
 }

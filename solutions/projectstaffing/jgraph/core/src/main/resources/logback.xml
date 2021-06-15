@@ -53,14 +53,11 @@
         <!--        <appender-ref ref="FILE" />-->
         <appender-ref ref="Console"/>
     </root>
-
     <logger name="com.microsoft.graphdataconnect" level="${JGRAPH_LOG_LEVEL:-info}" additivity="false">
         <!--        <appender-ref ref="FILE" />-->
         <appender-ref ref="Console"/>
     </logger>
-
     <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
         <level value="${JGRAPH_LOG_LEVEL:-debug}"/>
     </logger>
-
 </configuration>
