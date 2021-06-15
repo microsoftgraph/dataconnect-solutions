@@ -173,7 +173,7 @@ stages:
             scriptLocation:  'scriptPath'
             workingDirectory: $(Pipeline.Workspace)/deployment-workdir
             scriptPath:  $(Pipeline.Workspace)/deployment-workdir/install.sh
-            arguments: '--deployment-name $(testDeploymentName) --location $(location) --docker-password  $(prj-staffing-reader-password) --subscription $(subscriptionId) --remote-artifacts-location $(artifactStorageAccountName) --parameter-file $(parameterFile) --no-input'
+            arguments: '--deployment-name $(testDeploymentName) --location $(location) --docker-password  $(prj-staffing-reader-password) --subscription $(subscriptionId) --remote-artifacts-location $(artifactStorageAccountName) --parameter-file $(parameterFile) --no-input --debug '
             addSpnToEnvironment: true
 
     - job: verify
