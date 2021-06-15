@@ -1,0 +1,34 @@
+parameters:
+  - name: 'deployment_suffix'
+    type: string
+
+variables:
+  armServiceConn: contoso_devops_arm_connection
+  subscriptionId: 894f56bb-ecf5-4a8b-a3e1-6b67703d7c1c
+
+trigger: none
+pr: none
+
+resources:
+  - repo: self
+
+stages:
+  - stage: cleaup
+    pool:
+      vmImage: 'ubuntu-latest'
+    displayName: Clean Azure resources
+    jobs:
+      - job: cleanup
+        displayName: Cleanup deployment
+        steps:
+
+          - task: AzureCLI@2
+            displayName: "Run uninstall.sh for prj-stf-${{ parameters.deployment_suffix }}"
+            inputs:
+              azureSubscription: $(armServiceConn)
+              scriptType: 'bash'
+              scriptLocation:  'scriptPath'
+              workingDirectory: $(Build.SourcesDirectory)/solutions/projectstaffing/deployment/arm/
+              scriptPath:  $(Build.SourcesDirectory)/solutions/projectstaffing/deployment/arm/uninstall.sh
+              arguments: ' --deployment-name prj-stf-${{ parameters.deployment_suffix }} --subscription $(subscriptionId) --gdc-sp-name prjstf-app--${{ parameters.deployment_suffix }}-gdc-service --gdc-m365-sp-name prjstf-app--${{ parameters.deployment_suffix }}-gdc-m365-reader --no-input '
+              addSpnToEnvironment: true
