@@ -50,8 +50,8 @@ source ~/.gdc-env/bin/activate
 ~/.gdc-env/bin/pip install -r $WORKDIR/scripts/requirements.txt -q --no-input
 
 echo "Installing Azure CLI extension for Databricks and Data Factory..."
-az extension add --only-show-errors --upgrade --name databricks --yes
-az extension add --only-show-errors --upgrade --name datafactory --yes
+az extension add --only-show-errors --upgrade --name databricks --version 0.7.2 --yes
+az extension add --only-show-errors --upgrade --name datafactory --version 0.3.0 --yes
 
 mkdir -p ~/.gdc
 
