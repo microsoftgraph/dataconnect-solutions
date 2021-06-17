@@ -1,6 +1,6 @@
-requests~=2.24.0
+requests
 azure-storage-blob
-azure-cli==2.24.2
+azure-cli
 databricks-api~=0.5.1
 argparse
 retry
