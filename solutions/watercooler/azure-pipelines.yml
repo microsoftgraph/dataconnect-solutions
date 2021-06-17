@@ -1,0 +1,67 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+parameters:
+  - name: 'tag_override'
+    type: string
+    default: '$(Build.BuildNumber)'
+  - name: 'skipTests'
+    type: boolean
+    default: false
+
+trigger: none
+
+resources:
+  - repo: self
+
+variables:
+  tag: ${{ parameters.tag_override }}
+  skipTests: ${{ parameters.skipTests  }}
+
+stages:
+  - stage: build
+    pool:
+      vmImage: 'ubuntu-latest'
+    displayName: Build Watercooler
+    jobs:
+      - job: jwc_build
+        displayName: Building Watercooler
+        steps:
+          - task: Docker@2
+            displayName: Login to blueprint.azurecr.io
+            inputs:
+              command: login
+              containerRegistry: blueprint_docker_registry
+          - task: DockerCompose@0
+            displayName: Run test db
+            inputs:
+              action: Run services
+              dockerRegistryEndpoint: blueprint_docker_registry
+              dockerComposeFile: deployment/local/test/docker-compose.yml
+              projectName: $(Build.Repository.Name)-tests
+              qualifyImageNames: true
+              serviceName: jwc_database-test
+              buildImages: false
+              abortOnContainerExit: true
+              detached: true
+          - task: Maven@3
+            displayName: Running maven build
+            inputs:
+              mavenPomFile: 'jwc/pom.xml'
+              mavenOptions: '-Xmx3072m'
+              javaHomeOption: 'JDKVersion'
+              jdkVersionOption: '1.8'
+              publishJUnitResults: true
+              testResultsFiles: '**/TEST-*.xml'
+              options: '-DskipTests=$(skipTests) -DdockerTag=$(tag)'
+              goals: 'clean package'
+          - task: Docker@2
+            displayName: 'Build an image bpcs/jwc:$(tag)'
+            inputs:
+              command: buildAndPush
+              containerRegistry: blueprint_docker_registry
+              repository: bpcs/watercooler
+              buildContext: '$(Build.SourcesDirectory)/jwc/core'
+              dockerfile: '$(Build.SourcesDirectory)/jwc/core/Dockerfile'
+              tags: |
+                $(tag)

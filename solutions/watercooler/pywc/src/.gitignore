@@ -1,0 +1,5 @@
+# Ignore config files (reason: sensitive API keys)
+config*.json
+*_params.json
+# Allow config template
+!config_default.json

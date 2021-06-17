@@ -1,0 +1,67 @@
+[
+  {
+    "pypi": {
+      "package": "azure-core==1.13.0"
+    }
+  },
+  {
+    "pypi": {
+      "package": "azure-storage-blob==12.8.0"
+    }
+  },
+  {
+    "pypi": {
+      "package": "azure-identity==1.5.0"
+    }
+  },
+  {
+    "pypi": {
+      "package": "azure-keyvault-secrets==4.2.0"
+    }
+  },
+  {
+    "pypi": {
+      "package": "numpy==1.19.1"
+    }
+  },
+  {
+    "pypi": {
+      "package": "adal==1.2.7"
+    }
+  },
+  {
+    "pypi": {
+      "package": "dill==0.3.3"
+    }
+  },
+  {
+    "pypi": {
+      "package": "joblib==1.0.1"
+    }
+  },
+  {
+    "pypi": {
+      "package": "pyyaml==5.4.1"
+    }
+  },
+  {
+    "pypi": {
+      "package": "babel==2.9.1"
+    }
+  },
+  {
+    "pypi": {
+      "package": "jaydebeapi==1.2.3"
+    }
+  },
+  {
+    "pypi": {
+      "package": "holidays==0.11.1"
+    }
+  },
+  {
+    "pypi": {
+      "package": "analytics-logger-rest==1.0.1"
+    }
+  }
+]

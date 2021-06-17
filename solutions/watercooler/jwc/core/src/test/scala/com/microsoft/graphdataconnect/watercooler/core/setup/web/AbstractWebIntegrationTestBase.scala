@@ -1,0 +1,30 @@
+/*
+ * Copyright (c) Microsoft Corporation. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
+
+package com.microsoft.graphdataconnect.watercooler.core.setup.web
+
+import com.microsoft.graphdataconnect.watercooler.core.Runner
+import com.microsoft.graphdataconnect.watercooler.core.setup.InstanceClassTestBase
+import org.junit.Ignore
+import org.junit.runner.RunWith
+import org.springframework.boot.test.context.SpringBootTest
+
+@Ignore
+@RunWith(classOf[SpringInstanceTestClassRunner])
+@SpringBootTest(
+  properties = Array("spring.profiles.active=test"),
+  webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+  classes = Array(classOf[Runner]))
+class AbstractWebIntegrationTestBase extends InstanceClassTestBase {
+
+  override def beforeClassSetup(): Unit = {
+    // nothing to do
+  }
+
+  override def afterClassSetup(): Unit = {
+    // nothing to do
+  }
+
+}

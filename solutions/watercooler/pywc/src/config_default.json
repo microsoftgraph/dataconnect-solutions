@@ -1,0 +1,4 @@
+{
+  "datasource_connection_string": "DefaultEndpointsProtocol=https;AccountName=watercoolerdata;AccountKey=R8ECQkRY9FQELAp1tzQh0kmf1VHvyfhL8urvtxCnIOG+JZtowxwQdOpCcieATssZ7gsJ2pqAWOodRHa7c4R9pw==;EndpointSuffix=core.windows.net",
+  "SERVICE_PRINCIPAL_SECRET": "-qPr23NcAc~O72f4n.IgTJC-bIPK~7t5EQ"
+}

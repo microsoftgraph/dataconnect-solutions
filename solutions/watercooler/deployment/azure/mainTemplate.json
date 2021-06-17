@@ -1,0 +1,623 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sqlserver.admin.login": {
+            "type": "String",
+            "metadata": {
+                "description": "SQL Server Admin username "
+            }
+        },
+        "sqlserver.admin.password": {
+            "type": "securestring",
+            "metadata": {
+                "description": "SQL Server Admin password, must be at least 8 characters long and include uppercase letters, lowercase letters, digits and non-alphanumeric characters "
+            }
+        },
+        "sqlsever.database.aad.admin-login": {
+            "type": "String"
+        },
+        "sqlsever.database.aad.admin-object-id": {
+            "type": "String"
+        },
+        "sqlserver.name": {
+            "type": "String",
+            "defaultValue": "wc-db",
+            "metadata": {
+                "description": "Azure SQL Server name ( unique across Azure, letters, digits, hyphens are allowed)"
+            }
+        },
+        "keyvault.name": {
+            "type": "String",
+            "defaultValue": "WCKeyVault",
+            "metadata": {
+                "description": " Preferable Azure KeyVault for application properties ( unique across Azure, lowercase letters, numbers, and hyphens)"
+            }
+        },
+        "m365Adf-keyvault.name": {
+            "type": "string",
+            "defaultValue": "WCBackend",
+            "metadata": {
+                "description": " Preferable Azure KeyVault for offline pipeline properties( unique across Azure, alphanumerics and hyphens)"
+            }
+        },
+        "keyvault.enableSoftDelete": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]"
+        },
+        "storageAccount.name": {
+            "type": "string",
+            "defaultValue": "wcstorage",
+            "metadata": {
+                "description": " Preferable Azure Storage Account name for pipeline proccessing data ( unique across Azure, lowcase letters only)"
+            }
+        },
+        "_artifactsLocation": {
+            "type": "string",
+            "metadata": {
+                "description": "The base URI where artifacts required by this template are located including a trailing '/'"
+            }
+        },
+        "_artifactsLocationSasToken": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated. Use the defaultValue if the staging location is not secured."
+            },
+            "defaultValue": ""
+        },
+        "sqlsever.database.aad.admin-tenant-id": {
+            "type": "String",
+            "defaultValue": "[subscription().tenantId]"
+        },
+        "sqlsever.database.sku.family": {
+            "type": "String",
+            "defaultValue": "Gen5",
+            "metadata": {
+                "description": "Azure SQL Server SKU family name "
+            }
+        },
+        "sqlsever.database.sku.name": {
+            "type": "String",
+            "defaultValue": "GP_S_Gen5",
+            "metadata": {
+                "description": "Azure SQL Server SKU name "
+            }
+        },
+        "sqlsever.database.sku.edition": {
+            "type": "String",
+            "defaultValue": "GeneralPurpose",
+            "metadata": {
+                "description": "Azure SQL Server SKU edition "
+            }
+        },
+        "sqlsever.database.sku.capacity": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "Azure SQL Server SKU capacity "
+            }
+        },
+        "sqlsever.sql-auth": {
+            "type": "bool",
+            "defaultValue": false
+        },
+        "docker.login": {
+            "type": "securestring"
+        },
+        "docker.password": {
+            "type": "securestring"
+        },
+        "appservice.name": {
+            "type": "String",
+            "metadata": {
+                "description": " Deployment Name for Watercooler app (unique across Azure), it will be available at https://{appservice.name}.azurewebsites.net "
+            }
+        },
+        "appservice.aad.clientId": {
+            "type": "securestring"
+        },
+        "appservice.aad.clientSecret": {
+            "type": "securestring"
+        },
+        "appservice.version": {
+            "type": "string",
+            "defaultValue": "0.2.0",
+            "metadata": {
+                "description": " Release version "
+            }
+        },
+        "adf.name": {
+            "type": "string",
+            "defaultValue": "watercooler-adf",
+            "metadata": {
+                "description": " Azure Data Factory Name ( unique across Azure, alphanumerics and hyphens )"
+            }
+        },
+        "adb.workspace.name": {
+            "type": "string",
+            "defaultValue": "watercooler-databricks-workspace",
+            "metadata": {
+                "description": " Azure Databricks Workspace name "
+            }
+        },
+        "wc-service.sp.clientId": {
+            "type": "securestring"
+        },
+        "wc-service.sp.objectId": {
+            "type": "string"
+        },
+        "wc-service.sp.clientSecret": {
+            "type": "securestring"
+        },
+        "m365Adf-reader.sp.clientId": {
+            "type": "securestring"
+        },
+        "logs.workspace.name": {
+            "type": "string",
+            "defaultValue": ""
+        },
+        "pipeline_start_time": {
+            "type": "string"
+        },
+        "alert.admin.email": {
+            "type": "string"
+        },
+        "alert.admin.fullname": {
+           "type": "string"
+        },
+        "pywc_utils_library.name": {
+            "type": "string"
+        },
+        "wcAdmins.groupId": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "nsg.name": "[concat('wc-nsg-', resourceGroup().name)]",
+        "adb.nsg.name": "[concat('wc-adb-nsg-', resourceGroup().name)]",
+        "vnet.name": "[concat('wc-network-', resourceGroup().name)]",
+        "sqlsever.database.name": "wc_database",
+        "adb.workspace.name": "[parameters('adb.workspace.name')]",
+        "network.stage.uri": "[uri(parameters('_artifactsLocation'), concat('network/azuredeploy.json', parameters('_artifactsLocationSasToken')))]"
+    },
+    "resources": [
+        {
+            "apiVersion": "2020-05-01",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "name": "[variables('nsg.name')]",
+            "location": "[parameters('location')]"
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "LogAnalytics-Stage",
+            "condition": "[not(empty(parameters('logs.workspace.name')))]",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('log-analytics/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "logs.workspace.name": {
+                        "value": "[parameters('logs.workspace.name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "WatercoolerNetworks-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/networkSecurityGroups',variables('nsg.name'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('network.stage.uri')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "vnet.name": {
+                        "value": "[variables('vnet.name')]"
+                    },
+                    "nsg.name": {
+                        "value": "[variables('nsg.name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "WatercoolerKeyVault-Stage",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('keyvault/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "keyVaultName": {
+                        "value": "[parameters('keyvault.name')]"
+                    },
+                    "m365AdfKeyVault.name": {
+                        "value": "[parameters('m365Adf-keyvault.name')]"
+                    },
+                    "enableSoftDelete": {
+                        "value": "[parameters('keyvault.enableSoftDelete')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "WatercoolerStorageAccount",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerNetworks-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('storage/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "storageAccount.name": {
+                        "value": "[parameters('storageAccount.name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "WatercoolerSqlServer-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerNetworks-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('sql-server/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "sqlserver.name": {
+                        "value": "[parameters('sqlserver.name')]"
+                    },
+                    "vnet.name": {
+                        "value": "[variables('vnet.name')]"
+                    },
+                    "sqlsever.database.name": {
+                        "value": "[variables('sqlsever.database.name')]"
+                    },
+                    "sqlserver.admin.login": {
+                        "value": "[parameters('sqlserver.admin.login')]"
+                    },
+                    "sqlserver.admin.password": {
+                        "value": "[parameters('sqlserver.admin.password')]"
+                    },
+                    "sqlsever.database.aad.admin-login": {
+                        "value": "[parameters('sqlsever.database.aad.admin-login')]"
+                    },
+                    "sqlsever.database.aad.admin-object-id": {
+                        "value": "[parameters('sqlsever.database.aad.admin-object-id')]"
+                    },
+                    "sqlsever.database.aad.admin-tenant-id": {
+                        "value": "[parameters('sqlsever.database.aad.admin-tenant-id')]"
+                    },
+                    "sqlsever.database.sku.family": {
+                        "value": "[parameters('sqlsever.database.sku.family')]"
+                    },
+                    "sqlsever.database.sku.name": {
+                        "value": "[parameters('sqlsever.database.sku.name')]"
+                    },
+                    "sqlsever.database.sku.edition": {
+                        "value": "[parameters('sqlsever.database.sku.edition')]"
+                    },
+                    "sqlsever.database.sku.capacity": {
+                        "value": "[parameters('sqlsever.database.sku.capacity')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "WatercoolerAdbCluster",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerNetworks-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('adb-cluster/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "vnet.name": {
+                        "value": "[variables('vnet.name')]"
+                    },
+                    "adb.workspace.name": {
+                        "value": "[variables('adb.workspace.name')]"
+                    },
+                    "adb.nsg.name": {
+                        "value": "[variables('adb.nsg.name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "JWCAppService-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerNetworks-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerKeyVault-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerSqlServer-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('app-service/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "vnet.name": {
+                        "value": "[variables('vnet.name')]"
+                    },
+                    "sqlserver.name": {
+                        "value": "[parameters('sqlserver.name')]"
+                    },
+                    "sqlsever.database.name": {
+                        "value": "[variables('sqlsever.database.name')]"
+                    },
+                    "sqlsever.sql-auth": {
+                        "value": "[parameters('sqlsever.sql-auth')]"
+                    },
+                    "keyvault.name": {
+                        "value": "[parameters('keyvault.name')]"
+                    },
+                    "clientId": {
+                        "value": "[parameters('appservice.aad.clientId')]"
+                    },
+                    "clientSecret": {
+                        "value": "[parameters('appservice.aad.clientSecret')]"
+                    },
+                    "appservice.docker-config": {
+                        "value": {
+                            "username": "[parameters('docker.login')]",
+                            "password": "[parameters('docker.password')]",
+                                "server": "blueprint.azurecr.io",
+                            "image": "bpcs/watercooler",
+                            "tag": "[parameters('appservice.version')]"
+                        }
+                    },
+                    "tenantId": {
+                        "value": "[subscription().tenantId]"
+                    },
+                    "appservice.name": {
+                        "value": "[parameters('appservice.name')]"
+                    },
+                    "alert.admin.email": {
+                        "value": "[parameters('alert.admin.email')]"
+                    },
+                    "alert.name": {
+                        "value": "Watercooler HTTP Errors Alert"
+                    },
+                    "alert.enabled": {
+                        "value": false
+                    },
+                    "alert.admin.fullname": {
+                        "value": "[parameters('alert.admin.fullname')]"
+                    },
+                    "logs.workspace.name": {
+                        "value": "[parameters('logs.workspace.name')]"
+                    },
+                    "adf.name": {
+                        "value": "[parameters('adf.name')]"
+                    },
+                    "resourceGroup.name": {
+                        "value": "[resourceGroup().name]"
+                    },
+                    "subscriptionId": {
+                        "value": "[subscription().subscriptionId]"
+                    },
+                    "wcAdmins.groupId": {
+                        "value": "[parameters('wcAdmins.groupId')]"
+                    },
+                    "wc.sql.username": {
+                        "value": "[parameters('sqlserver.admin.login')]"
+                    },
+                    "wc.sql.password": {
+                        "value": "[parameters('sqlserver.admin.password')]"
+                    }
+
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "DataFactory-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerKeyVault-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('data-factory/azuredeploy.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "adf.name": {
+                        "value": "[parameters('adf.name')]"
+                    },
+                    "location": {
+                        "value": "[parameters('location')]"
+                    },
+                    "keyvault.url": {
+                        "value": "[concat('https://', parameters('m365Adf-keyvault.name'), '.vault.azure.net/')]"
+                    },
+                    "sqlsever.database.name": {
+                        "value": "[variables('sqlsever.database.name')]"
+                    },
+                    "sqlserver.host": {
+                        "value": "[concat(parameters('sqlserver.name'), '.database.windows.net')]"
+                    },
+                    "sqlsever.sql-auth": {
+                        "value": "[parameters('sqlsever.sql-auth')]"
+                    },
+                    "wc-service.sp.clientId": {
+                        "value": "[parameters('wc-service.sp.clientId')]"
+                    },
+                    "tenant.id": {
+                        "value": "[subscription().tenantId]"
+                    },
+                    "azbs.storage.account": {
+                        "value": "[parameters('storageAccount.name')]"
+                    },
+                    "logs.workspace.name": {
+                        "value": "[parameters('logs.workspace.name')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "DataFactory-Pipeline-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerKeyVault-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','DataFactory-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerStorageAccount')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('data-factory/pipelines.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "adf.name": {
+                        "value": "[parameters('adf.name')]"
+                    },
+                    "keyvault.url": {
+                        "value": "[concat('https://', parameters('m365Adf-keyvault.name'), '.vault.azure.net/')]"
+                    },
+                    "storageAccount.endpoint": {
+                        "value": "[concat('https://', parameters('storageAccount.name') ,'.blob.core.windows.net/')]"
+                    },
+                    "tenant.id": {
+                        "value": "[subscription().tenantId]"
+                    },
+                    "wc-service.sp.clientId": {
+                        "value": "[parameters('wc-service.sp.clientId')]"
+                    },
+                    "m365Adf-reader.sp.clientId": {
+                        "value": "[parameters('m365Adf-reader.sp.clientId')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "KeyVault-Setup-ACL-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerKeyVault-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','DataFactory-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','JWCAppService-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('keyvault/configure-acl.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "keyVaultName": {
+                        "value": "[parameters('keyvault.name')]"
+                    },
+                    "m365AdfKeyVault.name": {
+                        "value": "[parameters('m365Adf-keyvault.name')]"
+                    },
+                    "wc-service.sp.objectId": {
+                        "value": "[parameters('wc-service.sp.objectId')]"
+                    },
+                    "adf.name": {
+                        "value": "[parameters('adf.name')]"
+                    },
+                    "appservice.name": {
+                        "value": "[parameters('appservice.name')]"
+                    },
+                    "wc-service.tenantId": {
+                        "value": "[subscription().tenantId]"
+                    },
+                    "wc.aad.admin-object-id": {
+                        "value": "[parameters('sqlsever.database.aad.admin-object-id')]"
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2019-10-01",
+            "name": "Storage-Setup-ACL-Stage",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments','DataFactory-Stage')]",
+                "[resourceId('Microsoft.Resources/deployments','WatercoolerStorageAccount')]",
+                "[resourceId('Microsoft.Resources/deployments','JWCAppService-Stage')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[uri(parameters('_artifactsLocation'), concat('storage/configure-acl.json', parameters('_artifactsLocationSasToken')))]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "wc-service.sp.objectId": {
+                        "value": "[parameters('wc-service.sp.objectId')]"
+                    },
+                    "adf.name": {
+                        "value": "[parameters('adf.name')]"
+                    },
+                    "storageAccount.name": {
+                        "value": "[parameters('storageAccount.name')]"
+                    },
+                    "wcAdmins.groupId": {
+                        "value": "[parameters('wcAdmins.groupId')]"
+                    }
+                }
+            }
+        }
+    ]
+}
