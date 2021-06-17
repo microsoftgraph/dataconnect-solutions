@@ -44,13 +44,13 @@ Azure and then run the application locally while using the resources from the Az
 1. Install JDK 1.8
     - for example, to install the OpenJDK, follow the appropriate installation steps
       from https://openjdk.java.net/install/
-      or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your
+      or https://github.com/AdoptOpenJDK/openjdk8-upstream-binaries/releases/tag/jdk8u292-b10 (take the latest zip build), or search online for a more detailed installation guide, matching your
       OS
         - for Oracle jdk more help can be found here: https://java.com/en/download/help/download_options.html
         - for Open jdk more help can be found here: https://openjdk.java.net/install/
     - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark
       jobs)
-    - set $JAVA_HOME variable with the location of the JDK installation path      
+    - set $JAVA_HOME variable with the location of the JDK installation path (Observation: for windows set JAVA_HOME in the System Environment Variables; also add %JAVA_HOME%\bin to PATH)
 
 2. Install latest Maven 3 version
     - download the latest maven 3 binary distribution archive from https://maven.apache.org/download.cgi
