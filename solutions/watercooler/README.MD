@@ -79,7 +79,7 @@ mvn clean install --DskipTests
 ```
 
 This approach also runs the unit tests. To build the jars without running the tests,
-run `mvn clean install -DskipTests`  
+run `mvn clean install --DskipTests`  
 The resulting jars can be found in the `target` folder of the corresponding module
 
 ### Setting up the python scripts
