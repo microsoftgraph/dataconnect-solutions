@@ -44,7 +44,6 @@ def upload_mount_storage_file(databricks_host: str,
 
     try:
         res = adb_client.dbfs.delete("/mnt/provision/mount_dbfs.py")
-        print(res)
     except Exception as e:
         pass
 
@@ -74,14 +73,9 @@ def execute_script_mount_storage_script(databricks_host: str,
                                         storage_account_name: str,
                                         container_name: str,
                                         secret_key: str):
-    print(databricks_host, token, cluster_id,
-          storage_account_name,
-          container_name,
-          secret_key)
 
     adb_client = DatabricksAPI(host=databricks_host, token=token)
     res = adb_client.dbfs.list("/mnt/")
-    print(res)
     print("Waiting 30 seconds before proceeding with the deployment")
     time.sleep(30)
 
@@ -99,21 +93,19 @@ def execute_script_mount_storage_script(databricks_host: str,
                                                         ]
                                                     },
                                                     timeout_seconds=3600)
-        print(submit_run_res)
         run_id = submit_run_res["run_id"]
 
         while True:
             res = adb_client.jobs.get_run(run_id=run_id)
             if "state" in res:
-                print(res["state"])
-            if res is not None:
-                print(res)
+                print("Cluster mount job status is: " + str(res["state"]))
             if res is None:
-                print("RESPONSE === NONE, considering successfull?")
+                print("Cluster mount job completed")
                 deployment_succesfull = True
                 break
             if "state" in res and "life_cycle_state" in res["state"] and res["state"]["life_cycle_state"] in [
                 "PENDING", "RUNNING"]:
+                time.sleep(5)
                 continue
             if "state" in res and "life_cycle_state" in res["state"] and res["state"]["life_cycle_state"] in [
                 "INTERNAL_ERROR", "FAILED", "TIMED_OUT"]:
@@ -129,25 +121,17 @@ def execute_script_mount_storage_script(databricks_host: str,
         else:
             print("Retrying: ", str(i), " time. Waiting 10 seconds")
             time.sleep(10)
-    print(res)
-    print(databricks_host, token, cluster_id,
-          storage_account_name,
-          container_name,
-          secret_key)
-    print("Deployment succesfull:", str(deployment_succesfull))
+
+        time.sleep(30)
+    print("Cluster mount job successfully completed:", str(deployment_succesfull))
 
 
-def initialize_databricks_cluster(install_config: InstallConfiguration, resource_group: str, artifacts_path: str):
-    print("#######Before Storage account .............")
+def initialize_databricks_cluster(install_config: InstallConfiguration, resource_group: str, artifacts_path: str,
+                                  tenant_id: str = None, subscription_id: str = None):
+
     runtime_storage = install_config.runtime_storage_account_name
     storage_account_keys_list_res = az.az_cli("storage account keys list --account-name " + runtime_storage)
     storage_account_access_key = storage_account_keys_list_res[0]["value"]
-
-    print("#######")
-    print("#######")
-    print(runtime_storage, storage_account_keys_list_res, storage_account_access_key)
-    print("#######")
-    print("#######")
 
     print("Creating Databricks cluster ... ")
     backend_keyvault_name = install_config.backend_keyvault_name
@@ -156,7 +140,7 @@ def initialize_databricks_cluster(install_config: InstallConfiguration, resource
     ws_url = arm_ops.get_databricks_workspace_url(resource_group=resource_group, ws_name=adb_ws_name)
     if not ws_url.startswith("https://"):
         ws_url = "https://" + ws_url
-    adb_access_token = ad_ops.get_databricks_access_token()
+    adb_access_token = ad_ops.get_databricks_access_token(tenant_id, subscription_id)
     managed_libraries = []
     with open("cluster_libraries.json", "r") as libs_file:
         managed_libraries = json.load(libs_file)
@@ -190,14 +174,19 @@ if __name__ == '__main__':
     args = sys.argv
 
     current_account = az.az_cli("account show")
-    tenant_id = current_account['tenantId']
-    subscription_id = current_account['id']
-    subscription_name = current_account['name']
 
     # Create the parser
     arg_parser = argparse.ArgumentParser(description='Install Watercooler service')
 
     # Add the arguments
+    arg_parser.add_argument('--tenant-id',
+                            metavar='tenant-id',
+                            type=str,
+                            help='Id of Azure tenant used for deployment', required=True)
+    arg_parser.add_argument('--subscription-id',
+                            metavar='subscription-id',
+                            type=str,
+                            help='Id of Azure subscription used for deployment', required=True)
     arg_parser.add_argument("--resource-group",
                             metavar='resource-group',
                             type=str,
@@ -217,6 +206,8 @@ if __name__ == '__main__':
     if debug_enabled:
         az.DEBUG_ENABLED = True
 
-    initialize_databricks_cluster(install_config=config, resource_group=group, artifacts_path=artifacts_local_path)
+    initialize_databricks_cluster(install_config=config, resource_group=group, artifacts_path=artifacts_local_path,
+                                  tenant_id=parsed_args.tenant_id, subscription_id=parsed_args.subscription_id)
     install_state.complete_stage(Stages.DATABRICKS_CLUSTER_INITIALIZED)
     print("Databricks cluster has been initialized")
+

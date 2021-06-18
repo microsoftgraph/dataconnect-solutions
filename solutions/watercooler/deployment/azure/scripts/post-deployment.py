@@ -32,6 +32,14 @@ if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(description='Install Watercooler service')
 
     # Add the arguments
+    arg_parser.add_argument('--tenant-id',
+                            metavar='tenant-id',
+                            type=str,
+                            help='Id of Azure tenant used for deployment', required=True)
+    arg_parser.add_argument('--subscription-id',
+                            metavar='subscription-id',
+                            type=str,
+                            help='Id of Azure subscription used for deployment', required=True)
     arg_parser.add_argument("--resource-group",
                             metavar='resource-group',
                             type=str,
@@ -39,16 +47,20 @@ if __name__ == '__main__':
     arg_parser.add_argument("--artifacts-path",
                             metavar="artifacts-path",
                             default=join(dirname(__file__), "artifacts"))
+    arg_parser.add_argument("--remote-artifacts-storage-name",
+                            metavar="remote-artifacts-storage-name")
     arg_parser.add_argument('--debug', default=False, required=False, type=lambda x: bool(strtobool(str(x))))
 
     parsed_args = arg_parser.parse_args()
+    tenant_id = parsed_args.tenant_id
+    subscription_id = parsed_args.subscription_id
     resource_group = parsed_args.resource_group
     artifacts_path = parsed_args.artifacts_path
     debug_enabled = parsed_args.debug
     if debug_enabled:
         az.DEBUG_ENABLED = True
 
-# ---- init secrets phase -----------------
+    # ---- init secrets phase -----------------
     install_state = DeploymentState.load()
     post_deploy_secrets.initialize_secrets(install_config=install_config, resource_group_name=resource_group)
     install_state.complete_stage(Stages.KEY_VAULT_SECRETS_SET)
@@ -60,7 +72,10 @@ if __name__ == '__main__':
 
     if should_provision_adb_cluster:
         try:
-            post_deploy_adb.initialize_databricks_cluster(install_config=install_config, resource_group=resource_group,
+            post_deploy_adb.initialize_databricks_cluster(install_config=install_config,
+                                                          tenant_id=tenant_id,
+                                                          subscription_id=subscription_id,
+                                                          resource_group=resource_group,
                                                           artifacts_path=artifacts_path)
             install_state.complete_stage(Stages.DATABRICKS_CLUSTER_INITIALIZED)
         except Exception as adb_err:
@@ -70,7 +85,7 @@ if __name__ == '__main__':
                 raise adb_err
 
     # ---- post-config phase -----------------
-    print("Restart Watercooler application")
+    print("Restartng Watercooler application")
     arm_ops.restart_web_app(resource_group=resource_group, app_name=install_config.appservice_name)
     print("Activating Watercooler HTTP alert")
     arm_ops.enable_webapp_alert(resource_group=resource_group, alert_name="Watercooler HTTP Errors Alert")
@@ -94,12 +109,8 @@ if __name__ == '__main__':
 
     if install_state.is_sql_schema_initialized() and install_state.is_azure_resources_deployed() and install_state.is_cluster_created():
         print("Activating triggers ... ")
-        # adf_ops.activate_datafactory_trigger(resource_group=resource_group, factory_name=install_config.wc_datafactory_name,
-        #                                      trigger_name="inferred_roles_pipeline_backfill_trigger")
-        # adf_ops.activate_datafactory_trigger(resource_group=resource_group, factory_name=install_config.wc_datafactory_name,
-        #                                      trigger_name="employee_profiles_pipeline_backfill_trigger")
-        # adf_ops.activate_datafactory_trigger(resource_group=resource_group, factory_name=install_config.wc_datafactory_name,
-        #                                      trigger_name="emails_pipeline_backfill_past_week_trigger")
+        adf_ops.activate_datafactory_trigger(resource_group=resource_group, factory_name=install_config.wc_datafactory_name,
+                                             trigger_name="GenerateEventsEveryTwoWeeks")
 
         install_state.complete_stage(Stages.DEPLOYMENT_DONE)
     else:
@@ -110,3 +121,4 @@ if __name__ == '__main__':
 
         print("No pipeline triggers have not been activated due to previous stage failures. Please proceed with starting '*_backfill_*' triggers manually in Data Factory")
 
+    print("Watercooler web app is available at %s " % install_config.appservice_url())

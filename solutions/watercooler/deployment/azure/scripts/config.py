@@ -12,7 +12,8 @@ from os.path import expanduser
 import pathlib
 
 from watercooler_utils import common
-from watercooler_utils.common import lex_hash
+from watercooler_utils import ad_ops
+from watercooler_utils.common import lex_hash, get_random_string
 
 
 class InstallConfiguration:
@@ -21,8 +22,9 @@ class InstallConfiguration:
     __artifacts_path = str(pathlib.Path(__file__).parent.absolute()) + "/artifacts/"
 
     """
-        List of parameters we need guarantee uniqueness, 
-        InstallConfiguration will suffix its default with hash based on deployment name 
+        List of parameters for which we need to guarantee uniqueness. 
+        InstallConfiguration will suffix the default value with a hash based on the deployment name 
+        or, if this yields an unavailable name, with a random string
     """
     __unique_properties = [
         "sqlserver.name",
@@ -33,10 +35,16 @@ class InstallConfiguration:
     ]
 
     __fields_validators = {
-        "sqlserver.admin.password": common.check_complex_password
+        "sqlserver.admin.password": common.check_complex_password,
+        "appservice.name": common.is_azure_app_service_name_valid,
+        "sqlserver.name": common.is_sql_server_name_valid,
+        "keyvault.name": common.is_key_vault_resource_name_valid,
+        "m365Adf-keyvault.name": common.is_key_vault_resource_name_valid,
+        "storageAccount.name": common.is_storage_account_name_valid,
+        "adf.name": common.is_data_factory_name_valid
     }
 
-    def __init__(self):
+    def __init__(self, provided_param_file: str = None):
         self._wc_admin_ad_group = dict()
         self._wc_employees_ad_group = dict()
         self._wc_service_principal = dict()
@@ -47,6 +55,7 @@ class InstallConfiguration:
         self._jwc_aad_app = dict()
         self._deployment_name = None
         self._required_arm_params = dict()
+        self._provided_arm_params = dict()
         self._has_changes = False
         self._arm_params = dict()
         self._adb_cluster_details = dict()
@@ -54,7 +63,7 @@ class InstallConfiguration:
         self._log_analytics_workspace_name = None
         self._sql_auth_mode = True
         self._runtime_storage_account_key = None
-        InstallConfiguration._load_arm_params(self)
+        InstallConfiguration._load_arm_params(self, provided_param_file=provided_param_file)
 
     def get_wc_dir(self):
         return os.path.dirname(self.__dump_file_name)
@@ -72,17 +81,38 @@ class InstallConfiguration:
                 return file
 
     @classmethod
-    def _load_arm_params(cls, self):
-        default_template_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "mainTemplate.json")
+    def _load_arm_params(cls, self, provided_param_file: str = None):
+        current_dir = os.path.dirname(os.path.dirname(__file__))
+        default_template_path = os.path.join(current_dir, "mainTemplate.json")
         try:
             if os.path.exists(default_template_path):
+                print("Loading required deployment parameters from %s" % default_template_path)
                 with open(default_template_path, "r") as f:
                     self._arm_params = json.load(f)['parameters']
             else:
+                print("No required mainTemplate.json found in %s " % current_dir)
                 self._arm_params = dict()
         except JSONDecodeError as pe:
             print(pe)
             raise pe
+
+        if provided_param_file and os.path.exists(provided_param_file):
+            self._provided_arm_params = cls._load_provided_parameters(param_file=provided_param_file)
+        else:
+            print("No parameter file provided or it doesn't exists at %s ", provided_param_file)
+
+    @classmethod
+    def _load_provided_parameters(cls, param_file: str):
+        try:
+            with open(param_file, "r") as f:
+                provided_params = {k: v["value"] for k, v in json.load(f)['parameters'].items()}
+                return provided_params
+        except BaseException as pe:
+            print(pe)
+            raise pe
+
+    def get_provided_param_value(self, param_name: str):
+        return self._provided_arm_params.get(param_name)
 
     @property
     def wc_admin_ad_group(self):
@@ -219,6 +249,10 @@ class InstallConfiguration:
         def_param = self._arm_params.get("appservice.name") or dict()
         return self._required_arm_params.get("appservice.name") or def_param.get("defaultValue")
 
+    def appservice_url(self):
+        app_name = self.appservice_name
+        return "https://%s.azurewebsites.net" % app_name
+
     @property
     def appservice_version(self):
         def_param = self._arm_params.get("appservice.version") or dict()
@@ -269,14 +303,14 @@ class InstallConfiguration:
             pickle.dump(self, param_file)
 
     @classmethod
-    def load(cls):
+    def load(cls, default_param_file: str = None):
         if path.exists(InstallConfiguration.__dump_file_name):
             with open(InstallConfiguration.__dump_file_name, "rb") as param_file:
                 config = pickle.load(param_file)
-                InstallConfiguration._load_arm_params(self=config)
+                InstallConfiguration._load_arm_params(self=config, provided_param_file=default_param_file)
                 return config
         else:
-            return InstallConfiguration()
+            return InstallConfiguration(provided_param_file=default_param_file)
 
     def _get_required_arm_params_name(self):
         return list(filter(lambda x: not x.startswith("_") and "metadata" in self._arm_params[x],
@@ -286,13 +320,20 @@ class InstallConfiguration:
         def_param = self._arm_params.get(param_name)
         return def_param and 'type' in def_param and str(def_param['type']).lower() == 'securestring'
 
-    def _get_def_value(self, param_name: str, deployment_name: str):
+    def _get_def_value(self, param_name: str, deployment_name: str, random_suffix: bool = False):
         param_def = self._arm_params.get(param_name)
         if param_def and "defaultValue" in param_def:
             default_value = param_def["defaultValue"]
             if param_name in self.__unique_properties and deployment_name:
                 # see for details https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules
-                return default_value + lex_hash(deployment_name)
+                if param_name == 'adf.name' or random_suffix:
+                    # the data factory name has to be globally unique
+                    # and there is no api for checking the name availability
+                    # so we will use a random string just to make the collision probability is as small as possible
+                    recommended_default_value = default_value + get_random_string()
+                else:
+                    recommended_default_value = default_value + lex_hash(deployment_name)
+                return recommended_default_value
             else:
                 return default_value
         return None
@@ -312,10 +353,16 @@ class InstallConfiguration:
         return None
 
     def _prompt_param(self, param_name: str, deployment_name: str, is_secure: bool = False, _description: str = None,
-                      allow_empty: bool = False):
+                      allow_empty: bool = False, subscription_id: str = None, token: common.AccessToken = None,
+                      validate_default_params: bool = True):
         description = _description or self._param_description(param_name=param_name)
-        def_value = self._get_def_value(param_name=param_name, deployment_name=deployment_name)
         validator_func = self.__fields_validators.get(param_name)
+
+        def_value = self._get_def_value(param_name=param_name, deployment_name=deployment_name)
+        if validator_func and def_value and validate_default_params:
+            while not validator_func(def_value, subscription_id, token, False):
+                def_value = self._get_def_value(param_name=param_name, deployment_name=deployment_name, random_suffix=True)
+
         value = None
         while value is None:
             value = self._required_arm_params.get(param_name) or def_value
@@ -335,7 +382,7 @@ class InstallConfiguration:
                 msg = "Enter %s, %s : " % (param_name, description)
                 entered_value = getpass.getpass(prompt=msg)
                 if validator_func:
-                    if not validator_func(entered_value):
+                    if not validator_func(entered_value, subscription_id, token):
                         print("Entered value is invalid, try again")
                         entered_value = None
 
@@ -350,14 +397,14 @@ class InstallConfiguration:
                     # check if the int value is contained in the defined limits, if present
                     min_value = self._get_parameter_attribute(param_name=param_name, attribute_name="minValue")
                     if min_value and entered_value < min_value:
-                        entered_value = None
+                        print("Entered value is invalid, try again")
+                        value = None
+                        continue
                     max_value = self._get_parameter_attribute(param_name=param_name, attribute_name="maxValue")
                     if max_value and entered_value > max_value:
-                        entered_value = None
-
-                if validator_func:
-                    if not validator_func(entered_value):
-                        entered_value = None
+                        print("Entered value is invalid, try again")
+                        value = None
+                        continue
 
             print("\n")
             if entered_value:
@@ -365,13 +412,47 @@ class InstallConfiguration:
             elif allow_empty:
                 value = ""
 
+            # if the selected value is the default one
+            # we don't have to validate it again because it's already been validated
+            if validator_func and value != def_value and value != self._required_arm_params.get(param_name):
+                if not validator_func(value, subscription_id, token):
+                    print("Entered value is invalid, try again")
+                    value = None
+
         return value
 
-    def prompt_all_required(self, deployment_name: str):
+    def prompt_all_required(self, deployment_name: str, subscription_id: str, validate_default_params: bool = True):
         param_names = self._get_required_arm_params_name()
+        az_access_token = ad_ops._get_access_token(subscription_id=subscription_id)
+        token = common.AccessToken(az_access_token)
         for param_name in sorted(param_names):
             is_secure = self._is_secure_param(param_name=param_name)
-            entered_value = self._prompt_param(param_name=param_name, is_secure=is_secure, deployment_name=deployment_name)
+            if param_name not in self._provided_arm_params:
+                entered_value = self._prompt_param(param_name=param_name,
+                                                   is_secure=is_secure,
+                                                   deployment_name=deployment_name,
+                                                   subscription_id=subscription_id,
+                                                   token=token,
+                                                   validate_default_params=validate_default_params)
+            else:
+                entered_value = self._provided_arm_params[param_name]
+
             self._required_arm_params[param_name] = entered_value
             self._save()
 
+    def prompt_admin_contact_info(self, deployment_name: str):
+        if "alert.admin.email" not in self._provided_arm_params:
+            self._prompt_param(param_name="alert.admin.email", deployment_name=deployment_name,
+                               _description="Admin Email for alert notification")
+        else:
+            admin_email = self._provided_arm_params["alert.admin.email"] if self._provided_arm_params.get("alert.admin.email") else None
+            self._required_arm_params["alert.admin.email"] = admin_email
+            self._save()
+
+        if "alert.admin.fullname" not in self._provided_arm_params:
+            self._prompt_param(param_name="alert.admin.fullname", deployment_name=deployment_name,
+                               _description="Admin full name  for communication purpose")
+        else:
+            admin_name = self._provided_arm_params["alert.admin.fullname"] if self._provided_arm_params.get("alert.admin.fullname") else None
+            self._required_arm_params["alert.admin.fullname"] = admin_name
+            self._save()

@@ -70,7 +70,7 @@ if __name__ == '__main__':
             sas_token = parsed_args.sas_token
             resource_group = parsed_args.resource_group
             initialize_db_schema_via_arm(install_config=config, template_base_uri=arm_base_uri, storage_sas=sas_token,
-                                         rs_group_name=resource_group)
+                                         rs_group_name=resource_group, custom_init_file=custom_init_file)
             install_state.complete_stage(Stages.SQL_SCHEMA_INITIALIZED)
         elif init_mode == "manual":
             if initialize_db_schema_manually(install_config=config):

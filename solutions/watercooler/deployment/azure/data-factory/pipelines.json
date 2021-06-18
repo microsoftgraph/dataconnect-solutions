@@ -40,6 +40,9 @@
         "m365Adf-reader.sp.clientId": {
             "type": "string",
             "defaultValue": "ec7d067b-87b4-4783-825b-34f56bcd4d22"
+        },
+        "pipeline_start_time": {
+            "type": "string"
         }
     },
     "variables": {
@@ -1019,7 +1022,7 @@
                                 "--adb-secret-scope-name",
                                 "@pipeline().globalParameters.adb_secret_scope",
                                 "--max-db-connections",
-                                "2",
+                                "8",
                                 "--jdbc-hostname",
                                 "@pipeline().globalParameters.azure_sql_server_name",
                                 "--jdbc-port",
@@ -1031,9 +1034,9 @@
                                 "--key-vault-url",
                                 "@pipeline().globalParameters.key_vault_url",
                                 "--start-date",
-                                "2021-05-26",
+                                "@formatDateTime(utcnow(), 'yyyy-MM-dd')",
                                 "--end-date",
-                                "2021-05-26",
+                                "@formatDateTime(adddays(utcnow(), 14), 'yyyy-MM-dd')",
                                 "--meeting-duration",
                                 "15",
                                 "--log-analytics-workspace-id",
@@ -1153,7 +1156,7 @@
                                 "--adb-sp-client-key-name",
                                 "wc-service-principal-secret",
                                 "--max-db-connections",
-                                "2",
+                                "8",
                                 "--jdbc-hostname",
                                 "@pipeline().globalParameters.azure_sql_server_name",
                                 "--jdbc-port",
@@ -1397,6 +1400,40 @@
                 "[concat(variables('factoryId'), '/datasets/Office365MailBox')]",
                 "[concat(variables('factoryId'), '/datasets/AzureBlobStorageEvents')]",
                 "[concat(variables('factoryId'), '/pipelines/End2EndDataCollectorPipeline')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/GenerateEventsEveryTwoWeeks')]",
+            "type": "Microsoft.DataFactory/factories/triggers",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "runtimeState": "Started",
+                "pipelines": [
+                    {
+                        "pipelineReference": {
+                            "referenceName": "GenerateWatercoolerEventsPipeline",
+                            "type": "PipelineReference"
+                        }
+                    }
+                ],
+                "type": "ScheduleTrigger",
+                "typeProperties": {
+                    "recurrence": {
+                        "frequency": "Day",
+                        "interval": 14,
+                        "startTime": "[dateTimeAdd(parameters('pipeline_start_time'), '-P2D')]",
+                        "timeZone": "UTC",
+                        "schedule": {
+                            "hours": [
+                                6
+                            ]
+                        }
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/pipelines/GenerateWatercoolerEventsPipeline')]"
             ]
         }
     ]

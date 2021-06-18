@@ -29,7 +29,7 @@
         },
         "keyvault.name": {
             "type": "String",
-            "defaultValue": "WCKeyVault",
+            "defaultValue": "WCApp",
             "metadata": {
                 "description": " Preferable Azure KeyVault for application properties ( unique across Azure, lowercase letters, numbers, and hyphens)"
             }
@@ -127,7 +127,7 @@
             "type": "string",
             "defaultValue": "0.2.0",
             "metadata": {
-                "description": " Release version "
+                "description": " Application docker image version to be pulled from the container registry  "
             }
         },
         "adf.name": {
@@ -177,6 +177,15 @@
         },
         "wcAdmins.groupId": {
             "type": "string"
+        },
+        "emails.backfill.time.span": {
+            "type": "int",
+            "defaultValue": 30,
+            "minValue": 7,
+            "maxValue": 3650,
+            "metadata": {
+                "description": "Time span of processed emails from the past. Provide a value between 7 and 3650 days. For larger values, make sure your infrastructure can scale to such high loads"
+            }
         }
     },
     "variables": {
@@ -535,6 +544,9 @@
                 "parameters": {
                     "adf.name": {
                         "value": "[parameters('adf.name')]"
+                    },
+                    "pipeline_start_time": {
+                        "value": "[parameters('pipeline_start_time')]"
                     },
                     "keyvault.url": {
                         "value": "[concat('https://', parameters('m365Adf-keyvault.name'), '.vault.azure.net/')]"

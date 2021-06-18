@@ -1,11 +1,28 @@
 #!/usr/bin/env bash
-###### utils #########
-function lex_hash() {
-    # should be consistent with python watercooler_utils/common.py#lex_hash
-    echo "$1" | openssl md5 | sed 's/^.* //' | tr '[:upper:]' '[:lower:]' | cut -c1-7
-}
+
+#
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+#
+
+unameOut="$(uname -s)"
+case "${unameOut}" in
+    Linux*)  ;;
+    Darwin*)  ;;
+    *) echo "Unsupported platform"; exit 4 ;;
+esac
+
+DEPLOYMENT_NAME=
+LOCATION=
+DEBUG=
+DOCKER_PASSWORD=
+NO_INPUT=
+SUBSCRIPTION_ID=
+
 set -e
 WORKDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+source ${WORKDIR}/functions.sh
 
 if ! command -v az &> /dev/null
 then
@@ -31,84 +48,94 @@ echo "Installing Azure CLI extension for Databricks and Data Factory..."
 az extension add --only-show-errors --name  databricks
 az extension add --only-show-errors --name  datafactory
 # create virtual env
-pip3 install virtualenv -q
+pip3 install  --disable-pip-version-check virtualenv -q
 echo "Installing python virtual environment for deployment scripts..."
 virtualenv -p python3  ~/.wc-env -q
 source ~/.wc-env/bin/activate
-~/.wc-env/bin/pip install -r $WORKDIR/scripts/requirements.txt -q
+~/.wc-env/bin/pip install -r $WORKDIR/scripts/requirements.txt -q --no-input
+
+echo "Installing Azure CLI extension for Databricks and Data Factory..."
+az extension add --only-show-errors --upgrade --name databricks --yes
+az extension add --only-show-errors --upgrade --name datafactory --yes
 
 mkdir -p ~/.wc
-
-DEPLOYMENT_NAME=
-LOCATION=
-DEBUG=
-DOCKER_PASSWORD=
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
       -n | --deployment-name ) DEPLOYMENT_NAME="$2"; shift ;;
       -l | --location ) LOCATION="$2"; shift ;;
       -p | --docker-password ) DOCKER_PASSWORD="$2"; shift ;;
+      -s | --subscription ) SUBSCRIPTION_ID="$2"; shift ;;
       -d | --debug ) DEBUG="--debug true"; ;;
+      -f | --parameter-file) PARAMETERS_FILE_PATH="${2}"; shift;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
 done
 if [[ -z "$DEPLOYMENT_NAME" ]]; then
-  read -p "Enter deployment name: " DEPLOYMENT_NAME
+  prompt_non_empty_str_value "Enter deployment name: " DEPLOYMENT_NAME
 fi
 
 if [[ -z "$LOCATION" ]]; then
-  read -p "Enter Azure location: " LOCATION
+  prompt_non_empty_str_value "Enter Azure location: " LOCATION
 fi
 
 if [[ -z "$DOCKER_PASSWORD" ]]; then
-  read -p "Enter docker repository password: " DOCKER_PASSWORD
+  # prompt_non_empty_str_value -p "Enter docker repository password: " DOCKER_PASSWORD
+  # For now, using hardcoded password to public Watercpp;er docker images repository
+  DOCKER_PASSWORD="7O9P2Bg8+2Tu6nD5PpQc+aFb4eNrmmJc"
 fi
 
 
 RESOURCE_GROUP="${DEPLOYMENT_NAME}-resources"
 
-echo -e "\n\n###################Authenticating to Azure #####################\n\n "
-az login
-
+echo -e "\n\n################### Authenticating to Azure #####################\n\n "
+if [[ -z "${NO_INPUT}" ]]; then
+  az login
+else
+  echo "Non-interactive mode is enabled. Reusing exiting authentication session"
+fi
 
 #
 # -------- Deployment ------------------------------
 #
 #
-TENANT_ID=$(az account show --query tenantId -o tsv)
-SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
-    echo "Multiple subscription found"
-    az account list --output table
-    echo "--------------------------------------------------"
-    echo "Current subscription: "
-    az account list --output table | grep ${SUBSCRIPTION_ID}
 
-    read -p "Would you like to deploy into this subscription ?(Y/n) " -n 1 -r
-    echo    # move to a new line
-    if [[ ! $REPLY =~ ^[Yy]$ ]]
-    then
-        echo "Use the following command to switch subscription:"
-        echo "    az account set --subscription your_subscription_id "
-        [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-    fi
+if [[ -z "$SUBSCRIPTION_ID" ]]; then
+  SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+  if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
+      echo "Multiple subscriptions found"
+      az account list --output table
+      echo "--------------------------------------------------"
+      echo "Current subscription: "
+      az account list --output table | grep "${SUBSCRIPTION_ID}"
+      yes_no_confirmation "Would you still like to try to deploy into this subscription ?(Y/n) " reply_yn
+      if [[ "${reply_yn}" == false ]]
+      then
+          prompt_non_empty_str_value "Please provide the desired SubscriptionId, from the list displayed above. " SUBSCRIPTION_ID
+      fi
+  fi
 fi
 
+TENANT_ID=$(az account show --subscription "$SUBSCRIPTION_ID" --query tenantId -o tsv)
 
-REQUIRED_ROLE="Owner"
-LOGGED_USER_ID=$(az ad signed-in-user show --query objectId  --output tsv )
-ASSIGNMENTS_LIST=$(az role assignment list --scope /subscriptions/${SUBSCRIPTION_ID} --assignee ${LOGGED_USER_ID} --include-classic-administrators true --include-groups --include-inherited --role "${REQUIRED_ROLE}" --query [].{id:id} --output tsv)
+echo "Deploying in subscription $SUBSCRIPTION_ID from tenant $TENANT_ID"
 
-if [[ -z "${ASSIGNMENTS_LIST}" ]]; then
-    echo "You don't have enough permissions within selected subscription ${SUBSCRIPTION_ID}. Required role: ${REQUIRED_ROLE}"
-    read -p "Would you still like to try to deploy into this subscription ?(Y/n) " -n 1 -r
-    echo    # move to a new line
-    if [[ ! $REPLY =~ ^[Yy]$ ]]
-    then
-        [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
-    fi
+if [[ -z "${NO_INPUT}" ]];then
+  REQUIRED_ROLE="Owner"
+  LOGGED_USER_ID=$(az ad signed-in-user show --query objectId  --output tsv )
+  ASSIGNMENTS_LIST=$(az role assignment list --scope /subscriptions/${SUBSCRIPTION_ID} --assignee ${LOGGED_USER_ID} --include-classic-administrators true --include-groups --include-inherited --role "${REQUIRED_ROLE}" --query [].{id:id} --output tsv)
+  if [[ -z "${ASSIGNMENTS_LIST}" ]]; then
+      echo "You don't have enough permissions within selected subscription ${SUBSCRIPTION_ID}. Required role: ${REQUIRED_ROLE}"
+      yes_no_confirmation "Would you still like to try to deploy into this subscription ?(Y/n) " CONTINUE
+      if [[ "${CONTINUE}" == false ]]
+      then
+        echo "Terminating deployment"
+          [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1 # handle exits from shell or function but don't exit interactive shell
+      fi
+  fi
+else
+    echo "Non-interactive mode is enabled, skipping permissions verification "
 fi
 
 
@@ -117,15 +144,14 @@ MINIMAL_vCPU=8
 vCPU_USED=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID} -o tsv --query "[].{Name:name, currentValue:currentValue}[?contains(Name.value, '${DEFAULT_VM_TYPE}')]" | awk '{ print $1 }')
 vCPU_LIMIT=$(az vm   list-usage   --location $LOCATION --subscription  ${SUBSCRIPTION_ID}  -o tsv --query "[].{Name:name, limit:limit}[?contains(Name.value, '${DEFAULT_VM_TYPE}' )]" | awk '{ print $1 }')
 if (( ${vCPU_USED} + ${MINIMAL_vCPU} > ${vCPU_LIMIT} ));  then
-    read -p "The are not enough vCPUs available at ${LOCATION} region. You're using ${vCPU_USED} out of ${vCPU_LIMIT}, but ${MINIMAL_vCPU} are required. Would you still like to try to install ?(Y/n) " -n 1 -r
-    echo    # move to a new line
-    if [[ ! $REPLY =~ ^[Yy]$ ]]
+    prompt_msg="There are not enough vCPUs available at ${LOCATION} region. You're using ${vCPU_USED} out of ${vCPU_LIMIT}, but ${MINIMAL_vCPU} are required. Would you still like to try to install ?(Y/n) "
+    yes_no_confirmation "${prompt_msg}" CONTINUE true
+    if [[ "${CONTINUE}" == false ]]
     then
         echo "Canceling deployment due to lack of available vCPUs "
         exit 5
     fi
 fi
-
 
 declare -a services=("Microsoft.Network" "Microsoft.OperationalInsights" "Microsoft.Databricks" "Microsoft.Sql" "Microsoft.Authorization" "Microsoft.Compute" )
 
@@ -135,23 +161,20 @@ do
    SERVICE_STATE=$(az provider show --namespace $service --query registrationState -o tsv)
    if [[ "${SERVICE_STATE}" -ne "Registered" ]]; then
       echo "The subscription  ${SUBSCRIPTION_ID} is not registered to use $service. "
-      while true; do
-          read -p "Would you like to activate $service and continue installation (Y/n) " $enable_yn
-          case $enable_yn in
-              [Yy]* )
-                echo "Registering $service for  subscription $SUBSCRIPTION_ID ..."
-                az provider register  --subscription $SUBSCRIPTION_ID --namespace $service --wait
-                REGISTER_RESULT=$?
-                if [[ $REGISTER_RESULT != 0 ]]; then
-                    echo "Failed to register $service, bailing out..."
-                    exit $REGISTER_RESULT
-                fi
-                break;;
-              [Nn]* ) echo "Installation has been terminated";  exit;;
-              * ) echo "Please answer yes or no.";;
-          esac
-      done
-  fi
+      yes_no_confirmation "Would you like to activate $service and continue installation (Y/n) " enable_yn true
+      if [[ "${enable_yn}" == true ]]; then
+        echo "Registering $service for  subscription $SUBSCRIPTION_ID ..."
+        az provider register  --subscription "$SUBSCRIPTION_ID" --namespace "$service" --wait
+        REGISTER_RESULT=$?
+        if [[ $REGISTER_RESULT != 0 ]]; then
+            echo "Failed to register $service, bailing out..."
+            exit $REGISTER_RESULT
+        fi
+      else
+        echo "Installation has been terminated"
+        exit 9
+      fi
+   fi
 done
 
 
@@ -160,22 +183,27 @@ LOG_INSIGHTS_PARAM="--log-analytic-enabled true"
 if [[ "${LOG_INSIGHTS_REGISTRATION_STATE}" -ne "Registered" ]]; then
   echo "The subscription  ${SUBSCRIPTION_ID} is not registered to use microsoft.insights. "
   echo "Access to logs will be limited for this deployment  "
-  while true; do
-      read -p "Do you want to continue without Log Analytics Workspace (Y/n) " log_yn
-      case $log_yn in
-          [Yy]* ) LOG_INSIGHTS_PARAM="--log-analytic-enabled false";  break;;
-          [Nn]* ) echo "Installation has been terminated";  exit;;
-          * ) echo "Please answer yes or no.";;
-      esac
-  done
+  yes_no_confirmation "Do you want to continue without Log Analytics Workspace (Y/n) " log_yn true
+  if [[ "${enable_yn}" == true ]]; then
+    LOG_INSIGHTS_PARAM="--log-analytic-enabled false";
+  else
+    echo "Installation has been terminated";
+    exit 10
+  fi
 fi
 
 
 echo "Creating resource group  $RESOURCE_GROUP in $LOCATION"
 
-TMP_AZURE_STORAGE_ACCOUNT="wcdeploy$( lex_hash $DEPLOYMENT_NAME )"
 CONTAINER="wc-artifacts"
 az group create --name ${RESOURCE_GROUP} --location "$LOCATION" --output none
+
+TMP_AZURE_STORAGE_ACCOUNT=$(az storage account list --resource-group ${RESOURCE_GROUP} --query "[?starts_with(name, 'wcdeploy')].name" -o tsv)
+
+if [[ -z "$TMP_AZURE_STORAGE_ACCOUNT" ]]; then
+  RANDOM_STRING=$(head /dev/urandom | tr -dc a-z0-9 | head -c10)
+  TMP_AZURE_STORAGE_ACCOUNT="wcdeploy$RANDOM_STRING"
+fi
 
 echo "Creating temporal storage account for deployment  $TMP_AZURE_STORAGE_ACCOUNT in $LOCATION  "
 
@@ -200,34 +228,24 @@ SAS_TOKEN=$( az storage container  generate-sas --name $CONTAINER --account-name
 TEMPLATE_URL=$(az storage blob url --container-name $CONTAINER --name mainTemplate.json --output tsv --connection-string $connection )
 TEMPLATE_BASE_URI=https://${TMP_AZURE_STORAGE_ACCOUNT}.blob.core.windows.net/${CONTAINER}/
 
-USE_SQL_PASS_MODE_PARAM="true"
-#echo -e "\n\n\n #################################################################################################################"
-#echo "###############################     IMPORTANT!  DO NOT IGNORE! ##################################################"
-#echo -e "#################################################################################################################\n\n\n"
-#
-#echo "Watercooler Service supports both Windows (via managed identity and service principal in your AD) and SQL Server (user/password) authentication modes."
-#echo "For Windows authentication, the Directory Readers role must be assigned to managed instance identity of SQL server before you can set up an Azure AD admin for the managed instance. If the role isn't assigned to the SQL logical server identity, creating Azure AD users in Azure SQL will fail. For more information, see Azure Active Directory service principal with Azure SQL https://docs.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-service-principal "
-#echo "Windows authentication is considered to be the more secure approach. 'Directory Readers' AD role assignment is a manual process and requires *Global Administrator* AD permission"
-#
-#while true; do
-#    read -p "Would you like to use SQL Server (user/password) authentication mode? Select N to use Windows authentication (Y/n) " use_sql_pass_yn
-#    case ${use_sql_pass_yn} in
-#        [Yy]* ) USE_SQL_PASS_MODE_PARAM="true"; echo "SQL Server (user/password) authentication mode is selected";  break;;
-#        [Nn]* ) USE_SQL_PASS_MODE_PARAM="false"; echo "Windows authentication mode is selected";  break;;
-#        * ) echo "Please answer yes or no.";;
-#    esac
-#done
 command -v pwsh --version &> /dev/null && which sqlcmd &> /dev/null
 SQL_SCHEMA_GENERATION_LOCAL=$?
+USE_SQL_PASS_MODE_PARAM="true"
 SQL_PASS_MODE_PARAM="--sql-auth ${USE_SQL_PASS_MODE_PARAM}"
 SCHEMA_GENERATION_MODE=$([ "$SQL_SCHEMA_GENERATION_LOCAL" == 0 ] && echo "auto" || echo "manual")
+PARAMETERS_FILE_ARG=""
+if [[ -f "${PARAMETERS_FILE_PATH}" ]]; then
+  PARAMETERS_FILE_ARG=" --parameter-file $PARAMETERS_FILE_PATH "
+fi
 
 pushd $WORKDIR/scripts
   echo "Starting deployment script.... "
   # install dependencies
-  ~/.wc-env/bin/python ./install.py --deployment-name $DEPLOYMENT_NAME --resource-group $RESOURCE_GROUP \
+  ~/.wc-env/bin/python ./install.py --deployment-name $DEPLOYMENT_NAME --tenant-id "$TENANT_ID" \
+                              --subscription-id "$SUBSCRIPTION_ID" --resource-group $RESOURCE_GROUP \
                               --template-base-uri ${TEMPLATE_BASE_URI} --sas-token $SAS_TOKEN \
-                              --docker-login "watercooler-readonly-token" --docker-password $DOCKER_PASSWORD ${LOG_INSIGHTS_PARAM} ${DEBUG} ${SQL_PASS_MODE_PARAM}
+                              --docker-login "watercooler-readonly-token" --docker-password $DOCKER_PASSWORD \
+                              ${PARAMETERS_FILE_ARG} ${LOG_INSIGHTS_PARAM} ${DEBUG} ${SQL_PASS_MODE_PARAM} ${NO_INPUT}
 popd
 
 dbserver=$(az sql server  list --resource-group ${RESOURCE_GROUP} --query "[].name" -o tsv)
@@ -235,24 +253,6 @@ set +e
 # address local mode first
 AUTO_GENERATION_SUCCESSFUL=$([ -f ~/.wc/db_stage_successful ] && echo "true" || echo "false" )
 if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
-    if [[ "${USE_SQL_PASS_MODE_PARAM}" == "false" ]]; then
-      echo -e "\n\n\n#################################################################################################################"
-      echo "###############################     IMPORTANT!  DO NOT IGNORE! ##################################################"
-      echo -e "#################################################################################################################\n\n\n"
-      echo "Deployment has been set on hold. This manual step is mandatory otherwise the deployment won't operate properly. "
-      echo "Follow this instruction to add SQL Server '${dbserver}' managed Identity into Directory Readers"
-      echo "https://docs.microsoft.com/en-us/azure/azure-sql/database/authentication-aad-directory-readers-role-tutorial#add-azure-sql-managed-identity-to-the-group"
-      echo "NOTE: SQL schema initialization will fail if you don't add SQL Server into 'Directory Readers' role and installation procedure have to be started over after deployment resource group is deleted"
-      echo "Azure CLI doesn't support operations that allow to verify this permission. You have to confirm it manually"
-      while true; do
-        read -p "Confirm SQL server identity was added to 'Directory Readers' role in order to proceed with Azure SQL Server schema creation. Select N if you would like to skip this step and retry later by running post-deployment script again (Y/N) " sql_server_yn
-        case $sql_server_yn in
-            [Yy]* ) SCHEMA_GENERATION_MODE="auto"; break;;
-            [Nn]* ) SCHEMA_GENERATION_MODE="manual"; break;;
-            * ) echo "Please answer yes or no.";;
-        esac
-      done
-    fi
     pushd "$WORKDIR/scripts"
       python ./run_db_stage.py  ${SQL_PASS_MODE_PARAM} --mode manual --only-generate-schema true
       echo -e "SQL schema has been saved to:\n $( ls $WORKDIR/sql-server/*.sql ) "
@@ -261,9 +261,16 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
         if [[ "${USE_SQL_PASS_MODE_PARAM}" == "true" ]]; then
           if [[ $SQL_SCHEMA_GENERATION_LOCAL == 0 ]]; then
             pushd $WORKDIR/sql-server
-              echo "Initializing database schema using powershell locally "
               # script assumes SQL schema files have been generated and placed in the same folder
-              pwsh ./run_init_schema_local.ps1 -sqlServerName $dbserver -ResourceGroup $RESOURCE_GROUP -subscriptionId $SUBSCRIPTION_ID
+              if [[ -n "${NO_INPUT}" && -f ${PARAMETERS_FILE_PATH} ]]; then
+                echo "Initializing database schema using powershell locally in non-interactive mode "
+                SQL_ADMIN_LOGIN=$( jq  --raw-output '.parameters."sqlserver.admin.login".value' ${PARAMETERS_FILE_PATH} )
+                SQL_ADMIN_PASS=$( jq  --raw-output '.parameters."sqlserver.admin.password".value' ${PARAMETERS_FILE_PATH} )
+                pwsh ./run_init_schema_local.ps1 -sqlServerName $dbserver -ResourceGroup $RESOURCE_GROUP -subscriptionId $SUBSCRIPTION_ID -sqlAdminLogin "${SQL_ADMIN_LOGIN}" -sqlAdminPasword "${SQL_ADMIN_PASS}"
+              else
+               echo "Initializing database schema using powershell locally "
+               pwsh ./run_init_schema_local.ps1 -sqlServerName $dbserver -ResourceGroup $RESOURCE_GROUP -subscriptionId $SUBSCRIPTION_ID
+              fi
               AUTO_GENERATION_SUCCESSFUL=$([ "$?" == 0 ] && echo "true" || echo "false")
             popd
             # initiate db_state in manual mode to complete stage state
@@ -290,30 +297,42 @@ if [[ ${AUTO_GENERATION_SUCCESSFUL} == "false" ]]; then
     fi
 
     set -e
-    if [[ "${AUTO_GENERATION_SUCCESSFUL}"  == "false"  || "${SCHEMA_GENERATION_MODE}" == "manual" ]]; then
-        if [[ "${AUTO_GENERATION_SUCCESSFUL}"  == "false" &&  "${SCHEMA_GENERATION_MODE}" == "auto" ]]; then
-            echo "Automated SQL schema initialization has failed or has been canceled. Falling back to manual mode"
-            echo -e "We've generated generated SQL schema files and saved them at ${WORKDIR}/sql-server/ }. Please connect to $dbserver.database.windows.net using your SQL administrator credentials or AD admin  and sequentially execute the following scripts: \n schema.sql, \n stored_procedures.sql, \n data.sql, \n custom-init.sql  "
-            while true; do
-              read -p "Confirm SQL schema has been manually initialized. Select N if you would like to skip this step and execute it later by running post-deployment script again (Y/N)" manual_schema_completed
-              case $manual_schema_completed in
-                  [Yy]* )
-                    pushd "$WORKDIR/scripts"
-                      python ./run_db_stage.py  ${SQL_PASS_MODE_PARAM} --mode manual
-                      touch ~/.wc/db_stage_successful
-                    popd
-                    break;;
-                  [Nn]* ) echo "SQL schema wasn't initialized "; break;;
-                  * ) echo "Please answer yes or no.";;
-              esac
-            done
+    if [[ "${AUTO_GENERATION_SUCCESSFUL}"  == "false" ]]; then
+        if [[ -n "${NO_INPUT}" ]]; then
+          echo "Schema initialization failed, bailing out "
+          exit 8
         fi
+
+        if [[ "${SCHEMA_GENERATION_MODE}" == "auto" ]]; then
+            echo "Automated SQL schema initialization has failed or has been canceled. Falling back to manual mode"
+        fi
+        AUTH_MODE_MSG=""
+        if [[  "${USE_SQL_PASS_MODE_PARAM}" == "true" ]]; then
+          AUTH_MODE_MSG="using your SQL administrator credentials"
+        else
+          AUTH_MODE_MSG="using your Active Directory account"
+        fi
+        echo -e "We've generated generated SQL schema files and saved them at ${WORKDIR}/sql-server/ }.\nYou need to connect to $dbserver.database.windows.net $AUTH_MODE_MSG and sequentially execute the following scripts: \n $( ls $WORKDIR/sql-server/*.sql ) "
+        while true; do
+          read -p "Confirm SQL schema has been manually initialized. Select N if you would like to skip this step and proceed with post-deployment script instead (Y/N)" -r manual_schema_completed
+          case $manual_schema_completed in
+              [Yy]* )
+                pushd "$WORKDIR/scripts"
+                  python ./run_db_stage.py  ${SQL_PASS_MODE_PARAM} --mode manual
+                  touch ~/.wc/db_stage_successful
+                popd
+                break;;
+              [Nn]* ) echo "Skipping schema initialization step..."; break;;
+              * ) echo "Please answer yes or no.";;
+          esac
+        done
     fi
 fi
 echo "Running post-deployment script...";
 ### run post-deployment script
 pushd $WORKDIR/scripts
-  ~/.wc-env/bin/python post-deployment.py --resource-group $RESOURCE_GROUP ${DEBUG}
+  ~/.wc-env/bin/python post-deployment.py --tenant-id "$TENANT_ID" --subscription-id "$SUBSCRIPTION_ID" \
+                                           --resource-group "$RESOURCE_GROUP" ${DEBUG}
   echo " Post deployment script completed successfully at $(date)"
 popd
 

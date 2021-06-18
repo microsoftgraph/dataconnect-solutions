@@ -69,7 +69,7 @@ def generate_custom_init_sql(install_config):
     # In AzureSql strings are quoted with ', can contain any special character and escaping is only needed for ' via ''
     # Therefore, below we shall handle such special characters in user names and passwords, depending on quotation
 
-    wc_service_user = "wc-service"
+    wc_service_user =  install_config.wc_service_principal['name']
     jwc_user = install_config.appservice_name
     if install_config.sql_auth:
         wc_service_password = install_config.wc_service_db_user_password
