@@ -23,6 +23,7 @@ pushd "${PROJECT_ROOT}"
   [[ $SKIP_MAVEN -eq 1 ]] || mvn -DskipTests clean install
     cp events-creator/target/jwc-events-creator.jar                           "${ARTIFACTS_DIR}"
     cp profiles-extractor/target/jwc-profiles-extractor.jar                   "${ARTIFACTS_DIR}"
+    cp core/src/main/resources/db/migration/V0001__init.sql                   "${PROJECT_ROOT}"/bin/wc/sql-server/schema.sql
   popd
 
   cp pywc/src/000_cleanup.py                                                   "${ARTIFACTS_DIR}"
