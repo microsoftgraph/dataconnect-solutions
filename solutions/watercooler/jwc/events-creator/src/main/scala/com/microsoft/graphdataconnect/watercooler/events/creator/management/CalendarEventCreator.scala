@@ -66,44 +66,10 @@ class CalendarEventCreator(val groupMailBodyWriter: GroupMailBodyWriter,
     val attendeesList = new util.LinkedList[Attendee]()
     val members: Map[String, Map[String, String]] = objectMapper.readValue(group.group_members, classOf[Map[String, Map[String, String]]])
 
-    members.foreach { member =>
-
-//      if(member._1.contains("darius")) {
-        val attendees = new Attendee
-        val emailAddress = new EmailAddress
-        emailAddress.address = member._1
-        emailAddress.name = member._2("name")
-        attendees.emailAddress = emailAddress
-        attendees.`type` = AttendeeType.REQUIRED
-        attendeesList.add(attendees)
-//      }
-    }
-
-    attendeesList.addAll(createFakeAttendeeList())
     attendeesList
   }
 
-  private def createFakeAttendeeList(): util.LinkedList[Attendee] = {
-    val attendeesList = new util.LinkedList[Attendee]()
-    List(
-      Tuple2[String, String]("Andrei Borlea", "andrei@bpcsdevtest.onmicrosoft.com"),
-      Tuple2[String, String]("Alexandru Sisu", "alexandru@bpcsdevtest.onmicrosoft.com"),
-      Tuple2[String, String]("Claudiu Barbura", "claudiu@bpcsit.com"),
-      Tuple2[String, String]("Gary", "gary@bpcsit.com"),
 
-      Tuple2[String, String]("Claudiu Barbura", "Claudiu@bpcs.com")
-    ).foreach { case member: Tuple2[String, String] =>
-
-        val attendees = new Attendee
-        val emailAddress = new EmailAddress
-        emailAddress.address = member._2
-        emailAddress.name = member._1
-        attendees.emailAddress = emailAddress
-        attendees.`type` = AttendeeType.REQUIRED
-        attendeesList.add(attendees)
-    }
-    attendeesList
-  }
 
 }
 
