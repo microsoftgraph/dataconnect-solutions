@@ -217,4 +217,5 @@ target environment, then it might be faster than deploying it from local env.
 The `prepare_artifacts.sh` build script was tested on the following configurations:
     - Windows 10 version 20H2 build: 19042.1052
     - MacOS Catalina version 10.15.5 (19F101)
+    - MacOS BigSur version 11.4 
    
