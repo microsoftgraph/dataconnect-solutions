@@ -22,8 +22,6 @@ from pathlib import Path
 
 def run_spark_job(spark_args):
     """
-    TODO:
-
     :param spark_args:
     :type spark_args:
     :return:
@@ -133,7 +131,6 @@ def run_spark_job(spark_args):
 
         attendance_rows = input_df.collect()
 
-        # TODO: this can be optimized to execute update on multiple where statements
         index = 0
         command = ""
         for attendance_row in attendance_rows:

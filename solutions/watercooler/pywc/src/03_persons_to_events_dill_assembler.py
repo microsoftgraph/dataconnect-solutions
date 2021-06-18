@@ -45,14 +45,6 @@ def retrieve_latest_run(parent_folder):
 
 
 def process_line_spark(json_dict_rec):
-    """
-    TODO:
-
-    :param json_dict_rec:
-    :type json_dict_rec:
-    :return:
-    :rtype:
-    """
     all_records = []
 
     required_fields = ["puser", "originalStartTimeZone", "originalEndTimeZone",
@@ -80,7 +72,6 @@ def process_line_spark(json_dict_rec):
         logger.info(f"processed: {json_dict}")
         all_records.append(json_dict)
     except Exception as ex:
-        # TODO: re-add this
         trace = traceback.format_exc()
         logger.exception(f"Exception encountered on json", ex, trace)
         print(ex)
@@ -238,7 +229,7 @@ def retrieve_timezone_to_mail_to_persons(calendar_events_input_path: str,
         end_date_time = pd.to_datetime(end_time, format='%Y-%m-%dT%H:%M:%S.%f').to_pydatetime()
 
         day = start_date_time.replace(hour=0, minute=0, second=0,
-                                      microsecond=0)  # TODO: here's a problem if the start_date_time is  15 May Hour: 01:00, on PST that would be 14 May hour 17
+                                      microsecond=0)
 
         start_date_time = pytz_start_event_timezone.localize(start_date_time)
         end_date_time = pytz_end_event_timezone.localize(end_date_time)

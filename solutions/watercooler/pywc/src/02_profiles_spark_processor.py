@@ -63,8 +63,6 @@ def generate_dataframe_from_table(spark, spark_args, table):
 
 def run_spark_job(spark_args):
     """
-    TODO:
-
     :param spark_args:
     :type spark_args:
     :return:
@@ -161,8 +159,6 @@ args = None
 SERVICE_PRINCIPAL_SECRET = None
 
 if __name__ == '__main__':
-    """TODO
-    """
     print(sys.argv)
 
     if len(sys.argv) > 2:

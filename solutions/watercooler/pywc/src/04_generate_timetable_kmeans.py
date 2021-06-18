@@ -126,7 +126,6 @@ def retrieve_persons_from_group_based_on_clusters(full_group_for_time_slot, grou
     remaining_number_of_people_to_be_selected = group_size - len(selected_for_cluster)
 
     if group_size < len(full_group_for_time_slot):
-        # TODO: make sure the indexes dont get repeated
         selected_person_indexes.extend(
             random.sample(range(0, len(full_group_for_time_slot)), remaining_number_of_people_to_be_selected))
     else:
@@ -276,7 +275,7 @@ SERVICE_PRINCIPAL_SECRET = None
 
 if __name__ == '__main__':
     debug = True
-    if len(sys.argv) > 2:  # TODO: fix the conditions there
+    if len(sys.argv) > 2:
         parser = argparse.ArgumentParser(description='Process some integers.')
         parser.add_argument('--application-id', type=str,
                             help='application id')

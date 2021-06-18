@@ -355,13 +355,11 @@ def export_generated_groups_per_day_to_sql(mail_to_image_dict: dict,
                         group_members_to_image[member] = mail_to_image_dict[member]
                     record["group_members"] = json.dumps(group_members_to_image)
 
-                    # TODO: changed this to dictionary
+
                     members_wc_status = "unknown"  # get_members_wc_status(group) #accepted/rejected/unknown
 
-                    # TODO: changed this to dictionary
                     members_attendance_status = "unknown"  # attended/not-attended/unknown #get_members_attendance_status(day_index, month_index, members_wc_status)
 
-                    # TODO: this one will have to be computed later, or at runtime
                     record["attendance_rate"] = 0.0  # get_member_attendance_rate(members_attendance_status)
                     record["members_wc_status"] = members_wc_status
                     record["members_attendance_status"] = members_attendance_status
@@ -514,7 +512,7 @@ def export_all_personal_meetings_information(all_personal_meetings, file_name, o
         tzname = rec["tzname"]
         watercooler_hour = rec["watercooler_timeslot"]
         group_busy_slots = rec["group_busy_slots"]
-        # TODO: remove this after the demo
+
         if watercooler_hour in group_busy_slots:
             del group_busy_slots[watercooler_hour]
 
@@ -577,7 +575,7 @@ SERVICE_PRINCIPAL_SECRET = None
 
 if __name__ == '__main__':
 
-    if len(sys.argv) > 2:  # TODO: fix the conditions there
+    if len(sys.argv) > 2:
         parser = argparse.ArgumentParser(description='Process some integers.')
         parser.add_argument('--application-id', type=str,
                             help='application id')
@@ -676,7 +674,7 @@ if __name__ == '__main__':
     csv_output_folder = os.path.join(output_folder, subfolder)
 
     input_data_folder = retrieve_latest_run(kmeans_data_input_path)
-    # TODO: make all this cleaner
+
     input_profile_folder = retrieve_latest_run(user_profiles_input_path)
 
     timezone_to_generated_groups_per_day = joblib.load(

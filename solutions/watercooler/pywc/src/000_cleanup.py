@@ -100,8 +100,6 @@ args = None
 SERVICE_PRINCIPAL_SECRET = None
 
 if __name__ == '__main__':
-    """TODO
-    """
     print(sys.argv)
 
     if len(sys.argv) > 2:  # and false was necessary for debugging in adbfs
@@ -144,10 +142,6 @@ if __name__ == '__main__':
         default_params = {k: (v if v not in ('True', 'False') else eval(v)) for k, v in default_params.items()}
 
         args = SimpleNamespace(**default_params)
-
-        # TODO: should be in defaults ?
-        # args = SimpleNamespace(
-        # log_analytics_workspace_id=" ",  # "b61e5e81-9eb2-413e-aaef-624b89af04a0",
 
         SERVICE_PRINCIPAL_SECRET = json.load(open("config_test.json"))["SERVICE_PRINCIPAL_SECRET"]
 

@@ -14,7 +14,6 @@ from azure.storage.blob import BlobServiceClient
 from datetime import datetime
 from analytics_logger_rest.analytics_logger_rest import LogAnalyticsLogger
 from pyspark import TaskContext
-# TODO: remove this lines when configured from production
 from pyspark.sql import Row
 from pyspark.sql import SparkSession
 from pathlib import Path
@@ -22,8 +21,6 @@ from types import SimpleNamespace
 
 def process_line_spark(json_dict_rec):
     """
-    TODO:
-
     :param json_dict_rec:
     :type json_dict_rec:
     :return:
@@ -56,7 +53,6 @@ def process_line_spark(json_dict_rec):
         logger.info(f"processed: {json_dict}")
         all_records.append(json_dict)
     except Exception as ex:
-        # TODO: re-add this
         trace = traceback.format_exc()
         logger.exception(f"Exception encountered on json", ex, trace)
         print(ex)
@@ -68,8 +64,6 @@ def process_line_spark(json_dict_rec):
 
 def process_spark_partitions(partition):
     """
-    TODO:
-
     :param partition:
     :type partition:
     :return:
@@ -86,8 +80,6 @@ def process_spark_partitions(partition):
 
 def process_spark_partitions_local(partition):
     """
-    TODO:
-
     :param partition:
     :type partition:
     :return:
@@ -103,8 +95,6 @@ def process_spark_partitions_local(partition):
 
 def run_spark_job(spark_args):
     """
-    TODO:
-
     :param spark_args:
     :type spark_args:
     :return:
@@ -208,38 +198,11 @@ def extract_essential_calendar_info_and_write_to_output(input_df,
                                                         output_container,
                                                         storage_account_name,
                                                         container_client):
-    """
-    TODO
-
-    :param input_df:
-    :type input_df:
-    :param index:
-    :type index:
-    :param output_folder:
-    :type output_folder:
-    :param output_container:
-    :type output_container:
-    :param storage_account_name:
-    :type storage_account_name:
-    :param container_client:
-    :type container_client:
-    :return:
-    :rtype:
-    """
 
     spark_res_rdd = input_df.rdd.mapPartitions(process_spark_partitions)
 
     out_file_name = str(datetime.now().strftime("%Y%m%d%H%M"))
     out_file_full_path = os.path.join(output_folder, out_file_name)
-
-    # cleanup all previous runs
-    # TODO: make this configurable
-    """
-    for entry in container_client.list_blobs(name_starts_with=output_folder + "/"):
-        blob_client = container_client.get_blob_client(blob=entry.name)
-        logger.info(f"[calendar_information_extractor][cleanup]: deleted {entry.name}")
-        blob_client.delete_blob()
-    """
 
     wasb_output_file_path = f"abfss://{output_container}@{storage_account_name}." \
                             f"dfs.core.windows.net/{out_file_full_path}"
@@ -253,39 +216,6 @@ def extract_essential_calendar_info_and_write_to_output(input_df,
         if entry.name.lower().endswith("json") is False:
             logger.debug("detected file to delete: " + str(entry.name))
             list_of_files_to_clean.append(entry.name)
-
-    # for file_to_del in list_of_files_to_clean:
-    #    blob_client = containerClient.get_blob_client(blob=file_to_del)
-    #    logger.debug(f"Delete {file_to_del}")
-    #    # blob_client.delete_blob()
-
-    #    last_output_full_path = out_file_full_path
-
-
-def process_local_job(input_folder):
-    """Process calendar entry files line by line
-    TODO
-
-    :param folder_path_to_user_calendar_files: folder path to target calendar extracted files files
-    :type folder_path_to_user_calendar_files: str
-    """
-    input_records = []
-    for input_file in os.listdir(input_folder):
-        input_file = os.path.join(input_folder,input_file)
-        if not os.path.isfile(input_file): continue
-        try:
-            with open(input_file) as f:
-                for line in f.readlines():
-                    rec = json.loads(line.strip())
-                    input_records.append(rec)
-        except Exception as e:
-            pass
-
-    all_rec = process_spark_partitions_local(input_records)
-    with open( 'test_out.jsonl', 'w+') as f:
-        for rec in all_rec:
-            f.write(json.dumps(rec) + '\n')
-
 
 logger = None
 args = None
@@ -309,11 +239,9 @@ def str2bool(v):
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
 if __name__ == '__main__':
-    """TODO
-    """
     print(sys.argv)
 
-    if len(sys.argv) > 2:  # and false was necessary for debugging in adbfs
+    if len(sys.argv) > 2:
         parser = argparse.ArgumentParser(description='Process some integers.')
         parser.add_argument('--storage-account-name', type=str,
                             help='storage account name')
@@ -353,10 +281,6 @@ if __name__ == '__main__':
 
         args = SimpleNamespace(**default_params)
 
-        # TODO: should be in defaults ?
-        # args = SimpleNamespace(
-        # log_analytics_workspace_id=" ",  # "b61e5e81-9eb2-413e-aaef-624b89af04a0",
-
         SERVICE_PRINCIPAL_SECRET = json.load(open("config_test.json"))["SERVICE_PRINCIPAL_SECRET"]
 
     if args.log_analytics_workspace_id is None or not (args.log_analytics_workspace_id.strip()):
@@ -379,5 +303,4 @@ if __name__ == '__main__':
             logger = LogAnalyticsLogger(name="[calendar_information_extractor]")
             logger.error("Failed to get Log Analytics api key secret from key vault. " + str(e))
 
-    #process_local_job('/Users/alexsisu/datasets/watercooler/watercooler-test/raw-events/')
     run_spark_job(args)
