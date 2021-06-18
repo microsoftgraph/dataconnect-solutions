@@ -21,3 +21,9 @@ In order to run the application in production mode there are 4 steps that have t
    The following image shows how a Data Access Request can be approved.
     ![Image](imgs/data-access-request-example.png)
 
+4. Make sure you create the "watercooler@youdomain.com" user in Active Directory and make sure
+you assigned the office 365 license to it. (this is necessary in order for the mailer to create mail with calendar events )
+   How to create "watercooler@youdomain.com" user in Active Directory:
+   ![Create step](imgs/watercooler_create_mailsender_user.png)
+   ![Watercooler licenses menu entry](imgs/watercooler_licenses.png)
+   ![Watercooler license assignment](imgs/watercooler_licenses_assignment.png)

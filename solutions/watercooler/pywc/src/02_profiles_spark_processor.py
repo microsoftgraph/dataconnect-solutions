@@ -214,10 +214,6 @@ if __name__ == '__main__':
 
         args = SimpleNamespace(**default_params)
 
-        # TODO: should be in defaults ?
-        # args = SimpleNamespace(
-        # log_analytics_workspace_id=" ",  # "b61e5e81-9eb2-413e-aaef-624b89af04a0",
-
         SERVICE_PRINCIPAL_SECRET = json.load(open("config_test.json"))["SERVICE_PRINCIPAL_SECRET"]
 
     if args.log_analytics_workspace_id is None or not (args.log_analytics_workspace_id.strip()):
