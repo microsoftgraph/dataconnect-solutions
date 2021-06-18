@@ -66,6 +66,17 @@ class CalendarEventCreator(val groupMailBodyWriter: GroupMailBodyWriter,
     val attendeesList = new util.LinkedList[Attendee]()
     val members: Map[String, Map[String, String]] = objectMapper.readValue(group.group_members, classOf[Map[String, Map[String, String]]])
 
+    members.foreach { member =>
+
+        val attendees = new Attendee
+        val emailAddress = new EmailAddress
+        emailAddress.address = member._1
+        emailAddress.name = member._2("name")
+        attendees.emailAddress = emailAddress
+        attendees.`type` = AttendeeType.REQUIRED
+        attendeesList.add(attendees)
+    }
+
     attendeesList
   }
 
