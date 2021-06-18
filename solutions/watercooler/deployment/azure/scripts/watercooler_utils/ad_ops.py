@@ -185,13 +185,6 @@ def _create_web_app_service_principal(display_name, reply_url, logout_url, crede
                 pass
 
 
-def _create_user(mail: str, display_name: str, password: str):
-    return az_cli("ad user create ", "--display-name", display_name,
-                  "--password", password , "--user-principal-name", mail)
-
-
-
-
 def get_or_create_watercooler_user():
     while True:
         mail = input("Please enter valid watercooler mail for calendar events mail sender account:")
@@ -201,20 +194,10 @@ def get_or_create_watercooler_user():
             continue
         existing_users = az_cli("ad user list ", "--filter", "mail eq '%s' " % mail)
         if len(existing_users)==0:
-            response = yes_no("[watercooler_mail_user]The mail "+str(mail)+" was not found. Would you like to create it? (If you respond `no` you will be asked for a new mail address): ")
-            if not response:
-                continue
-            else:
-                try:
-                    user_json_info = _create_user(mail, "Watercooler", make_strong_password(24))
-                    print("[watercooler_mail_user] user created: ",str(user_json_info))
-                    return user_json_info
-                except Exception as e:
-                    print("Error on creating the user with the specificed mail address. Please select a valid email address with a valid domain")
-                    continue
+            print("Given user was not found")
+            continue
         else:
             user_json_info = existing_users[0]
-            print("[watercooler_mail_user] selected user: ", str(user_json_info))
             return user_json_info
 
 

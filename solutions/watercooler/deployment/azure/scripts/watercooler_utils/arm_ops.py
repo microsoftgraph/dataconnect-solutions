@@ -231,7 +231,8 @@ def _get_earliest_6am_in_past(utc_now):
 
 def create_main_arm_parameters(install_config: InstallConfiguration, base_uri: str = None, sas_token: str = None, docker_login: str = None,
                                docker_password: str = None, app_version: str = "1.0.2",
-                               log_analytic_ws_name: str = None, admin_full_name: str = None, admin_email: str = None):
+                               log_analytic_ws_name: str = None, admin_full_name: str = None, admin_email: str = None,
+                               meeting_organizer_email: str = None):
     parameters = dict()
     for key, value in install_config.required_arm_params.items():
         parameters[key] = {
@@ -298,6 +299,11 @@ def create_main_arm_parameters(install_config: InstallConfiguration, base_uri: s
         parameters['logs.workspace.name'] = {
             "value": log_analytic_ws_name
         }
+    if meeting_organizer_email:
+        parameters['meeting.organizer.email'] = {
+            "value": meeting_organizer_email
+        }
+
     if admin_full_name:
         parameters['alert.admin.fullname'] = {
             "value": admin_full_name

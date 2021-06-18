@@ -13,6 +13,7 @@ import json
 import os
 from distutils.util import strtobool
 from os.path import expanduser
+import subprocess
 
 import sys
 from watercooler_utils import ad_ops
@@ -118,10 +119,11 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
         watercooler_user_sp = ad_ops.get_or_create_watercooler_user()
         install_config.watercooler_user = watercooler_user_sp
 
+    print('Creating custom application policy for creating online meetings on behalf of')
+    cmd = f"pwsh ../meetings/run_policy_assign.ps1 " + str(install_config.watercooler_user['objectId']) + " " + str(install_config.wc_service_principal['appId'])
+    print(f"executing command: {cmd}")
 
-    print("Please save Watercooler Meetings Organizer user ID and Service Pricipal ID for future reference")
-    print("Watercooler Meetings Organizer user ID :" + str(install_config.watercooler_user['objectId']))
-    print("Service Pricipal ID :" + str(install_config.wc_service_principal['appId']))
+    subprocess.call(["pwsh", "../meetings/run_policy_assign.ps1", str(install_config.watercooler_user['objectId']), str(install_config.wc_service_principal['appId'])])
 
 
 def execute_user_prompts(deployment_name: str, install_config: InstallConfiguration, resource_group: str):
@@ -153,7 +155,10 @@ def execute_deploy_mainTemplate(parsed_args):
                                                      app_version=install_config.appservice_version,
                                                      docker_password=docker_password,
                                                      log_analytic_ws_name=log_analytic_ws_name,
-                                                     admin_full_name=full_name, admin_email=admin_email)
+                                                     admin_full_name=full_name,
+                                                     admin_email=admin_email,
+                                                     meeting_organizer_email=str(install_config.watercooler_user['userPrincipalName']))
+
     arm_params_json_file = os.path.join(install_config.get_wc_dir(), "wc_arm_params.json")
     with open(arm_params_json_file, "w") as param_file:
         param_file.write(json_params)

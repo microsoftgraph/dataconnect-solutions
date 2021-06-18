@@ -267,678 +267,6 @@
             ]
         },
         {
-            "name": "[concat(parameters('adf.name'), '/EndToEndCalendarsEventsExporter')]",
-            "type": "Microsoft.DataFactory/factories/pipelines",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "activities": [
-                    {
-                        "name": "runCalendarEventsExporterSparkJob",
-                        "type": "ExecutePipeline",
-                        "dependsOn": [],
-                        "userProperties": [],
-                        "typeProperties": {
-                            "pipeline": {
-                                "referenceName": "runCalendarEventsExporterSparkJob",
-                                "type": "PipelineReference"
-                            },
-                            "waitOnCompletion": true,
-                            "parameters": {}
-                        }
-                    }
-                ],
-                "folder": {
-                    "name": "calendar-events-exporter"
-                },
-                "annotations": [],
-                "lastPublishTime": "2021-04-13T09:42:37Z"
-            },
-            "dependsOn": [
-                "[concat(variables('factoryId'), '/pipelines/runCalendarEventsExporterSparkJob')]"
-            ]
-        },
-        {
-            "name": "[concat(parameters('adf.name'), '/runProfilesExporterSparkJob')]",
-            "type": "Microsoft.DataFactory/factories/pipelines",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "activities": [
-                    {
-                        "name": "ProfilesExporterJar",
-                        "type": "DatabricksSparkJar",
-                        "dependsOn": [],
-                        "policy": {
-                            "timeout": "7.00:00:00",
-                            "retry": 0,
-                            "retryIntervalInSeconds": 30,
-                            "secureOutput": false,
-                            "secureInput": false
-                        },
-                        "userProperties": [],
-                        "typeProperties": {
-                            "mainClassName": "com.microsoft.graphdataconnect.watercooler.profiles.extractor.Runner",
-                            "parameters": [
-                                "--application-id",
-                                "@pipeline().globalParameters.service_application_id",
-                                "--directory-id",
-                                "@pipeline().globalParameters.directory_id",
-                                "--adb-secret-scope-name",
-                                "@pipeline().globalParameters.adb_secret_scope",
-                                "--adb-sp-client-key-name",
-                                "wc-service-principal-secret",
-                                "--max-db-connections",
-                                "2",
-                                "--jdbc-hostname",
-                                "@pipeline().globalParameters.azure_sql_server_name",
-                                "--jdbc-port",
-                                "1433",
-                                "--jdbc-database",
-                                "@pipeline().globalParameters.azure_sql_database",
-                                "--use-msi-auth",
-                                "@pipeline().globalParameters.azure_sql_msi_auth_enabled",
-                                "--jdbc-username",
-                                "azure-sql-backend-username",
-                                "--jdbc-password",
-                                "azure-sql-backend-password",
-                                "--key-vault-url",
-                                "@pipeline().globalParameters.key_vault_url"
-                            ],
-                            "libraries": [
-                                {
-                                    "jar": "dbfs:/mnt/watercooler/scripts/jwc-profiles-extractor.jar"
-                                }
-                            ]
-                        },
-                        "linkedServiceName": {
-                            "referenceName": "databricks_link_service",
-                            "type": "LinkedServiceReference"
-                        }
-                    }
-                ],
-                "folder": {
-                    "name": "employees-profile-exporter/components"
-                },
-                "annotations": [],
-                "lastPublishTime": "2021-05-21T12:46:31Z"
-            },
-            "dependsOn": [
-                "[concat(variables('factoryId'), '/linkedServices/databricks_link_service')]"
-            ]
-        },
-        {
-            "name": "[concat(parameters('adf.name'), '/EndToEndTeamsMeetingsConfirmer')]",
-            "type": "Microsoft.DataFactory/factories/pipelines",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "activities": [
-                    {
-                        "name": "If Condition1",
-                        "type": "IfCondition",
-                        "dependsOn": [],
-                        "userProperties": [],
-                        "typeProperties": {
-                            "expression": {
-                                "value": "a",
-                                "type": "Expression"
-                            }
-                        }
-                    }
-                ],
-                "folder": {
-                    "name": "teams-meetings-confirmer"
-                },
-                "annotations": [],
-                "lastPublishTime": "2021-04-12T16:38:54Z"
-            },
-            "dependsOn": []
-        },
-        {
-            "name": "[concat(parameters('adf.name'), '/EndToEndEmployeesProfileExporter')]",
-            "type": "Microsoft.DataFactory/factories/pipelines",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "activities": [
-                    {
-                        "name": "runProfilesExporterSparkJob",
-                        "type": "ExecutePipeline",
-                        "dependsOn": [],
-                        "userProperties": [],
-                        "typeProperties": {
-                            "pipeline": {
-                                "referenceName": "runProfilesExporterSparkJob",
-                                "type": "PipelineReference"
-                            },
-                            "waitOnCompletion": true,
-                            "parameters": {}
-                        }
-                    }
-                ],
-                "folder": {
-                    "name": "employees-profile-exporter"
-                },
-                "annotations": [],
-                "lastPublishTime": "2021-04-12T16:38:54Z"
-            },
-            "dependsOn": [
-                "[concat(variables('factoryId'), '/pipelines/runProfilesExporterSparkJob')]"
-            ]
-        },
-        {
-            "name": "[concat(parameters('adf.name'), '/runCalendarEventsExporterSparkJob')]",
-            "type": "Microsoft.DataFactory/factories/pipelines",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "activities": [
-                    {
-                        "name": "CalendarEventsExporterJar",
-                        "type": "DatabricksSparkJar",
-                        "dependsOn": [],
-                        "policy": {
-                            "timeout": "7.00:00:00",
-                            "retry": 0,
-                            "retryIntervalInSeconds": 30,
-                            "secureOutput": false,
-                            "secureInput": false
-                        },
-                        "userProperties": [],
-                        "typeProperties": {
-                            "mainClassName": "com.microsoft.graphdataconnect.watercooler.events.extractor.Runner",
-                            "parameters": [
-                                "--application-id",
-                                "@pipeline().globalParameters.service_application_id",
-                                "--directory-id",
-                                "@pipeline().globalParameters.directory_id",
-                                "--adb-secret-scope-name",
-                                "@pipeline().globalParameters.adb_secret_scope",
-                                "--application-key-secret-name",
-                                "wc-service-principal-secret",
-                                "--storage-account-name",
-                                "@pipeline().globalParameters.azbs_storage_account",
-                                "--output-container",
-                                "@pipeline().globalParameters.azbs_container_name",
-                                "--output-folder-path",
-                                "raw-exported",
-                                "--log-analytics-workspace-id",
-                                "\"\"",
-                                "--log-analytics-workspace-key-name",
-                                "\"\"",
-                                "--key-vault-url",
-                                "@pipeline().globalParameters.key_vault_url",
-                                "--start-date",
-                                "2021-04-20",
-                                "--end-date",
-                                "2021-06-15"
-                            ],
-                            "libraries": [
-                                {
-                                    "jar": "dbfs:/mnt/watercooler/jwc-events-extractor.jar"
-                                }
-                            ]
-                        },
-                        "linkedServiceName": {
-                            "referenceName": "databricks_link_service",
-                            "type": "LinkedServiceReference"
-                        }
-                    }
-                ],
-                "folder": {
-                    "name": "calendar-events-exporter/components"
-                },
-                "annotations": [],
-                "lastPublishTime": "2021-05-21T12:49:36Z"
-            },
-            "dependsOn": [
-                "[concat(variables('factoryId'), '/linkedServices/databricks_link_service')]"
-            ]
-        },
-        {
-            "name": "[concat(parameters('adf.name'), '/exportEmployeeProfilesFromMO365')]",
-            "type": "Microsoft.DataFactory/factories/pipelines",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "activities": [
-                    {
-                        "name": "exportEmployeeProfileFromM365",
-                        "type": "Copy",
-                        "dependsOn": [],
-                        "policy": {
-                            "timeout": "7.00:00:00",
-                            "retry": 0,
-                            "retryIntervalInSeconds": 30,
-                            "secureOutput": false,
-                            "secureInput": false
-                        },
-                        "userProperties": [],
-                        "typeProperties": {
-                            "source": {
-                                "type": "Office365Source",
-                                "userScopeFilterUri": "",
-                                "outputColumns": [
-                                    {
-                                        "name": "aboutMe"
-                                    },
-                                    {
-                                        "name": "accountEnabled"
-                                    },
-                                    {
-                                        "name": "ageGroup"
-                                    },
-                                    {
-                                        "name": "assignedLicenses"
-                                    },
-                                    {
-                                        "name": "assignedPlans"
-                                    },
-                                    {
-                                        "name": "birthday"
-                                    },
-                                    {
-                                        "name": "businessPhones"
-                                    },
-                                    {
-                                        "name": "city"
-                                    },
-                                    {
-                                        "name": "companyName"
-                                    },
-                                    {
-                                        "name": "consentProvidedForMinor"
-                                    },
-                                    {
-                                        "name": "country"
-                                    },
-                                    {
-                                        "name": "createdDateTime"
-                                    },
-                                    {
-                                        "name": "department"
-                                    },
-                                    {
-                                        "name": "displayName"
-                                    },
-                                    {
-                                        "name": "givenName"
-                                    },
-                                    {
-                                        "name": "hireDate"
-                                    },
-                                    {
-                                        "name": "id"
-                                    },
-                                    {
-                                        "name": "imAddresses"
-                                    },
-                                    {
-                                        "name": "interests"
-                                    },
-                                    {
-                                        "name": "jobTitle"
-                                    },
-                                    {
-                                        "name": "legalAgeGroupClassification"
-                                    },
-                                    {
-                                        "name": "mail"
-                                    },
-                                    {
-                                        "name": "mailNickname"
-                                    },
-                                    {
-                                        "name": "mobilePhone"
-                                    },
-                                    {
-                                        "name": "mySite"
-                                    },
-                                    {
-                                        "name": "officeLocation"
-                                    },
-                                    {
-                                        "name": "onPremisesImmutableId"
-                                    },
-                                    {
-                                        "name": "onPremisesLastSyncDateTime"
-                                    },
-                                    {
-                                        "name": "onPremisesSecurityIdentifier"
-                                    },
-                                    {
-                                        "name": "onPremisesSyncEnabled"
-                                    },
-                                    {
-                                        "name": "passwordPolicies"
-                                    },
-                                    {
-                                        "name": "pastProjects"
-                                    },
-                                    {
-                                        "name": "postalCode"
-                                    },
-                                    {
-                                        "name": "preferredLanguage"
-                                    },
-                                    {
-                                        "name": "preferredName"
-                                    },
-                                    {
-                                        "name": "provisionedPlans"
-                                    },
-                                    {
-                                        "name": "proxyAddresses"
-                                    },
-                                    {
-                                        "name": "responsibilities"
-                                    },
-                                    {
-                                        "name": "schools"
-                                    },
-                                    {
-                                        "name": "skills"
-                                    },
-                                    {
-                                        "name": "state"
-                                    },
-                                    {
-                                        "name": "streetAddress"
-                                    },
-                                    {
-                                        "name": "surname"
-                                    },
-                                    {
-                                        "name": "usageLocation"
-                                    },
-                                    {
-                                        "name": "userPrincipalName"
-                                    },
-                                    {
-                                        "name": "userType"
-                                    }
-                                ]
-                            },
-                            "sink": {
-                                "type": "BinarySink",
-                                "storeSettings": {
-                                    "type": "AzureBlobStorageWriteSettings"
-                                }
-                            },
-                            "enableStaging": false
-                        },
-                        "inputs": [
-                            {
-                                "referenceName": "Office365Users",
-                                "type": "DatasetReference",
-                                "parameters": {}
-                            }
-                        ],
-                        "outputs": [
-                            {
-                                "referenceName": "AzureBlobStorageEmployeeProfiles",
-                                "type": "DatasetReference",
-                                "parameters": {}
-                            }
-                        ]
-                    }
-                ],
-                "folder": {
-                    "name": "employees-profile-exporter/components"
-                },
-                "annotations": [],
-                "lastPublishTime": "2021-05-07T05:16:54Z"
-            },
-            "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/Office365Users')]",
-                "[concat(variables('factoryId'), '/datasets/AzureBlobStorageEmployeeProfiles')]"
-            ]
-        },
-        {
-            "name": "[concat(parameters('adf.name'), '/exportCalendarEventsFromMO365')]",
-            "type": "Microsoft.DataFactory/factories/pipelines",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "activities": [
-                    {
-                        "name": "copyCalendarEventsFromMO365",
-                        "type": "Copy",
-                        "dependsOn": [],
-                        "policy": {
-                            "timeout": "7.00:00:00",
-                            "retry": 0,
-                            "retryIntervalInSeconds": 30,
-                            "secureOutput": false,
-                            "secureInput": false
-                        },
-                        "userProperties": [],
-                        "typeProperties": {
-                            "source": {
-                                "type": "Office365Source",
-                                "dateFilterColumn": "createdDateTime",
-                                "startTime": "2021-05-09T00:00:00Z",
-                                "endTime": "2021-06-10T00:00:00Z",
-                                "userScopeFilterUri": "",
-                                "outputColumns": [
-                                    {
-                                        "name": "id"
-                                    },
-                                    {
-                                        "name": "allowNewTimeProposals"
-                                    },
-                                    {
-                                        "name": "createdDateTime"
-                                    },
-                                    {
-                                        "name": "lastModifiedDateTime"
-                                    },
-                                    {
-                                        "name": "changeKey"
-                                    },
-                                    {
-                                        "name": "categories"
-                                    },
-                                    {
-                                        "name": "originalStartTimeZone"
-                                    },
-                                    {
-                                        "name": "originalEndTimeZone"
-                                    },
-                                    {
-                                        "name": "responseStatus"
-                                    },
-                                    {
-                                        "name": "iCalUId"
-                                    },
-                                    {
-                                        "name": "reminderMinutesBeforeStart"
-                                    },
-                                    {
-                                        "name": "isOnlineMeeting"
-                                    },
-                                    {
-                                        "name": "isReminderOn"
-                                    },
-                                    {
-                                        "name": "hasAttachments"
-                                    },
-                                    {
-                                        "name": "subject"
-                                    },
-                                    {
-                                        "name": "importance"
-                                    },
-                                    {
-                                        "name": "sensitivity"
-                                    },
-                                    {
-                                        "name": "start"
-                                    },
-                                    {
-                                        "name": "end"
-                                    },
-                                    {
-                                        "name": "location"
-                                    },
-                                    {
-                                        "name": "isAllDay"
-                                    },
-                                    {
-                                        "name": "isCancelled"
-                                    },
-                                    {
-                                        "name": "isOrganizer"
-                                    },
-                                    {
-                                        "name": "onlineMeeting"
-                                    },
-                                    {
-                                        "name": "onlineMeetingProvider"
-                                    },
-                                    {
-                                        "name": "recurrence"
-                                    },
-                                    {
-                                        "name": "responseRequested"
-                                    },
-                                    {
-                                        "name": "showAs"
-                                    },
-                                    {
-                                        "name": "transactionId"
-                                    },
-                                    {
-                                        "name": "type"
-                                    },
-                                    {
-                                        "name": "attendees"
-                                    },
-                                    {
-                                        "name": "organizer"
-                                    },
-                                    {
-                                        "name": "webLink"
-                                    },
-                                    {
-                                        "name": "locations"
-                                    },
-                                    {
-                                        "name": "onlineMeetingUrl"
-                                    },
-                                    {
-                                        "name": "originalStart"
-                                    },
-                                    {
-                                        "name": "seriesMasterId"
-                                    }
-                                ]
-                            },
-                            "sink": {
-                                "type": "BinarySink",
-                                "storeSettings": {
-                                    "type": "AzureBlobStorageWriteSettings"
-                                }
-                            },
-                            "enableStaging": false
-                        },
-                        "inputs": [
-                            {
-                                "referenceName": "Office365Events",
-                                "type": "DatasetReference",
-                                "parameters": {}
-                            }
-                        ],
-                        "outputs": [
-                            {
-                                "referenceName": "AzureBlobStorageEvents",
-                                "type": "DatasetReference",
-                                "parameters": {}
-                            }
-                        ]
-                    }
-                ],
-                "folder": {
-                    "name": "calendar-events-exporter/components"
-                },
-                "annotations": [],
-                "lastPublishTime": "2021-05-19T09:35:13Z"
-            },
-            "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/Office365Events')]",
-                "[concat(variables('factoryId'), '/datasets/AzureBlobStorageEvents')]"
-            ]
-        },
-        {
-            "name": "[concat(parameters('adf.name'), '/exportMailBoxFromO365')]",
-            "type": "Microsoft.DataFactory/factories/pipelines",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "activities": [
-                    {
-                        "name": "exportMailBoxFromM365",
-                        "type": "Copy",
-                        "dependsOn": [],
-                        "policy": {
-                            "timeout": "7.00:00:00",
-                            "retry": 0,
-                            "retryIntervalInSeconds": 30,
-                            "secureOutput": false,
-                            "secureInput": false
-                        },
-                        "userProperties": [],
-                        "typeProperties": {
-                            "source": {
-                                "type": "Office365Source",
-                                "userScopeFilterUri": "",
-                                "outputColumns": [
-                                    {
-                                        "name": "archiveFolder"
-                                    },
-                                    {
-                                        "name": "timeZone"
-                                    },
-                                    {
-                                        "name": "automaticRepliesSetting"
-                                    },
-                                    {
-                                        "name": "language"
-                                    },
-                                    {
-                                        "name": "workingHours"
-                                    }
-                                ]
-                            },
-                            "sink": {
-                                "type": "BinarySink",
-                                "storeSettings": {
-                                    "type": "AzureBlobStorageWriteSettings"
-                                }
-                            },
-                            "enableStaging": false
-                        },
-                        "inputs": [
-                            {
-                                "referenceName": "Office365MailBox",
-                                "type": "DatasetReference",
-                                "parameters": {}
-                            }
-                        ],
-                        "outputs": [
-                            {
-                                "referenceName": "AzureBlobStorageMailBox",
-                                "type": "DatasetReference",
-                                "parameters": {}
-                            }
-                        ]
-                    }
-                ],
-                "folder": {
-                    "name": "employees-profile-exporter/components"
-                },
-                "annotations": [],
-                "lastPublishTime": "2021-05-07T05:17:32Z"
-            },
-            "dependsOn": [
-                "[concat(variables('factoryId'), '/datasets/Office365MailBox')]",
-                "[concat(variables('factoryId'), '/datasets/AzureBlobStorageMailBox')]"
-            ]
-        },
-        {
             "name": "[concat(parameters('adf.name'), '/UpdateUserEventsAttendance')]",
             "type": "Microsoft.DataFactory/factories/pipelines",
             "apiVersion": "2018-06-01",
@@ -1687,7 +1015,7 @@
                                 "--directory-id",
                                 "@pipeline().globalParameters.directory_id",
                                 "--meeting-organizer-email",
-                                "watercooler@bpcsdevtest.onmicrosoft.com",
+                                "@pipeline().globalParameters.meeting_organizer_email",
                                 "--adb-secret-scope-name",
                                 "@pipeline().globalParameters.adb_secret_scope",
                                 "--max-db-connections",
@@ -1730,10 +1058,345 @@
                     }
                 ],
                 "annotations": [],
-                "lastPublishTime": "2021-05-26T08:46:44Z"
+                "folder": {
+                    "name": "Components"
+                }
             },
             "dependsOn": [
                 "[concat(variables('factoryId'), '/linkedServices/databricks_link_service')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/End2EndDataCollectorPipeline')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "exportMailBoxFromM365",
+                        "description": "Extracts User mail settings",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "Office365Source",
+                                "userScopeFilterUri": "",
+                                "outputColumns": [
+                                    {
+                                        "name": "archiveFolder"
+                                    },
+                                    {
+                                        "name": "timeZone"
+                                    },
+                                    {
+                                        "name": "automaticRepliesSetting"
+                                    },
+                                    {
+                                        "name": "language"
+                                    },
+                                    {
+                                        "name": "workingHours"
+                                    }
+                                ]
+                            },
+                            "sink": {
+                                "type": "BinarySink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                }
+                            },
+                            "enableStaging": false
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "Office365MailBox",
+                                "type": "DatasetReference"
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "AzureBlobStorageMailBox",
+                                "type": "DatasetReference"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "ProfilesExporterJar",
+                        "description": "Extracts User profiles",
+                        "type": "DatabricksSparkJar",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "mainClassName": "com.microsoft.graphdataconnect.watercooler.profiles.extractor.Runner",
+                            "parameters": [
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-name",
+                                "wc-service-principal-secret",
+                                "--max-db-connections",
+                                "2",
+                                "--jdbc-hostname",
+                                "@pipeline().globalParameters.azure_sql_server_name",
+                                "--jdbc-port",
+                                "1433",
+                                "--jdbc-database",
+                                "@pipeline().globalParameters.azure_sql_database",
+                                "--use-msi-auth",
+                                "@pipeline().globalParameters.azure_sql_msi_auth_enabled",
+                                "--jdbc-username",
+                                "azure-sql-backend-username",
+                                "--jdbc-password",
+                                "azure-sql-backend-password",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url"
+                            ],
+                            "libraries": [
+                                {
+                                    "jar": "dbfs:/mnt/watercooler/scripts/jwc-profiles-extractor.jar"
+                                }
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "copyCalendarEventsFromMO365",
+                        "description": "Extracts User calendar data",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "Office365Source",
+                                "dateFilterColumn": "createdDateTime",
+                                "startTime": "2021-05-09T00:00:00Z",
+                                "endTime": "2021-06-10T00:00:00Z",
+                                "userScopeFilterUri": "",
+                                "outputColumns": [
+                                    {
+                                        "name": "id"
+                                    },
+                                    {
+                                        "name": "allowNewTimeProposals"
+                                    },
+                                    {
+                                        "name": "createdDateTime"
+                                    },
+                                    {
+                                        "name": "lastModifiedDateTime"
+                                    },
+                                    {
+                                        "name": "changeKey"
+                                    },
+                                    {
+                                        "name": "categories"
+                                    },
+                                    {
+                                        "name": "originalStartTimeZone"
+                                    },
+                                    {
+                                        "name": "originalEndTimeZone"
+                                    },
+                                    {
+                                        "name": "responseStatus"
+                                    },
+                                    {
+                                        "name": "iCalUId"
+                                    },
+                                    {
+                                        "name": "reminderMinutesBeforeStart"
+                                    },
+                                    {
+                                        "name": "isOnlineMeeting"
+                                    },
+                                    {
+                                        "name": "isReminderOn"
+                                    },
+                                    {
+                                        "name": "hasAttachments"
+                                    },
+                                    {
+                                        "name": "subject"
+                                    },
+                                    {
+                                        "name": "importance"
+                                    },
+                                    {
+                                        "name": "sensitivity"
+                                    },
+                                    {
+                                        "name": "start"
+                                    },
+                                    {
+                                        "name": "end"
+                                    },
+                                    {
+                                        "name": "location"
+                                    },
+                                    {
+                                        "name": "isAllDay"
+                                    },
+                                    {
+                                        "name": "isCancelled"
+                                    },
+                                    {
+                                        "name": "isOrganizer"
+                                    },
+                                    {
+                                        "name": "onlineMeeting"
+                                    },
+                                    {
+                                        "name": "onlineMeetingProvider"
+                                    },
+                                    {
+                                        "name": "recurrence"
+                                    },
+                                    {
+                                        "name": "responseRequested"
+                                    },
+                                    {
+                                        "name": "showAs"
+                                    },
+                                    {
+                                        "name": "transactionId"
+                                    },
+                                    {
+                                        "name": "type"
+                                    },
+                                    {
+                                        "name": "attendees"
+                                    },
+                                    {
+                                        "name": "organizer"
+                                    },
+                                    {
+                                        "name": "webLink"
+                                    },
+                                    {
+                                        "name": "locations"
+                                    },
+                                    {
+                                        "name": "onlineMeetingUrl"
+                                    },
+                                    {
+                                        "name": "originalStart"
+                                    },
+                                    {
+                                        "name": "seriesMasterId"
+                                    }
+                                ]
+                            },
+                            "sink": {
+                                "type": "BinarySink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                }
+                            },
+                            "enableStaging": false
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "Office365Events",
+                                "type": "DatasetReference"
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "AzureBlobStorageEvents",
+                                "type": "DatasetReference"
+                            }
+                        ]
+                    }
+                ],
+                "annotations": [],
+                "folder": {
+                    "name": "Components"
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/databricks_link_service')]",
+                "[concat(variables('factoryId'), '/datasets/Office365Events')]",
+                "[concat(variables('factoryId'), '/datasets/Office365MailBox')]",
+                "[concat(variables('factoryId'), '/datasets/AzureBlobStorageEvents')]",
+                "[concat(variables('factoryId'), '/datasets/AzureBlobStorageEvents')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/GenerateWatercoolerEventsPipeline')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "End2EndDataCollectorPipeline",
+                        "type": "ExecutePipeline",
+                        "dependsOn": [],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pipeline": {
+                                "referenceName": "End2EndDataCollectorPipeline",
+                                "type": "PipelineReference"
+                            },
+                            "waitOnCompletion": true
+                        }
+                    },
+                    {
+                        "name": "End2EndUserGroupsGenerationPipeline",
+                        "type": "ExecutePipeline",
+                        "dependsOn": [
+                            {
+                                "activity": "End2EndDataCollectorPipeline",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pipeline": {
+                                "referenceName": "End2EndUserGroupsGenerationPipeline",
+                                "type": "PipelineReference"
+                            },
+                            "waitOnCompletion": true
+                        }
+                    }
+                ],
+                "annotations": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/databricks_link_service')]",
+                "[concat(variables('factoryId'), '/datasets/Office365Events')]",
+                "[concat(variables('factoryId'), '/datasets/Office365MailBox')]",
+                "[concat(variables('factoryId'), '/datasets/AzureBlobStorageEvents')]",
+                "[concat(variables('factoryId'), '/pipelines/End2EndDataCollectorPipeline')]"
             ]
         }
     ]

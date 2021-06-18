@@ -46,6 +46,9 @@
     "logs.workspace.name": {
       "type": "string"
     },
+    "meeting.organizer.email": {
+      "type": "string"
+    },
     "adfSettingsName": {
       "type": "string",
       "defaultValue": "wc-adf-logs"
@@ -141,6 +144,10 @@
           "wc_log_analytics_workspace_id": {
             "type": "string",
             "value": "[if(not(empty(parameters('logs.workspace.name'))), reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logs.workspace.name')),'2020-08-01', 'Full').properties.customerId, ' ')]"
+          },
+          "meeting_organizer_email": {
+            "type": "string",
+            "value": "[parameters('meeting.organizer.email')]"
           }
         }
       }

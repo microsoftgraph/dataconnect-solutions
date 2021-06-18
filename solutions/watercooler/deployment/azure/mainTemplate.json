@@ -160,6 +160,9 @@
             "type": "string",
             "defaultValue": ""
         },
+        "meeting.organizer.email": {
+            "type": "string"
+        },
         "pipeline_start_time": {
             "type": "string"
         },
@@ -507,6 +510,9 @@
                     },
                     "logs.workspace.name": {
                         "value": "[parameters('logs.workspace.name')]"
+                    },
+                    "meeting.organizer.email": {
+                        "value": "[parameters('meeting.organizer.email')]"
                     }
                 }
             }
