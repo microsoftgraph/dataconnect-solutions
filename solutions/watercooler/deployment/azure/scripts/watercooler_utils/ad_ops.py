@@ -189,7 +189,7 @@ def _create_web_app_service_principal(display_name, reply_url, logout_url, crede
                 pass
 
 
-def get_or_create_watercooler_user():
+def get_watercooler_user():
     while True:
         mail = input("Please enter valid watercooler mail for calendar events mail sender account:")
         print("The following mail was introduced:"+str(mail))
