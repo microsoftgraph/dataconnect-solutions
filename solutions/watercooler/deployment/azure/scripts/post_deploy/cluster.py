@@ -3,7 +3,6 @@
 
 import argparse
 import json
-import os
 from distutils.util import strtobool
 from os.path import join, dirname, basename
 
