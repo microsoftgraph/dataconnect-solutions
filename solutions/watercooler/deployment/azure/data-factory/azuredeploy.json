@@ -1,0 +1,212 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adf.name": {
+      "type": "string",
+      "metadata": {
+        "description": " Azure Data Factory Name "
+      },
+      "defaultValue": "wc-adf"
+    },
+    "location": {
+      "type": "string"
+    },
+    "keyvault.url": {
+      "type": "string"
+    },
+    "sqlsever.database.name": {
+      "type": "string",
+      "defaultValue": "wc_database"
+    },
+    "sqlserver.host": {
+      "type": "string"
+    },
+    "sqlsever.sql-auth": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "wc-service.sp.clientId": {
+      "type": "string"
+    },
+    "tenant.id": {
+      "type": "string"
+    },
+    "azbs.storage.account": {
+      "type": "string"
+    },
+    "azbs.container.name": {
+      "type": "string",
+      "defaultValue": "data"
+    },
+    "adb.secret.scope": {
+      "type": "string",
+      "defaultValue": "jwc"
+    },
+    "logs.workspace.name": {
+      "type": "string"
+    },
+    "meeting.organizer.email": {
+      "type": "string"
+    },
+    "adfSettingsName": {
+      "type": "string",
+      "defaultValue": "wc-adf-logs"
+    },
+    "adfLogs.PipelineRuns": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.ActivityRuns": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.TriggerRuns": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISPackageEventMessages": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISPackageExecutableStatistics": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISPackageEventMessageContext": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISPackageExecutionComponentPhases": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISPackageExecutionDataStatistics": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfLogs.SSISIntegrationRuntimeLogs": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adfMetrics.AllMetrics": {
+      "type": "bool",
+      "defaultValue": true
+    }
+  },
+  "resources": [
+    {
+      "name": "[parameters('adf.name')]",
+      "type": "Microsoft.DataFactory/factories",
+      "apiVersion": "2018-06-01",
+      "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "globalParameters": {
+          "key_vault_url": {
+            "type": "string",
+            "value": "[parameters('keyvault.url')]"
+          },
+          "azure_sql_database": {
+            "type": "string",
+            "value": "[parameters('sqlsever.database.name')]"
+          },
+          "azure_sql_server_name": {
+            "type": "string",
+            "value": "[parameters('sqlserver.host')]"
+          },
+          "azure_sql_msi_auth_enabled": {
+            "type": "string",
+            "value": "[string(not(parameters('sqlsever.sql-auth')))]"
+          },
+          "service_application_id": {
+            "type": "string",
+            "value": "[parameters('wc-service.sp.clientId')]"
+          },
+          "directory_id": {
+            "type": "string",
+            "value": "[parameters('tenant.id')]"
+          },
+          "azbs_storage_account": {
+            "type": "string",
+            "value": "[parameters('azbs.storage.account')]"
+          },
+          "azbs_container_name": {
+            "type": "string",
+            "value": "[parameters('azbs.container.name')]"
+          },
+          "adb_secret_scope": {
+            "type": "string",
+            "value": "[parameters('adb.secret.scope')]"
+          },
+          "wc_log_analytics_workspace_id": {
+            "type": "string",
+            "value": "[if(not(empty(parameters('logs.workspace.name'))), reference(resourceId('Microsoft.OperationalInsights/workspaces', parameters('logs.workspace.name')),'2020-08-01', 'Full').properties.customerId, ' ')]"
+          },
+          "meeting_organizer_email": {
+            "type": "string",
+            "value": "[parameters('meeting.organizer.email')]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.DataFactory/factories/providers/diagnosticSettings",
+      "apiVersion": "2017-05-01-preview",
+      "name": "[concat(parameters('adf.name'),'/microsoft.insights/', parameters('adfSettingsName'))]",
+      "condition": "[not(empty(parameters('logs.workspace.name')))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.DataFactory/factories', parameters('adf.name'))]"
+      ],
+      "properties": {
+        "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logs.workspace.name'))]",
+        "logs": [
+          {
+            "category": "ActivityRuns",
+            "enabled": "[parameters('adfLogs.ActivityRuns')]"
+          },
+          {
+            "category": "PipelineRuns",
+            "enabled": "[parameters('adfLogs.PipelineRuns')]"
+          },
+          {
+            "category": "TriggerRuns",
+            "enabled": "[parameters('adfLogs.TriggerRuns')]"
+          },
+          {
+            "category": "SSISPackageEventMessages",
+            "enabled": "[parameters('adfLogs.SSISPackageEventMessages')]"
+          },
+          {
+            "category": "SSISPackageExecutableStatistics",
+            "enabled": "[parameters('adfLogs.SSISPackageExecutableStatistics')]"
+          },
+          {
+            "category": "SSISPackageEventMessageContext",
+            "enabled": "[parameters('adfLogs.SSISPackageEventMessageContext')]"
+          },
+          {
+            "category": "SSISPackageExecutionComponentPhases",
+            "enabled": "[parameters('adfLogs.SSISPackageExecutionComponentPhases')]"
+          },
+          {
+            "category": "SSISPackageExecutionDataStatistics",
+            "enabled": "[parameters('adfLogs.SSISPackageExecutionDataStatistics')]"
+          },
+          {
+            "category": "SSISIntegrationRuntimeLogs",
+            "enabled": "[parameters('adfLogs.SSISIntegrationRuntimeLogs')]"
+          }
+        ],
+        "metrics": [
+          {
+            "category": "AllMetrics",
+            "enabled": "[parameters('adfMetrics.AllMetrics')]"
+          }
+        ]
+      }
+    }
+  ]
+}

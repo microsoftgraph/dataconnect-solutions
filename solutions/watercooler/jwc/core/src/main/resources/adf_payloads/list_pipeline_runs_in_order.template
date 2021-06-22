@@ -1,0 +1,20 @@
+{
+  lastUpdatedAfter: $startTime,
+  lastUpdatedBefore: $endTime,
+  filters: [
+    {
+      operand: PipelineName,
+      operator: In,
+      values: [
+        $pipelineName
+      ]
+    }
+  ],
+  orderBy: [
+        {
+            order: DESC,
+            orderBy: RunStart
+        }
+    ]
+
+}

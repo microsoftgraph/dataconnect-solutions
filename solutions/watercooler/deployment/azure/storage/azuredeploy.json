@@ -1,0 +1,73 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "storageAccount.name": {
+          "defaultValue": "wcstorage",
+          "type": "string"
+      },
+      "location": {
+          "type": "string"
+      }
+  },
+  "variables": {
+  },
+  "resources": [
+      {
+          "type": "Microsoft.Storage/storageAccounts",
+          "apiVersion": "2020-08-01-preview",
+          "name": "[parameters('storageAccount.name')]",
+          "location": "[parameters('location')]",
+          "sku": {
+              "name": "Standard_RAGRS",
+              "tier": "Standard"
+          },
+          "kind": "StorageV2",
+          "properties": {
+              "minimumTlsVersion": "TLS1_0",
+              "supportsHttpsTrafficOnly": true,
+              "encryption": {
+                  "services": {
+                      "blob": {
+                          "keyType": "Account",
+                          "enabled": true
+                      }
+                  },
+                  "keySource": "Microsoft.Storage"
+              },
+              "accessTier": "Hot"
+          }
+      },
+      {
+          "type": "Microsoft.Storage/storageAccounts/blobServices",
+          "apiVersion": "2019-06-01",
+          "name": "[concat(parameters('storageAccount.name'), '/default')]",
+          "dependsOn": [
+              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount.name'))]"
+          ],
+          "sku": {
+              "name": "Standard_RAGRS",
+              "tier": "Standard"
+          },
+          "properties": {
+              "deleteRetentionPolicy": {
+                  "enabled": false
+              }
+          }
+      },
+      {
+          "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+          "apiVersion": "2019-06-01",
+          "name": "[concat(parameters('storageAccount.name'), '/default/data')]",
+          "dependsOn": [
+              "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccount.name'), 'default')]",
+              "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccount.name'))]"
+          ],
+          "properties": {
+              "defaultEncryptionScope": "$account-encryption-key",
+              "denyEncryptionScopeOverride": false,
+              "publicAccess": "None"
+          }
+      }
+  ]
+}

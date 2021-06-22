@@ -1,0 +1,179 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sqlserver.name": {
+            "type": "String"
+        },
+        "vnet.name": {
+            "type": "String"
+        },
+        "sqlsever.database.name": {
+            "type": "String"
+        },
+        "sqlserver.admin.login": {
+            "type": "String"
+        },
+        "sqlserver.admin.password": {
+            "type": "securestring"
+        },
+        "sqlsever.database.sku.family": {
+            "type": "String",
+            "defaultValue": "Gen5"
+        },
+        "sqlsever.database.sku.name": {
+            "type": "String",
+            "defaultValue": "GP_S_Gen5"
+        },
+        "sqlsever.database.sku.edition": {
+            "type": "String",
+            "defaultValue": "GeneralPurpose"
+        },
+        "sqlsever.database.sku.capacity": {
+            "type": "int",
+            "defaultValue": 1
+        },
+        "sqlsever.database.aad.admin-login": {
+            "type": "String",
+            "metadata": {
+                "description": "Individual login or AAD group name to represent Active Directory admin for this database"
+            }
+        },
+        "sqlsever.database.aad.admin-object-id": {
+            "type": "String",
+            "metadata": {
+                "description": "Individual user or AAD group Object Id of AAD Admin"
+            }
+        },
+        "sqlsever.database.aad.admin-tenant-id": {
+            "type": "String",
+            "metadata": {
+                "description": "Individual user or AAD group Tenant Id of AAD Admin"
+            },
+            "defaultValue": "[subscription().tenantId]"
+        },
+        "location": {
+            "type": "String"
+        }
+
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Sql/servers",
+            "apiVersion": "2020-02-02-preview",
+            "name": "[parameters('sqlserver.name')]",
+            "location": "[parameters('location')]",
+            "kind": "v12.0",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "administratorLogin": "[parameters('sqlserver.admin.login')]",
+                "administratorLoginPassword": "[parameters('sqlserver.admin.password')]",
+                "version": "12.0",
+                "publicNetworkAccess": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases",
+            "apiVersion": "2020-02-02-preview",
+            "name": "[concat(parameters('sqlserver.name'), '/', parameters('sqlsever.database.name'))]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlserver.name'))]"
+            ],
+            "sku": {
+                "name": "[parameters('sqlsever.database.sku.name')]",
+                "tier": "[parameters('sqlsever.database.sku.edition')]",
+                "family": "[parameters('sqlsever.database.sku.family')]",
+                "capacity": "[parameters('sqlsever.database.sku.capacity')]"
+            },
+            "kind": "v12.0,user,vcore,serverless",
+            "properties": {
+                "collation": "SQL_Latin1_General_CP1_CI_AS",
+                "catalogCollation": "SQL_Latin1_General_CP1_CI_AS",
+                "zoneRedundant": false,
+                "readReplicaCount": 0,
+                "autoPauseDelay": 120,
+                "storageAccountType": "GRS",
+                "minCapacity": 0.5
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/administrators",
+            "apiVersion": "2020-02-02-preview",
+            "name": "[concat(parameters('sqlserver.name'), '/ActiveDirectory')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlserver.name'))]"
+            ],
+            "properties": {
+                "administratorType": "ActiveDirectory",
+                "login": "[parameters('sqlsever.database.aad.admin-login')]",
+                "sid": "[parameters('sqlsever.database.aad.admin-object-id')]",
+                "tenantId": "[parameters('sqlsever.database.aad.admin-tenant-id')]"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/firewallRules",
+            "apiVersion": "2015-05-01-preview",
+            "name": "[concat(parameters('sqlserver.name'), '/AllowAllWindowsAzureIps')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlserver.name'))]"
+            ],
+            "properties": {
+                "startIpAddress": "0.0.0.0",
+                "endIpAddress": "0.0.0.0"
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/virtualNetworkRules",
+            "apiVersion": "2020-02-02-preview",
+            "name": "[concat(parameters('sqlserver.name'), '/access-from-databricks-subnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlserver.name'))]"
+            ],
+            "properties": {
+                "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet.name'), 'wc-databricks-private')]",
+                "ignoreMissingVnetServiceEndpoint": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/virtualNetworkRules",
+            "apiVersion": "2020-02-02-preview",
+            "name": "[concat(parameters('sqlserver.name'), '/access-from-databricks-public-subnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlserver.name'))]"
+            ],
+            "properties": {
+                "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet.name'), 'wc-databricks-public')]",
+                "ignoreMissingVnetServiceEndpoint": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/virtualNetworkRules",
+            "apiVersion": "2020-02-02-preview",
+            "name": "[concat(parameters('sqlserver.name'), '/access-from-jwc-subnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlserver.name'))]"
+            ],
+            "properties": {
+                "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet.name'), 'watercooler-vnet')]",
+                "ignoreMissingVnetServiceEndpoint": false
+            }
+        },
+        {
+            "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
+            "apiVersion": "2017-03-01-preview",
+            "name": "[concat(parameters('sqlserver.name'), '/', parameters('sqlsever.database.name'),'/current')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Sql/servers/databases', parameters('sqlserver.name'), parameters('sqlsever.database.name'))]",
+                "[resourceId('Microsoft.Sql/servers', parameters('sqlserver.name'))]"
+            ],
+            "properties": {
+                "status": "Enabled"
+            }
+        }
+    ]
+}

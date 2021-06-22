@@ -1,0 +1,113 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "keyVaultName": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies the name of the key vault."
+      }
+    },
+    "m365AdfKeyVault.name": {
+      "type": "string",
+      "metadata": {
+        "description": "Specifies the name of the key vault to used by Azure Data Factory and Databricks"
+      }
+    },
+    "appservice.name": {
+      "type": "string"
+    },
+    "wc-service.sp.objectId": {
+      "type": "string"
+    },
+    "wc-service.tenantId": {
+      "type": "string"
+    },
+    "wc.aad.admin-object-id": {
+      "type": "string"
+    },
+    "adf.name": {
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[concat(parameters('keyVaultName'), '/add')]",
+      "apiVersion": "2019-09-01",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('appservice.name')), '2019-08-01', 'Full').identity.tenantId]",
+            "objectId": "[reference(resourceId('Microsoft.Web/sites', parameters('appservice.name')), '2019-08-01', 'Full').identity.principalId]",
+            "permissions": {
+              "secrets": [
+                "List",
+                "Get"
+              ]
+            }
+          },
+          {
+            "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('appservice.name')), '2019-08-01', 'Full').identity.tenantId]",
+            "objectId": "[parameters('wc.aad.admin-object-id')]",
+            "permissions": {
+              "secrets": [
+                "Get",
+                "List",
+                "Set",
+                "Delete",
+                "Recover",
+                "Backup",
+                "Restore"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/accessPolicies",
+      "name": "[concat(parameters('m365AdfKeyVault.name'), '/add')]",
+      "apiVersion": "2019-09-01",
+      "properties": {
+        "accessPolicies": [
+          {
+            "tenantId": "[parameters('wc-service.tenantId')]",
+            "objectId": "[parameters('wc-service.sp.objectId')]",
+            "permissions": {
+              "secrets": [
+                "List",
+                "Get"
+              ]
+            }
+          },
+          {
+            "tenantId": "[reference(resourceId('Microsoft.DataFactory/factories', parameters('adf.name')), '2018-06-01', 'Full').identity.tenantId]",
+            "objectId": "[reference(resourceId('Microsoft.DataFactory/factories', parameters('adf.name')), '2018-06-01', 'Full').identity.principalId]",
+            "permissions": {
+              "secrets": [
+                "List",
+                "Get"
+              ]
+            }
+          },
+          {
+            "tenantId": "[reference(resourceId('Microsoft.Web/sites', parameters('appservice.name')), '2019-08-01', 'Full').identity.tenantId]",
+            "objectId": "[parameters('wc.aad.admin-object-id')]",
+            "permissions": {
+              "secrets": [
+                "Get",
+                "List",
+                "Set",
+                "Delete",
+                "Recover",
+                "Backup",
+                "Restore"
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

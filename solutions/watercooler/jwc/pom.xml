@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) Microsoft Corporation. All rights reserved.
+  ~ Licensed under the MIT license. See LICENSE file in the project root for full license information.
+  -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.microsoft.graphdataconnect.watercooler</groupId>
+    <artifactId>watercooler</artifactId>
+    <version>0.2.1-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>Java Watercooler application</description>
+    <inceptionYear>2020</inceptionYear>
+
+    <properties>
+        <jwc.common.version>0.2.1-SNAPSHOT</jwc.common.version>
+    </properties>
+
+    <modules>
+        <module>core</module>
+        <module>ui</module>
+        <module>common</module>
+        <module>events-creator</module>
+        <module>profiles-extractor</module>
+    </modules>
+
+</project>

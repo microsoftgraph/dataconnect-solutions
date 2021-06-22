@@ -1,0 +1,1440 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adf.name": {
+            "type": "string",
+            "metadata": "Data Factory name",
+            "defaultValue": "wc.adf"
+        },
+        "keyvault.url": {
+            "type": "string",
+            "defaultValue": "https://watercooler-kv.vault.azure.net/"
+        },
+        "storageAccount.endpoint": {
+            "type": "string",
+            "defaultValue": "https://watercoolerdata.blob.core.windows.net"
+        },
+        "tenant.id": {
+            "type": "string",
+            "defaultValue": "d26bf63a-a52f-436a-bf3b-531b1e378694"
+        },
+        "adb.cluster_id": {
+            "type": "string",
+            "metadata": {
+                "description": "Existing Databricks Cluster Id"
+            },
+            "defaultValue": "none"
+        },
+        "adb.workspace.url": {
+            "type": "string",
+            "metadata": {
+                "description": "Databricks workspace url ,https://../"
+            },
+            "defaultValue": "none"
+        },
+        "wc-service.sp.clientId": {
+            "type": "string",
+            "defaultValue": "ec7d067b-87b4-4783-825b-34f56bcd4d22"
+        },
+        "m365Adf-reader.sp.clientId": {
+            "type": "string",
+            "defaultValue": "ec7d067b-87b4-4783-825b-34f56bcd4d22"
+        },
+        "pipeline_start_time": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('adf.name'))]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('adf.name'), '/keyvault_link_service')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureKeyVault",
+                "typeProperties": {
+                    "baseUrl": "[parameters('keyvault.url')]"
+                }
+            },
+            "dependsOn": []
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/databricks_link_service')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureDatabricks",
+                "typeProperties": {
+                    "domain": "[parameters('adb.workspace.url')]",
+                    "accessToken": {
+                        "type": "AzureKeyVaultSecret",
+                        "store": {
+                            "referenceName": "keyvault_link_service",
+                            "type": "LinkedServiceReference"
+                        },
+                        "secretName": "wc-databricks-token"
+                    },
+                    "existingClusterId": "[parameters('adb.cluster_id')]"
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/keyvault_link_service')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/AzureBlobStorageLinkService')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "AzureBlobStorage",
+                "typeProperties": {
+                    "serviceEndpoint": "[parameters('storageAccount.endpoint')]",
+                    "tenant": "[parameters('tenant.id')]",
+                    "servicePrincipalId": "[parameters('wc-service.sp.clientId')]",
+                    "servicePrincipalKey": {
+                        "type": "AzureKeyVaultSecret",
+                        "store": {
+                            "referenceName": "keyvault_link_service",
+                            "type": "LinkedServiceReference"
+                        },
+                        "secretName": "wc-service-principal-secret"
+                    },
+                    "accountKind": "StorageV2"
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/keyvault_link_service')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/Office365LinkService')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "type": "Office365",
+                "typeProperties": {
+                    "office365TenantId": "d26bf63a-a52f-436a-bf3b-531b1e378694",
+                    "servicePrincipalTenantId": "d26bf63a-a52f-436a-bf3b-531b1e378694",
+                    "servicePrincipalId": "[parameters('m365Adf-reader.sp.clientId')]",
+                    "servicePrincipalKey": {
+                        "type": "AzureKeyVaultSecret",
+                        "store": {
+                            "referenceName": "keyvault_link_service",
+                            "type": "LinkedServiceReference"
+                        },
+                        "secretName": "wc-m365-reader-secret"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/keyvault_link_service')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/AzureBlobStorageEmployeeProfiles')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageLinkService",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "Binary",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "folderPath": "employee-profiles",
+                        "container": "data"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/AzureBlobStorageEvents')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageLinkService",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "Binary",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "folderPath": {
+                            "value": "@concat('events/events_',formatDateTime(utcnow(),'yyyyMMddHHmm'))",
+                            "type": "Expression"
+                        },
+                        "container": "data"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/Office365Events')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "Office365LinkService",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "Office365Table",
+                "schema": [],
+                "typeProperties": {
+                    "tableName": "BasicDataSet_v0.Event_v1"
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/Office365LinkService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/Office365Users')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "Office365LinkService",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "Office365Table",
+                "schema": [],
+                "typeProperties": {
+                    "tableName": "BasicDataSet_v0.User_v1"
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/Office365LinkService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/Office365MailBox')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "Office365LinkService",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "Office365Table",
+                "schema": [],
+                "typeProperties": {
+                    "tableName": "BasicDataSet_v0.MailboxSettings_v0"
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/Office365LinkService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/AzureBlobStorageMailBox')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "AzureBlobStorageLinkService",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "Binary",
+                "typeProperties": {
+                    "location": {
+                        "type": "AzureBlobStorageLocation",
+                        "folderPath": "mailbox",
+                        "container":  "data"
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/AzureBlobStorageLinkService')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/UpdateUserEventsAttendance')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "ExtractUserAttendanceInformation",
+                        "type": "DatabricksSparkPython",
+                        "dependsOn": [
+                            {
+                                "activity": "Set batchTimeBasedSubpath",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pythonFile": "dbfs:/mnt/watercooler/scripts/01_1_calendar_events_attendance.py",
+                            "parameters": [
+                                "--storage-account-name",
+                                "@pipeline().globalParameters.azbs_storage_account",
+                                "--input-container-name",
+                                "@pipeline().globalParameters.azbs_container_name",
+                                "--input-folder-path",
+                                "events",
+                                "--output-container-name",
+                                "@pipeline().globalParameters.azbs_container_name",
+                                "--output-folder-path",
+                                "@concat('attendance_watercooler_events/', variables('batchTimeBasedSubpath'))",
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-secret-name",
+                                "wc-service-principal-secret",
+                                "--log-analytics-workspace-id",
+                                "@pipeline().globalParameters.wc_log_analytics_workspace_id",
+                                "--log-analytics-workspace-key-name",
+                                "log-analytics-api-key",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url",
+                                "--jdbc-host",
+                                "@pipeline().globalParameters.azure_sql_server_name",
+                                "--jdbc-port",
+                                "1433",
+                                "--jdbc-database",
+                                "@pipeline().globalParameters.azure_sql_database",
+                                "--jdbc-username-key-name",
+                                "azure-sql-backend-username",
+                                "--jdbc-password-key-name",
+                                "azure-sql-backend-password",
+                                "--use-msi-azure-sql-auth",
+                                "@pipeline().globalParameters.azure_sql_msi_auth_enabled"
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "UpdateUserInvitationStatus",
+                        "type": "DatabricksSparkPython",
+                        "dependsOn": [
+                            {
+                                "activity": "ExtractUserAttendanceInformation",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pythonFile": "dbfs:/mnt/watercooler/scripts/01_2_update_group_members_invitation_status.py",
+                            "parameters": [
+                                "--storage-account-name",
+                                "@pipeline().globalParameters.azbs_storage_account",
+                                "--input-container-name",
+                                "@pipeline().globalParameters.azbs_container_name",
+                                "--input-folder-path",
+                                "@concat('attendance_watercooler_events/', variables('batchTimeBasedSubpath'))",
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-secret-name",
+                                "wc-service-principal-secret",
+                                "--log-analytics-workspace-id",
+                                "@pipeline().globalParameters.wc_log_analytics_workspace_id",
+                                "--log-analytics-workspace-key-name",
+                                "log-analytics-api-key",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url",
+                                "--jdbc-host",
+                                "@pipeline().globalParameters.azure_sql_server_name",
+                                "--jdbc-port",
+                                "1433",
+                                "--jdbc-database",
+                                "@pipeline().globalParameters.azure_sql_database",
+                                "--jdbc-username-key-name",
+                                "azure-sql-backend-username",
+                                "--jdbc-password-key-name",
+                                "azure-sql-backend-password",
+                                "--use-msi-azure-sql-auth",
+                                "@pipeline().globalParameters.azure_sql_msi_auth_enabled",
+                                "--update-batch-size",
+                                "10"
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "Set batchTimeBasedSubpath",
+                        "type": "SetVariable",
+                        "dependsOn": [
+                            {
+                                "activity": "copyCalendarEventsFromMO365",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "variableName": "batchTimeBasedSubpath",
+                            "value": {
+                                "value": "@utcnow('yyyyMMddHHmm')",
+                                "type": "Expression"
+                            }
+                        }
+                    },
+                    {
+                        "name": "copyCalendarEventsFromMO365",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "Office365Source",
+                                "dateFilterColumn": "createdDateTime",
+                                "startTime": "2021-05-09T00:00:00Z",
+                                "endTime": "2021-06-10T00:00:00Z",
+                                "userScopeFilterUri": "",
+                                "outputColumns": [
+                                    {
+                                        "name": "id"
+                                    },
+                                    {
+                                        "name": "allowNewTimeProposals"
+                                    },
+                                    {
+                                        "name": "createdDateTime"
+                                    },
+                                    {
+                                        "name": "lastModifiedDateTime"
+                                    },
+                                    {
+                                        "name": "changeKey"
+                                    },
+                                    {
+                                        "name": "categories"
+                                    },
+                                    {
+                                        "name": "originalStartTimeZone"
+                                    },
+                                    {
+                                        "name": "originalEndTimeZone"
+                                    },
+                                    {
+                                        "name": "responseStatus"
+                                    },
+                                    {
+                                        "name": "iCalUId"
+                                    },
+                                    {
+                                        "name": "reminderMinutesBeforeStart"
+                                    },
+                                    {
+                                        "name": "isOnlineMeeting"
+                                    },
+                                    {
+                                        "name": "isReminderOn"
+                                    },
+                                    {
+                                        "name": "hasAttachments"
+                                    },
+                                    {
+                                        "name": "subject"
+                                    },
+                                    {
+                                        "name": "body"
+                                    },
+                                    {
+                                        "name": "importance"
+                                    },
+                                    {
+                                        "name": "sensitivity"
+                                    },
+                                    {
+                                        "name": "start"
+                                    },
+                                    {
+                                        "name": "end"
+                                    },
+                                    {
+                                        "name": "location"
+                                    },
+                                    {
+                                        "name": "isAllDay"
+                                    },
+                                    {
+                                        "name": "isCancelled"
+                                    },
+                                    {
+                                        "name": "isOrganizer"
+                                    },
+                                    {
+                                        "name": "onlineMeeting"
+                                    },
+                                    {
+                                        "name": "onlineMeetingProvider"
+                                    },
+                                    {
+                                        "name": "recurrence"
+                                    },
+                                    {
+                                        "name": "responseRequested"
+                                    },
+                                    {
+                                        "name": "showAs"
+                                    },
+                                    {
+                                        "name": "transactionId"
+                                    },
+                                    {
+                                        "name": "type"
+                                    },
+                                    {
+                                        "name": "attendees"
+                                    },
+                                    {
+                                        "name": "organizer"
+                                    },
+                                    {
+                                        "name": "webLink"
+                                    },
+                                    {
+                                        "name": "attachments"
+                                    },
+                                    {
+                                        "name": "bodyPreview"
+                                    },
+                                    {
+                                        "name": "locations"
+                                    },
+                                    {
+                                        "name": "onlineMeetingUrl"
+                                    },
+                                    {
+                                        "name": "originalStart"
+                                    },
+                                    {
+                                        "name": "seriesMasterId"
+                                    }
+                                ]
+                            },
+                            "sink": {
+                                "type": "BinarySink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                }
+                            },
+                            "enableStaging": false
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "Office365Events",
+                                "type": "DatasetReference",
+                                "parameters": {}
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "AzureBlobStorageEvents",
+                                "type": "DatasetReference",
+                                "parameters": {}
+                            }
+                        ]
+                    }
+                ],
+                "variables": {
+                    "batchTimeBasedSubpath": {
+                        "type": "String"
+                    }
+                },
+                "annotations": [],
+                "lastPublishTime": "2021-05-24T11:21:09Z"
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/databricks_link_service')]",
+                "[concat(variables('factoryId'), '/datasets/Office365Events')]",
+                "[concat(variables('factoryId'), '/datasets/AzureBlobStorageEvents')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/End2EndUserGroupsGenerationPipeline')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "CalendarEventsExtractor",
+                        "description": "Extracts the events from the users calendar exported files",
+                        "type": "DatabricksSparkPython",
+                        "dependsOn": [
+                            {
+                                "activity": "Clean Data",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pythonFile": "dbfs:/mnt/watercooler/scripts/01_calendar_spark_processor.py",
+                            "parameters": [
+                                "--storage-account-name",
+                                "@pipeline().globalParameters.azbs_storage_account",
+                                "--input-container-name",
+                                "@pipeline().globalParameters.azbs_container_name",
+                                "--input-folder-path",
+                                "events",
+                                "--output-container-name",
+                                "@pipeline().globalParameters.azbs_container_name",
+                                "--output-folder-path",
+                                "watercooler_out_events",
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-secret-name",
+                                "wc-service-principal-secret",
+                                "--log-analytics-workspace-id",
+                                "@pipeline().globalParameters.wc_log_analytics_workspace_id",
+                                "--log-analytics-workspace-key-name",
+                                "log-analytics-api-key",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url"
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "EventsAndProfilesJoblibAssembeler",
+                        "description": "Extracts the events from the users calendar exported files",
+                        "type": "DatabricksSparkPython",
+                        "dependsOn": [
+                            {
+                                "activity": "ProfilesFieldsExtractor",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pythonFile": "dbfs:/mnt/watercooler/scripts/03_persons_to_events_dill_assembler.py",
+                            "parameters": [
+                                "--user-profiles-input-path",
+                                "/dbfs/mnt/watercooler/watercooler_out_profiles",
+                                "--calendar-events-input-path",
+                                "/dbfs/mnt/watercooler/watercooler_out_events",
+                                "--output-path",
+                                "/dbfs/mnt/watercooler/assembled_data",
+                                "--mailbox-meta-folder-path",
+                                "/dbfs/mnt/watercooler/mailbox",
+                                "--timezone-names-path",
+                                "/dbfs/mnt/watercooler/scripts/",
+                                "--log-analytics-workspace-id",
+                                "@pipeline().globalParameters.wc_log_analytics_workspace_id",
+                                "--log-analytics-workspace-key-name",
+                                "log-analytics-api-key",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-secret-name",
+                                "wc-service-principal-secret",
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url"
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "Clustering",
+                        "description": "Extracts the events from the users calendar exported files",
+                        "type": "DatabricksSparkPython",
+                        "dependsOn": [
+                            {
+                                "activity": "EventsAndProfilesJoblibAssembeler",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pythonFile": "dbfs:/mnt/watercooler/scripts/04_generate_timetable_kmeans.py",
+                            "parameters": [
+                                "--clusters",
+                                "10",
+                                "--max-group-size",
+                                "10",
+                                "--input-assembled-data-path",
+                                "/dbfs/mnt/watercooler/assembled_data",
+                                "--kmeans-data-output-path",
+                                "/dbfs/mnt/watercooler/kmeans_output",
+                                "--log-analytics-workspace-id",
+                                "@pipeline().globalParameters.wc_log_analytics_workspace_id",
+                                "--log-analytics-workspace-key-name",
+                                "log-analytics-api-key",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-secret-name",
+                                "wc-service-principal-secret",
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url"
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "Write Csv Files",
+                        "description": "Extracts the events from the users calendar exported files",
+                        "type": "DatabricksSparkPython",
+                        "dependsOn": [
+                            {
+                                "activity": "Clustering",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pythonFile": "dbfs:/mnt/watercooler/scripts/05_export_to_csv.py",
+                            "parameters": [
+                                "--user-profiles-input-path",
+                                "/dbfs/mnt/watercooler/watercooler_out_profiles",
+                                "--csv-output-data-path",
+                                "/dbfs/mnt/watercooler/csv_output_data",
+                                "--kmeans-data-input-path",
+                                "/dbfs/mnt/watercooler/kmeans_output",
+                                "--log-analytics-workspace-id",
+                                "@pipeline().globalParameters.wc_log_analytics_workspace_id",
+                                "--log-analytics-workspace-key-name",
+                                "log-analytics-api-key",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-secret-name",
+                                "wc-service-principal-secret",
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url"
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "ProfilesFieldsExtractor",
+                        "type": "DatabricksSparkPython",
+                        "dependsOn": [
+                            {
+                                "activity": "CalendarEventsExtractor",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pythonFile": "dbfs:/mnt/watercooler/scripts/02_profiles_spark_processor.py",
+                            "parameters": [
+                                "--storage-account-name",
+                                "@pipeline().globalParameters.azbs_storage_account",
+                                "--output-container-name",
+                                "@pipeline().globalParameters.azbs_container_name",
+                                "--output-folder-path",
+                                "watercooler_out_profiles",
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-secret-name",
+                                "wc-service-principal-secret",
+                                "--log-analytics-workspace-id",
+                                "@pipeline().globalParameters.wc_log_analytics_workspace_id",
+                                "--log-analytics-workspace-key-name",
+                                "log-analytics-api-key",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url",
+                                "--jdbc-host",
+                                "@pipeline().globalParameters.azure_sql_server_name",
+                                "--jdbc-port",
+                                "1433",
+                                "--jdbc-database",
+                                "@pipeline().globalParameters.azure_sql_database",
+                                "--jdbc-username-key-name",
+                                "azure-sql-backend-username",
+                                "--jdbc-password-key-name",
+                                "azure-sql-backend-password",
+                                "--use-msi-azure-sql-auth",
+                                "@pipeline().globalParameters.azure_sql_msi_auth_enabled"
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "SQL_export",
+                        "type": "DatabricksSparkPython",
+                        "dependsOn": [
+                            {
+                                "activity": "Write Csv Files",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pythonFile": "dbfs:/mnt/watercooler/scripts/06_spark_export_to_sql.py",
+                            "parameters": [
+                                "--storage-account-name",
+                                "@pipeline().globalParameters.azbs_storage_account",
+                                "--csv-input-data-path",
+                                "/dbfs/mnt/watercooler/csv_output_data",
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-secret-name",
+                                "wc-service-principal-secret",
+                                "--log-analytics-workspace-id",
+                                "@pipeline().globalParameters.wc_log_analytics_workspace_id",
+                                "--log-analytics-workspace-key-name",
+                                "log-analytics-api-key",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url",
+                                "--jdbc-host",
+                                "@pipeline().globalParameters.azure_sql_server_name",
+                                "--jdbc-port",
+                                "1433",
+                                "--jdbc-database",
+                                "@pipeline().globalParameters.azure_sql_database",
+                                "--jdbc-username-key-name",
+                                "azure-sql-backend-username",
+                                "--jdbc-password-key-name",
+                                "azure-sql-backend-password",
+                                "--use-msi-azure-sql-auth",
+                                "@pipeline().globalParameters.azure_sql_msi_auth_enabled",
+                                "--export-batch-size",
+                                "10"
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "Clean Data",
+                        "type": "DatabricksSparkPython",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pythonFile": "dbfs:/mnt/watercooler/scripts/000_cleanup.py",
+                            "parameters": [
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-secret-name",
+                                "wc-service-principal-secret",
+                                "--log-analytics-workspace-id",
+                                "@pipeline().globalParameters.wc_log_analytics_workspace_id",
+                                "--log-analytics-workspace-key-name",
+                                "log-analytics-api-key",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url",
+                                "--jdbc-host",
+                                "@pipeline().globalParameters.azure_sql_server_name",
+                                "--jdbc-port",
+                                "1433",
+                                "--jdbc-database",
+                                "@pipeline().globalParameters.azure_sql_database",
+                                "--jdbc-username-key-name",
+                                "azure-sql-backend-username",
+                                "--jdbc-password-key-name",
+                                "azure-sql-backend-password",
+                                "--use-msi-azure-sql-auth",
+                                "@pipeline().globalParameters.azure_sql_msi_auth_enabled"
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "runSparkJob-EventsEmailSender",
+                        "type": "DatabricksSparkJar",
+                        "dependsOn": [
+                            {
+                                "activity": "SQL_export",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "mainClassName": "com.microsoft.graphdataconnect.watercooler.events.creator.Runner",
+                            "parameters": [
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--application-key-secret-name",
+                                "wc-service-principal-secret",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--meeting-organizer-email",
+                                "@pipeline().globalParameters.meeting_organizer_email",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--max-db-connections",
+                                "8",
+                                "--jdbc-hostname",
+                                "@pipeline().globalParameters.azure_sql_server_name",
+                                "--jdbc-port",
+                                "1433",
+                                "--jdbc-database",
+                                "@pipeline().globalParameters.azure_sql_database",
+                                "--use-msi-auth",
+                                "@pipeline().globalParameters.azure_sql_msi_auth_enabled",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url",
+                                "--start-date",
+                                "@formatDateTime(utcnow(), 'yyyy-MM-dd')",
+                                "--end-date",
+                                "@formatDateTime(adddays(utcnow(), 14), 'yyyy-MM-dd')",
+                                "--meeting-duration",
+                                "15",
+                                "--log-analytics-workspace-id",
+                                "@pipeline().globalParameters.wc_log_analytics_workspace_id",
+                                "--log-analytics-workspace-key-name",
+                                "log-analytics-api-key",
+                                "--jdbc-username",
+                                "azure-sql-backend-username",
+                                "--jdbc-password",
+                                "azure-sql-backend-password"
+                            ],
+                            "libraries": [
+                                {
+                                    "jar": "dbfs:/mnt/watercooler/scripts/jwc-events-creator.jar"
+                                }
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    }
+                ],
+                "annotations": [],
+                "folder": {
+                    "name": "Components"
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/databricks_link_service')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/End2EndDataCollectorPipeline')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "exportMailBoxFromM365",
+                        "description": "Extracts User mail settings",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "Office365Source",
+                                "userScopeFilterUri": "",
+                                "outputColumns": [
+                                    {
+                                        "name": "archiveFolder"
+                                    },
+                                    {
+                                        "name": "timeZone"
+                                    },
+                                    {
+                                        "name": "automaticRepliesSetting"
+                                    },
+                                    {
+                                        "name": "language"
+                                    },
+                                    {
+                                        "name": "workingHours"
+                                    }
+                                ]
+                            },
+                            "sink": {
+                                "type": "BinarySink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                }
+                            },
+                            "enableStaging": false
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "Office365MailBox",
+                                "type": "DatasetReference"
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "AzureBlobStorageMailBox",
+                                "type": "DatasetReference"
+                            }
+                        ]
+                    },
+                    {
+                        "name": "ProfilesExporterJar",
+                        "description": "Extracts User profiles",
+                        "type": "DatabricksSparkJar",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "mainClassName": "com.microsoft.graphdataconnect.watercooler.profiles.extractor.Runner",
+                            "parameters": [
+                                "--application-id",
+                                "@pipeline().globalParameters.service_application_id",
+                                "--directory-id",
+                                "@pipeline().globalParameters.directory_id",
+                                "--adb-secret-scope-name",
+                                "@pipeline().globalParameters.adb_secret_scope",
+                                "--adb-sp-client-key-name",
+                                "wc-service-principal-secret",
+                                "--max-db-connections",
+                                "8",
+                                "--jdbc-hostname",
+                                "@pipeline().globalParameters.azure_sql_server_name",
+                                "--jdbc-port",
+                                "1433",
+                                "--jdbc-database",
+                                "@pipeline().globalParameters.azure_sql_database",
+                                "--use-msi-auth",
+                                "@pipeline().globalParameters.azure_sql_msi_auth_enabled",
+                                "--jdbc-username",
+                                "azure-sql-backend-username",
+                                "--jdbc-password",
+                                "azure-sql-backend-password",
+                                "--key-vault-url",
+                                "@pipeline().globalParameters.key_vault_url"
+                            ],
+                            "libraries": [
+                                {
+                                    "jar": "dbfs:/mnt/watercooler/scripts/jwc-profiles-extractor.jar"
+                                }
+                            ]
+                        },
+                        "linkedServiceName": {
+                            "referenceName": "databricks_link_service",
+                            "type": "LinkedServiceReference"
+                        }
+                    },
+                    {
+                        "name": "copyCalendarEventsFromMO365",
+                        "description": "Extracts User calendar data",
+                        "type": "Copy",
+                        "dependsOn": [],
+                        "policy": {
+                            "timeout": "7.00:00:00",
+                            "retry": 0,
+                            "retryIntervalInSeconds": 30,
+                            "secureOutput": false,
+                            "secureInput": false
+                        },
+                        "userProperties": [],
+                        "typeProperties": {
+                            "source": {
+                                "type": "Office365Source",
+                                "dateFilterColumn": "createdDateTime",
+                                "startTime": "2021-05-09T00:00:00Z",
+                                "endTime": "2021-06-10T00:00:00Z",
+                                "userScopeFilterUri": "",
+                                "outputColumns": [
+                                    {
+                                        "name": "id"
+                                    },
+                                    {
+                                        "name": "allowNewTimeProposals"
+                                    },
+                                    {
+                                        "name": "createdDateTime"
+                                    },
+                                    {
+                                        "name": "lastModifiedDateTime"
+                                    },
+                                    {
+                                        "name": "changeKey"
+                                    },
+                                    {
+                                        "name": "categories"
+                                    },
+                                    {
+                                        "name": "originalStartTimeZone"
+                                    },
+                                    {
+                                        "name": "originalEndTimeZone"
+                                    },
+                                    {
+                                        "name": "responseStatus"
+                                    },
+                                    {
+                                        "name": "iCalUId"
+                                    },
+                                    {
+                                        "name": "reminderMinutesBeforeStart"
+                                    },
+                                    {
+                                        "name": "isOnlineMeeting"
+                                    },
+                                    {
+                                        "name": "isReminderOn"
+                                    },
+                                    {
+                                        "name": "hasAttachments"
+                                    },
+                                    {
+                                        "name": "subject"
+                                    },
+                                    {
+                                        "name": "importance"
+                                    },
+                                    {
+                                        "name": "sensitivity"
+                                    },
+                                    {
+                                        "name": "start"
+                                    },
+                                    {
+                                        "name": "end"
+                                    },
+                                    {
+                                        "name": "location"
+                                    },
+                                    {
+                                        "name": "isAllDay"
+                                    },
+                                    {
+                                        "name": "isCancelled"
+                                    },
+                                    {
+                                        "name": "isOrganizer"
+                                    },
+                                    {
+                                        "name": "onlineMeeting"
+                                    },
+                                    {
+                                        "name": "onlineMeetingProvider"
+                                    },
+                                    {
+                                        "name": "recurrence"
+                                    },
+                                    {
+                                        "name": "responseRequested"
+                                    },
+                                    {
+                                        "name": "showAs"
+                                    },
+                                    {
+                                        "name": "transactionId"
+                                    },
+                                    {
+                                        "name": "type"
+                                    },
+                                    {
+                                        "name": "attendees"
+                                    },
+                                    {
+                                        "name": "organizer"
+                                    },
+                                    {
+                                        "name": "webLink"
+                                    },
+                                    {
+                                        "name": "locations"
+                                    },
+                                    {
+                                        "name": "onlineMeetingUrl"
+                                    },
+                                    {
+                                        "name": "originalStart"
+                                    },
+                                    {
+                                        "name": "seriesMasterId"
+                                    }
+                                ]
+                            },
+                            "sink": {
+                                "type": "BinarySink",
+                                "storeSettings": {
+                                    "type": "AzureBlobStorageWriteSettings"
+                                }
+                            },
+                            "enableStaging": false
+                        },
+                        "inputs": [
+                            {
+                                "referenceName": "Office365Events",
+                                "type": "DatasetReference"
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "referenceName": "AzureBlobStorageEvents",
+                                "type": "DatasetReference"
+                            }
+                        ]
+                    }
+                ],
+                "annotations": [],
+                "folder": {
+                    "name": "Components"
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/databricks_link_service')]",
+                "[concat(variables('factoryId'), '/datasets/Office365Events')]",
+                "[concat(variables('factoryId'), '/datasets/Office365MailBox')]",
+                "[concat(variables('factoryId'), '/datasets/AzureBlobStorageEvents')]",
+                "[concat(variables('factoryId'), '/datasets/AzureBlobStorageEvents')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/GenerateWatercoolerEventsPipeline')]",
+            "type": "Microsoft.DataFactory/factories/pipelines",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "activities": [
+                    {
+                        "name": "End2EndDataCollectorPipeline",
+                        "type": "ExecutePipeline",
+                        "dependsOn": [],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pipeline": {
+                                "referenceName": "End2EndDataCollectorPipeline",
+                                "type": "PipelineReference"
+                            },
+                            "waitOnCompletion": true
+                        }
+                    },
+                    {
+                        "name": "End2EndUserGroupsGenerationPipeline",
+                        "type": "ExecutePipeline",
+                        "dependsOn": [
+                            {
+                                "activity": "End2EndDataCollectorPipeline",
+                                "dependencyConditions": [
+                                    "Succeeded"
+                                ]
+                            }
+                        ],
+                        "userProperties": [],
+                        "typeProperties": {
+                            "pipeline": {
+                                "referenceName": "End2EndUserGroupsGenerationPipeline",
+                                "type": "PipelineReference"
+                            },
+                            "waitOnCompletion": true
+                        }
+                    }
+                ],
+                "annotations": []
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/linkedServices/databricks_link_service')]",
+                "[concat(variables('factoryId'), '/datasets/Office365Events')]",
+                "[concat(variables('factoryId'), '/datasets/Office365MailBox')]",
+                "[concat(variables('factoryId'), '/datasets/AzureBlobStorageEvents')]",
+                "[concat(variables('factoryId'), '/pipelines/End2EndDataCollectorPipeline')]"
+            ]
+        },
+        {
+            "name": "[concat(parameters('adf.name'), '/GenerateEventsEveryTwoWeeks')]",
+            "type": "Microsoft.DataFactory/factories/triggers",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "annotations": [],
+                "runtimeState": "Started",
+                "pipelines": [
+                    {
+                        "pipelineReference": {
+                            "referenceName": "GenerateWatercoolerEventsPipeline",
+                            "type": "PipelineReference"
+                        }
+                    }
+                ],
+                "type": "ScheduleTrigger",
+                "typeProperties": {
+                    "recurrence": {
+                        "frequency": "Day",
+                        "interval": 14,
+                        "startTime": "[dateTimeAdd(parameters('pipeline_start_time'), '-P2D')]",
+                        "timeZone": "UTC",
+                        "schedule": {
+                            "hours": [
+                                6
+                            ]
+                        }
+                    }
+                }
+            },
+            "dependsOn": [
+                "[concat(variables('factoryId'), '/pipelines/GenerateWatercoolerEventsPipeline')]"
+            ]
+        }
+    ]
+}
