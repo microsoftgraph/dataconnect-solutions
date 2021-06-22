@@ -25,14 +25,14 @@ def cleanup_database(database, jdbc_user, jdbc_password):
 
     cursor = connection.cursor()
 
-    truncate_groups_per_day = "truncate table conversation_sentiment_info;"
-    truncate_groups_per_week = "truncate table conversation_entities_info;"
+    conversation_sentiment_info = "truncate table conversation_sentiment_info;"
+    conversation_entities_info = "truncate table conversation_entities_info;"
 
-    cursor.execute(truncate_groups_per_day)
-    print("Truncated groups_per_day table.")
+    cursor.execute(conversation_sentiment_info)
+    print("Truncated conversation_sentiment_info table.")
 
-    cursor.execute(truncate_groups_per_week)
-    print("Truncated groups_per_week table.")
+    cursor.execute(conversation_entities_info)
+    print("Truncated conversation_entities_info table.")
 
     cursor.close()
     connection.close()
@@ -54,14 +54,14 @@ if __name__ == '__main__':
 
         args = parser.parse_args()
         params = json.load(open(Path("/dbfs/mnt/convlineage/scripts/config_test_azure.json")))
-        output_folder = params["output_folder"]
         database = params["jdbc_db"]
         jdbc_user = params["jdbc_user"]
         jdbc_password = params["jdbc_password"]
 
     else:
 
-        params = json.load(open(Path("config_test.json")))
+        #params = json.load(open(Path("config_test.json")))
+        params = json.load(open(Path("/dbfs/mnt/convlineage/scripts/config_test_azure.json")))
         database = params["jdbc_db"]
         jdbc_user = params["jdbc_user"]
         jdbc_password = params["jdbc_password"]

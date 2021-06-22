@@ -177,6 +177,33 @@ def export_to_csv(full_path, analyzed_conversations):
                                                ",")])
     df.to_csv(os.path.join(full_path, file_name), index=False, doublequote=False, escapechar="\\")
 
+    tuple_list = []
+    file_name = "conversation_to_recipient_sentiment_info.csv"
+    for conversation in analyzed_conversations:
+
+        for receiver in conversation.recipients:
+            sql_idx = str(uuid.uuid4())
+            conversation_id = conversation.id
+            recipient_name, recipient_address, recipient_domain = receiver
+
+            tuple_list.append(tuple([sql_idx,
+                                     conversation_id,
+                                     conversation.sender_mail,
+                                     conversation.sender_name,
+                                     conversation.sender_domain,
+                                     conversation.conversation_sentiment_info["general_sentiment"],
+                                     conversation.conversation_sentiment_info["confidence_scores"]["positive"],
+                                     conversation.conversation_sentiment_info["confidence_scores"]["neutral"],
+                                     conversation.conversation_sentiment_info["confidence_scores"]["negative"],
+                                     recipient_name,
+                                     recipient_address,
+                                     recipient_domain
+                                     ]))
+    df = pd.DataFrame(tuple_list, columns=[p.strip() for p in
+                                           "id,conversation_id,sender_mail,sender_name,sender_domain,general_sentiment,pos_score,neutral_score,negative_score,recipient_name,recipient_address,recipient_domain".split(
+                                               ",")])
+    df.to_csv(os.path.join(full_path, file_name), index=False, doublequote=False, escapechar="\\")
+
 
 if __name__ == '__main__':
     print(sys.argv)
@@ -204,7 +231,7 @@ if __name__ == '__main__':
 
     else:
 
-        # params = json.load(open(Path("config_test.json")))
+        #params = json.load(open(Path("config_test.json")))
         params = json.load(open(Path("/dbfs/mnt/convlineage/scripts/config_test_azure.json")))
         mail_input_file = params["mail_input_folder"]
         key = params["key"]

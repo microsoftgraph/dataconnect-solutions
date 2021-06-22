@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 import sys
+import traceback
 from pathlib import Path
 
 import jaydebeapi
@@ -39,6 +40,7 @@ def export_data_to_azure_sql(full_base_path, database, jdbc_user, jdbc_password)
 
     conversation_entities_info_file = os.path.join(full_base_path, "conversation_entities_info.csv")
     conversation_sentiment_info_file = os.path.join(full_base_path, "conversation_sentiment_info.csv")
+    conversation_to_receiver_sentiment_info_file = os.path.join(full_base_path, "conversation_to_recipient_sentiment_info.csv")
 
     connectionProperties = {'databaseName': database,
                             'url': 'conduit-bde.database.windows.net',
@@ -55,14 +57,15 @@ def export_data_to_azure_sql(full_base_path, database, jdbc_user, jdbc_password)
 
     cursor = connection.cursor()
 
-    # print(f"*******#####Processing {employee_profile_file}")
-    # write_employee_profile_to_az_sql(employee_profile_file, export_batch_size, cursor)
 
     print(f"*******#####Processing {conversation_entities_info_file}")
     write_conversation_entities_to_sql(conversation_entities_info_file, export_batch_size, cursor)
 
     print(f"*******#####Processing {conversation_sentiment_info_file}")
     write_conversation_sentiment_to_sql(conversation_sentiment_info_file, export_batch_size, cursor)
+
+    print(f"*******#####Processing {conversation_to_receiver_sentiment_info_file}")
+    write_conversation_to_receiver_sentiment_to_sql(conversation_to_receiver_sentiment_info_file, export_batch_size, cursor)
 
     cursor.close()
     connection.close()
@@ -132,6 +135,41 @@ def write_conversation_sentiment_to_sql(conversation_sentiment_info_file, batch_
         except Exception as e:
             print("===========PROBLEM====================")
             print(batch_insert)
+
+def write_conversation_to_receiver_sentiment_to_sql(conversation_sentiment_info_file, batch_size, cursor):
+    df = pd.read_csv(conversation_sentiment_info_file, escapechar="\\")
+    number_of_rows = len(df)
+    line_count = 0
+    insert_command = "INSERT INTO conversation_to_receiver_sentiment_info " \
+                     "(id,conversation_id,sender_mail,sender_name,sender_domain,general_sentiment,pos_score,neutral_score,negative_score,recipient_name,recipient_address,recipient_domain) VALUES "
+    batch_insert = insert_command
+    for line_count in range(1, number_of_rows + 1):
+        row = df.iloc[line_count - 1]
+        batch_insert += f""" ('{row["id"]}',  '{row["conversation_id"]}', '{row["sender_mail"]}', '{row["sender_name"]}', '{row["sender_domain"]}', '{row["general_sentiment"]}', {row["pos_score"]}, {row["neutral_score"]}, {row["negative_score"]}, '{row["recipient_name"]}', '{row["recipient_address"]}', '{row["recipient_domain"]}'),"""
+        try:
+            if line_count % batch_size == 0:
+                batch_insert = batch_insert[:-1]  # remove last comma
+                batch_insert = batch_insert + ";"
+                batch_insert = batch_insert.replace("""'nan'""", "NULL")
+                cursor.execute(batch_insert)
+                batch_insert = insert_command
+        except Exception as e:
+            print("===========PROBLEM====================")
+            print(batch_insert)
+
+    if line_count % batch_size != 0:
+        batch_insert = batch_insert[:-1]  # remove last comma
+        batch_insert = batch_insert + ";"
+        try:
+            cursor.execute(batch_insert)
+        except Exception as e:
+            print("===========PROBLEM====================")
+            print(batch_insert)
+            print("Exception in creating the conversation")
+            print("-" * 60)
+            print(e)
+            traceback.print_exc(file=sys.stdout)
+            print("-" * 60)
 
 
 if __name__ == '__main__':
