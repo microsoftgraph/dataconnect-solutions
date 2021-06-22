@@ -425,7 +425,7 @@ if __name__ == '__main__':
     debug_people_meetings = True
 
     if len(sys.argv) > 2:
-        parser = argparse.ArgumentParser(description='Process some integers.')
+        parser = argparse.ArgumentParser(description='Process Arguments')
         parser.add_argument('--application-id', type=str,
                             help='application id')
         parser.add_argument('--directory-id', type=str,
