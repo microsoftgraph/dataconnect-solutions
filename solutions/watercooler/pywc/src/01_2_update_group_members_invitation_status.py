@@ -175,7 +175,7 @@ SERVICE_PRINCIPAL_SECRET = None
 
 if __name__ == '__main__':
     if len(sys.argv) > 2:
-        parser = argparse.ArgumentParser(description='Process some integers.')
+        parser = argparse.ArgumentParser(description='Process Arguments')
         parser.add_argument('--storage-account-name', type=str,
                             help='storage account name')
         parser.add_argument('--input-container-name', type=str,
