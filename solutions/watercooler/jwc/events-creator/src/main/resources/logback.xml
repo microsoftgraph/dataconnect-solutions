@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright (c) Microsoft Corporation. All rights reserved.
+  ~ Licensed under the MIT license. See LICENSE file in the project root for full license information.
+  -->
+
+<configuration>
+
+    <property name="LOGS" value="${JWC_CORE_LOG_DIR:-logs}"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %X{correlationId} %replace([user:%X{user}]){'\[user:]', ''} %-5level %logger{36} - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGS}/jwc-events-creator.log</file>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{yyyy-MM-dd HH:mm:ss SSS} [%t] %-5level %logger{36} %msg\n</Pattern>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOGS}/archived/jwc-events-creator-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>20MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            <!-- keep maximum 500 MB of logs within 7 days -->
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>500MB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="org.springframework.data.elasticsearch" level="ERROR" />
+    <logger name="org.springframework.security" level="INFO" />
+    <logger name="org.elasticsearch.client" level="ERROR" />
+
+    <!-- LOG everything at INFO level -->
+    <root level="${JWC_EVENTS_CREATOR_LOG_LEVEL:-info}">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="Console" />
+    </root>
+
+    <logger name="com.microsoft.graphdataconnect.watercooler.events.creator" level="${JWC_EVENTS_CREATOR_LOG_LEVEL:-info}" additivity="false">
+        <appender-ref ref="FILE" />
+        <appender-ref ref="Console" />
+    </logger>
+
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
+        <level value="${JWC_EVENTS_CREATOR_LOG_LEVEL:-debug}" />
+    </logger>
+
+</configuration>

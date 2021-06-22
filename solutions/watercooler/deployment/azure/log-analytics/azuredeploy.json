@@ -1,0 +1,38 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "type": "string"
+    },
+    "logs.workspace.name": {
+      "type": "string"
+    },
+    "logs.workspace.sku": {
+      "type": "string",
+      "defaultValue": "free",
+      "allowedValues": [
+        "free",
+        "standalone",
+        "pernode"
+      ],
+      "metadata": {
+        "description": "Specify the SKU for Log Analytics"
+      }
+    }
+  },
+  "variables": {},
+  "resources": [
+          {
+            "name": "[parameters('logs.workspace.name')]",
+            "type": "Microsoft.OperationalInsights/workspaces",
+            "apiVersion": "2020-08-01",
+            "location": "[parameters('location')]",
+              "properties": {
+                "sku": {
+                  "name": "[parameters('logs.workspace.sku')]"
+                }
+              }
+            }
+  ]
+}

@@ -1,0 +1,548 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appservice.name": {
+      "defaultValue": "watercooler-app",
+      "type": "string"
+    },
+    "vnet.name": {
+      "defaultValue": "wc-network",
+      "type": "string"
+    },
+    "keyvault.name": {
+      "type": "string",
+      "defaultValue": ""
+    },
+    "sqlserver.name": {
+      "type": "string"
+    },
+    "sqlsever.database.name": {
+      "type": "string"
+    },
+    "sqlsever.sql-auth": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "appservice.sku": {
+      "type": "object",
+      "defaultValue": {
+        "name": "P2v2",
+        "tier": "PremiumV2",
+        "size": "P2v2",
+        "family": "Pv2",
+        "capacity": 1
+      }
+    },
+    "appservice.docker-config": {
+      "type": "object",
+      "defaultValue": {
+        "password": "none",
+        "server": "blueprint.azurecr.io",
+        "username": "none",
+        "image": "bpcs/watercooler",
+        "tag": "none"
+      }
+    },
+    "clientId": {
+      "type": "securestring"
+    },
+    "clientSecret": {
+      "type": "securestring"
+    },
+    "location": {
+      "type": "string"
+    },
+    "tenantId": {
+      "type": "string"
+    },
+    "alert.admin.email": {
+      "type": "string"
+    },
+    "alert.name": {
+      "type": "string",
+      "defaultValue": "Watercooler HTTP Errors Alert"
+    },
+    "alert.enabled": {
+      "type": "bool",
+      "defaultValue": false
+    },
+    "alert.admin.fullname": {
+      "type": "string"
+    },
+    "logs.workspace.name": {
+      "type": "string"
+    },
+    "appServiceSettingsName": {
+      "type": "string",
+      "defaultValue": "wc-jwc-logs"
+    },
+    "jwcCoreLogs.AppServiceHTTPLogs": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "jwcCoreLogs.AppServiceConsoleLogs": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "jwcCoreLogs.AppServiceAppLogs": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "jwcCoreLogs.AppServiceFileAuditLogs": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "jwcCoreLogs.AppServiceAuditLogs": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "jwcCoreLogs.AppServiceIPSecAuditLogs": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "jwcCoreLogs.AppServicePlatformLogs": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "jwcCoreMetrics.AllMetrics": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "adf.name": {
+      "type": "string"
+    },
+    "resourceGroup.name": {
+      "type": "string"
+    },
+    "subscriptionId": {
+      "type": "string"
+    },
+    "wcAdmins.groupId": {
+      "type": "string"
+    },
+    "wc.sql.username": {
+      "type": "string"
+    },
+    "wc.sql.password": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "appservice.vnet.connection.name": "b7959778-2245-4faf-be82-540465abeed2_watercooler-vnet",
+    "appservice.serverfarm.name": "[concat(parameters('appservice.name'),'-app-plan' )]",
+    "dockerImageUrl": "[concat(parameters('appservice.docker-config').server, '/', parameters('appservice.docker-config').image, ':', parameters('appservice.docker-config').tag)]",
+    "jdbc-url": "[concat('jdbc:sqlserver://', parameters('sqlserver.name'), '.database.windows.net:1433;database=', parameters('sqlsever.database.name'), ';authentication=ActiveDirectoryMSI;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30')]",
+    "sql-server-auth-jdbc-url": "[concat('jdbc:sqlserver://', parameters('sqlserver.name'), '.database.windows.net:1433;database=', parameters('sqlsever.database.name'), ';encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2019-08-01",
+      "name": "[variables('appservice.serverfarm.name')]",
+      "location": "[parameters('location')]",
+      "tags": {
+        "Purpose": "Watercooler app service plan"
+      },
+      "sku": {
+        "name": "[parameters('appservice.sku').name]",
+        "tier": "[parameters('appservice.sku').tier]",
+        "size": "[parameters('appservice.sku').size]",
+        "family": "[parameters('appservice.sku').family]",
+        "capacity": "[parameters('appservice.sku').capacity]"
+      },
+      "kind": "linux",
+      "properties": {
+        "perSiteScaling": false,
+        "maximumElasticWorkerCount": 1,
+        "isSpot": false,
+        "reserved": true,
+        "isXenon": false,
+        "hyperV": false
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2019-08-01",
+      "name": "[parameters('appservice.name')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appservice.serverfarm.name'))]"
+      ],
+      "tags": {
+        "Purpose": "Watercooler core app "
+      },
+      "kind": "app,linux,container",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "properties": {
+        "enabled": true,
+        "siteConfig": {
+          "siteAuthSettings": {
+            "enabled": true,
+            "unauthenticatedClientAction": "RedirectToLoginPage",
+            "tokenStoreEnabled": true,
+            "additionalLoginParams": [
+              "response_type=code id_token"
+            ],
+            "defaultProvider": "AzureActiveDirectory",
+            "clientId": "[parameters('clientId')]",
+            "clientSecret": "[parameters('clientSecret')]",
+            "issuer": "[concat('https://sts.windows.net/', parameters('tenantId'), '/')]"
+          },
+          "appSettings": [
+            {
+              "name": "AZURE_KEY_VAULT_URI",
+              "value": "[concat('https://', parameters('keyvault.name'), '.vault.azure.net/')]"
+            },
+            {
+              "name": "WATERCOOLER_APPSERVICE_URL",
+              "value": "[concat('https://', parameters('appservice.name'), '.azurewebsites.net')]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_URL",
+              "value": "[concat('https://', parameters('appservice.docker-config').server)]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_USERNAME",
+              "value": "[parameters('appservice.docker-config').username]"
+            },
+            {
+              "name": "DOCKER_REGISTRY_SERVER_PASSWORD",
+              "value": "[parameters('appservice.docker-config').password]"
+            },
+            {
+              "name": "FLYWAY_ENABLED",
+              "value": "false"
+            },
+            {
+              "name": "JWC_LOG_LEVEL",
+              "value": "info"
+            },
+            {
+              "name": "RELEVANT_SKILLS_SIZE",
+              "value": "200"
+            },
+            {
+              "name": "USE_RELATED_SUGGESTIONS",
+              "value": "true"
+            },
+            {
+              "name": "WEBSITE_DNS_SERVER",
+              "value": "168.63.129.16"
+            },
+            {
+              "name": "WEBSITE_HTTPLOGGING_RETENTION_DAYS",
+              "value": "7"
+            },
+            {
+              "name": "WEBSITE_VNET_ROUTE_ALL",
+              "value": "1"
+            },
+            {
+              "name": "WEBSITES_ENABLE_APP_SERVICE_STORAGE",
+              "value": "false"
+            },
+            {
+              "name": "USE_MSI_SQL_AUTH",
+              "value": "[not(parameters('sqlsever.sql-auth'))]"
+            },
+            {
+              "name": "ADF_POLLING_INTERVAL_SECONDS",
+              "value": "20"
+            },
+            {
+              "name": "ADF_POLLING_ATTEMPTS_CLEANUP",
+              "value": "100"
+            },
+            {
+              "name": "ADF_POLLING_ATTEMPTS_PIPELINES",
+              "value": "4200"
+            },
+            {
+              "name": "SERVICE_PRINCIPAL_TENANT_ID",
+              "value": "[parameters('tenantId')]"
+            },
+            {
+              "name": "SERVICE_PRINCIPAL_CLIENT_ID",
+              "value": "[parameters('clientId')]"
+            },
+            {
+              "name": "ADF_SUBSCRIPTION_ID",
+              "value": "[parameters('subscriptionId')]"
+            },
+            {
+              "name": "ADF_RESOURCE_GROUP_NAME",
+              "value": "[parameters('resourceGroup.name')]"
+            },
+            {
+              "name": "ADF_NAME",
+              "value": "[parameters('adf.name')]"
+            },
+            {
+              "name": "WC_ADMINS_GROUP_ID",
+              "value": "[parameters('wcAdmins.groupId')]"
+            },
+            {
+              "name": "USE_MULTILINE_LOGS",
+              "value": "true"
+            },
+            {
+              "name": "JWC_DATASOURCE_USERNAME",
+              "value": "[parameters('wc.sql.username')]"
+            },
+            {
+              "name": "JWC_DATASOURCE_PASSWORD",
+              "value": "[parameters('wc.sql.password')]"
+            },
+            {
+              "name": "JWC_DATASOURCE_URL",
+              "value": "[if(parameters('sqlsever.sql-auth'), variables('sql-server-auth-jdbc-url') , variables('jdbc-url'))]"
+            },
+
+          ],
+          "connectionStrings": [
+            {
+              "name": "WC_SERVER",
+              "connectionString": "[if(parameters('sqlsever.sql-auth'), variables('sql-server-auth-jdbc-url') , variables('jdbc-url'))]",
+              "type": "SQLServer"
+            }
+          ]
+        },
+        "hostNameSslStates": [
+          {
+            "name": "[concat(parameters('appservice.name'), '.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "[concat(parameters('appservice.name'), '.scm.azurewebsites.net')]",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appservice.serverfarm.name'))]",
+        "reserved": true,
+        "isXenon": false,
+        "hyperV": false,
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": false,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 0,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": false,
+        "redundancyMode": "None"
+      },
+      "resources": [
+        {
+          "name": "virtualNetwork",
+          "type": "networkConfig",
+          "apiVersion": "2019-08-01",
+          "dependsOn": [
+            "[resourceId('Microsoft.Web/sites', parameters('appservice.name'))]"
+          ],
+          "properties": {
+            "subnetResourceId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet.name'), 'watercooler-vnet')]",
+            "swiftSupported": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2019-08-01",
+      "name": "[concat(parameters('appservice.name'), '/web')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('appservice.name'))]"
+      ],
+      "tags": {
+        "Purpose": "Watercooler core configuration"
+      },
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php",
+          "hostingstart.html"
+        ],
+        "netFrameworkVersion": "v4.0",
+        "linuxFxVersion": "[concat('DOCKER|', variables('dockerImageUrl'))]",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "httpLoggingEnabled": true,
+        "logsDirectorySizeLimit": 75,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "[concat('$', parameters('appservice.name'))]",
+        "scmType": "None",
+        "use32BitWorkerProcess": true,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": true
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "autoHealEnabled": false,
+        "vnetName": "[variables('appservice.vnet.connection.name')]",
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Deny",
+            "priority": 1024,
+            "name": "Deny all",
+            "description": "Deny all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2019-08-01",
+      "name": "[concat(parameters('appservice.name'), '/', parameters('appservice.name'), '.azurewebsites.net')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('appservice.name'))]"
+      ],
+      "properties": {
+        "siteName": "[parameters('appservice.name')]",
+        "hostNameType": "Verified"
+      }
+    },
+    {
+      "name": "[parameters('alert.name')]",
+      "type": "Microsoft.Insights/metricAlerts",
+      "location": "global",
+      "apiVersion": "2018-03-01",
+      "tags": {},
+      "dependson": [
+        "[resourceId('microsoft.insights/actionGroups','adminEmailActionGroup')]",
+        "[resourceId('Microsoft.Web/sites', parameters('appservice.name'))]"
+      ],
+      "properties": {
+        "description": "Email whenever there are HTTP Errors sent by the server",
+        "severity": 3,
+        "enabled": "[parameters('alert.enabled')]",
+        "scopes": ["[resourceId('Microsoft.Web/sites', parameters('appservice.name'))]"],
+        "evaluationFrequency":"PT1M",
+        "windowSize": "PT5M",
+        "criteria": {
+          "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+          "allOf": [
+            {
+              "criterionType": "StaticThresholdCriterion",
+              "name" : "Http Error Metric",
+              "metricName": "Http5xx",
+              "metricNamespace": "Microsoft.Web/sites",
+              "monitorTemplateType": 8,
+              "operator": "GreaterThan",
+              "threshold": 0.0,
+              "timeAggregation": "Total"
+            }
+          ]
+        },
+        "actions": [
+          {
+            "actionGroupId": "[resourceId('microsoft.insights/actionGroups','adminEmailActionGroup')]"
+          }
+        ]
+      }
+    },
+    {
+      "name": "adminEmailActionGroup",
+      "type": "microsoft.insights/actionGroups",
+      "apiVersion": "2019-06-01",
+      "location": "global",
+      "properties": {
+        "groupShortName": "string",
+        "enabled": true,
+        "emailReceivers": [
+          {
+            "name": "[parameters('alert.admin.fullname')]",
+            "emailAddress": "[parameters('alert.admin.email')]",
+            "useCommonAlertSchema": true
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/providers/diagnosticSettings",
+      "apiVersion": "2017-05-01-preview",
+      "name": "[concat(parameters('appservice.name'),'/microsoft.insights/', parameters('appServiceSettingsName'))]",
+      "condition": "[not(empty(parameters('logs.workspace.name')))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('appservice.name'))]"
+      ],
+      "properties": {
+        "workspaceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('logs.workspace.name'))]",
+        "logs": [
+          {
+            "category": "AppServiceHTTPLogs",
+            "enabled": "[parameters('jwcCoreLogs.AppServiceHTTPLogs')]"
+          },
+          {
+            "category": "AppServiceConsoleLogs",
+            "enabled": "[parameters('jwcCoreLogs.AppServiceConsoleLogs')]"
+          },
+          {
+            "category": "AppServiceAppLogs",
+            "enabled": "[parameters('jwcCoreLogs.AppServiceAppLogs')]"
+          },
+          {
+            "category": "AppServiceFileAuditLogs",
+            "enabled": "[parameters('jwcCoreLogs.AppServiceFileAuditLogs')]"
+          },
+          {
+            "category": "AppServiceAuditLogs",
+            "enabled": "[parameters('jwcCoreLogs.AppServiceAuditLogs')]"
+          },
+          {
+            "category": "AppServiceIPSecAuditLogs",
+            "enabled": "[parameters('jwcCoreLogs.AppServiceIPSecAuditLogs')]"
+          },
+          {
+            "category": "AppServicePlatformLogs",
+            "enabled": "[parameters('jwcCoreLogs.AppServicePlatformLogs')]"
+          }
+        ],
+        "metrics": [
+          {
+            "category": "AllMetrics",
+            "enabled": "[parameters('jwcCoreMetrics.AllMetrics')]"
+          }
+        ]
+      }
+    }
+  ],
+  "outputs": {
+    "possibleOutboundIpAddresses": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Web/sites', parameters('appservice.name')), '2019-08-01', 'Full').properties.possibleOutboundIpAddresses]"
+    }
+  }
+}

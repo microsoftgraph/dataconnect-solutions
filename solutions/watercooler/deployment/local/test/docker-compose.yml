@@ -1,0 +1,43 @@
+version: '2.4'
+services:
+  jwc_database:
+    container_name: jwc_database
+    image: blueprint.azurecr.io/bpcs/mssql-server:db_jwcv1
+    restart: on-failure
+
+    environment:
+      SA_PASSWORD: ${MSSQL_PASSWORD:-password_!23}
+      ACCEPT_EULA: y
+      MSSQL_TCP_PORT: 1433
+    ports:
+      - "1533:1433"
+    networks:
+      - jwc
+    volumes:
+      - jwc_mssql_data:/var/opt/mssql
+
+  jwc_database-test:
+    container_name: jwc_database-test
+    image: blueprint.azurecr.io/bpcs/mssql-server:db_jwcv1
+    restart: on-failure
+
+    environment:
+      SA_PASSWORD: ${MSSQL_PASSWORD:-password_!23}
+      ACCEPT_EULA: y
+      MSSQL_TCP_PORT: 1433
+    ports:
+      - "11533:1433"
+    networks:
+      - jwc
+    volumes:
+      - jwc_mssql_test_data:/var/opt/mssql
+
+networks:
+  jwc:
+    driver: bridge
+
+volumes:
+  jwc_mssql_data:
+    driver: local
+  jwc_mssql_test_data:
+    driver: local

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "wc-service.sp.objectId": {
+      "type": "string"
+    },
+    "adf.name": {
+      "type": "string"
+    },
+    "storageAccount.name": {
+      "type": "string"
+    },
+    "wcAdmins.groupId": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "roleDefinitionId": {
+      "StorageBlobDataContributor": "[subscriptionResourceId('Microsoft.Authorization/roleAssignments', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+    },
+    "wc-service.roleName": "[guid('StorageBlobDataContributor', parameters('wc-service.sp.objectId'), parameters('storageAccount.name'))]",
+    "adf.roleName": "[guid('StorageBlobDataContributor', parameters('adf.name'), parameters('storageAccount.name'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+      "apiVersion": "2018-09-01-preview",
+      "name": "[concat(parameters('storageAccount.name'), '/Microsoft.Authorization/', variables('wc-service.roleName') )]",
+      "properties": {
+        "roleDefinitionId": "[variables('roleDefinitionId').StorageBlobDataContributor]",
+        "principalId": "[parameters('wc-service.sp.objectId')]",
+        "principalType": "ServicePrincipal"
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+      "apiVersion": "2018-09-01-preview",
+      "name": "[concat(parameters('storageAccount.name'), '/Microsoft.Authorization/', variables('adf.roleName') )]",
+      "properties": {
+        "roleDefinitionId": "[variables('roleDefinitionId').StorageBlobDataContributor]",
+        "principalId": "[reference(resourceId('Microsoft.DataFactory/factories', parameters('adf.name')), '2018-06-01', 'Full').identity.principalId]",
+        "principalType": "ServicePrincipal"
+      }
+    }
+  ]
+}
