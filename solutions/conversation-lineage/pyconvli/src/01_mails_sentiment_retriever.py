@@ -79,14 +79,19 @@ def analyze_conversations(all_conversations, batch_size=5, endpoint="", key=""):
     for batch in batch_list(all_conversations, batch_size):
         content = [conv.content for conv in batch]
 
+        print("========Initializing Text Analytics Client")
         text_analytics_client = TextAnalyticsClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+
         conversations_sentiment_dict = dict()
         conversation_entities_dict = dict()
         try:
 
-            with text_analytics_client:
+
+                print("========recognize_entities(content)", content)
                 entities_result = text_analytics_client.recognize_entities(content)
+                print("========analyze_sentiment(content)", content)
                 sentiment_results = text_analytics_client.analyze_sentiment(content)
+                print("===")
                 for entity_result in entities_result:
                     index = entity_result["id"]
                     for recognized_ent in entity_result["entities"]:
@@ -109,17 +114,17 @@ def analyze_conversations(all_conversations, batch_size=5, endpoint="", key=""):
                     )
                     conversations_sentiment_dict[index] = sent_dict
 
-            for idx, conversation in enumerate(batch):
-                idx = str(idx)
-                # we update the conversation only if we have information about it
-                if idx in conversations_sentiment_dict and idx in conversation_entities_dict and len(
-                        conversations_sentiment_dict[idx]):
-                    conversation_sentiment_info = conversations_sentiment_dict[idx]
-                    conversation_entities_info = conversation_entities_dict[idx]
+                for idx, conversation in enumerate(batch):
+                    idx = str(idx)
+                    # we update the conversation only if we have information about it
+                    if idx in conversations_sentiment_dict and idx in conversation_entities_dict and len(
+                            conversations_sentiment_dict[idx]):
+                        conversation_sentiment_info = conversations_sentiment_dict[idx]
+                        conversation_entities_info = conversation_entities_dict[idx]
 
-                    conversation.conversation_sentiment_info = conversation_sentiment_info
-                    conversation.entities_info = conversation_entities_info
-                    analyzed_conversations.append(conversation)
+                        conversation.conversation_sentiment_info = conversation_sentiment_info
+                        conversation.entities_info = conversation_entities_info
+                        analyzed_conversations.append(conversation)
 
         except Exception as e:
             print("Exception in retrieving the sentiment")
@@ -231,7 +236,7 @@ if __name__ == '__main__':
 
     else:
 
-        #params = json.load(open(Path("config_test.json")))
+        # params = json.load(open(Path("config_test.json")))
         params = json.load(open(Path("/dbfs/mnt/convlineage/scripts/config_test_azure.json")))
         mail_input_file = params["mail_input_folder"]
         key = params["key"]
@@ -248,9 +253,12 @@ if __name__ == '__main__':
         os.mkdir(full_path)
 
     flag_time = time.time()
+    print("=========start retrieving conversations")
     all_conversations = retrieve_conversations(mail_input_file)
+    print("=========conversations retrieved")
     # sample 100 of them
     all_conversations = random.sample(all_conversations, 400)
+    print("=========start analyzing conversations")
     analyzed_conversations = analyze_conversations(all_conversations, batch_size=5, endpoint=endpoint, key=key)
 
     export_to_csv(full_path, analyzed_conversations)
