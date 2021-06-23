@@ -27,12 +27,16 @@ def cleanup_database(database, jdbc_user, jdbc_password):
 
     conversation_sentiment_info = "truncate table conversation_sentiment_info;"
     conversation_entities_info = "truncate table conversation_entities_info;"
+    conversation_to_receiver_sentiment_info = "truncate table conversation_to_receiver_sentiment_info;"
 
     cursor.execute(conversation_sentiment_info)
     print("Truncated conversation_sentiment_info table.")
 
     cursor.execute(conversation_entities_info)
     print("Truncated conversation_entities_info table.")
+
+    cursor.execute(conversation_to_receiver_sentiment_info)
+    print("Truncated conversation_to_receiver_sentiment_info table.")
 
     cursor.close()
     connection.close()

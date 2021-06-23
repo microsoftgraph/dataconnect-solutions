@@ -76,12 +76,12 @@ def write_conversation_entities_to_sql(conversation_entities_info_file, batch_si
     number_of_rows = len(df)
     line_count = 0
     insert_command = "INSERT INTO conversation_entities_info " \
-                     "(id,conversation_id,sender_mail,sender_name,sender_domain,entity_text,category,score) VALUES "
+                     "(id,sent_date,conversation_id,sender_mail,sender_name,sender_domain,entity_text,category,score) VALUES "
     batch_insert = insert_command
     for line_count in range(1, number_of_rows + 1):
         row = df.iloc[line_count - 1]
         try:
-            batch_insert += f""" ('{row["id"]}',  '{row["conversation_id"]}', '{row["sender_mail"]}', '{row["sender_name"]}', '{row["sender_domain"]}', '{row["text"]}', '{row["category"]}', {row["score"]}),"""
+            batch_insert += f""" ('{row["id"]}',  '{row["sent_date"]}', '{row["conversation_id"]}', '{row["sender_mail"]}', '{row["sender_name"]}', '{row["sender_domain"]}', '{row["text"]}', '{row["category"]}', {row["score"]}),"""
             if line_count % batch_size == 0:
                 batch_insert = batch_insert[:-1]  # remove last comma
                 batch_insert = batch_insert + ";"
@@ -111,11 +111,11 @@ def write_conversation_sentiment_to_sql(conversation_sentiment_info_file, batch_
     number_of_rows = len(df)
     line_count = 0
     insert_command = "INSERT INTO conversation_sentiment_info " \
-                     "(id,conversation_id,sender_mail,sender_name,sender_domain,general_sentiment,pos_score,neutral_score,negative_score) VALUES "
+                     "(id,sent_date,conversation_id,sender_mail,sender_name,sender_domain,general_sentiment,pos_score,neutral_score,negative_score) VALUES "
     batch_insert = insert_command
     for line_count in range(1, number_of_rows + 1):
         row = df.iloc[line_count - 1]
-        batch_insert += f""" ('{row["id"]}',  '{row["conversation_id"]}', '{row["sender_mail"]}', '{row["sender_name"]}', '{row["sender_domain"]}', '{row["general_sentiment"]}', {row["pos_score"]}, {row["neutral_score"]}, {row["negative_score"]}),"""
+        batch_insert += f""" ('{row["id"]}',  '{row["sent_date"]}', '{row["conversation_id"]}', '{row["sender_mail"]}', '{row["sender_name"]}', '{row["sender_domain"]}', '{row["general_sentiment"]}', {row["pos_score"]}, {row["neutral_score"]}, {row["negative_score"]}),"""
         try:
             if line_count % batch_size == 0:
                 batch_insert = batch_insert[:-1]  # remove last comma
@@ -141,11 +141,11 @@ def write_conversation_to_receiver_sentiment_to_sql(conversation_sentiment_info_
     number_of_rows = len(df)
     line_count = 0
     insert_command = "INSERT INTO conversation_to_receiver_sentiment_info " \
-                     "(id,conversation_id,sender_mail,sender_name,sender_domain,general_sentiment,pos_score,neutral_score,negative_score,recipient_name,recipient_address,recipient_domain) VALUES "
+                     "(id,sent_date,conversation_id,sender_mail,sender_name,sender_domain,general_sentiment,pos_score,neutral_score,negative_score,recipient_name,recipient_address,recipient_domain) VALUES "
     batch_insert = insert_command
     for line_count in range(1, number_of_rows + 1):
         row = df.iloc[line_count - 1]
-        batch_insert += f""" ('{row["id"]}',  '{row["conversation_id"]}', '{row["sender_mail"]}', '{row["sender_name"]}', '{row["sender_domain"]}', '{row["general_sentiment"]}', {row["pos_score"]}, {row["neutral_score"]}, {row["negative_score"]}, '{row["recipient_name"]}', '{row["recipient_address"]}', '{row["recipient_domain"]}'),"""
+        batch_insert += f""" ('{row["id"]}',  '{row["sent_date"]}', '{row["conversation_id"]}', '{row["sender_mail"]}', '{row["sender_name"]}', '{row["sender_domain"]}', '{row["general_sentiment"]}', {row["pos_score"]}, {row["neutral_score"]}, {row["negative_score"]}, '{row["recipient_name"]}', '{row["recipient_address"]}', '{row["recipient_domain"]}'),"""
         try:
             if line_count % batch_size == 0:
                 batch_insert = batch_insert[:-1]  # remove last comma

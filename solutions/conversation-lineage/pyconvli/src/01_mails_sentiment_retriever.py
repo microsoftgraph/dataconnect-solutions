@@ -18,7 +18,7 @@ from azure.core.credentials import AzureKeyCredential
 
 
 class Conversation(object):
-    def __init__(self, sender_name, sender_mail, sender_domain, content, recipients):
+    def __init__(self, sender_name, sender_mail, sender_domain, content, recipients, conversation_date=None):
         self.sender_name = sender_name
         self.sender_mail = sender_mail
         self.sender_domain = sender_domain
@@ -26,15 +26,22 @@ class Conversation(object):
             recipients = []
         self.recipients = recipients
         self.content = content
+        self.conversation_date = conversation_date
         self.id = str(uuid.uuid4())
         self.conversation = None
 
 
 def retrieve_conversations(mails_input_path):
     all_conversations = []
+    start_date = datetime.date(2021, 1, 1)
+    end_date = datetime.date(2021, 3, 20)
+    time_between_dates = end_date - start_date
+    days_between_dates = time_between_dates.days
+
     with open(mails_input_path) as f:
         for line in f.readlines():
             try:
+                random_number_of_days = random.randrange(days_between_dates)
                 mail = json.loads(line)
                 content = mail["UniqueBody"]["Content"]
                 sender_mail = mail["Sender"]["EmailAddress"]["Address"]
@@ -48,8 +55,10 @@ def retrieve_conversations(mails_input_path):
                     recipient_name = recipient["EmailAddress"]["Name"]
                     target_recipients.append((recipient_name, recipient_address, recipient_domain))
 
+                conversation_date = start_date + datetime.timedelta(days=random_number_of_days)
+                conversation_date_str = conversation_date.strftime("%Y-%m-%d")
                 conversation = Conversation(sender_name, sender_mail, sender_domain,
-                                            content, target_recipients)
+                                            content, target_recipients, conversation_date_str)
                 all_conversations.append(conversation)
             except Exception as e:
                 print("Exception in creating the conversation")
@@ -86,45 +95,44 @@ def analyze_conversations(all_conversations, batch_size=5, endpoint="", key=""):
         conversation_entities_dict = dict()
         try:
 
+            print("========recognize_entities(content)", content)
+            entities_result = text_analytics_client.recognize_entities(content)
+            print("========analyze_sentiment(content)", content)
+            sentiment_results = text_analytics_client.analyze_sentiment(content)
+            print("===")
+            for entity_result in entities_result:
+                index = entity_result["id"]
+                for recognized_ent in entity_result["entities"]:
+                    category = recognized_ent["category"]
+                    score = recognized_ent["confidence_score"]
+                    text = recognized_ent["text"]
+                    if score is not None and score > 0.5:
+                        ent_dict = dict(category=category, text=text, score=score)
+                        conversation_entities_dict.setdefault(index, []).append(ent_dict)
 
-                print("========recognize_entities(content)", content)
-                entities_result = text_analytics_client.recognize_entities(content)
-                print("========analyze_sentiment(content)", content)
-                sentiment_results = text_analytics_client.analyze_sentiment(content)
-                print("===")
-                for entity_result in entities_result:
-                    index = entity_result["id"]
-                    for recognized_ent in entity_result["entities"]:
-                        category = recognized_ent["category"]
-                        score = recognized_ent["confidence_score"]
-                        text = recognized_ent["text"]
-                        if score is not None and score > 0.5:
-                            ent_dict = dict(category=category, text=text, score=score)
-                            conversation_entities_dict.setdefault(index, []).append(ent_dict)
+            for sentiment_result in sentiment_results:
+                index = sentiment_result["id"]
+                confidence_scores = sentiment_result["confidence_scores"]
+                general_sentiment = sentiment_result["sentiment"]
+                conversations_sentiment_dict.setdefault(index, [])
+                sent_dict = dict(
+                    confidence_scores=confidence_scores,
+                    general_sentiment=general_sentiment,
+                    sentences=sentiment_result["sentences"]
+                )
+                conversations_sentiment_dict[index] = sent_dict
 
-                for sentiment_result in sentiment_results:
-                    index = sentiment_result["id"]
-                    confidence_scores = sentiment_result["confidence_scores"]
-                    general_sentiment = sentiment_result["sentiment"]
-                    conversations_sentiment_dict.setdefault(index, [])
-                    sent_dict = dict(
-                        confidence_scores=confidence_scores,
-                        general_sentiment=general_sentiment,
-                        sentences=sentiment_result["sentences"]
-                    )
-                    conversations_sentiment_dict[index] = sent_dict
+            for idx, conversation in enumerate(batch):
+                idx = str(idx)
+                # we update the conversation only if we have information about it
+                if idx in conversations_sentiment_dict and idx in conversation_entities_dict and len(
+                        conversations_sentiment_dict[idx]):
+                    conversation_sentiment_info = conversations_sentiment_dict[idx]
+                    conversation_entities_info = conversation_entities_dict[idx]
 
-                for idx, conversation in enumerate(batch):
-                    idx = str(idx)
-                    # we update the conversation only if we have information about it
-                    if idx in conversations_sentiment_dict and idx in conversation_entities_dict and len(
-                            conversations_sentiment_dict[idx]):
-                        conversation_sentiment_info = conversations_sentiment_dict[idx]
-                        conversation_entities_info = conversation_entities_dict[idx]
-
-                        conversation.conversation_sentiment_info = conversation_sentiment_info
-                        conversation.entities_info = conversation_entities_info
-                        analyzed_conversations.append(conversation)
+                    conversation.conversation_sentiment_info = conversation_sentiment_info
+                    conversation.entities_info = conversation_entities_info
+                    analyzed_conversations.append(conversation)
 
         except Exception as e:
             print("Exception in retrieving the sentiment")
@@ -133,7 +141,7 @@ def analyze_conversations(all_conversations, batch_size=5, endpoint="", key=""):
             print("-" * 60)
             continue
 
-        time.sleep(0.1)
+        #time.sleep(0.1)
 
     return analyzed_conversations
 
@@ -144,8 +152,9 @@ def export_to_csv(full_path, analyzed_conversations):
     for conversation in analyzed_conversations:
         sql_idx = str(uuid.uuid4())
         conversation_id = conversation.id
-
+        conversation_date = conversation.conversation_date
         tuple_list.append(tuple([sql_idx,
+                                 conversation_date,
                                  conversation_id,
                                  conversation.sender_mail,
                                  conversation.sender_name,
@@ -156,7 +165,7 @@ def export_to_csv(full_path, analyzed_conversations):
                                  conversation.conversation_sentiment_info["confidence_scores"]["negative"],
                                  ]))
     df = pd.DataFrame(tuple_list, columns=[p.strip() for p in
-                                           "id,conversation_id,sender_mail,sender_name,sender_domain,general_sentiment,pos_score,neutral_score,negative_score".split(
+                                           "id,sent_date,conversation_id,sender_mail,sender_name,sender_domain,general_sentiment,pos_score,neutral_score,negative_score".split(
                                                ",")])
     df.to_csv(os.path.join(full_path, file_name), index=False, doublequote=False, escapechar="\\")
 
@@ -165,10 +174,12 @@ def export_to_csv(full_path, analyzed_conversations):
     for conversation in analyzed_conversations:
 
         conversation_id = conversation.id
+        conversation_date = conversation.conversation_date
 
         for entity_info in conversation.entities_info[:5]:  # we limit to 5 entities
             sql_idx = str(uuid.uuid4())
             tuple_list.append(tuple([sql_idx,
+                                     conversation_date,
                                      conversation_id,
                                      conversation.sender_mail,
                                      conversation.sender_name,
@@ -178,7 +189,7 @@ def export_to_csv(full_path, analyzed_conversations):
                                      entity_info["score"],
                                      ]))
     df = pd.DataFrame(tuple_list, columns=[p.strip() for p in
-                                           "id,conversation_id,sender_mail,sender_name,sender_domain,text,category,score".split(
+                                           "id,sent_date,conversation_id,sender_mail,sender_name,sender_domain,text,category,score".split(
                                                ",")])
     df.to_csv(os.path.join(full_path, file_name), index=False, doublequote=False, escapechar="\\")
 
@@ -189,9 +200,11 @@ def export_to_csv(full_path, analyzed_conversations):
         for receiver in conversation.recipients:
             sql_idx = str(uuid.uuid4())
             conversation_id = conversation.id
+            conversation_date = conversation.conversation_date
             recipient_name, recipient_address, recipient_domain = receiver
 
             tuple_list.append(tuple([sql_idx,
+                                     conversation_date,
                                      conversation_id,
                                      conversation.sender_mail,
                                      conversation.sender_name,
@@ -205,7 +218,7 @@ def export_to_csv(full_path, analyzed_conversations):
                                      recipient_domain
                                      ]))
     df = pd.DataFrame(tuple_list, columns=[p.strip() for p in
-                                           "id,conversation_id,sender_mail,sender_name,sender_domain,general_sentiment,pos_score,neutral_score,negative_score,recipient_name,recipient_address,recipient_domain".split(
+                                           "id,sent_date,conversation_id,sender_mail,sender_name,sender_domain,general_sentiment,pos_score,neutral_score,negative_score,recipient_name,recipient_address,recipient_domain".split(
                                                ",")])
     df.to_csv(os.path.join(full_path, file_name), index=False, doublequote=False, escapechar="\\")
 
@@ -236,7 +249,7 @@ if __name__ == '__main__':
 
     else:
 
-        # params = json.load(open(Path("config_test.json")))
+        #params = json.load(open(Path("config_test.json")))
         params = json.load(open(Path("/dbfs/mnt/convlineage/scripts/config_test_azure.json")))
         mail_input_file = params["mail_input_folder"]
         key = params["key"]
