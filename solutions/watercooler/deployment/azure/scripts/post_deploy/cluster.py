@@ -3,7 +3,6 @@
 
 import argparse
 import json
-import os
 from distutils.util import strtobool
 from os.path import join, dirname, basename
 
@@ -11,9 +10,7 @@ import sys
 from watercooler_utils import ad_ops
 from watercooler_utils import arm_ops
 from watercooler_utils import az
-from watercooler_utils import blob_ops
 from watercooler_utils import secrets_ops
-from watercooler_utils import adf_ops
 from config import InstallConfiguration
 from monitoring import DeploymentState, Stages
 import pathlib
@@ -21,15 +18,8 @@ import pathlib
 import base64
 import json
 import os
-import requests
 from databricks_api import DatabricksAPI
-from datetime import datetime, timedelta
-from os import listdir
 from os.path import isfile, isdir, join, basename
-from requests import HTTPError
-from retry import retry
-from time import sleep
-from urllib.parse import urljoin
 import time
 
 

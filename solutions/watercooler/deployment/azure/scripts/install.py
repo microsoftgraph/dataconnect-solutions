@@ -47,7 +47,6 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
 
         install_config.wc_admin_ad_group = admin_ad_group
 
-
     if not install_config.wc_service_principal:
         wc_service_sp_name = None
         if non_interactive_mode:
@@ -136,14 +135,12 @@ def init_active_directory_entities(deployment_name: str, install_config: Install
 
     if not install_config.watercooler_user:
         print("Updating Watercooler Meetings Organizer user")
-        watercooler_user_sp = ad_ops.get_or_create_watercooler_user()
+        watercooler_user_sp = ad_ops.get_watercooler_user()
         install_config.watercooler_user = watercooler_user_sp
 
-    print('Creating custom application policy for creating online meetings on behalf of Watercooler Meetings Organizer user')
-    cmd = f"pwsh ../meetings/run_policy_assign.ps1 " + str(install_config.watercooler_user['objectId']) + " " + str(install_config.wc_service_principal['appId'])
-    print(f"executing command: {cmd}")
-
-    subprocess.call(["pwsh", "../meetings/run_policy_assign.ps1", str(install_config.watercooler_user['objectId']), str(install_config.wc_service_principal['appId'])])
+    print('Creating custom application policy for creating online meetings on behalf of Watercooler Meetings Organizer')
+    script_path = "../meetings/run_policy_assign.ps1"
+    subprocess.call(["pwsh", script_path, str(install_config.watercooler_user['objectId']), str(install_config.wc_service_principal['appId'])])
 
 
 def execute_user_prompts(deployment_name: str, install_config: InstallConfiguration, resource_group: str,

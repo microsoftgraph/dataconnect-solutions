@@ -81,4 +81,4 @@ if __name__ == '__main__':
 
     initialize_secrets(install_config=config, resource_group_name=resource_group)
     install_state.complete_stage(Stages.KEY_VAULT_SECRETS_SET)
-    print("Watercooler secrets has been initialized successfully")
+    print("Watercooler secrets have been initialized successfully")
