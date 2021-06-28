@@ -19,33 +19,42 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class MdcFilter(@Autowired override val userService: UserService) extends UserIdExtractionFilter(userService) {
   private val log: Logger = LoggerFactory.getLogger(classOf[MdcFilter])
+  private val arrayAnonymousUserInfo = Map("accesToken" -> "", "idToken" -> "", "refreshToken" -> "", "userId" -> "test@anonymous.com")
 
   @throws[IOException]
   @throws[ServletException]
   override protected def doFilter(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain): Unit = {
-    try {
-      MDC.put("correlationId", getCorrelationId(request))
-      val userId: Option[String] = getUserIdFromHttpServletRequest(request)
 
-      if (userId.isDefined) {
-        MDC.put("user", userId.get)
+        try {
+          if (anonymousUser) {
+            val userId = arrayAnonymousUserInfo.get("userId")
+            MDC.put("user", userId.get)
+          } else {
+            MDC.put("correlationId", getCorrelationId(request))
+            val userId: Option[String] = getUserIdFromHttpServletRequest(request)
+
+            if (userId.isDefined) {
+              MDC.put("user", userId.get)
+            }
+
+          }
+        }catch {
+          case _: UnauthorizedException => None
+        }
+        finally {
+          try {
+            // filterChain.doFilter call has to be made from this finally block,
+            // otherwise if the filterChain.doFilter call would be in the try block above, if an exception is thrown from the try block
+            // filterChain.doFilter might not get called thus the UserIdExtractionFilter.doFilter will not be called
+            filterChain.doFilter(request, response)
+          } finally {
+            MDC.remove("correlationId")
+            MDC.remove("user")
+          }
+        }
       }
 
-    } catch {
-      case _: UnauthorizedException => None
-    }
-    finally {
-      try {
-        // filterChain.doFilter call has to be made from this finally block,
-        // otherwise if the filterChain.doFilter call would be in the try block above, if an exception is thrown from the try block
-        // filterChain.doFilter might not get called thus the UserIdExtractionFilter.doFilter will not be called
-        filterChain.doFilter(request, response)
-      } finally {
-        MDC.remove("correlationId")
-        MDC.remove("user")
-      }
-    }
-  }
+
 
   private def getCorrelationId(request: HttpServletRequest): String = {
     Option(request.getHeader("X-Correlation-ID")) match {

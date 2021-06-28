@@ -42,6 +42,23 @@ Top-level script for the test track. This script runs the tests. Used in `tests-
 * Install and configure [Apache Maven 3.6.0+](http://maven.apache.org/)
 * Download and install [Docker](https://www.docker.com/)
 
+For running the API tests, in the azure app service, the authentication should be set to allow anonymous requests.
+
+In the azure app service, select `Authentication(classic)`
+
+![image](imgs/app_service_authentication_menu.png)
+
+Select the `Allow anonymous requests` option and save the modification
+
+![image](imgs/allow_anonymous_option.png)
+
+Also, in the `Configuration` panel, set the `ALLOW_ANONYMOUS_USER` to `true` like in the steps below:
+
+![image](imgs/configuration_panel.png)
+
+![image](imgs/allow_anonymous_auth.png)
+
+
 ## IDE setup
 
 Before running the tests, depending on you IDE, run one of the following commands to configure the `zebrunner-agent.jar`
@@ -57,9 +74,7 @@ The manner in which the tests can be run is by simply executing the `run_tests.s
 The script will run the `mvn clean test` command and will generate the report using the `mvn surefire-report:report-only` after the run ends.
 
 Run command example:
-`sh run_tests.sh <AppServiceAuthSession> <AppServiceUrl>`
-
-`AppServiceAuthSession` - authentication cookie from App Service (details for obtaining it provided below)
+`sh run_tests.sh  <AppServiceUrl>`
 
 `AppServiceUrl` - the URL of the App Service that is being tested
 
@@ -73,7 +88,7 @@ You can do this by right-clicking the class and selecting the edit configuration
 
 ![image](imgs/run_configuration_for_all_tests.png)
 
-After that, insert the `AppServiceAuthSession` and `AppServiceUrl` in the VM options, with the `-Dtestng.dtd.http=true` 
+After that,`AppServiceUrl` in the VM options, with the `-Dtestng.dtd.http=true`
 argument, used to explicitly load the DTD from a http URL.
 
 ![image](imgs/complete_vm_options.png)
@@ -81,21 +96,6 @@ argument, used to explicitly load the DTD from a http URL.
 ## Test results
 After we run the tests, a report will be available in `target/suite` folder as `surefire-report.html` file.
 
-
-## Retrieving the app service auth cookie
-In order for the tests to work, we need the authentication token from the App Service.
-
-> *Note:* this token expires, make sure you're using a fresh one everytime you run the pipeline.
-
-To obtain the token from a logged-in session in the browser do the following:
-
-- open the ProjectStaffing UI of the development App Service in the browser and log in
-
-- right-click on the page and go to `Inspect` -> `Application` -> `Storage` -> `Cookies`
-
-- locate the cookie titled `AppServiceAuthSession` and copy its value
-
-![Image](imgs/AppServiceAuthSession_cookie_location.png)
 
 ## Writing new tests
 

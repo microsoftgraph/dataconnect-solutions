@@ -57,6 +57,10 @@ AZURE_SEARCH_BASE_URL=<url>
 AZURE_SEARCH_EMAILS_INDEX=gdc-emails
 ```
 
+This enables the anonymous authentication option that is required to run API tests without adding the app service authentication token.
+```
+ALLOW_ANONYMOUS_USER=true
+```
 The name of the employee index is computed by the employees ADF pipeline based on the current date (to support versioning).
 Therefore, the current name of the index has to be set in the local database (the local database setup is presented in 
 [the next step](#mssql-local-database-configuration)).  

@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.microsoft.graphdataconnect.skillsfinder.exceptions.{FailedToGetAzureServiceManagerTokenException, PermissionConsentMissingException, UnauthorizedException}
 import com.microsoft.graphdataconnect.skillsfinder.models.TokenScope
+import com.microsoft.graphdataconnect.skillsfinder.models.dto.admin
 import com.microsoft.graphdataconnect.skillsfinder.models.dto.admin.{JwtTokenHeaders, UserInfo, UserToken}
 import com.microsoft.graphdataconnect.skillsfinder.utils.JwtTokenUtils
 import kong.unirest.json.JSONObject
@@ -48,6 +49,14 @@ class UserService {
   @Autowired
   var cacheManager: CacheManager = _
 
+  @Value("${anonymous.authentication}")
+  var anonymousUser: Boolean = _
+
+  private val anonymousUserInfo = UserInfo("", "", "", "test@anonymous.com")
+  private val arrayAnonymousUserInfo = new Array[UserInfo](1)
+  arrayAnonymousUserInfo(0) = anonymousUserInfo
+
+
   private val logger: Logger = LoggerFactory.getLogger(classOf[UserService])
 
   def getUserId(cookieValue: String): String = {
@@ -55,34 +64,44 @@ class UserService {
   }
 
   def getUserInfo(cookieValue: String): UserInfo = {
-    Try {
-      Unirest.get(jgraphUrl + "/.auth/me").headers(Map("Cookie" -> ("AppServiceAuthSession=" + cookieValue)).asJava).asJson()
-    } match {
-      case Success(response: HttpResponse[JsonNode]) =>
-        if (response.getStatus == HttpStatus.OK) {
-          val jsonResponse = response.getBody.toPrettyString
+    if (anonymousUser) {
+      arrayAnonymousUserInfo(0)
+    } else {
+      Try {
+        Unirest.get(jgraphUrl + "/.auth/me").headers(Map("Cookie" -> ("AppServiceAuthSession=" + cookieValue)).asJava).asJson()
+      } match {
+        case Success(response: HttpResponse[JsonNode]) =>
+          if (response.getStatus == HttpStatus.OK) {
+            val jsonResponse = response.getBody.toPrettyString
 
-          val arrayUserInfo: Array[UserInfo] = objectMapper.readValue(jsonResponse, classOf[Array[UserInfo]])
-          if (arrayUserInfo.nonEmpty) {
-            arrayUserInfo(0)
+            val arrayUserInfo: Array[UserInfo] = objectMapper.readValue(jsonResponse, classOf[Array[UserInfo]])
+            if (arrayUserInfo.nonEmpty) {
+              arrayUserInfo(0)
+            } else {
+              throw new UnauthorizedException("There was no information about the user that could be received from calling /.auth/me endpoint.")
+            }
           } else {
-            throw new UnauthorizedException("There was no information about the user that could be received from calling /.auth/me endpoint.")
+            throw new UnauthorizedException(s"Failed to get user info from /.auth/me endpoint. Status: ${response.getStatusText} Body: ${response.getBody}")
           }
-        } else {
-          throw new UnauthorizedException(s"Failed to get user info from /.auth/me endpoint. Status: ${response.getStatusText} Body: ${response.getBody}")
-        }
 
-      case Failure(e: Throwable) =>
-        logger.error("Failed to get user info from /.auth/me endpoint!", e)
-        throw new UnauthorizedException("Failed to get user info from /.auth/me endpoint!")
+        case Failure(e: Throwable) =>
+          logger.error("Failed to get user info from /.auth/me endpoint!", e)
+          throw new UnauthorizedException("Failed to get user info from /.auth/me endpoint!")
+      }
     }
+
   }
 
 
   def isUserPartOfAdminsGroup(clientPrincipalToken: String): Boolean = {
-    val jwtTokenHeaders = objectMapper.readValue(JwtTokenUtils.extractHeader(clientPrincipalToken), classOf[JwtTokenHeaders])
-    val userGroups = jwtTokenHeaders.claims.filter(_.typ.equals("groups"))
-    userGroups.exists(_.value.equals(gdcAdminsGroupId))
+    if (anonymousUser) {
+      true
+    } else {
+      val jwtTokenHeaders = objectMapper.readValue(JwtTokenUtils.extractHeader(clientPrincipalToken), classOf[JwtTokenHeaders])
+      val userGroups = jwtTokenHeaders.claims.filter(_.typ.equals("groups"))
+      userGroups.exists(_.value.equals(gdcAdminsGroupId))
+    }
+
   }
 
   def getUserToken(xMsAadIdToken: String = "", refreshToken: String = "", authSessionCookie: String = "", scope: TokenScope): UserToken = {
@@ -165,12 +184,17 @@ class UserService {
   }
 
   def isCurrentUserAnAdmin(httpHeaders: HttpHeaders): Boolean = {
-    if (httpHeaders.toSingleValueMap.containsKey("x-ms-client-principal")) {
-      val clientPrincipalToken = httpHeaders.toSingleValueMap.asScala("x-ms-client-principal")
-      isUserPartOfAdminsGroup(clientPrincipalToken)
+    if (anonymousUser) {
+      true
     } else {
-      false
+      if (httpHeaders.toSingleValueMap.containsKey("x-ms-client-principal")) {
+        val clientPrincipalToken = httpHeaders.toSingleValueMap.asScala("x-ms-client-principal")
+        isUserPartOfAdminsGroup(clientPrincipalToken)
+      } else {
+        false
+      }
     }
+
   }
 
   def getUserToken(httpHeaders: HttpHeaders, authSessionCookie: String, scope: TokenScope): UserToken = {
