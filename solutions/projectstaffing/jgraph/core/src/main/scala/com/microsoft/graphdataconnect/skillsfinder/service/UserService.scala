@@ -95,7 +95,7 @@ class UserService {
 
   def isUserPartOfAdminsGroup(clientPrincipalToken: String): Boolean = {
     if (anonymousUser) {
-      true
+      false
     } else {
       val jwtTokenHeaders = objectMapper.readValue(JwtTokenUtils.extractHeader(clientPrincipalToken), classOf[JwtTokenHeaders])
       val userGroups = jwtTokenHeaders.claims.filter(_.typ.equals("groups"))
@@ -185,7 +185,7 @@ class UserService {
 
   def isCurrentUserAnAdmin(httpHeaders: HttpHeaders): Boolean = {
     if (anonymousUser) {
-      true
+      false
     } else {
       if (httpHeaders.toSingleValueMap.containsKey("x-ms-client-principal")) {
         val clientPrincipalToken = httpHeaders.toSingleValueMap.asScala("x-ms-client-principal")
