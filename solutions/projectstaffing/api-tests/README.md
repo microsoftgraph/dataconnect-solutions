@@ -88,7 +88,7 @@ You can do this by right-clicking the class and selecting the edit configuration
 
 ![image](imgs/run_configuration_for_all_tests.png)
 
-After that,`AppServiceUrl` in the VM options, with the `-Dtestng.dtd.http=true`
+After that, insert the `AppServiceUrl` in the VM options, with the `-Dtestng.dtd.http=true`
 argument, used to explicitly load the DTD from a http URL.
 
 ![image](imgs/complete_vm_options.png)

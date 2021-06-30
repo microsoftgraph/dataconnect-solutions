@@ -50,11 +50,11 @@ class UserService {
   var cacheManager: CacheManager = _
 
   @Value("${anonymous.authentication}")
-  var anonymousUser: Boolean = _
+  var isAnonymousUser: Boolean = _
 
-  private val anonymousUserInfo = UserInfo("", "", "", "test@anonymous.com")
+  private val anonymousUserDefaultInfo = UserInfo("", "", "", "test@anonymous.com")
   private val arrayAnonymousUserInfo = new Array[UserInfo](1)
-  arrayAnonymousUserInfo(0) = anonymousUserInfo
+  arrayAnonymousUserInfo(0) = anonymousUserDefaultInfo
 
 
   private val logger: Logger = LoggerFactory.getLogger(classOf[UserService])
@@ -64,7 +64,7 @@ class UserService {
   }
 
   def getUserInfo(cookieValue: String): UserInfo = {
-    if (anonymousUser) {
+    if (isAnonymousUser) {
       arrayAnonymousUserInfo(0)
     } else {
       Try {
@@ -94,7 +94,7 @@ class UserService {
 
 
   def isUserPartOfAdminsGroup(clientPrincipalToken: String): Boolean = {
-    if (anonymousUser) {
+    if (isAnonymousUser) {
       false
     } else {
       val jwtTokenHeaders = objectMapper.readValue(JwtTokenUtils.extractHeader(clientPrincipalToken), classOf[JwtTokenHeaders])
@@ -184,7 +184,7 @@ class UserService {
   }
 
   def isCurrentUserAnAdmin(httpHeaders: HttpHeaders): Boolean = {
-    if (anonymousUser) {
+    if (isAnonymousUser) {
       false
     } else {
       if (httpHeaders.toSingleValueMap.containsKey("x-ms-client-principal")) {

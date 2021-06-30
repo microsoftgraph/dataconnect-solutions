@@ -7,7 +7,7 @@
 
 if [ "a$1" == "a" ]; then
     echo "Incorrect number of command line arguments!"
-    echo "Usage: $0 <env access token> <url>"
+    echo "Usage: $0 <url>"
     exit 1
 fi
 

@@ -23,7 +23,7 @@ public class TeamTests {
     @Test
     @Order(2)
     public void getDownloadTeamTest() {
-        editTeamTitleAndDescriptionTest();
+        TestUtils.editTeamTitleAndDescription(TestUtils.getProperty("title"), TestUtils.getProperty("description"));
         String results = TestUtils.getDownloadTeamName();
         Assert.assertEquals("The GET download request was not successful", results, TestUtils.getProperty("title"));
     }

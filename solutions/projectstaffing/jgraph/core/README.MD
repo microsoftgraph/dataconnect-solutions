@@ -10,7 +10,7 @@ from the App Service Overview page.
 
 ### User Authentication
 The ProjectStaffing AppService uses the [built-in authentication mechanism of the AppService](https://docs.microsoft.com/en-us/azure/app-service/overview-authentication-authorization).   
-Anonymous access is not permitted.
+Anonymous access should only be used for App Services which are called by REST API tests. For production and development App Services, anonymous access should be avoided.
 In order to log in, you need to access the AppService UI URL and use your Azure ActiveDirectory identity to log in.
 
 
@@ -57,10 +57,6 @@ AZURE_SEARCH_BASE_URL=<url>
 AZURE_SEARCH_EMAILS_INDEX=gdc-emails
 ```
 
-This enables the anonymous authentication option that is required to run API tests without adding the app service authentication token.
-```
-ALLOW_ANONYMOUS_USER=true
-```
 The name of the employee index is computed by the employees ADF pipeline based on the current date (to support versioning).
 Therefore, the current name of the index has to be set in the local database (the local database setup is presented in 
 [the next step](#mssql-local-database-configuration)).  
