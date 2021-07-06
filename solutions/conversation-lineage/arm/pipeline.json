@@ -16,45 +16,88 @@
         "userProperties": [],
         "typeProperties": {
           "notebook": {
-            "referenceName": "ProcessMails-ConversationLineage",
+            "referenceName": "ConversationLineage",
             "type": "NotebookReference"
           },
           "parameters": {
             "sql_database_name": {
-              "value": "{{sql_database_name}}",
+              "value": {
+                "value": "@pipeline().parameters.sql_database_name",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "sql_table_name": {
-              "value": "{{sql_table_name}}",
+              "value": {
+                "value": "@pipeline().parameters.sql_table_name",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "sql_username": {
-              "value": "{{sql_username}}",
+              "value": {
+                "value": "@pipeline().parameters.sql_username",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "sql_password": {
-              "value": "{{sql_password}}",
+              "value": {
+                "value": "@pipeline().parameters.sql_password",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "azure_ai_endpoint": {
-              "value": "{{azure_ai_endpoint}}",
+              "value": {
+                "value": "@pipeline().parameters.azure_ai_endpoint",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "azure_ai_key": {
-              "value": "{{azure_ai_key}}",
+              "value": {
+                "value": "@pipeline().parameters.azure_ai_key",
+                "type": "Expression"
+              },
               "type": "string"
             },
             "sql_server_name": {
-              "value": "{{sql_server_name}}",
+              "value": {
+                "value": "@pipeline().parameters.sql_server_name",
+                "type": "Expression"
+              },
               "type": "string"
             }
-          },
-          "snapshot": true
+          }
         }
       }
     ],
+    "parameters": {
+      "sql_database_name": {
+        "type": "string"
+      },
+      "sql_table_name": {
+        "type": "string"
+      },
+      "sql_username": {
+        "type": "string"
+      },
+      "sql_password": {
+        "type": "string"
+      },
+      "azure_ai_endpoint": {
+        "type": "string"
+      },
+      "azure_ai_key": {
+        "type": "string"
+      },
+      "sql_server_name": {
+        "type": "string"
+      }
+    },
     "annotations": [],
-    "lastPublishTime": "2021-07-06T07:56:47Z"
+    "lastPublishTime": "2021-07-06T10:21:12Z"
   },
   "type": "Microsoft.Synapse/workspaces/pipelines"
 }
