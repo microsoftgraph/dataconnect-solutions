@@ -181,11 +181,34 @@ How:
 
 The mail sentiment and entity extraction code is deployed in  [Azure Synapse](https://azure.microsoft.com/en-us/services/synapse-analytics/).
 
+The following instructions should be followed in order to deploy the notebook in your resource group.
+As a prerequisites you should provide `Azure Synapse Workspace Name` and the `Spark Pool Name`
 
-* Explain notebook parameters
-  [parameters for debugging](../docs/notebook_parameters_for_debugging.png)
-  [parameters for process conversation lineage](../docs/parameters_for_process_conversation_lineage_notebook.png)
-*Explain how do we store the data and make it accessible
+###Deploy the notebook
+```
+az synapse notebook create --file @arm/notebook.json --name 'ProcessMails-ConversationLineage' --workspace-name '<Azure Synapse Workspace Name>' --spark-pool-name '<Spark Pool Name>'
+```
+
+
+###Deploy the pipeline 
+
+```
+az synapse pipeline create --file @arm/pipeline.json --name 'ConversationLineage' --workspace-name <Azure Synapse Workspace Name>
+```
+
+###Run the pipeline
+```
+az synapse pipeline create-run --workspace-name <Azure Synapse Workspace Name> --name 'ConversationLineage' \
+    --parameters '{"sql_server_name": "<SQL Pool Server Name>", "sql_database_name": "<SQL Pool Database Name>", "sql_table_name": "<SQL Pool Table name>", "sql_username": "<SQL Pool Username>", "sql_password": "<SQL Pool Password>", "azure_ai_endpoint": "<Azure Text Analytics URL>", "azure_ai_key": "<Azure Text Analytics Secret Key>"}'
+```
+
+###Pipeline and notebook parameters:
+In order to provide parameters for debugging insert a cell in which you'll define the notebook parameters as described here:
+- [parameters for debugging](../docs/notebook_parameters_for_debugging.png)
+
+The global parameters should be set as show in here:  
+[parameters for process conversation lineage](../docs/parameters_for_process_conversation_lineage_notebook.png)
+
 
 
 
