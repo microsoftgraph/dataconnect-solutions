@@ -10,7 +10,10 @@ from pyspark.sql.types import *
 from azure.ai.textanalytics import TextAnalyticsClient
 from azure.core.credentials import AzureKeyCredential
 
-# parameters
+"""
+The following section of code will have to be removed when integrated as a notebook in Synapse analytics, because 
+the parameters will be passed as notebook parameters
+"""
 sql_database_name = "synapsededicatesqlpool"
 sql_table_name = "dbo.augmented_emails"
 sql_username = ""
@@ -18,6 +21,8 @@ sql_password  = ""
 azure_ai_endpoint = ""
 azure_ai_key = ""
 sql_server_name = ""
+
+
 
 conversation_sentiment_info_sql_table_definition = "id VARCHAR(1024), conversation_id VARCHAR(1024), sender_mail VARCHAR(1024), sender_name VARCHAR(1024), sender_domain VARCHAR(1024), \
                                                                                     general_sentiment VARCHAR(1024), pos_score FLOAT, neutral_score FLOAT, negative_score FLOAT"
@@ -28,7 +33,7 @@ conversation_to_recipient_sentiment_info_sql_table_definition = "id VARCHAR(1024
                                                                                     recipient_name VARCHAR(8000), recipient_address VARCHAR(8000), recipient_domain VARCHAR(8000)"
 
 MAX_NUMBER_OF_RECIPIENTS = 50
-MAX_WORDS_FROM_MAIL = 10
+MAX_ENTITIES_RETRIEVED_FROM_MAIL = 10
 TEXT_ANALYTICS_BATCH_SIZE = 5
 
 
@@ -95,7 +100,6 @@ def analyze_conversations(all_conversations):
             conversation_entities_dict = dict()
             try:
                 content = [html_text_handler.handle(conv['content']) for conv in batch]
-                # content = [html_text_handler.handle(conv['content'])]
 
                 entities_result = text_analytics_client.recognize_entities(content)
                 for entity_result in entities_result:
@@ -129,7 +133,6 @@ def analyze_conversations(all_conversations):
 
                 for idx, conversation in enumerate(batch):
                     idx = str(idx)
-                    # we update the conversation only if we have information about it
                     if idx in conversations_sentiment_dict and idx in conversation_entities_dict and len(
                             conversations_sentiment_dict[idx]):
                         conversation_sentiment_info = conversations_sentiment_dict[idx]
@@ -189,7 +192,7 @@ def create_conversation_entities_info(analyzed_conversations):
         conversation_id = conversation['id']
         entities_info = conversation["entities_info"]
         result = []
-        for ei in entities_info[:min(MAX_WORDS_FROM_MAIL, len(entities_info))]:
+        for ei in entities_info[:min(MAX_ENTITIES_RETRIEVED_FROM_MAIL, len(entities_info))]:
             result.append([sql_idx,
                            conversation_id,
                            conversation['sender_mail'],
