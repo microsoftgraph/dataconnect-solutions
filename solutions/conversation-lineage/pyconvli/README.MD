@@ -6,7 +6,7 @@
   over certain topics and write it to an sql table with the goal of exposing the insights through a power-bi presentation notebook.
 
 ## Input data:
-- is `dbo.augmented_emails`. An example view is this one [dbo_augmented_mails.png](../docs/dbo_augmented_mails.png)
+- is `dbo.augmented_emails`. An example view is this one ![dbo_augmented_mails.png](../docs/dbo_augmented_mails.png)
 
 ## Prerequisites
 - azure-ai-textanalytics==5.0.0
@@ -204,10 +204,10 @@ az synapse pipeline create-run --workspace-name <Azure Synapse Workspace Name> -
 
 ###Pipeline and notebook parameters:
 In order to provide parameters for debugging insert a cell in which you'll define the notebook parameters as described here:
-- [parameters for debugging](../docs/notebook_parameters_for_debugging.png)
+- ![parameters for debugging](../docs/notebook_parameters_for_debugging.png)
 
 The global parameters should be set as show in here:  
-[parameters for process conversation lineage](../docs/parameters_for_process_conversation_lineage_notebook.png)
+- ![parameters for process conversation lineage](../docs/parameters_for_process_conversation_lineage_notebook.png)
 
 
 
