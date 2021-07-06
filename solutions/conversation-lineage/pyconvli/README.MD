@@ -4,7 +4,7 @@
 over certain topics and write it to an sql table with the goal of exposing the insights through a power-bi presentation notebook.
 
 *Input data*
--  
+- is `dbo.augmented_emails`. An example view is this one [dbo_augmented_mails.png](../docs/dbo_augmented_mails.png)
 
 *Explain requirements.txt
 - azure-ai-textanalytics==5.0.0
@@ -20,8 +20,8 @@ over certain topics and write it to an sql table with the goal of exposing the i
     - [Azure Synapse] (https://azure.microsoft.com/en-us/services/synapse-analytics/)
 
 * Explain notebook parameters
-  [parameters for debugging](./docs/notebook_parameters_for_debugging.png)
-  [parameters for process conversation lineage](./docs/parameters_for_process_conversation_lineage_notebook.png)
+  [parameters for debugging](../docs/notebook_parameters_for_debugging.png)
+  [parameters for process conversation lineage](../docs/parameters_for_process_conversation_lineage_notebook.png)
 *Explain how do we store the data and make it accessible
 
 
