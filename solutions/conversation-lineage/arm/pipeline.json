@@ -1,0 +1,60 @@
+{
+  "name": "ConversationLineage",
+  "properties": {
+    "activities": [
+      {
+        "name": "Process Conversation Lineage",
+        "type": "SynapseNotebook",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "7.00:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "userProperties": [],
+        "typeProperties": {
+          "notebook": {
+            "referenceName": "ProcessMails-ConversationLineage",
+            "type": "NotebookReference"
+          },
+          "parameters": {
+            "sql_database_name": {
+              "value": "{{sql_database_name}}",
+              "type": "string"
+            },
+            "sql_table_name": {
+              "value": "{{sql_table_name}}",
+              "type": "string"
+            },
+            "sql_username": {
+              "value": "{{sql_username}}",
+              "type": "string"
+            },
+            "sql_password": {
+              "value": "{{sql_password}}",
+              "type": "string"
+            },
+            "azure_ai_endpoint": {
+              "value": "{{azure_ai_endpoint}}",
+              "type": "string"
+            },
+            "azure_ai_key": {
+              "value": "{{azure_ai_key}}",
+              "type": "string"
+            },
+            "sql_server_name": {
+              "value": "{{sql_server_name}}",
+              "type": "string"
+            }
+          },
+          "snapshot": true
+        }
+      }
+    ],
+    "annotations": [],
+    "lastPublishTime": "2021-07-06T07:56:47Z"
+  },
+  "type": "Microsoft.Synapse/workspaces/pipelines"
+}
