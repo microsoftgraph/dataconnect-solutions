@@ -8,9 +8,6 @@
 ## Input data:
 - is `dbo.augmented_emails`. An example view is this one ![dbo_augmented_mails.png](../docs/dbo_augmented_mails.png)
 
-## Prerequisites
-- azure-ai-textanalytics==5.0.0
-- html2text (for cleaning mail html body)
 
 ### Azure Ai Text Analytics usage.
 In order to retrieve the sentiment of the mails content we make use of the `azure-ai-textanalytics` python library.
@@ -209,7 +206,16 @@ In order to provide parameters for debugging insert a cell in which you'll defin
 The global parameters should be set as show in here:  
 - ![parameters for process conversation lineage](../docs/parameters_for_process_conversation_lineage_notebook.png)
 
+### Prerequisites
+A requirements.txt file containing the following lines is provided: [requirements.txt](./requirements.txt)
+containg the following lines
+```text
+azure-ai-textanalytics==5.0.0
+html2text
+```
 
-
+In order to deploy the requirements in the synapse spark pool, navigate to the *Apache Spark pools* menu entry in synaps.
+Select your created spark pool and click on the spark pool package menu entry as shown here: ![../docs/spark_pool_settings.png](../docs/spark_pool_settings.png)
+Click on the upload icon and upload the requirements.txt file as shown here: ![../docs/spark_pool_packages.png](../docs/spark_pool_packages.png)
 
 
