@@ -2,18 +2,22 @@
 #  Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 import uuid
-
 import html2text
-from azure.ai.textanalytics import TextAnalyticsClient
-from azure.core.credentials import AzureKeyCredential
+import time
+
 from pyspark.sql.types import *
 
+from azure.ai.textanalytics import TextAnalyticsClient
+from azure.core.credentials import AzureKeyCredential
+
+# parameters
 sql_database_name = "synapsededicatesqlpool"
 sql_table_name = "dbo.augmented_emails"
 sql_username = ""
 sql_password  = ""
 azure_ai_endpoint = ""
 azure_ai_key = ""
+sql_server_name = ""
 
 conversation_sentiment_info_sql_table_definition = "id VARCHAR(1024), conversation_id VARCHAR(1024), sender_mail VARCHAR(1024), sender_name VARCHAR(1024), sender_domain VARCHAR(1024), \
                                                                                     general_sentiment VARCHAR(1024), pos_score FLOAT, neutral_score FLOAT, negative_score FLOAT"
@@ -31,11 +35,11 @@ TEXT_ANALYTICS_BATCH_SIZE = 5
 def retrieve_conversations():
     emails = spark.read.format("jdbc") \
         .option("url",
-                f"jdbc:sqlserver://mgdc101synapse.sql.azuresynapse.net:1433;database={sql_database_name};user={sql_username}@mgdc101synapse;password={sql_password};encrypt=true;trustServerCertificate=true;hostNameInCertificate=*.sql.azuresynapse.net;loginTimeout=30;") \
+                f"jdbc:sqlserver://{sql_server_name}.sql.azuresynapse.net:1433;database={sql_database_name};user={sql_username}@{sql_server_name};password={sql_password};encrypt=true;trustServerCertificate=true;hostNameInCertificate=*.sql.azuresynapse.net;loginTimeout=30;") \
         .option("user", sql_username) \
         .option("password", sql_password) \
         .option("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver") \
-        .option("query", f"SELECT top 300 Id, Content, Sender, Sender_Name, ToAddresses, ToNames from {sql_table_name}") \
+        .option("query", f"SELECT Id, Content, Sender, Sender_Name, ToAddresses, ToNames from {sql_table_name}") \
         .load()
 
     schema = StructType([
@@ -105,7 +109,7 @@ def analyze_conversations(all_conversations):
                             if score is not None and score > 0.5:
                                 ent_dict = dict(category=category, text=text, score=score)
                                 conversation_entities_dict.setdefault(index, []).append(ent_dict)
-                    elif "error" in list(entity_result.keys()):
+                    elif "error" in entity_result:
                         print("Error encountered", str(entity_result))
                     else:
                         print("Error encountered", str(entity_result))
@@ -231,7 +235,7 @@ def write_df_to_sql(df, table_name, table_schema):
     df.write.mode("overwrite") \
         .format("jdbc") \
         .option("url",
-                f"jdbc:sqlserver://mgdc101synapse.sql.azuresynapse.net:1433;database={sql_database_name};user={sql_username}@mgdc101synapse;password={sql_password};encrypt=true;trustServerCertificate=true;hostNameInCertificate=*.sql.azuresynapse.net;loginTimeout=30;") \
+                f"jdbc:sqlserver://{sql_server_name}.sql.azuresynapse.net:1433;database={sql_database_name};user={sql_username}@{sql_server_name};password={sql_password};encrypt=true;trustServerCertificate=true;hostNameInCertificate=*.sql.azuresynapse.net;loginTimeout=30;") \
         .option("dbtable", table_name) \
         .option("user", sql_username) \
         .option("password", sql_password) \
