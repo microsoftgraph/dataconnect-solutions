@@ -249,8 +249,8 @@ if __name__ == '__main__':
 
     else:
 
-        #params = json.load(open(Path("config_test.json")))
-        params = json.load(open(Path("/dbfs/mnt/convlineage/scripts/config_test_azure.json")))
+        params = json.load(open(Path("config_test.json")))
+        #params = json.load(open(Path("/dbfs/mnt/convlineage/scripts/config_test_azure.json")))
         mail_input_file = params["mail_input_folder"]
         key = params["key"]
         endpoint = params["endpoint"]
