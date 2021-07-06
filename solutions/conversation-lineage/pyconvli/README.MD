@@ -202,7 +202,7 @@ az synapse pipeline create-run --workspace-name <Azure Synapse Workspace Name> -
     --parameters '{"sql_server_name": "<SQL Pool Server Name>", "sql_database_name": "<SQL Pool Database Name>", "sql_table_name": "<SQL Pool Table name>", "sql_username": "<SQL Pool Username>", "sql_password": "<SQL Pool Password>", "azure_ai_endpoint": "<Azure Text Analytics URL>", "azure_ai_key": "<Azure Text Analytics Secret Key>"}'
 ```
 
-###Pipeline and notebook parameters:
+### Pipeline and notebook parameters:
 In order to provide parameters for debugging insert a cell in which you'll define the notebook parameters as described here:
 - ![parameters for debugging](../docs/notebook_parameters_for_debugging.png)
 
