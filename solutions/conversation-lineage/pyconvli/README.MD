@@ -1,18 +1,18 @@
-#Conversation lineage python scripts
+# Conversation lineage python scripts
 
-##Goal:
+## Goal:
   - extract conversation analytics from the mail flow between members of a company
   - more specifically: extract sentiment and nlp entities with possible purpose of identifying conversation sentiment
   over certain topics and write it to an sql table with the goal of exposing the insights through a power-bi presentation notebook.
 
-##Input data:
+## Input data:
 - is `dbo.augmented_emails`. An example view is this one [dbo_augmented_mails.png](../docs/dbo_augmented_mails.png)
 
-##Prerequisites
+## Prerequisites
 - azure-ai-textanalytics==5.0.0
 - html2text (for cleaning mail html body)
 
-###Azure Ai Text Analytics usage.
+### Azure Ai Text Analytics usage.
 In order to retrieve the sentiment of the mails content we make use of the `azure-ai-textanalytics` python library.
 How:
   - instantiate a class:
@@ -184,19 +184,19 @@ The mail sentiment and entity extraction code is deployed in  [Azure Synapse](ht
 The following instructions should be followed in order to deploy the notebook in your resource group.
 As a prerequisites you should provide `Azure Synapse Workspace Name` and the `Spark Pool Name`
 
-###Deploy the notebook
+### Deploy the notebook
 ```
 az synapse notebook create --file @arm/notebook.json --name 'ProcessMails-ConversationLineage' --workspace-name '<Azure Synapse Workspace Name>' --spark-pool-name '<Spark Pool Name>'
 ```
 
 
-###Deploy the pipeline 
+### Deploy the pipeline 
 
 ```
 az synapse pipeline create --file @arm/pipeline.json --name 'ConversationLineage' --workspace-name <Azure Synapse Workspace Name>
 ```
 
-###Run the pipeline
+### Run the pipeline
 ```
 az synapse pipeline create-run --workspace-name <Azure Synapse Workspace Name> --name 'ConversationLineage' \
     --parameters '{"sql_server_name": "<SQL Pool Server Name>", "sql_database_name": "<SQL Pool Database Name>", "sql_table_name": "<SQL Pool Table name>", "sql_username": "<SQL Pool Username>", "sql_password": "<SQL Pool Password>", "azure_ai_endpoint": "<Azure Text Analytics URL>", "azure_ai_key": "<Azure Text Analytics Secret Key>"}'
