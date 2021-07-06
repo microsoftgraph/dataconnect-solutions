@@ -49,8 +49,8 @@ class UserService {
   @Autowired
   var cacheManager: CacheManager = _
 
-  @Value("${anonymous.authentication}")
-  var isAnonymousUser: Boolean = _
+  @Value("${anonymous.authentication.enabled}")
+  var isAnonymousAuthEnabled: Boolean = _
 
   private val anonymousUserDefaultInfo = UserInfo("", "", "", "test@anonymous.com")
   private val arrayAnonymousUserInfo = new Array[UserInfo](1)
@@ -64,7 +64,7 @@ class UserService {
   }
 
   def getUserInfo(cookieValue: String): UserInfo = {
-    if (isAnonymousUser) {
+    if (isAnonymousAuthEnabled) {
       arrayAnonymousUserInfo(0)
     } else {
       Try {
@@ -94,7 +94,7 @@ class UserService {
 
 
   def isUserPartOfAdminsGroup(clientPrincipalToken: String): Boolean = {
-    if (isAnonymousUser) {
+    if (isAnonymousAuthEnabled) {
       false
     } else {
       val jwtTokenHeaders = objectMapper.readValue(JwtTokenUtils.extractHeader(clientPrincipalToken), classOf[JwtTokenHeaders])
@@ -184,15 +184,16 @@ class UserService {
   }
 
   def isCurrentUserAnAdmin(httpHeaders: HttpHeaders): Boolean = {
-    if (isAnonymousUser) {
+    if (isAnonymousAuthEnabled) {
       false
     } else {
-      if (httpHeaders.toSingleValueMap.containsKey("x-ms-client-principal")) {
-        val clientPrincipalToken = httpHeaders.toSingleValueMap.asScala("x-ms-client-principal")
-        isUserPartOfAdminsGroup(clientPrincipalToken)
-      } else {
-        false
-      }
+      httpHeaders.toSingleValueMap.asScala.get("x-ms-client-principal").map(isUserPartOfAdminsGroup).getOr(false)
+//      if (httpHeaders.toSingleValueMap.containsKey("x-ms-client-principal")) {
+//        val clientPrincipalToken = httpHeaders.toSingleValueMap.asScala("x-ms-client-principal")
+//        isUserPartOfAdminsGroup(clientPrincipalToken)
+//      } else {
+//        false
+//      }
     }
 
   }

@@ -17,7 +17,7 @@ class MdcFilter(@Autowired override val userService: UserService) extends UserId
   override protected def doFilter(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain): Unit = {
 
         try {
-          if (isAnonymousUser) {
+          if (isAnonymousAuthEnabled) {
             MDC.put("user", anonymousUserDefaultEmail)
             MDC.put("correlationId", getCorrelationId(request))
           } else {

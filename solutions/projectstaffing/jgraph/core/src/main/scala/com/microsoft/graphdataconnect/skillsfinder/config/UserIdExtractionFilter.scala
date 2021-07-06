@@ -13,15 +13,15 @@ class UserIdExtractionFilter(@Autowired val userService: UserService) extends Ht
   @Value("${anonymous.user.default.email}")
   private var anonymousUserDefaultEmail: String = _
 
-  @Value("${anonymous.authentication}")
-  var isAnonymousUser: Boolean  = _
+  @Value("${anonymous.authentication.enabled}")
+  var isAnonymousAuthEnabled: Boolean  = _
 
   @throws[IOException]
   @throws[ServletException]
   override protected def doFilter(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain): Unit = {
     try {
 
-      if (isAnonymousUser) {
+      if (isAnonymousAuthEnabled) {
         request.setAttribute("userId", anonymousUserDefaultEmail)
         filterChain.doFilter(request, response)
       } else {
