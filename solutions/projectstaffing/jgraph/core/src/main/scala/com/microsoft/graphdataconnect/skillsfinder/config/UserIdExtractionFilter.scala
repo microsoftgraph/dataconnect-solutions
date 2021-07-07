@@ -8,7 +8,6 @@ package com.microsoft.graphdataconnect.skillsfinder.config
 @Configuration
 class UserIdExtractionFilter(@Autowired val userService: UserService) extends HttpFilter {
   private val log: Logger = LoggerFactory.getLogger(classOf[UserIdExtractionFilter])
-  private val arrayAnonymousUserInfo = Map("accesToken" -> "", "idToken" -> "", "refreshToken" -> "", "userId" -> "test@anonymous.com")
 
   @Value("${anonymous.user.default.email}")
   private var anonymousUserDefaultEmail: String = _
