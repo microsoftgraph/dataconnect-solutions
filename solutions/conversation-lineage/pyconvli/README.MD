@@ -20,7 +20,7 @@
   over certain topics and write it to a sql table with the goal of exposing the insights through a power-bi presentation notebook.
 
 ## Input data:
-- is `dbo.augmented_emails`. An example view is this one ![dbo_augmented_mails.png](../docs/dbo_augmented_mails.png)
+- is `dbo.augmented_emails`. An example view is this one ![dbo_augmented_mails.png](../docs/analytics_notebook_imgs/dbo_augmented_mails.png)
 
 
 ## Azure Ai Text Analytics usage.
@@ -198,16 +198,18 @@ The mail sentiment and entity extraction code is deployed in  [Azure Synapse](ht
 #### Deployment and configuration
 
 Upload the notebook from the [./src/ProcessMails-ConversationLineage_demo.ipynb](./src/ProcessMails-ConversationLineage_demo.ipynb)
-![Upload notebook](../docs/import_mail_processing_notebook_00.png)
-![Select the notebook file](../docs/import_mail_processing_notebook_01_select_notebook.png)
-![Attach a spark pool to the current notebook](../docs/import_mail_processing_notebook_02_select_spark_pool.png)
+![Upload notebook](../docs/analytics_notebook_imgs/import_mail_processing_notebook_00.png)
+Select the notebook
+![Select the notebook file](../docs/analytics_notebook_imgs/import_mail_processing_notebook_01_select_notebook.png)
+Attach the spark pool to the notebook
+![Attach a spark pool to the current notebook](../docs/analytics_notebook_imgs/import_mail_processing_notebook_02_select_spark_pool.png)
 
 Navigate to ingest tab folder (from the left menu).
 Create a new pipeline
-![Create Pipeline](../docs/integrate_00_new_pipeline.png)
+![Create Pipeline](../docs/analytics_notebook_imgs/integrate_00_new_pipeline.png)
 
 Add a synapse notebook, select the uploaded notebook and configure parameters as shown below:
-![Configure notebook](../docs/integrate_01_select_notebook.png)
+![Configure notebook](../docs/analytics_notebook_imgs/integrate_01_select_notebook.png)
 
 ### Deployment using az command line and arm templates
 The following instructions should be followed in order to deploy the notebook in your resource group.
@@ -233,10 +235,10 @@ az synapse pipeline create-run --workspace-name <Azure Synapse Workspace Name> -
 
 ### Pipeline and notebook parameters:
 In order to provide parameters for debugging insert a cell in which you'll define the notebook parameters as described here:
-- ![parameters for debugging](../docs/notebook_parameters_for_debugging.png)
+- ![parameters for debugging](../docs/analytics_notebook_imgs/notebook_parameters_for_debugging.png)
 
 The global parameters should be set as show in here:  
-- ![parameters for process conversation lineage](../docs/parameters_for_process_conversation_lineage_notebook.png)
+- ![parameters for process conversation lineage](../docs/analytics_notebook_imgs/parameters_for_process_conversation_lineage_notebook.png)
 
 ### Prerequisites
 A requirements.txt file containing the following lines is provided: [requirements.txt](./requirements.txt)
@@ -247,7 +249,7 @@ html2text
 ```
 
 In order to deploy the requirements in the synapse spark pool, navigate to the *Apache Spark pools* menu entry in synapse.
-Select your created spark pool and click on the spark pool package menu entry as shown here: ![../docs/spark_pool_settings.png](../docs/spark_pool_settings.png)
-Click on the upload icon and upload the requirements.txt file as shown here: ![../docs/spark_pool_packages.png](../docs/spark_pool_packages.png)
+Select your created spark pool and click on the spark pool package menu entry as shown here: ![../docs/analytics_notebook_imgs/spark_pool_settings.png](../docs/analytics_notebook_imgs/spark_pool_settings.png)
+Click on the upload icon and upload the requirements.txt file as shown here: ![../docs/analytics_notebook_imgs/spark_pool_packages.png](../docs/analytics_notebook_imgs/spark_pool_packages.png)
 
 
