@@ -89,6 +89,6 @@ Here are the workflows steps that get executed:
 
 ![Flow ](./docs/Conversation%20Lineage%20Table%20Derivation.png)
  
-## Sentiment and entities extraction
+## [Sentiment and entities extraction from mails](./pyconvli/README.MD)
 
 
