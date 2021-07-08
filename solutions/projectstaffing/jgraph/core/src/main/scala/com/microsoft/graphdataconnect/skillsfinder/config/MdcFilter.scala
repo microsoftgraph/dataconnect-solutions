@@ -5,6 +5,16 @@
 
 package com.microsoft.graphdataconnect.skillsfinder.config
 
+import java.io.IOException
+import java.util.UUID
+import com.microsoft.graphdataconnect.skillsfinder.exceptions.UnauthorizedException
+import com.microsoft.graphdataconnect.skillsfinder.service.UserService
+import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
+import javax.servlet.{FilterChain, ServletException}
+import org.slf4j.{Logger, LoggerFactory, MDC}
+import org.springframework.beans.factory.annotation.{Autowired, Value}
+import org.springframework.context.annotation.Configuration
+
 @Configuration
 class MdcFilter(@Autowired override val userService: UserService) extends UserIdExtractionFilter(userService) {
   private val log: Logger = LoggerFactory.getLogger(classOf[MdcFilter])

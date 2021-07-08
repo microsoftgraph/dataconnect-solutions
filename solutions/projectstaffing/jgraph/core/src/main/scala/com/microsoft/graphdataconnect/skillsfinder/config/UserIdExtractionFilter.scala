@@ -5,6 +5,19 @@
 
 package com.microsoft.graphdataconnect.skillsfinder.config
 
+import java.io.IOException
+
+import com.microsoft.graphdataconnect.skillsfinder.exceptions.UnauthorizedException
+import com.microsoft.graphdataconnect.skillsfinder.service.UserService
+import javax.servlet.http.{HttpFilter, HttpServletRequest, HttpServletResponse}
+import javax.servlet.{FilterChain, ServletException}
+import org.slf4j.{Logger, LoggerFactory}
+import org.springframework.beans.factory.annotation.{Autowired, Value}
+import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpStatus
+
+
+
 @Configuration
 class UserIdExtractionFilter(@Autowired val userService: UserService) extends HttpFilter {
   private val log: Logger = LoggerFactory.getLogger(classOf[UserIdExtractionFilter])

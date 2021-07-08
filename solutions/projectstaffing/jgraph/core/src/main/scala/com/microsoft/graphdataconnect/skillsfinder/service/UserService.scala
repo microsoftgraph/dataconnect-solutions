@@ -5,6 +5,24 @@
 
 package com.microsoft.graphdataconnect.skillsfinder.service
 
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.microsoft.graphdataconnect.skillsfinder.exceptions.{FailedToGetAzureServiceManagerTokenException, PermissionConsentMissingException, UnauthorizedException}
+import com.microsoft.graphdataconnect.skillsfinder.models.TokenScope
+import com.microsoft.graphdataconnect.skillsfinder.models.dto.admin
+import com.microsoft.graphdataconnect.skillsfinder.models.dto.admin.{JwtTokenHeaders, UserInfo, UserToken}
+import com.microsoft.graphdataconnect.skillsfinder.utils.JwtTokenUtils
+import kong.unirest.json.JSONObject
+import kong.unirest.{HttpResponse, HttpStatus, JsonNode, Unirest}
+import org.slf4j.{Logger, LoggerFactory}
+import org.springframework.beans.factory.annotation.{Autowired, Value}
+import org.springframework.cache.CacheManager
+import org.springframework.http.HttpHeaders
+import org.springframework.stereotype.Service
+import scala.collection.JavaConverters._
+import scala.util.{Failure, Success, Try}
+
 @Service
 class UserService {
 
