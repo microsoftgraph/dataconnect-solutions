@@ -1,10 +1,13 @@
 # Conversation Lineage
 
+
+## Architectural design
+
 There are 3 major steps in retrieving the conversations.
 1) The data ingestion from gdc.
 2) Table derivation necessary for obtaining the views that will contain the information for powerbi
 3) Sentiment extraction on the conversation content retrieved by the step 1. 
-
+![Architecture](./docs/Diagram-Architecture.png)
 
 ## Data Ingestion
 The workflow steps are focused on extracting the following type of information:
