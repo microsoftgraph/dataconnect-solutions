@@ -1,6 +1,20 @@
 # Conversation lineage python scripts
 
-## Goal:
+## Table of content
+
+- [Project Description](#project-description)
+- [Input Data](#input-data)
+- [Azure Ai Text Analytics usage](#azure-ai-text-analytics-usage)
+- [Deployment on azure synapse](#deployment-on-azure-synapse)
+    - [Deployment and configuration](#deployment-and-configuration)
+- [Deployment using az command line and arm templates](#deployment-using-az-command-line-and-arm-templates)
+    - [Deploy the pipeline](#deploy-the-pipeline)
+    - [Run the pipeline](#run-the-pipeline)
+- [Pipeline and notebook parameters](#pipeline-and-notebook-parameters)
+- [Prerequisites](#prerequisites)
+
+
+## Project description:
   - extract conversation analytics from the mail flow between members of a company
   - more specifically: extract sentiment and nlp entities with possible purpose of identifying conversation sentiment
   over certain topics and write it to a sql table with the goal of exposing the insights through a power-bi presentation notebook.
@@ -9,7 +23,7 @@
 - is `dbo.augmented_emails`. An example view is this one ![dbo_augmented_mails.png](../docs/dbo_augmented_mails.png)
 
 
-### Azure Ai Text Analytics usage.
+## Azure Ai Text Analytics usage.
 In order to retrieve the sentiment of the mails content we make use of the `azure-ai-textanalytics` python library.
 How:
   - instantiate a class:
