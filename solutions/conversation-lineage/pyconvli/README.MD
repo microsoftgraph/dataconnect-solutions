@@ -3,7 +3,7 @@
 ## Goal:
   - extract conversation analytics from the mail flow between members of a company
   - more specifically: extract sentiment and nlp entities with possible purpose of identifying conversation sentiment
-  over certain topics and write it to an sql table with the goal of exposing the insights through a power-bi presentation notebook.
+  over certain topics and write it to a sql table with the goal of exposing the insights through a power-bi presentation notebook.
 
 ## Input data:
 - is `dbo.augmented_emails`. An example view is this one ![dbo_augmented_mails.png](../docs/dbo_augmented_mails.png)
@@ -179,7 +179,7 @@ How:
 The mail sentiment and entity extraction code is deployed in  [Azure Synapse](https://azure.microsoft.com/en-us/services/synapse-analytics/).
 
 
-### Deployment from azure synapse workspace mananger
+### Deployment from azure synapse workspace manager
 
 #### Deployment and configuration
 
@@ -226,7 +226,7 @@ The global parameters should be set as show in here:
 
 ### Prerequisites
 A requirements.txt file containing the following lines is provided: [requirements.txt](./requirements.txt)
-containg the following lines
+containing the following lines
 ```text
 azure-ai-textanalytics==5.0.0
 html2text
