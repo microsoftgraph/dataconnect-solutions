@@ -14,6 +14,8 @@ The workflow steps are focused on extracting the following type of information:
 - M365 user profile data
 - Teams chat data
 
+![Pipeline Overview](./docs/generating_pipeline.png)
+
 Here are the workflows steps that get executed:
 ### Mail retrieval workflows
 
@@ -84,5 +86,6 @@ Here are the workflows steps that get executed:
 
 ![Flow ](./docs/Conversation%20Lineage%20Table%20Derivation.png)
  
+## Sentiment and entities extraction
 
 

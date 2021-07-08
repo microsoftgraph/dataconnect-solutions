@@ -178,22 +178,40 @@ How:
 
 The mail sentiment and entity extraction code is deployed in  [Azure Synapse](https://azure.microsoft.com/en-us/services/synapse-analytics/).
 
+
+### Deployment from azure synapse workspace mananger
+
+#### Deployment and configuration
+
+Upload the notebook from the [./src/ProcessMails-ConversationLineage_demo.ipynb](./src/ProcessMails-ConversationLineage_demo.ipynb)
+![Upload notebook](../docs/import_mail_processing_notebook_00.png)
+![Select the notebook file](../docs/import_mail_processing_notebook_01_select_notebook.png)
+![Attach a spark pool to the current notebook](../docs/import_mail_processing_notebook_02_select_spark_pool.png)
+
+Navigate to ingest tab folder (from the left menu).
+Create a new pipeline
+![Create Pipeline](../docs/integrate_00_new_pipeline.png)
+
+Add a synapse notebook, select the uploaded notebook and configure parameters as shown below:
+![Configure notebook](../docs/integrate_01_select_notebook.png)
+
+### Deployment using az command line and arm templates
 The following instructions should be followed in order to deploy the notebook in your resource group.
 As a prerequisites you should provide `Azure Synapse Workspace Name` and the `Spark Pool Name`
 
-### Deploy the notebook
+#### Deploy the notebook
 ```
 az synapse notebook create --file @arm/notebook.json --name 'ProcessMails-ConversationLineage' --workspace-name '<Azure Synapse Workspace Name>' --spark-pool-name '<Spark Pool Name>'
 ```
 
 
-### Deploy the pipeline 
+#### Deploy the pipeline 
 
 ```
 az synapse pipeline create --file @arm/pipeline.json --name 'ConversationLineage' --workspace-name <Azure Synapse Workspace Name>
 ```
 
-### Run the pipeline
+#### Run the pipeline
 ```
 az synapse pipeline create-run --workspace-name <Azure Synapse Workspace Name> --name 'ConversationLineage' \
     --parameters '{"sql_server_name": "<SQL Pool Server Name>", "sql_database_name": "<SQL Pool Database Name>", "sql_table_name": "<SQL Pool Table name>", "sql_username": "<SQL Pool Username>", "sql_password": "<SQL Pool Password>", "azure_ai_endpoint": "<Azure Text Analytics URL>", "azure_ai_key": "<Azure Text Analytics Secret Key>"}'
@@ -214,7 +232,7 @@ azure-ai-textanalytics==5.0.0
 html2text
 ```
 
-In order to deploy the requirements in the synapse spark pool, navigate to the *Apache Spark pools* menu entry in synaps.
+In order to deploy the requirements in the synapse spark pool, navigate to the *Apache Spark pools* menu entry in synapse.
 Select your created spark pool and click on the spark pool package menu entry as shown here: ![../docs/spark_pool_settings.png](../docs/spark_pool_settings.png)
 Click on the upload icon and upload the requirements.txt file as shown here: ![../docs/spark_pool_packages.png](../docs/spark_pool_packages.png)
 
