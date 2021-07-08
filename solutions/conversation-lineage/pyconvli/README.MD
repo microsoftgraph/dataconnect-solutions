@@ -23,10 +23,11 @@
 - is `dbo.augmented_emails`. An example view is this one ![dbo_augmented_mails.png](../docs/analytics_notebook_imgs/dbo_augmented_mails.png)
 
 
-## Azure Ai Text Analytics usage.
-In order to retrieve the sentiment of the mails content we make use of the `azure-ai-textanalytics` python library.
-How:
-  - instantiate a class:
+## Azure AI Text Analytics usage.
+In order to extract the sentiment from the mails content we make use of the [azure-ai-textanalytics](https://pypi.org/project/azure-ai-textanalytics/) python library
+
+Usage example for azure-ai-textanalytics:
+  - instantiate the class:
     ```python
     text_analytics_client = TextAnalyticsClient(endpoint=azure_ai_endpoint,credential=AzureKeyCredential(azure_ai_key))
     ```
