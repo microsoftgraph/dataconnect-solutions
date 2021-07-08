@@ -38,81 +38,17 @@ The teams chat processing pipeline:
 ![Teams chat processing pipeline](./docs/pipeline_process_teams_chat_data.png)
 
 
-Here are the workflows steps that get executed:
-
-### Manager retrieval workflow
-- #### DeleteOldM365ManagersBlobData
-
-- #### AllM365ManagersToAZBS
-
-### User profiles retrieval workflow
-- #### DeleteOldM365UsersProfilesBlobData
-
-- #### AllM365UserProfilesToAZBS
-
-### Join Users with Managers
-- #### TruncateUsersTable
-
-- #### JoinUsersWithManagers
-
-### Join all the information
-- #### WriteAugmentedFlattenedEmailsWithManagersToTable
-
-- #### WriteAugmentedEmailsToTable
-
-- #### WriteAugmentedFlattenedEventsToTable
-
-- #### WriteAugmentedEvents
-
-- #### WriteAugmentedFlattenedChatsToTable
-
-- #### WriteAugmentedTeamChats
-
-### Mail retrieval workflows
-
-- #### DeleteOldM365EmailsBlobData
-
-- #### AllM365EmailsToAZBS
-
-- #### DeleteOldEmailsParquetData
-
-- #### Emails_JsonToParquet
-
-- #### CopyEmailsToTable
-
-- #### Compute Recipient Email Domains
-
-
-### Calendar retrieval workflows
-- #### DeleteOldM365CalendarEventBlobData
-
-- #### AllM365CalendarEventsToAZBS
-
-- #### DeleteOldEventsParquetData
-
-- #### Events_JsonToParquet
-
-- #### CopyCalendarEventsToSqlTable
-
-
-
-### Teams chat retrieval workflow
-- #### DeleteOldM365TeamChatsBlobData
-
-- #### AllM365TeamChatsToAZBS
-
-- #### DeletOldTeamChatsParquetData
-
-- #### TeamChats_JsonToParquet
-
-- #### CopyTeamChatsToTable
-
-
-
 ## Table derivation
 
 ![Flow ](./docs/Conversation%20Lineage%20Table%20Derivation.png)
+
+## PowerBI presentation
+The powerbi presentation is based on the views created from the derived table.
+The sql for the views creation can be found [here](./sql/views_creation_sql.sql)
  
 ## [Sentiment and entities extraction from mails](./pyconvli/README.MD)
 
+## Deployment
+
+All the workflows run in azure-synapse. For setting it upt use the [Official documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
 
