@@ -61,8 +61,11 @@ az command (fill in here)
 ```
 
 ### Sql deployment
-In order to create the associated sql tables open an sql editor on the tables folder in synapse workspace manager:  
-![create-tables](./docs/sql_script_create_table_menu.png)
+In order to create/update the associated sql tables open an sql editor on the tables folder in synapse workspace manager:  
+![create-tables-menu](./docs/sql_script_create_table_menu.png)
+
+And use the script located here [./sql/tables_creation.sql](./sql/tables_creation.sql) and execute it in synapse workspace manager:  
+![create-all-tables](./docs/sql_script_create_all_tables.png)
 
 ## Architectural design
 
