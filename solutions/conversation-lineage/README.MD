@@ -49,9 +49,13 @@ The teams chat processing pipeline:
 
 ![Flow ](./docs/Conversation%20Lineage%20Table%20Derivation.png)
 
+##  Sentiment and entities extraction from mails 
+
+In order to follow the setup steps for the text analytics pipeline please consult the setup instructions [here](conversations_text_analytics/README.MD)
+
 ## PowerBI presentation
 The PowerBI presentation is based on the views created from the derived table.
 The sql for the views creation can be found [here](./sql/views_creation_sql.sql)
  
-## [Sentiment and entities extraction from mails](conversations_text_analytics/README.MD)
+
 
