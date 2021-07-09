@@ -42,23 +42,27 @@ You will also need an user with [global administration role](https://docs.micros
 In order to start up the deployment log in to portal.azure.com and open an azure cloud shell:   
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
-Select the necessary files from the `./arm/mgdc101/` folder and upload them using the upload functionality in azure cloud shell:   
+Select the necessary ARM template JSON files from the `./arm/mgdc101/` folder and upload them using
+the upload functionality in azure cloud shell:   
 ![azure_upload_files](./docs/azure_upload_files.png)
 
 
 ### Arm files deployment
-Once the files are uploaded please execute the following steps for deploying the pipelines:
+Once the files are uploaded please execute the appropriate command specific for each entity type that needs to be deployed.
+Documentation synapse deployment commands can be found [here](https://docs.microsoft.com/en-us/cli/azure/synapse?view=azure-cli-latest)
 
+Example: in order to deploy a pipeline run the followin:
 ```shell
-az command (fill in here)
+az synapse pipeline create --file @pipeline.json --name 'ConversationLineage' --workspace-name <Azure Synapse Workspace Name>
 ```
 
 ### Trigger deployment
-In order to configure the triggers please execute the following commands:
+In order to configure the triggers please execute the appropiate triger az commands commands.
+Documentation for synapse trigger commands can be found [here](https://docs.microsoft.com/en-us/cli/azure/synapse/trigger?view=azure-cli-latest#az-synapse-trigger-create)
 
 ```shell
-az command (fill in here)
-```
+az synapse trigger create --workspace-name <Azure Synapse Workspace Name>  --name 'ConversationLineageTrigger' --file @trigger.json
+  ```
 
 ### Sql deployment
 In order to create/update the associated sql tables open an sql editor on the tables folder in synapse workspace manager:  
