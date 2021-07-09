@@ -100,5 +100,12 @@ In order to follow the setup steps for the text analytics pipeline please consul
 
 ### PowerBI presentation
 The PowerBI presentation is based on the views created from the derived table.
-The sql for the views creation can be found [here](./sql/views_creation_sql.sql)
+The sql for the views creation can be found [here](./sql/views_creation_sql.sql)  
+The PowerBI report can be found [here](./power_bi_presentation/MGDC%20Conversation%20Lineage.pbix)
+
+In order to create the views necessary for the PowerBI please open a sql query window:  
+![sql-query-window](./docs/sql_script_creation.png)  
+
+And execute the sql script necessary for PowerBI report:  
+![sql-query-execution](./docs/sql_script_views_creation.png)
  
