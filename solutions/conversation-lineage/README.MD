@@ -13,8 +13,13 @@
 
 
 ## Project description
-This application’s purpose is to extract conversation analytics from a provided mail-flow between members of a company.
-More specifically, we aim to extract sentiment and nlp entities in order to identify the conversation’s sentiment over certain topics and then write it to a sql table. 
+This tutorial purpose is to provide an example of using Graph Data Connect to extract insights and analytics by analyzing
+conversations within an organization.
+Another purpose of this tutorial is to provide the developers with a technical infrastructure for quickly 
+setting up a GDC  based application, by providing and example project(*Conversation Lineage*) 
+that integrates GDC infrastructure and azure connected services.
+
+More specifically we'll use `azure-text-analytics` on top of GDC data in order to: extract sentiment and nlp entities over conversations retrieved from GDC 
 Our end goal is to provide insights through a power-bi presentation notebook.
 
 ## Prerequisites
