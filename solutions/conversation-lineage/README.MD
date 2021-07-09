@@ -3,12 +3,12 @@
 ## Table of contents
 - [Project Description](#project-description)
 - [Prerequisites](#prerequisites)
-- [Architectura design](#architectural-design)
+- [Tutorial for setting up the Conversation Lineage processing pipelines](#tutorial-for-setting-up-the-conversation-lineage-processing-pipelines)
+- [Architectural design](#architectural-design)
     - [Data Ingestion](#data-ingestion)
     - [Table Derivation](#table-derivation)  
     - [Sentiment and entities extraction from mails](#sentiment-and-entities-extraction-from-mails)
     - [PowerBI presentation](#powerbi-presentation)
-- [Tutorial for setting up the Conversation Lineage processing pipelines](#tutorial-for-setting-up-the-conversation-lineage-processing-pipelines)
 
 
 
@@ -32,6 +32,27 @@ and run in [Azure Synapse Analytics](https://docs.microsoft.com/en-us/azure/syna
 For setting up an *Azure Synapse Workspace* please follow the [official synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)    
 For setting GDC please use the following tutorial chapter from this Microsoft GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md#exercise-1-setup-office-365-tenant-and-enable-microsoft-graph-data-connect).    
 You will also need an user with [global administration role](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin).  
+
+
+## Tutorial for setting up the Conversation Lineage processing pipelines
+
+In order to start up the deployment log in to portal.azure.com and open an azure cloud shell:   
+![azure cloud shell](./docs/azure_cloud_shell.png)
+
+Select the necessary files from the `./arm/mgdc101/` folder and upload them using the upload functionality in azure cloud shell:   
+![azure_upload_files](./docs/azure_upload_files.png)
+
+Once the files are uploaded please execute the following steps for deploying the pipelines:
+
+```shell
+az command (fill in here)
+```
+
+In order to configure the triggers please execute the following commands:
+
+```shell
+az command (fill in here)
+```
 
 
 ## Architectural design
@@ -81,22 +102,3 @@ In order to follow the setup steps for the text analytics pipeline please consul
 The PowerBI presentation is based on the views created from the derived table.
 The sql for the views creation can be found [here](./sql/views_creation_sql.sql)
  
-## Tutorial for setting up the Conversation Lineage processing pipelines
-
-In order to start up the deployment log in to portal.azure.com and open an azure cloud shell:   
-![azure cloud shell](./docs/azure_cloud_shell.png)
-
-Select the necessary files from the `./arm/mgdc101/` folder and upload them using the upload functionality in azure cloud shell:   
-![azure_upload_files](./docs/azure_upload_files.png)
-
-Once the files are uploaded please execute the following steps for deploying the pipelines:
-
-```shell
-az command (fill in here)
-```
-
-In order to configure the triggers please execute the following commands:
-
-```shell
-az command (fill in here)
-```
