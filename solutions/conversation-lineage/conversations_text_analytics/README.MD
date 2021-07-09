@@ -8,6 +8,8 @@
 - [Deployment on azure synapse](#deployment-on-azure-synapse)
     - [Deployment and configuration](#deployment-and-configuration)
 - [Deployment using az command line and arm templates](#deployment-using-az-command-line-and-arm-templates)
+    - [Open the azure cloud shell](#open-the-azure-cloud-shell)
+    - [Deploy the notebook](#deploy-the-notebook)  
     - [Deploy the pipeline](#deploy-the-pipeline)
     - [Run the pipeline](#run-the-pipeline)
 - [Pipeline and notebook parameters](#pipeline-and-notebook-parameters)
@@ -220,7 +222,7 @@ The following instructions should be followed in order to deploy the notebook in
 As a prerequisites you should provide `Azure Synapse Workspace Name` and the `Spark Pool Name`
 The location of the files to upload: `notebook.json` and `pipeline.json` is in [./conversation-lineage/arm/conversations_text_analytics](../arm/conversations_text_analytics)
 
-### Open the azure cloud shell
+#### Open the azure cloud shell
 ![azure cloud shell](../docs/azure_cloud_shell.png)
 
 Using the upload functionality upload the `notebook.json` and `pipeline.json` to the shell container.
