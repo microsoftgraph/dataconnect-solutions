@@ -5,11 +5,18 @@ This application’s purpose is to extract conversation analytics from a provide
 More specifically, we aim to extract sentiment and nlp entities in order to identify the conversation’s sentiment over certain topics and then write it to a sql table. 
 Our end goal is to provide insights through a power-bi presentation notebook.
 
+## Prerequisites
+
+All the workflows run in azure-synapse. For setting it up use the [Official documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
+All the workflows are dependent on the Graph-Data-Connect setup. For setting GDC please use the following Microsoft GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md)
+
 ## Architectural design
 
-There are 3 major steps in retrieving the conversations.
-1) The data ingestion from gdc.
-2) Table derivation necessary for obtaining the views that will contain the information for powerbi
+There are 3 types of entities that represent conversations: mails, chats and calendar events.
+
+There are 3 major pipeline steps in retrieving and processing the conversations:
+1) The data ingestion from Graph-Data-Connect.
+2) Table derivation necessary for obtaining the views that will contain the information for PowerBI
 3) Sentiment extraction on the conversation content retrieved by the step 1. 
 ![Architecture](./docs/Diagram-Architecture.png)
 
@@ -43,12 +50,8 @@ The teams chat processing pipeline:
 ![Flow ](./docs/Conversation%20Lineage%20Table%20Derivation.png)
 
 ## PowerBI presentation
-The powerbi presentation is based on the views created from the derived table.
+The PowerBI presentation is based on the views created from the derived table.
 The sql for the views creation can be found [here](./sql/views_creation_sql.sql)
  
 ## [Sentiment and entities extraction from mails](conversations_text_analytics/README.MD)
-
-## Deployment
-
-All the workflows run in azure-synapse. For setting it up use the [Official documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
 

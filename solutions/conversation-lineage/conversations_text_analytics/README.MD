@@ -21,6 +21,12 @@
   - more specifically: extract sentiment and nlp entities with possible purpose of identifying conversation sentiment
   over certain topics and write it to a sql table with the goal of exposing the insights through a power-bi presentation notebook.
 
+
+## Prerequisites
+
+All the workflows run in azure-synapse. For setting it up use the [Official documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
+All the workflows are dependent on the gdc setup. For setting GDC please use the following microsoft gdc [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md)
+
 ## Input data:
 - is `dbo.augmented_emails`. An example view is this one ![dbo_augmented_mails.png](../docs/analytics_notebook_imgs/dbo_augmented_mails.png)
 
