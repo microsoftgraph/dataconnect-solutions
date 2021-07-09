@@ -13,7 +13,7 @@
 
 
 ## Project description
-This tutorial purpose is to provide an example of using Graph Data Connect to extract insights and analytics by analyzing
+This tutorial purpose is to provide an example of using [Graph Data Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview) to extract insights and analytics by analyzing
 conversations within an organization.  
 Another purpose of this tutorial is to provide the developers with a technical infrastructure for quickly 
 setting up a GDC  based application, by providing and example project(*Conversation Lineage*) 
