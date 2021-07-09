@@ -4,6 +4,9 @@
 - [Project Description](#project-description)
 - [Prerequisites](#prerequisites)
 - [Tutorial for setting up the Conversation Lineage processing pipelines](#tutorial-for-setting-up-the-conversation-lineage-processing-pipelines)
+    - [Arm files deployment](#arm-files-deployment)
+    - [Trigger deployment](#trigger-deployment)
+    - [Sql deployment](#sql-deployment)
 - [Architectural design](#architectural-design)
     - [Data Ingestion](#data-ingestion)
     - [Table Derivation](#table-derivation)  
@@ -42,18 +45,24 @@ In order to start up the deployment log in to portal.azure.com and open an azure
 Select the necessary files from the `./arm/mgdc101/` folder and upload them using the upload functionality in azure cloud shell:   
 ![azure_upload_files](./docs/azure_upload_files.png)
 
+
+### Arm files deployment
 Once the files are uploaded please execute the following steps for deploying the pipelines:
 
 ```shell
 az command (fill in here)
 ```
 
+### Trigger deployment
 In order to configure the triggers please execute the following commands:
 
 ```shell
 az command (fill in here)
 ```
 
+### Sql deployment
+In order to create the associated sql tables open an sql editor on the tables folder in synapse workspace manager:  
+![create-tables](./docs/sql_script_create_table_menu.png)
 
 ## Architectural design
 
