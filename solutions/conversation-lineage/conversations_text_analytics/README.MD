@@ -201,14 +201,14 @@ The mail sentiment and entity extraction code is deployed in  [Azure Synapse](ht
 Upload the notebook from the [./src/ProcessMails-ConversationLineage_demo.ipynb](./src/ProcessMails-ConversationLineage_demo.ipynb)
 ![Upload notebook](../docs/analytics_notebook_imgs/import_mail_processing_notebook_00.png)
 
-Select the notebook
+Select the notebook:
 ![Select the notebook file](../docs/analytics_notebook_imgs/import_mail_processing_notebook_01_select_notebook.png)
 
-Attach the spark pool to the notebook
+Attach the spark pool to the notebook:
 ![Attach a spark pool to the current notebook](../docs/analytics_notebook_imgs/import_mail_processing_notebook_02_select_spark_pool.png)
 
 Navigate to ingest tab folder (from the left menu).
-Create a new pipeline
+Create a new pipeline:
 ![Create Pipeline](../docs/analytics_notebook_imgs/integrate_00_new_pipeline.png)
 
 Add a synapse notebook, select the uploaded notebook and configure parameters as shown below:
