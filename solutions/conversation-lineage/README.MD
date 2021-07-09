@@ -83,10 +83,6 @@ The sql for the views creation can be found [here](./sql/views_creation_sql.sql)
  
 ## Tutorial for setting up the Conversation Lineage processing pipelines
 
-Prerequisites:
-- azure synapse services
-- gdc with and user with global admin rights
-
 In order to start up the deployment log in to portal.azure.com and open an azure cloud shell:   
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
