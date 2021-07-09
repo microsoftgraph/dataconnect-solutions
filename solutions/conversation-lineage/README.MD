@@ -1,6 +1,18 @@
 # Conversation Lineage
 
-## Project purpose
+## Table of contents
+- [Project Description](#project-description)
+- [Prerequisites](#prerequisites)
+- [Architectura design](#architectural-design)
+    - [Data Ingestion](#data-ingestion)
+    - [Table Derivation](#table-derivation)  
+    - [Sentiment and entities extraction from mails](#sentiment-and-entities-extraction-from-mails)
+    - [PowerBI presentation](#powerbi-presentation)
+- [Tutorial for setting up the Conversation Lineage processing pipelines](#tutorial-for-setting-up-the-conversation-lineage-processing-pipelines)
+
+
+
+## Project description
 This application’s purpose is to extract conversation analytics from a provided mail-flow between members of a company.
 More specifically, we aim to extract sentiment and nlp entities in order to identify the conversation’s sentiment over certain topics and then write it to a sql table. 
 Our end goal is to provide insights through a power-bi presentation notebook.
@@ -20,7 +32,7 @@ There are 3 major pipeline steps in retrieving and processing the conversations:
 3) Sentiment extraction on the conversation content retrieved by the step 1. 
 ![Architecture](./docs/Diagram-Architecture.png)
 
-## Data Ingestion
+### Data Ingestion
 
 The workflow steps are focused on extracting the following type of information:
 - M365 user profile data
@@ -45,17 +57,38 @@ The teams chat processing pipeline:
 ![Teams chat processing pipeline](./docs/pipeline_process_teams_chat_data.png)
 
 
-## Table derivation
+### Table derivation
 
 ![Flow ](./docs/Conversation%20Lineage%20Table%20Derivation.png)
 
-##  Sentiment and entities extraction from mails 
+###  Sentiment and entities extraction from mails 
 
 In order to follow the setup steps for the text analytics pipeline please consult the setup instructions [here](conversations_text_analytics/README.MD)
 
-## PowerBI presentation
+### PowerBI presentation
 The PowerBI presentation is based on the views created from the derived table.
 The sql for the views creation can be found [here](./sql/views_creation_sql.sql)
  
+## Tutorial for setting up the Conversation Lineage processing pipelines
 
+Prerequisites:
+- azure synapse services
+- gdc with and user with global admin rights
 
+In order to start up the deployment log in to portal.azure.com and open an azure cloud shell:   
+![azure cloud shell](./docs/azure_cloud_shell.png)
+
+Select the necessary files from the `./arm/mgdc101/` folder and upload them using the upload functionality in azure cloud shell:   
+![azure_upload_files](./docs/azure_upload_files.png)
+
+Once the files are uploaded please execute the following steps for deploying the pipelines:
+
+```shell
+az command (fill in here)
+```
+
+In order to configure the triggers please execute the following commands:
+
+```shell
+az command (fill in here)
+```
