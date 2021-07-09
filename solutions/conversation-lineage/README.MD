@@ -13,13 +13,15 @@
 
 
 ## Project description
-This tutorial purpose is to provide an example of using [Graph Data Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview) (GDC) to extract insights and analytics by analyzing
+This tutorial purpose is to provide an example of using [Graph Data Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview)
+(GDC) to extract insights and analytics by analyzing
 conversations within an organization.  
 Another purpose of this tutorial is to provide the developers with a technical infrastructure for quickly 
 setting up a GDC  based application, by providing and example project(*Conversation Lineage*) 
 that integrates GDC infrastructure and azure connected services.
 
-More specifically we'll use [Azure Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/) on top of GDC data in order to: extract sentiment and nlp entities over conversations retrieved from GDC 
+More specifically we'll use [Azure Cognitive Services](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/)
+on top of GDC data in order to: extract sentiment and nlp entities over conversations retrieved from GDC 
 Our end goal is to provide insights through a power-bi presentation notebook.
 
 ## Prerequisites
