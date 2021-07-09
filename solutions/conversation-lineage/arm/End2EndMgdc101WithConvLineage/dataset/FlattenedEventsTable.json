@@ -1,0 +1,141 @@
+{
+    "name": "FlattenedEventsTable",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "SynapseDedicateSqlPool",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "Id",
+                "type": "varchar"
+            },
+            {
+                "name": "CreatedDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "LastModifiedDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "iCalUId",
+                "type": "varchar"
+            },
+            {
+                "name": "Subject",
+                "type": "varchar"
+            },
+            {
+                "name": "Importance",
+                "type": "varchar"
+            },
+            {
+                "name": "Sensitivity",
+                "type": "varchar"
+            },
+            {
+                "name": "IsAllDay",
+                "type": "bit"
+            },
+            {
+                "name": "IsCancelled",
+                "type": "bit"
+            },
+            {
+                "name": "IsOrganizer",
+                "type": "bit"
+            },
+            {
+                "name": "ResponseRequested",
+                "type": "bit"
+            },
+            {
+                "name": "ContentType",
+                "type": "varchar"
+            },
+            {
+                "name": "Content",
+                "type": "varchar"
+            },
+            {
+                "name": "StartDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "StartTimeZone",
+                "type": "varchar"
+            },
+            {
+                "name": "EndDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "EndTimeZone",
+                "type": "varchar"
+            },
+            {
+                "name": "LocationDisplayName",
+                "type": "varchar"
+            },
+            {
+                "name": "AttendeeStatusResponse",
+                "type": "varchar"
+            },
+            {
+                "name": "AttendeeName",
+                "type": "varchar"
+            },
+            {
+                "name": "AttendeeAddress",
+                "type": "varchar"
+            },
+            {
+                "name": "Organizer",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerName",
+                "type": "varchar"
+            },
+            {
+                "name": "ODataType",
+                "type": "varchar"
+            },
+            {
+                "name": "puser",
+                "type": "varchar"
+            },
+            {
+                "name": "ptenant",
+                "type": "varchar"
+            },
+            {
+                "name": "datarow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "userrow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "pagerow",
+                "type": "bigint",
+                "precision": 19
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "flattened_events"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}

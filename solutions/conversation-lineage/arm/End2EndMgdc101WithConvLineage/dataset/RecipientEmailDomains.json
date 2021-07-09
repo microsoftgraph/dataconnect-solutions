@@ -1,0 +1,22 @@
+{
+    "name": "RecipientEmailDomains",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "SynapseDedicateSqlPool",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "Domain",
+                "type": "varchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "recipient_email_domains"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}
