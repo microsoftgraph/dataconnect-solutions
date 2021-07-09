@@ -1,0 +1,280 @@
+{
+    "name": "AugmentedFlattenedEmailsTable",
+    "properties": {
+        "annotations": [],
+        "type": "SqlPoolTable",
+        "schema": [
+            {
+                "name": "Id",
+                "type": "varchar"
+            },
+            {
+                "name": "CreatedDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "LastModifiedDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "InternetMessageId",
+                "type": "varchar"
+            },
+            {
+                "name": "Subject",
+                "type": "varchar"
+            },
+            {
+                "name": "IsReadReceiptRequested",
+                "type": "bit"
+            },
+            {
+                "name": "IsRead",
+                "type": "bit"
+            },
+            {
+                "name": "IsDraft",
+                "type": "bit"
+            },
+            {
+                "name": "WebLink",
+                "type": "varchar"
+            },
+            {
+                "name": "Sender",
+                "type": "varchar"
+            },
+            {
+                "name": "Sender_Name",
+                "type": "varchar"
+            },
+            {
+                "name": "From",
+                "type": "varchar"
+            },
+            {
+                "name": "From_Name",
+                "type": "varchar"
+            },
+            {
+                "name": "ContentType",
+                "type": "varchar"
+            },
+            {
+                "name": "Content",
+                "type": "varchar"
+            },
+            {
+                "name": "Recipient",
+                "type": "varchar"
+            },
+            {
+                "name": "RecipientName",
+                "type": "varchar"
+            },
+            {
+                "name": "RecipientType",
+                "type": "varchar"
+            },
+            {
+                "name": "ODataType",
+                "type": "varchar"
+            },
+            {
+                "name": "emai_puser",
+                "type": "varchar"
+            },
+            {
+                "name": "email_ptenant",
+                "type": "varchar"
+            },
+            {
+                "name": "email_datarow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "email_userrow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "email_pagerow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "SenderAboutMe",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderBirthday",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderHireDate",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "SenderMySite",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderPreferredName",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderAccountEnabled",
+                "type": "bit"
+            },
+            {
+                "name": "SenderCity",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderCompanyName",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderCountry",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderCreatedDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "SenderDepartment",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderDisplayName",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderGivenName",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderId",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderJobTitle",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderMail",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderOfficeLocation",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderOnPremisesImmutableId",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderPostalCode",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderPreferredLanguage",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderState",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderStreetAddress",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderSurname",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderUsageLocation",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderUserPrincipalName",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderUserType",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderPuser",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderPtenant",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderPAdditionalInfo",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderDatarow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "SenderUserrow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "SenderPagerow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "IsExternalEmail",
+                "type": "bit"
+            },
+            {
+                "name": "MailToManager",
+                "type": "bit"
+            },
+            {
+                "name": "MailToSubordinate",
+                "type": "bit"
+            },
+            {
+                "name": "SenderReportsTo",
+                "type": "varchar"
+            },
+            {
+                "name": "SenderManagerEmail",
+                "type": "varchar"
+            },
+            {
+                "name": "RecipientManagerEmail",
+                "type": "varchar"
+            },
+            {
+                "name": "RecipientReportsTo",
+                "type": "varchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "augmented_flattened_emails"
+        },
+        "sqlPool": {
+            "referenceName": "synapsededicatesqlpool",
+            "type": "SqlPoolReference"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}
