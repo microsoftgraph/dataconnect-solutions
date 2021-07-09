@@ -50,5 +50,5 @@ The sql for the views creation can be found [here](./sql/views_creation_sql.sql)
 
 ## Deployment
 
-All the workflows run in azure-synapse. For setting it upt use the [Official documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
+All the workflows run in azure-synapse. For setting it up use the [Official documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
 
