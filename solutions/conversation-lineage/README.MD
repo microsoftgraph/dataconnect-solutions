@@ -14,7 +14,7 @@
 
 ## Project description
 This tutorial purpose is to provide an example of using Graph Data Connect to extract insights and analytics by analyzing
-conversations within an organization.
+conversations within an organization.  
 Another purpose of this tutorial is to provide the developers with a technical infrastructure for quickly 
 setting up a GDC  based application, by providing and example project(*Conversation Lineage*) 
 that integrates GDC infrastructure and azure connected services.
