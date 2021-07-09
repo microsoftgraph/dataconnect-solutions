@@ -26,10 +26,13 @@ Our end goal is to provide insights through a power-bi presentation notebook.
 
 ## Prerequisites
 
-All the workflows run in azure-synapse. 
-For setting it up use the [Official documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
-All the workflows are dependent on the Graph-Data-Connect setup. 
-For setting GDC please use the following Microsoft GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md)
+All the workflows are dependent on the [Graph-Data-Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview)
+and run in [Azure Synapse Analytics](https://docs.microsoft.com/en-us/azure/synapse-analytics/). 
+
+For setting up an *Azure Synapse Workspace* please follow the [official synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)    
+For setting GDC please use the following Microsoft GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md).    
+You will also need an user with [global administration role](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin).  
+
 
 ## Architectural design
 
