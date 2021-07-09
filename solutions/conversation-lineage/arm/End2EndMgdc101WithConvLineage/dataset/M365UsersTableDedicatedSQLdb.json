@@ -1,0 +1,25 @@
+{
+    "name": "M365UsersTableDedicatedSQLdb",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "SynapseDedicateSqlPool",
+            "type": "LinkedServiceReference"
+        },
+        "parameters": {
+            "users_table_name": {
+                "type": "string"
+            }
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": {
+                "value": "@dataset().users_table_name",
+                "type": "Expression"
+            }
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}

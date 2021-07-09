@@ -1,0 +1,19 @@
+{
+    "name": "M365TeamChatsBlob",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "blobstorage_via_sp_linkedservice",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "Binary",
+        "typeProperties": {
+            "location": {
+                "type": "AzureBlobStorageLocation",
+                "folderPath": "m365_team_chats_json",
+                "container": "team-chats"
+            }
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}

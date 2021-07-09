@@ -1,0 +1,290 @@
+{
+    "name": "AugmentedEventsTable",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "SynapseDedicateSqlPool",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "Id",
+                "type": "varchar"
+            },
+            {
+                "name": "CreatedDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "LastModifiedDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "iCalUId",
+                "type": "varchar"
+            },
+            {
+                "name": "Subject",
+                "type": "varchar"
+            },
+            {
+                "name": "Importance",
+                "type": "varchar"
+            },
+            {
+                "name": "Sensitivity",
+                "type": "varchar"
+            },
+            {
+                "name": "IsAllDay",
+                "type": "bit"
+            },
+            {
+                "name": "IsCancelled",
+                "type": "bit"
+            },
+            {
+                "name": "IsOrganizer",
+                "type": "bit"
+            },
+            {
+                "name": "ResponseRequested",
+                "type": "bit"
+            },
+            {
+                "name": "ContentType",
+                "type": "varchar"
+            },
+            {
+                "name": "Content",
+                "type": "varchar"
+            },
+            {
+                "name": "StartDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "StartTimeZone",
+                "type": "varchar"
+            },
+            {
+                "name": "EndDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "EndTimeZone",
+                "type": "varchar"
+            },
+            {
+                "name": "LocationDisplayName",
+                "type": "varchar"
+            },
+            {
+                "name": "Organizer",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerName",
+                "type": "varchar"
+            },
+            {
+                "name": "ODataType",
+                "type": "varchar"
+            },
+            {
+                "name": "puser",
+                "type": "varchar"
+            },
+            {
+                "name": "ptenant",
+                "type": "varchar"
+            },
+            {
+                "name": "datarow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "userrow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "pagerow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "OrganizerAboutMe",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerBirthday",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerHireDate",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "OrganizerMySite",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerPreferredName",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerAccountEnabled",
+                "type": "bit"
+            },
+            {
+                "name": "OrganizerCity",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerCompanyName",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerCountry",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerCreatedDateTime",
+                "type": "datetime2",
+                "scale": 6
+            },
+            {
+                "name": "OrganizerDepartment",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerDisplayName",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerGivenName",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerId",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerJobTitle",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerMail",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerOfficeLocation",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerOnPremisesImmutableId",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerPostalCode",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerPreferredLanguage",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerState",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerStreetAddress",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerSurname",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerUsageLocation",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerUserPrincipalName",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerUserType",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerPuser",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerPtenant",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerPAdditionalInfo",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerDatarow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "OrganizerUserrow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "OrganizerPagerow",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "IsExternalEvent",
+                "type": "bit"
+            },
+            {
+                "name": "EventWithManager",
+                "type": "bit"
+            },
+            {
+                "name": "EventWithSubordinate",
+                "type": "bit"
+            },
+            {
+                "name": "OrganizerReportsTo",
+                "type": "varchar"
+            },
+            {
+                "name": "OrganizerManagerEmail",
+                "type": "varchar"
+            },
+            {
+                "name": "AttendeeNames",
+                "type": "varchar"
+            },
+            {
+                "name": "AttendeeAddresses",
+                "type": "varchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "augmented_events"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}
