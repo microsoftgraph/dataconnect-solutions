@@ -46,9 +46,9 @@ The teams chat processing pipeline:
 The powerbi presentation is based on the views created from the derived table.
 The sql for the views creation can be found [here](./sql/views_creation_sql.sql)
  
-## [Sentiment and entities extraction from mails](./pyconvli/README.MD)
+## [Sentiment and entities extraction from mails](conversations_text_analytics/README.MD)
 
 ## Deployment
 
-All the workflows run in azure-synapse. For setting it upt use the [Official documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
+All the workflows run in azure-synapse. For setting it up use the [Official documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
 

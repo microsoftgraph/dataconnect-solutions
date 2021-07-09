@@ -8,6 +8,8 @@
 - [Deployment on azure synapse](#deployment-on-azure-synapse)
     - [Deployment and configuration](#deployment-and-configuration)
 - [Deployment using az command line and arm templates](#deployment-using-az-command-line-and-arm-templates)
+    - [Open the azure cloud shell](#open-the-azure-cloud-shell)
+    - [Deploy the notebook](#deploy-the-notebook)  
     - [Deploy the pipeline](#deploy-the-pipeline)
     - [Run the pipeline](#run-the-pipeline)
 - [Pipeline and notebook parameters](#pipeline-and-notebook-parameters)
@@ -200,13 +202,16 @@ The mail sentiment and entity extraction code is deployed in  [Azure Synapse](ht
 
 Upload the notebook from the [./src/ProcessMails-ConversationLineage_demo.ipynb](./src/ProcessMails-ConversationLineage_demo.ipynb)
 ![Upload notebook](../docs/analytics_notebook_imgs/import_mail_processing_notebook_00.png)
-Select the notebook
+
+
+Select the notebook:  
 ![Select the notebook file](../docs/analytics_notebook_imgs/import_mail_processing_notebook_01_select_notebook.png)
-Attach the spark pool to the notebook
+
+Attach the spark pool to the notebook:  
 ![Attach a spark pool to the current notebook](../docs/analytics_notebook_imgs/import_mail_processing_notebook_02_select_spark_pool.png)
 
 Navigate to ingest tab folder (from the left menu).
-Create a new pipeline
+Create a new pipeline:
 ![Create Pipeline](../docs/analytics_notebook_imgs/integrate_00_new_pipeline.png)
 
 Add a synapse notebook, select the uploaded notebook and configure parameters as shown below:
@@ -215,17 +220,25 @@ Add a synapse notebook, select the uploaded notebook and configure parameters as
 ### Deployment using az command line and arm templates
 The following instructions should be followed in order to deploy the notebook in your resource group.
 As a prerequisites you should provide `Azure Synapse Workspace Name` and the `Spark Pool Name`
+The location of the files to upload: `notebook.json` and `pipeline.json` is in [./conversation-lineage/arm/conversations_text_analytics](../arm/conversations_text_analytics)
+
+#### Open the azure cloud shell
+![azure cloud shell](../docs/azure_cloud_shell.png)
+
+Using the upload functionality upload the `notebook.json` and `pipeline.json` to the shell container.
+![azure_upload_files](../docs/azure_upload_files.png)
+
 
 #### Deploy the notebook
 ```
-az synapse notebook create --file @arm/notebook.json --name 'ProcessMails-ConversationLineage' --workspace-name '<Azure Synapse Workspace Name>' --spark-pool-name '<Spark Pool Name>'
+az synapse notebook create --file @notebook.json --name 'ProcessMails-ConversationLineage' --workspace-name '<Azure Synapse Workspace Name>' --spark-pool-name '<Spark Pool Name>'
 ```
 
 
 #### Deploy the pipeline 
 
 ```
-az synapse pipeline create --file @arm/pipeline.json --name 'ConversationLineage' --workspace-name <Azure Synapse Workspace Name>
+az synapse pipeline create --file @pipeline.json --name 'ConversationLineage' --workspace-name <Azure Synapse Workspace Name>
 ```
 
 #### Run the pipeline
