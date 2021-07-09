@@ -46,7 +46,7 @@ The teams chat processing pipeline:
 The powerbi presentation is based on the views created from the derived table.
 The sql for the views creation can be found [here](./sql/views_creation_sql.sql)
  
-## [Sentiment and entities extraction from mails](./pyconvli/README.MD)
+## [Sentiment and entities extraction from mails](text_analytics/README.MD)
 
 ## Deployment
 
