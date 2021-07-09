@@ -42,7 +42,7 @@ You will also need an user with [global administration role](https://docs.micros
 In order to start up the deployment log in to portal.azure.com and open an azure cloud shell:   
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
-Select the necessary ARM template JSON files from the `./arm/mgdc101/` folder and upload them using
+Select the necessary ARM template JSON files from the `./arm/End2EndMgdc101WithConvLineage/` [folder](./arm/End2EndMgdc101WithConvLineage) and upload them using
 the upload functionality in azure cloud shell:   
 ![azure_upload_files](./docs/azure_upload_files.png)
 
