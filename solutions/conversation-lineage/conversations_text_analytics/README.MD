@@ -17,18 +17,24 @@
 
 
 ## Project description:
-  - extract conversation analytics from the mail flow between members of a company
+  - extract conversation analytics from the conversation flow between members of a company
   - more specifically: extract sentiment and nlp entities with possible purpose of identifying conversation sentiment
   over certain topics and write it to a sql table with the goal of exposing the insights through a power-bi presentation notebook.
 
 
 ## Prerequisites
 
-All the workflows run in azure-synapse. For setting it up use the [Official documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
-All the workflows are dependent on the gdc setup. For setting GDC please use the following microsoft gdc [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md)
+All the workflows are dependent on the [Graph-Data-Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview)
+and run in [Azure Synapse Analytics](https://docs.microsoft.com/en-us/azure/synapse-analytics/). 
+
+For setting up an *Azure Synapse Workspace* please follow the [official synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)    
+For setting GDC please use the following tutorial chapter from this Microsoft GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md#exercise-1-setup-office-365-tenant-and-enable-microsoft-graph-data-connect).    
+You will also need an user with [global administration role](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin).  
 
 ## Input data:
-- is `dbo.augmented_emails`. An example view is this one ![dbo_augmented_mails.png](../docs/analytics_notebook_imgs/dbo_augmented_mails.png)
+The source for the azure text analytics service is the content of the `dbo.augmented_emails` table.   
+Sample data:   
+![dbo_augmented_mails.png](../docs/analytics_notebook_imgs/dbo_augmented_mails.png)
 
 
 ## Azure AI Text Analytics usage.
