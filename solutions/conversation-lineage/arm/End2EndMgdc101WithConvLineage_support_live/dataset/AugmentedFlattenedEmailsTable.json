@@ -1,8 +1,12 @@
 {
     "name": "AugmentedFlattenedEmailsTable",
     "properties": {
+        "linkedServiceName": {
+            "referenceName": "SynapseDedicateSqlPool",
+            "type": "LinkedServiceReference"
+        },
         "annotations": [],
-        "type": "SqlPoolTable",
+        "type": "AzureSqlTable",
         "schema": [
             {
                 "name": "Id",
@@ -265,16 +269,15 @@
             {
                 "name": "RecipientReportsTo",
                 "type": "varchar"
+            },
+            {
+                "name": "Version",
+                "type": "varchar"
             }
         ],
         "typeProperties": {
             "schema": "dbo",
             "table": "augmented_flattened_emails"
-        },
-        "sqlPool": {
-            "referenceName": "synapsededicatesqlpool",
-            "type": "SqlPoolReference"
         }
-    },
-    "type": "Microsoft.Synapse/workspaces/datasets"
+    }
 }

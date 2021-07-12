@@ -1,0 +1,32 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.1",
+    "parameters": {
+        "synapse.name": {
+            "type": "string",
+            "defaultValue": "mgdc101synapse"
+        }
+    },
+    "variables": {
+        "synapseId": "[resourceId('Microsoft.Synapse/workspaces', parameters('synapse.name'))]"
+    },
+    "resources": [
+        {
+            "name": "[concat(parameters('synapse.name'), '/SynapseDedicateSqlPoolTest')]",
+            "type": "Microsoft.Synapse/workspaces/linkedservices",
+            "apiVersion": "2019-06-01-preview",
+            "properties": {
+                "annotations": [],
+                "type": "AzureSqlDatabase",
+                "typeProperties": {
+                    "connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=gdc-synapse.sql.azuresynapse.net;Initial Catalog=GDCdedicatedSQLpool"
+                },
+                "connectVia": {
+                    "referenceName": "AutoResolveIntegrationRuntime",
+                    "type": "IntegrationRuntimeReference"
+                }
+            }
+        }
+    ],
+    "outputs": {}
+}
