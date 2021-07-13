@@ -739,7 +739,7 @@ GO
 
 
 
----------------------------- Create conversation_entities_info ----------------------------
+--------------------------- Create conversation_entities_info ----------------------------
 
 
 
@@ -751,8 +751,9 @@ GO
 
 CREATE TABLE [dbo].[conversation_entities_info]
 (
-	[id] [varchar](1024)  NULL,
-	[conversation_id] [varchar](1024)  NULL,
+	[uuid] [varchar](1024)  NULL,
+	[interaction_id] [varchar](1024)  NULL,
+    [source_type] [varchar](1024)  NULL,
 	[sender_mail] [varchar](1024)  NULL,
 	[sender_name] [varchar](1024)  NULL,
 	[sender_domain] [varchar](1024)  NULL,
@@ -780,8 +781,9 @@ GO
 
 CREATE TABLE [dbo].[conversation_sentiment_info]
 (
-	[id] [varchar](1024)  NULL,
-	[conversation_id] [varchar](1024)  NULL,
+	[uuid] [varchar](1024)  NULL,
+	[interaction_id] [varchar](1024)  NULL,
+    [source_type] [varchar](1024)  NULL,
 	[sender_mail] [varchar](1024)  NULL,
 	[sender_name] [varchar](1024)  NULL,
 	[sender_domain] [varchar](1024)  NULL,
@@ -811,8 +813,9 @@ GO
 
 CREATE TABLE [dbo].[conversation_to_recipient_sentiment_info]
 (
-	[id] [varchar](1024)  NULL,
-	[conversation_id] [varchar](1024)  NULL,
+	[uuid] [varchar](1024)  NULL,
+	[interaction_id] [varchar](1024)  NULL,
+    [source_type] [varchar](1024)  NULL,
 	[sender_mail] [varchar](1024)  NULL,
 	[sender_name] [varchar](1024)  NULL,
 	[sender_domain] [varchar](1024)  NULL,
@@ -830,42 +833,3 @@ WITH
 	CLUSTERED COLUMNSTORE INDEX
 )
 GO
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
