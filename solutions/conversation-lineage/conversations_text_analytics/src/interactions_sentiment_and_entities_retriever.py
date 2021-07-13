@@ -32,7 +32,7 @@ conversation_to_recipient_sentiment_info_sql_table_definition = "uuid VARCHAR(10
 
 
 MAX_NUMBER_OF_RECIPIENTS = 50
-MAX_ENTITIES_RETRIEVED_FROM_MAIL = 10
+MAX_ENTITIES_RETRIEVED_FROM_CONVERSATION = 10
 TEXT_ANALYTICS_BATCH_SIZE = 5
 
 
@@ -196,7 +196,7 @@ def create_conversation_entities_info(analyzed_conversations):
         conversation_id = conversation['id']
         entities_info = conversation["entities_info"]
         result = []
-        for ei in entities_info[:min(MAX_ENTITIES_RETRIEVED_FROM_MAIL, len(entities_info))]:
+        for ei in entities_info[:min(MAX_ENTITIES_RETRIEVED_FROM_CONVERSATION, len(entities_info))]:
             result.append([sql_idx,
                            conversation_id,
                            conversation['source_type'],
