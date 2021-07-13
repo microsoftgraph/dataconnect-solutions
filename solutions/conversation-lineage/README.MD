@@ -46,6 +46,11 @@ from transforming the input data.
 
 ### Create an Azure Cognitive Service
 Create an instance of Azure Cognitive Services meant to be used for sentiment analysis of interactions between users.
+From *Azure Cognitive Services* we'll use *Text Analytics* service.
+In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api?tabs=synchronous#create-a-text-analytics-resource)
+From *Text Analytics* service we'll use 2 provided api functions:
+- [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
+- [named entity recognition](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-entity-linking?tabs=version-3-1)
 
 ### Create an Azure Key Vault
 Create a KeyVault meant to store any sensitive pieces of information meant to be used by the Synapse pipelines.
