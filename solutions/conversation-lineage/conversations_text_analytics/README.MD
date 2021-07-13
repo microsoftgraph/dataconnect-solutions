@@ -40,7 +40,7 @@ The script for the view can be found [here](../sql/private_views_creation_sql.sq
 This view is created as a result of running the workflow described [here](../README.MD#tutorial-for-setting-up-the-conversation-lineage-processing-pipelines)
 
 Sample data:   
-![dbo_augmented_mails.png](../docs/analytics_notebook_imgs/dbo_vInternal_Interactions_one_to_many.png)
+![dbo_vInternal_Interactions_one_to_many.png](../docs/analytics_notebook_imgs/dbo_vInternal_Interactions_one_to_many.png)
 
 
 ## Azure AI Text Analytics usage.
