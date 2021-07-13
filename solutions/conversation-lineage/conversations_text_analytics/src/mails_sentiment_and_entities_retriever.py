@@ -22,18 +22,19 @@ azure_ai_key = ""
 sql_server_name = ""
 
 
-conversation_sentiment_info_sql_table_definition = "uuid VARCHAR(1024), interaction_id VARCHAR(1024), source_type VARCHAR(1024), sender_mail VARCHAR(1024), sender_name VARCHAR(1024), sender_domain VARCHAR(1024), \
-                                                                                    general_sentiment VARCHAR(1024), pos_score FLOAT, neutral_score FLOAT, negative_score FLOAT"
-conversation_entities_info_sql_table_definition = "uuid VARCHAR(1024), interaction_id VARCHAR(1024), source_type VARCHAR(1024), sender_mail VARCHAR(1024), sender_name VARCHAR(1024), sender_domain VARCHAR(1024), \
-                                                                                    text VARCHAR(1024), category VARCHAR(1024), score FLOAT"
-conversation_to_recipient_sentiment_info_sql_table_definition = "uuid VARCHAR(1024), interaction_id VARCHAR(1024), source_type VARCHAR(1024), sender_mail VARCHAR(1024), sender_name VARCHAR(1024), sender_domain VARCHAR(1024), \
-                                                                                    general_sentiment VARCHAR(1024), pos_score FLOAT, neutral_score FLOAT, negative_score FLOAT, \
-                                                                                    recipient_name VARCHAR(8000), recipient_address VARCHAR(8000), recipient_domain VARCHAR(8000)"
+conversation_sentiment_info_sql_table_definition = "uuid VARCHAR(1024), interaction_id VARCHAR(1024), source_type VARCHAR(1024), sender_mail VARCHAR(1024), sender_name VARCHAR(1024), " \
+                                                   "sender_domain VARCHAR(1024), general_sentiment VARCHAR(1024), pos_score FLOAT, neutral_score FLOAT, negative_score FLOAT"
+conversation_entities_info_sql_table_definition = "uuid VARCHAR(1024), interaction_id VARCHAR(1024), source_type VARCHAR(1024), sender_mail VARCHAR(1024), sender_name VARCHAR(1024), " \
+                                                  "sender_domain VARCHAR(1024), text VARCHAR(1024), category VARCHAR(1024), score FLOAT"
+conversation_to_recipient_sentiment_info_sql_table_definition = "uuid VARCHAR(1024), interaction_id VARCHAR(1024), source_type VARCHAR(1024), sender_mail VARCHAR(1024), sender_name VARCHAR(1024), " \
+                                                                "sender_domain VARCHAR(1024), general_sentiment VARCHAR(1024), pos_score FLOAT, neutral_score FLOAT, negative_score FLOAT, \
+                                                                recipient_name VARCHAR(8000), recipient_address VARCHAR(8000), recipient_domain VARCHAR(8000)"
 
 
 MAX_NUMBER_OF_RECIPIENTS = 50
 MAX_ENTITIES_RETRIEVED_FROM_MAIL = 10
 TEXT_ANALYTICS_BATCH_SIZE = 5
+
 
 def retrieve_interactions():
     interactions = spark.read.format("jdbc") \
@@ -54,9 +55,9 @@ def retrieve_interactions():
         StructField("SourceType", StringType(), True)
     ])
 
-    interactionsDF = spark.createDataFrame(interactions.rdd, schema)
+    interactions_df = spark.createDataFrame(interactions.rdd, schema)
 
-    def transform(interaction):
+    def transform_as_sql_data(interaction):
         recipient_addresses_list = interaction["Recipients"].split(",")
         recipient_names_list = interaction["RecipientNames"].split(",")
         interaction_id = interaction['InteractionId']
@@ -81,8 +82,8 @@ def retrieve_interactions():
             "source_type": source_type
         }
 
-    tranformed_interactions = interactionsDF.rdd.map(lambda x: transform(x))
-    return tranformed_interactions
+    sql_transformed_interactions = interactions_df.rdd.map(lambda interaction: transform_as_sql_data(interaction))
+    return sql_transformed_interactions
 
 
 def analyze_conversations(all_conversations):
