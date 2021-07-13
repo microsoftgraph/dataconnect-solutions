@@ -3,8 +3,7 @@
 ## Table of contents
 - [Tutorial Overview](#tutorial-overview)
 - [Prerequisites](#prerequisites)
-- [Set up required Azure resources](#set-up-required-azure-resources)
-- [Tutorial for setting up the Conversation Lineage processing pipelines](#set-up-the-conversation-lineage-processing-pipelines)
+- [Set up the Synapse data processing pipelines](#set-up-the-synapse-data-processing-pipelines)
     - [Arm files deployment](#arm-files-deployment)
     - [Trigger deployment](#trigger-deployment)
     - [Sql deployment](#sql-deployment)
@@ -26,17 +25,34 @@ You will learn how to:
 - visualize key insights using [PowerBI](https://docs.microsoft.com/en-us/power-bi/fundamentals/power-bi-overview)
 
 ## Prerequisites
-All the workflows are dependent on [Graph-Data-Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview)
-and run in [Azure Synapse Analytics](https://docs.microsoft.com/en-us/azure/synapse-analytics/). 
 
-For setting up an *Azure Synapse Workspace*, please follow the [official synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace).   
-For setting GDC, please use the following tutorial chapter from this Microsoft GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md#exercise-1-setup-office-365-tenant-and-enable-microsoft-graph-data-connect).      
-You will also need a user with [global administration role](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin).  
+To complete this lab, you need the following:
 
-To create and visualize the final reports, you will need a PowerBI deployment with an appropriate [license](https://docs.microsoft.com/en-us/power-bi/fundamentals/service-features-license-type).
+- Microsoft Azure subscription
+  - If you do not have one, you can obtain one (for free) here: [https://azure.microsoft.com/free](https://azure.microsoft.com/free/)
+  - The account used to perform the set up must have the [**global administrator** role granted to it](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin),
+    in order to be able to create the various infrastructure components described below
+  - The Azure subscription must be in the same tenant as the Office 365 tenant as Graph Data Connect will only export 
+    data to an Azure subscription in the same tenant, not across tenants.
+- Office 365 tenancy
+  - If you do not have one, you obtain one (for free) by signing up to the [Office 365 Developer Program](https://developer.microsoft.com/office/dev-program).
+  - Multiple Office 365 users with emails sent & received
+  - Access to at least two accounts that meet the following requirements:
+  - One of the two accounts must be a global tenant administrator & have the **global administrator** role granted (just one account)
+- Workplace Analytics licenses
+  - Access to the Microsoft Graph data connect toolset is available through [Workplace Analytics](https://products.office.com/en-us/business/workplace-analytics), 
+    which is licensed on a per-user, per-month basis.
+  - To learn more please see [Microsoft Graph data connect policies and licensing](https://docs.microsoft.com/en-us/graph/data-connect-policies)
 
+> NOTE: The screenshots and examples used in this lab are from an Office 365 test tenant with fake email from test users. 
+> You can use your own Office 365 tenant to perform the same steps. No data is written to Office 365. 
+> A copy of email data is extracted from all users in an Office 365 tenant and copied to an Azure Blob Storage 
+> account that you maintain control over. Thus, you control who has access to the data within the Azure Blob Storage.
+ 
+### Set up Graph Data Connect
+For setting up Office 365 Tenant and enabling Graph Data Connect, please follow the steps from chapter `Excercise 1` 
+from this GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md#exercise-1-setup-office-365-tenant-and-enable-microsoft-graph-data-connect)
 
-## Set up required Azure resources
 ### Create an Azure resource group
 Create a resource group to hold all the Azure resources required for this project.
 
@@ -57,7 +73,9 @@ Create a KeyVault meant to store any sensitive pieces of information meant to be
 For example, you'll need to store the storage account key, the Cognitive service key, the Synapse SQL pool password etc.
 
 ### Create an Azure Synapse workspace
-Create the Synapse workspace used to process all the data
+Create the Synapse workspace used to process all the data.
+For setting up a Synapse workspace, please follow the [official Synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
+and make sure to use your resource group.
 
 ### Create a Synapse Spark pool
 Certain more complex transformations of data will be performed using Apache Spark. This requires the computation
@@ -87,8 +105,14 @@ via Synapse triggers (described below).
 Please follow the next link to learn more about [Azure Synapse SQL architecture](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/overview-architecture)
 and about [dedicated SQL pools](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-overview-what-is).
 
+### Set up PowerBI
+To create, edit and visualize the final reports over the processed data, you will need to have [PowerBI Desktop](https://docs.microsoft.com/en-us/power-bi/fundamentals/desktop-what-is-desktop) 
+installed (either locally or on a Windows VM accessed via RDP).  
+To perform the installation, please follow [these steps](https://docs.microsoft.com/en-us/power-bi/fundamentals/desktop-getting-started#install-and-run-power-bi-desktop).  
+To share the reports with others you will also need an appropriate [license](https://docs.microsoft.com/en-us/power-bi/fundamentals/service-features-license-type).
 
-## Set up the Conversation Lineage processing pipelines
+
+## Set up the Synapse data processing pipelines
 In order to start up the deployment log in to portal.azure.com and open an azure cloud shell:   
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
@@ -176,10 +200,10 @@ The teams chat processing pipeline:
 In order to follow the setup steps for the text analytics pipeline, please consult the setup instructions [here](conversations_text_analytics/README.MD)
 
 ### PowerBI presentation
-The PowerBI presentation is based on the views created from the derived table.
-The statements for the SQL views creation can be found [here](./sql/views_creation_sql.sql)  
-The PowerBI report can be found [here](./power_bi_presentation/MGDC%20Conversation%20Lineage.pbix)
-The PowerBI report documentation can be found [here](./power_bi_presentation/README.MD)
+The PowerBI presentation is based on the views created from the derived table.  
+The statements for the SQL views creation can be found [here](./sql/views_creation_sql.sql).  
+The PowerBI report can be found [here](./power_bi_presentation/MGDC%20Conversation%20Lineage.pbix).  
+The PowerBI report documentation can be found [here](./power_bi_presentation/README.MD).
 
 In order to create/update the views necessary for the PowerBI please open a sql query window:  
 ![sql-query-window](./docs/sql_script_creation.png)  

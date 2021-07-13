@@ -5,7 +5,7 @@
 - [Dev101](#dev101-report)
 - [Mails Management](#mails-management)
 - [Are mails read](#are-mails-read)
-- [Who interacts with who?](#who-interacts-with-who)
+- [Who interacts with whom?](#who-interacts-with-whom)
 
 
 # All report pages
@@ -30,5 +30,5 @@ Here are all the pages from the report.
 ## Are Mails Read
 ![Are Mails Read](../docs/power_bi/are_mails_read.png)
 
-## Who Interacts with Who
+## Who Interacts with Whom
 ![Who Interacts](../docs/power_bi/who_interacts.png)
