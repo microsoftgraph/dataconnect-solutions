@@ -739,7 +739,7 @@ GO
 
 
 
----------------------------- Create conversation_entities_info ----------------------------
+--------------------------- Create conversation_entities_info ----------------------------
 
 
 
@@ -833,42 +833,3 @@ WITH
 	CLUSTERED COLUMNSTORE INDEX
 )
 GO
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
