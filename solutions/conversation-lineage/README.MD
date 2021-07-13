@@ -3,7 +3,8 @@
 ## Table of contents
 - [Tutorial Overview](#tutorial-overview)
 - [Prerequisites](#prerequisites)
-- [Tutorial for setting up the Conversation Lineage processing pipelines](#tutorial-for-setting-up-the-conversation-lineage-processing-pipelines)
+- [Set up required Azure resources](#set-up-required-azure-resources)
+- [Tutorial for setting up the Conversation Lineage processing pipelines](#set-up-the-conversation-lineage-processing-pipelines)
     - [Arm files deployment](#arm-files-deployment)
     - [Trigger deployment](#trigger-deployment)
     - [Sql deployment](#sql-deployment)
@@ -35,7 +36,54 @@ You will also need a user with [global administration role](https://docs.microso
 To create and visualize the final reports, you will need a PowerBI deployment with an appropriate [license](https://docs.microsoft.com/en-us/power-bi/fundamentals/service-features-license-type).
 
 
-## Tutorial for setting up the Conversation Lineage processing pipelines
+## Set up required Azure resources
+### Create an Azure resource group
+Create a resource group to hold all the Azure resources required for this project.
+
+### Create an Azure Storage account
+Create a Storage account meant to store the raw data ingested from Microsoft 365, as well as intermediate data resulting
+from transforming the input data.
+
+### Create an Azure Cognitive Service
+Create an instance of Azure Cognitive Services meant to be used for sentiment analysis of interactions between users.
+
+### Create an Azure Key Vault
+Create a KeyVault meant to store any sensitive pieces of information meant to be used by the Synapse pipelines.
+For example, you'll need to store the storage account key, the Cognitive service key, the Synapse SQL pool password etc.
+
+### Create an Azure Synapse workspace
+Create the Synapse workspace used to process all the data
+
+### Create a Synapse Spark pool
+Certain more complex transformations of data will be performed using Apache Spark. This requires the computation
+resources of a Spark cluster. Synapse provides an integrated Spark cluster via Spark pools.  
+
+From Synapse Studio, create a Spark pool named `mgdc101synapse` by adapting the steps in [this tutorial](https://docs.microsoft.com/en-us/azure/synapse-analytics/quickstart-create-apache-spark-pool-studio).
+This can also be [done from Azure portal](https://docs.microsoft.com/en-us/azure/synapse-analytics/quickstart-create-apache-spark-pool-portal).  
+In order to keep costs low, assuming you will use a rather small input dataset, use small nodes and keep the number of
+nodes to a minimum. Also, to enable automatic pausing after the pool is idle, go to `Pause Settings` (on the right of 
+the pool name in the pools list), select "Enabled", and set the desired idle duration.
+
+Please follow the next link to learn more about [Apache Spark in Synapse](https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/apache-spark-overview).
+
+### Create a Synapse dedicated SQL pool
+In order to keep most data transformations as accessible as possible, SQL queries are used. Also, the data is exposed
+to PowerBI for visualization in tabular format (more precisely as views). Therefore, Synapse dedicated SQL pools are 
+used.  
+The SQL pool is an analytics engine which offers both compute and storage capabilities.
+
+From Synapse Studio, create a dedicated SQL pool named `synapsededicatesqlpool` by adapting the relevant steps from [this guide](https://docs.microsoft.com/en-us/azure/synapse-analytics/quickstart-create-sql-pool-studio).
+This can also be [done from Azure portal](https://docs.microsoft.com/en-us/azure/synapse-analytics/quickstart-create-sql-pool-portal).  
+In order to keep costs low, assuming you will use a rather small input dataset, set the "Performance level" of the pool
+to the smallest available value (`DW100c`). The pool does not have the option to automatically shut down while idle, so
+consider pausing it yourself while not in use. However, make sure this does not interfere with scheduled processing
+via Synapse triggers (described below).
+
+Please follow the next link to learn more about [Azure Synapse SQL architecture](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/overview-architecture)
+and about [dedicated SQL pools](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-overview-what-is).
+
+
+## Set up the Conversation Lineage processing pipelines
 In order to start up the deployment log in to portal.azure.com and open an azure cloud shell:   
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
@@ -68,6 +116,16 @@ In order to create/update the associated sql tables, open a sql editor on the "T
 
 Use the script located here [./sql/tables_creation.sql](./sql/tables_creation.sql) and execute it in Synapse workspace manager:  
 ![create-all-tables](./docs/sql_script_create_all_tables.png)
+
+
+### Limiting the size of the input data
+In order to minimize costs, you should consider keeping  the size of the input data reasonably small. This can be achieved
+via 2 mechanisms:
+
+#### Limit the number of users for which data is processed
+
+#### Limit the time span of the processed data
+
 
 ## Architectural design
 
