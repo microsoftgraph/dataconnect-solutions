@@ -3,6 +3,7 @@
 ## Table of content
 
 - [Project Description](#project-description)
+- [Prerequisites](#prerequisites)  
 - [Input Data](#input-data)
 - [Azure Ai Text Analytics usage](#azure-ai-text-analytics-usage)
 - [Deployment on azure synapse](#deployment-on-azure-synapse)
@@ -13,7 +14,6 @@
     - [Deploy the pipeline](#deploy-the-pipeline)
     - [Run the pipeline](#run-the-pipeline)
 - [Pipeline and notebook parameters](#pipeline-and-notebook-parameters)
-- [Prerequisites](#prerequisites)
 
 
 ## Project description:
@@ -29,10 +29,10 @@ and run in [Azure Synapse Analytics](https://docs.microsoft.com/en-us/azure/syna
 
 For setting up an *Azure Synapse Workspace* please follow the [official synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)    
 For setting GDC please use the following tutorial chapter from this Microsoft GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md#exercise-1-setup-office-365-tenant-and-enable-microsoft-graph-data-connect).    
-You will also need an user with [global administration role](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin).  
+You will also need a user with [global administration role](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin).  
 
 ## Input data:
-The source for the azure text analytics service is the content of the `dbo.vInternal_Interactions_one_to_many` view. ]
+The source for the azure text analytics service is the content of the `dbo.vInternal_Interactions_one_to_many` view. 
 This view represents a data union of all the common fields of the augmented_emails, augmented_team_chats and augmented_events tables, 
 under a single schema describing interactions between users.  
 The script for the view can be found [here](../sql/private_views_creation_sql.sql)
