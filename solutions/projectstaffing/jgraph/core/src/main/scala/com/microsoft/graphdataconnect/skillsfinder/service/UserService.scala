@@ -33,7 +33,7 @@ class UserService {
   var jgraphUrl: String = _
 
   @Value("${gdcAdmins.groupId}")
-  var gdcAdminsGroupId: String = _
+  var gdcAdminsGroupId:  String = _
 
   @Value("${gdc-jgraph-service-principal-secret:#{environment.JGRAPH_SERVICE_PRINCIPAL_SECRET}}")
   var servicePrincipalSecret: String = _
@@ -50,7 +50,10 @@ class UserService {
   @Value("${anonymous.authentication.enabled}")
   var isAnonymousAuthEnabled: Boolean = _
 
-  private val anonymousUserDefaultInfo = UserInfo("", "", "", "test@anonymous.com")
+  @Value("${anonymous.user.default.email}")
+  var anonymousUserDefaultEmail: String = _
+
+  private lazy val anonymousUserDefaultInfo = UserInfo("", "", "", anonymousUserDefaultEmail)
 
   private val logger: Logger = LoggerFactory.getLogger(classOf[UserService])
 
