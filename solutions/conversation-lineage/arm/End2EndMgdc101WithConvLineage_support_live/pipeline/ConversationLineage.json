@@ -5,7 +5,26 @@
             {
                 "name": "Process Conversation Lineage",
                 "type": "SynapseNotebook",
-                "dependsOn": [],
+                "dependsOn": [
+                    {
+                        "activity": "SetJbcUsername",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "SetJbcPassword",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "SetAzureAIKey",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
                 "policy": {
                     "timeout": "7.00:00:00",
                     "retry": 0,
@@ -36,14 +55,14 @@
                         },
                         "sql_username": {
                             "value": {
-                                "value": "@pipeline().parameters.sql_username",
+                                "value": "@variables('jdbcUsername')",
                                 "type": "Expression"
                             },
                             "type": "string"
                         },
                         "sql_password": {
                             "value": {
-                                "value": "@pipeline().parameters.sql_password",
+                                "value": "@variables('jdbcPassword')",
                                 "type": "Expression"
                             },
                             "type": "string"
@@ -57,7 +76,7 @@
                         },
                         "azure_ai_key": {
                             "value": {
-                                "value": "@pipeline().parameters.azure_ai_key",
+                                "value": "@variables('azureAIKey')",
                                 "type": "Expression"
                             },
                             "type": "string"
@@ -71,6 +90,141 @@
                         }
                     }
                 }
+            },
+            {
+                "name": "GetJdbcUsername",
+                "type": "WebActivity",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": true,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "url": "https://mgdc101-vault.vault.azure.net/secrets/jdbcUsername/9b6c80b63462497bada54c444cc5cd38?api-version=7.0",
+                    "connectVia": {
+                        "referenceName": "AutoResolveIntegrationRuntime",
+                        "type": "IntegrationRuntimeReference"
+                    },
+                    "method": "GET",
+                    "authentication": {
+                        "type": "MSI",
+                        "resource": "https://vault.azure.net"
+                    }
+                }
+            },
+            {
+                "name": "SetJbcUsername",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "GetJdbcUsername",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "jdbcUsername",
+                    "value": {
+                        "value": "@activity('GetJdbcUsername').output.value",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "GetJdbcPassword",
+                "type": "WebActivity",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": true,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "url": "https://mgdc101-vault.vault.azure.net/secrets/jdbcPassword/75b887c9f9414848aa81dc6a4e05ffbf?api-version=7.0",
+                    "connectVia": {
+                        "referenceName": "AutoResolveIntegrationRuntime",
+                        "type": "IntegrationRuntimeReference"
+                    },
+                    "method": "GET",
+                    "authentication": {
+                        "type": "MSI",
+                        "resource": "https://vault.azure.net"
+                    }
+                }
+            },
+            {
+                "name": "SetJbcPassword",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "GetJdbcPassword",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "jdbcPassword",
+                    "value": {
+                        "value": "@activity('GetJdbcPassword').output.value",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "GetAzureAIKey",
+                "type": "WebActivity",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": true,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "url": "https://mgdc101-vault.vault.azure.net/secrets/azure-ai-key/0b407db5742c4cb8b13f9fa434245c6e?api-version=7.0",
+                    "connectVia": {
+                        "referenceName": "AutoResolveIntegrationRuntime",
+                        "type": "IntegrationRuntimeReference"
+                    },
+                    "method": "GET",
+                    "authentication": {
+                        "type": "MSI",
+                        "resource": "https://vault.azure.net"
+                    }
+                }
+            },
+            {
+                "name": "SetAzureAIKey",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "GetAzureAIKey",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "variableName": "azureAIKey",
+                    "value": {
+                        "value": "@activity('GetAzureAIKey').output.value",
+                        "type": "Expression"
+                    }
+                }
             }
         ],
         "parameters": {
@@ -80,24 +234,26 @@
             "sql_table_name": {
                 "type": "string"
             },
-            "sql_username": {
-                "type": "string"
-            },
-            "sql_password": {
-                "type": "string"
-            },
             "azure_ai_endpoint": {
-                "type": "string"
-            },
-            "azure_ai_key": {
                 "type": "string"
             },
             "sql_server_name": {
                 "type": "string"
             }
         },
+        "variables": {
+            "jdbcUsername": {
+                "type": "String"
+            },
+            "jdbcPassword": {
+                "type": "String"
+            },
+            "azureAIKey": {
+                "type": "String"
+            }
+        },
         "annotations": [],
-        "lastPublishTime": "2021-07-06T11:49:14Z"
+        "lastPublishTime": "2021-07-12T16:33:41Z"
     },
     "type": "Microsoft.Synapse/workspaces/pipelines"
 }

@@ -2,7 +2,7 @@
     "name": "M365TeamChatsParquet",
     "properties": {
         "linkedServiceName": {
-            "referenceName": "blobstorage_via_sp_linkedservice",
+            "referenceName": "blobstorage_linkedservice",
             "type": "LinkedServiceReference"
         },
         "annotations": [],

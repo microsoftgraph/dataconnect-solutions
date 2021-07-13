@@ -1,5 +1,5 @@
 {
-    "name": "synapsededicatesqlpool",
+    "name": "SynapseDedicatedSqlPool",
     "location": "westus",
     "sku": {
         "name": "DW300c",

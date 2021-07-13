@@ -101,7 +101,7 @@
                 {
                     "name": "stdout",
                     "output_type": "stream",
-                    "text": "storageAccountKey: String = y+ltmLxAIVX9XcoCQx97vdJDR6t9048volUK/oxrg2XprBQBA6J9EFhj/gdYeDb0XH07Fy/FSKTb3OYiZWhbmQ==\nusersInputContainer: String = mgdc101-employee-profiles\nstorageAccountName: String = mgdc101storage\nusersInputFolderPath: String = m365_users_json\nmanagerInputContainer: String = managers\nmanagerInputFolderPath: String = m365_managers_json\njdbcHostname: String = mgdc101synapse.sql.azuresynapse.net\njdbcPort: Int = 1433\njdbcDatabase: String = synapsededicatesqlpool\njdbcUsername: String = contosoadmin\njdbcPassword: String = pYf!OY7ILQhS\n"
+                    "text": "storageAccountKey: String = y+ltmLxAIVX9XcoCQx97vdJDR6t9048volUK/oxrg2XprBQBA6J9EFhj/gdYeDb0XH07Fy/FSKTb3OYiZWhbmQ==\nusersInputContainer: String = mgdc101-employee-profiles\nstorageAccountName: String = mgdc101storage\nusersInputFolderPath: String = m365_users_json\nmanagerInputContainer: String = managers\nmanagerInputFolderPath: String = m365_managers_json\njdbcHostname: String = mgdc101synapse.sql.azuresynapse.net\njdbcPort: Int = 1433\njdbcDatabase: String = SynapseDedicatedSqlPool\njdbcUsername: String = contosoadmin\njdbcPassword: String = pYf!OY7ILQhS\n"
                 }
             ],
             "execution_count": 18
@@ -752,7 +752,7 @@
                 {
                     "name": "stdout",
                     "output_type": "stream",
-                    "text": "jdbcUrl: String = jdbc:sqlserver://mgdc101synapse.sql.azuresynapse.net:1433;database=synapsededicatesqlpool;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;\n"
+                    "text": "jdbcUrl: String = jdbc:sqlserver://mgdc101synapse.sql.azuresynapse.net:1433;database=SynapseDedicatedSqlPool;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;\n"
                 }
             ],
             "execution_count": 19

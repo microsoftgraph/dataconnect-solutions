@@ -1,0 +1,20 @@
+{
+    "name": "MGDC101_recurring_trigger",
+    "properties": {
+        "annotations": [],
+        "runtimeState": "Stopped",
+        "type": "TumblingWindowTrigger",
+        "typeProperties": {
+            "frequency": "Hour",
+            "interval": 24,
+            "startTime": "<startTimeValue>",
+            "delay": "00:10:00",
+            "maxConcurrency": 1,
+            "retryPolicy": {
+                "count": 1,
+                "intervalInSeconds": 3600
+            },
+            "dependsOn": []
+        }
+    }
+}

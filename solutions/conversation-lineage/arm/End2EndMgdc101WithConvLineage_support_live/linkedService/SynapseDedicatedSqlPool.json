@@ -1,11 +1,11 @@
 {
-    "name": "SynapseDedicateSqlPool",
+    "name": "SynapseDedicatedSqlPool",
     "type": "Microsoft.Synapse/workspaces/linkedservices",
     "properties": {
         "annotations": [],
         "type": "AzureSqlDatabase",
         "typeProperties": {
-            "connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=mgdc101synapse.sql.azuresynapse.net;Initial Catalog=synapsededicatesqlpool"
+            "connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=<dedicatedSqlPoolEndpoint>;Initial Catalog=<sqlPoolDatabaseName>"
         },
         "connectVia": {
             "referenceName": "AutoResolveIntegrationRuntime",
