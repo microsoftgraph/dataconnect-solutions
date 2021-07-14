@@ -52,6 +52,11 @@ echo "DEDICATED_SQL_POOL_ENDPOINT=$DEDICATED_SQL_POOL_ENDPOINT"
 echo "SQL_POOL_DATABASE_NAME=$SQL_POOL_DATABASE_NAME"
 
 
+suffix=".blob.core.windows.net/"
+prefix="https://"
+storage_account_name=${STORAGE_ACCOUNT_ENDPOINT#"$prefix"}
+storage_account_name=${storage_account_name/%$suffix}
+
 
 echo "Deploying linkedservices ... "
 
@@ -128,6 +133,9 @@ az synapse pipeline create --file @./End2EndMgdc101WithConvLineage_support_live/
 
 prepare_users_data_pipeline_definition=`cat ./End2EndMgdc101WithConvLineage_support_live/pipeline/PrepareUsersData.json`
 prepare_users_data_pipeline_definition="${prepare_users_data_pipeline_definition//<key_vault_endpoint>/$KEY_VAULT_ENDPOINT}"
+prepare_users_data_pipeline_definition="${prepare_users_data_pipeline_definition//<storageAccountName>/$storage_account_name}"
+prepare_users_data_pipeline_definition="${prepare_users_data_pipeline_definition//<dedicatedSqlPoolEndpoint>/$DEDICATED_SQL_POOL_ENDPOINT}"
+prepare_users_data_pipeline_definition="${prepare_users_data_pipeline_definition//<sqlPoolDatabaseName>/$SQL_POOL_DATABASE_NAME}"
 
 az synapse pipeline create --file "$prepare_users_data_pipeline_definition" --name PrepareUsersData --workspace-name "$WORKSPACE_NAME"
 
@@ -135,6 +143,7 @@ az synapse pipeline create --file "$prepare_users_data_pipeline_definition" --na
 
 prepare_emails_data_pipeline_definition=`cat ./End2EndMgdc101WithConvLineage_support_live/pipeline/PrepareEmailsData.json`
 prepare_emails_data_pipeline_definition="${prepare_emails_data_pipeline_definition//<key_vault_endpoint>/$KEY_VAULT_ENDPOINT}"
+prepare_emails_data_pipeline_definition="${prepare_emails_data_pipeline_definition//<storageAccountName>/$storage_account_name}"
 
 az synapse pipeline create --file "$prepare_emails_data_pipeline_definition" --name PrepareEmailsData --workspace-name "$WORKSPACE_NAME"
 

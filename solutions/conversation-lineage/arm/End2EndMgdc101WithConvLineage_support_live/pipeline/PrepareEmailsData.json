@@ -301,7 +301,7 @@
                             "type": "string"
                         },
                         "storageAccountName": {
-                            "value": "mgdc101storage",
+                            "value": "<storageAccountName>",
                             "type": "string"
                         },
                         "inputFolderPath": {

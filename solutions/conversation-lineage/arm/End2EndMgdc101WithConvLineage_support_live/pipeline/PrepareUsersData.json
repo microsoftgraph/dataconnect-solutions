@@ -667,7 +667,7 @@
                             "type": "string"
                         },
                         "storageAccountName": {
-                            "value": "mgdc101storage",
+                            "value": "<storageAccountName>",
                             "type": "string"
                         },
                         "usersInputFolderPath": {
@@ -683,7 +683,7 @@
                             "type": "string"
                         },
                         "jdbcHostname": {
-                            "value": "mgdc101synapse.sql.azuresynapse.net",
+                            "value": "<dedicatedSqlPoolEndpoint>",
                             "type": "string"
                         },
                         "jdbcPort": {
@@ -691,7 +691,7 @@
                             "type": "int"
                         },
                         "jdbcDatabase": {
-                            "value": "SynapseDedicatedSqlPool",
+                            "value": "<sqlPoolDatabaseName>",
                             "type": "string"
                         },
                         "jdbcUsername": {
