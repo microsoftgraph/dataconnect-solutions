@@ -61,13 +61,13 @@ storage_account_name=${storage_account_name/%$suffix}
 echo "Deploying linkedservices ... "
 
 #create key vault linked service
-key_vault_linked_service_definition=`cat ./End2EndMgdc101WithConvLineage_support_live/linkedService/keyvault_linkedservice.json`
+key_vault_linked_service_definition=`cat ./End2EndMgdc101WithConvLineage/linkedService/keyvault_linkedservice.json`
 key_vault_linked_service_definition="${key_vault_linked_service_definition//<keyVaultEndpoint>/$KEY_VAULT_ENDPOINT}"
 
 az synapse linked-service create --file "$key_vault_linked_service_definition" --name keyvault_linkedservice --workspace-name "$WORKSPACE_NAME"
 
 #create blob storage linked service
-blob_storage_linked_service_definition=`cat ./End2EndMgdc101WithConvLineage_support_live/linkedService/blobstorage_linkedservice.json`
+blob_storage_linked_service_definition=`cat ./End2EndMgdc101WithConvLineage/linkedService/blobstorage_linkedservice.json`
 blob_storage_linked_service_definition="${blob_storage_linked_service_definition//<storageAccountEndpoint>/$STORAGE_ACCOUNT_ENDPOINT}"
 blob_storage_linked_service_definition="${blob_storage_linked_service_definition//<servicePrincipalTenantId>/$SP_TENANT_ID}"
 blob_storage_linked_service_definition="${blob_storage_linked_service_definition//<servicePrincipalId>/$SP_ID}"
@@ -76,7 +76,7 @@ blob_storage_linked_service_definition="${blob_storage_linked_service_definition
 az synapse linked-service create --file "$blob_storage_linked_service_definition" --name blobstorage_linkedservice --workspace-name "$WORKSPACE_NAME"
 
 #office365_linkedservice
-office_365_linked_service_definition=`cat ./End2EndMgdc101WithConvLineage_support_live/linkedService/office365_linkedservice.json`
+office_365_linked_service_definition=`cat ./End2EndMgdc101WithConvLineage/linkedService/office365_linkedservice.json`
 office_365_linked_service_definition="${office_365_linked_service_definition//<office365TenantId>/$SP_TENANT_ID}"
 office_365_linked_service_definition="${office_365_linked_service_definition//<servicePrincipalTenantId>/$SP_TENANT_ID}"
 office_365_linked_service_definition="${office_365_linked_service_definition//<servicePrincipalId>/$SP_ID}"
@@ -85,7 +85,7 @@ office_365_linked_service_definition="${office_365_linked_service_definition//<s
 az synapse linked-service create --file "$office_365_linked_service_definition" --name office365_linkedservice --workspace-name "$WORKSPACE_NAME"
 
 #dedicate slq pool linked service
-SynapseDedicatedSqlPoolDefinition=`cat ./End2EndMgdc101WithConvLineage_support_live/linkedService/SynapseDedicatedSqlPool.json`
+SynapseDedicatedSqlPoolDefinition=`cat ./End2EndMgdc101WithConvLineage/linkedService/SynapseDedicatedSqlPool.json`
 SynapseDedicatedSqlPoolDefinition="${SynapseDedicatedSqlPoolDefinition//<dedicatedSqlPoolEndpoint>/$DEDICATED_SQL_POOL_ENDPOINT}"
 SynapseDedicatedSqlPoolDefinition="${SynapseDedicatedSqlPoolDefinition//<sqlPoolDatabaseName>/$SQL_POOL_DATABASE_NAME}"
 
@@ -94,11 +94,11 @@ az synapse linked-service create --file "$SynapseDedicatedSqlPoolDefinition" --n
 
 echo "Deploying datasets ... "
 
-for file in ./End2EndMgdc101WithConvLineage_support_live/dataset/*
+for file in ./End2EndMgdc101WithConvLineage/dataset/*
 do
 
  file_path="$file"
- prefix="./End2EndMgdc101WithConvLineage_support_live/dataset/"
+ prefix="./End2EndMgdc101WithConvLineage/dataset/"
  suffix=".json"
 
  dataset_name=${file_path/#$prefix}
@@ -117,21 +117,21 @@ done
 echo "Deploying notebooks ... "
 
 
-az synapse notebook create --file @./End2EndMgdc101WithConvLineage_support_live/notebook/ExplodeEmailsByRecipients.json --name 'ExplodeEmailsByRecipients' --workspace-name "$WORKSPACE_NAME" --spark-pool-name "$SPARK_POOL_NAME"
+az synapse notebook create --file @./End2EndMgdc101WithConvLineage/notebook/ExplodeEmailsByRecipients.json --name 'ExplodeEmailsByRecipients' --workspace-name "$WORKSPACE_NAME" --spark-pool-name "$SPARK_POOL_NAME"
 
-az synapse notebook create --file @./End2EndMgdc101WithConvLineage_support_live/notebook/ConversationLineage.json --name 'ConversationLineage' --workspace-name "$WORKSPACE_NAME" --spark-pool-name "$SPARK_POOL_NAME"
+az synapse notebook create --file @./End2EndMgdc101WithConvLineage/notebook/ConversationLineage.json --name 'ConversationLineage' --workspace-name "$WORKSPACE_NAME" --spark-pool-name "$SPARK_POOL_NAME"
 
-az synapse notebook create --file @./End2EndMgdc101WithConvLineage_support_live/notebook/JoinUsersAndManagers.json --name 'JoinUsersAndManagers' --workspace-name "$WORKSPACE_NAME" --spark-pool-name "$SPARK_POOL_NAME"
+az synapse notebook create --file @./End2EndMgdc101WithConvLineage/notebook/JoinUsersAndManagers.json --name 'JoinUsersAndManagers' --workspace-name "$WORKSPACE_NAME" --spark-pool-name "$SPARK_POOL_NAME"
 
 echo "Deploying pipelines ... "
 
 # create ConversationLineage pipeline
 
-az synapse pipeline create --file @./End2EndMgdc101WithConvLineage_support_live/pipeline/ConversationLineage.json --name ConversationLineage --workspace-name "$WORKSPACE_NAME"
+az synapse pipeline create --file @./End2EndMgdc101WithConvLineage/pipeline/ConversationLineage.json --name ConversationLineage --workspace-name "$WORKSPACE_NAME"
 
 # create PrepareUsersData pipeline
 
-prepare_users_data_pipeline_definition=`cat ./End2EndMgdc101WithConvLineage_support_live/pipeline/PrepareUsersData.json`
+prepare_users_data_pipeline_definition=`cat ./End2EndMgdc101WithConvLineage/pipeline/PrepareUsersData.json`
 prepare_users_data_pipeline_definition="${prepare_users_data_pipeline_definition//<key_vault_endpoint>/$KEY_VAULT_ENDPOINT}"
 prepare_users_data_pipeline_definition="${prepare_users_data_pipeline_definition//<storageAccountName>/$storage_account_name}"
 prepare_users_data_pipeline_definition="${prepare_users_data_pipeline_definition//<dedicatedSqlPoolEndpoint>/$DEDICATED_SQL_POOL_ENDPOINT}"
@@ -141,7 +141,7 @@ az synapse pipeline create --file "$prepare_users_data_pipeline_definition" --na
 
 # create PrepareEmailsData pipeline
 
-prepare_emails_data_pipeline_definition=`cat ./End2EndMgdc101WithConvLineage_support_live/pipeline/PrepareEmailsData.json`
+prepare_emails_data_pipeline_definition=`cat ./End2EndMgdc101WithConvLineage/pipeline/PrepareEmailsData.json`
 prepare_emails_data_pipeline_definition="${prepare_emails_data_pipeline_definition//<key_vault_endpoint>/$KEY_VAULT_ENDPOINT}"
 prepare_emails_data_pipeline_definition="${prepare_emails_data_pipeline_definition//<storageAccountName>/$storage_account_name}"
 
@@ -149,15 +149,15 @@ az synapse pipeline create --file "$prepare_emails_data_pipeline_definition" --n
 
 # create PrepareEventsData
 
-az synapse pipeline create --file @./End2EndMgdc101WithConvLineage_support_live/pipeline/PrepareEventsData.json --name PrepareEventsData --workspace-name "$WORKSPACE_NAME"
+az synapse pipeline create --file @./End2EndMgdc101WithConvLineage/pipeline/PrepareEventsData.json --name PrepareEventsData --workspace-name "$WORKSPACE_NAME"
 
 # create PrepareTeamChatsData
 
-az synapse pipeline create --file @./End2EndMgdc101WithConvLineage_support_live/pipeline/PrepareTeamChatsData.json --name PrepareTeamChatsData --workspace-name "$WORKSPACE_NAME"
+az synapse pipeline create --file @./End2EndMgdc101WithConvLineage/pipeline/PrepareTeamChatsData.json --name PrepareTeamChatsData --workspace-name "$WORKSPACE_NAME"
 
 # create End2EndMgdc101WithConvLineage pipeline
 
-end2end_pipeline_definition=`cat ./End2EndMgdc101WithConvLineage_support_live/pipeline/End2EndMgdc101WithConvLineage.json`
+end2end_pipeline_definition=`cat ./End2EndMgdc101WithConvLineage/pipeline/End2EndMgdc101WithConvLineage.json`
 
 suffix=".sql.azuresynapse.net"
 sql_server_name=${DEDICATED_SQL_POOL_ENDPOINT/%$suffix}
@@ -174,7 +174,7 @@ az synapse pipeline create --file "$end2end_pipeline_definition" --name End2EndM
 echo "Deploying triggers"
 
 
-backfill_trigger_definition=`cat ./End2EndMgdc101WithConvLineage_support_live/trigger/MGDC101_backfill_trigger.json`
+backfill_trigger_definition=`cat ./End2EndMgdc101WithConvLineage/trigger/MGDC101_backfill_trigger.json`
 
 backfill_trigger_definition="${backfill_trigger_definition//<startTimeValue>/$START_DATE}"
 backfill_trigger_definition="${backfill_trigger_definition//<endTimeValue>/$END_DATE}"
@@ -182,7 +182,7 @@ backfill_trigger_definition="${backfill_trigger_definition//<endTimeValue>/$END_
 az synapse trigger create --file "$backfill_trigger_definition" --name MGDC101_backfill_trigger --workspace-name "$WORKSPACE_NAME"
 
 
-recurring_trigger_definition=`cat ./End2EndMgdc101WithConvLineage_support_live/trigger/MGDC101_recurring_trigger.json`
+recurring_trigger_definition=`cat ./End2EndMgdc101WithConvLineage/trigger/MGDC101_recurring_trigger.json`
 
 recurring_trigger_definition="${recurring_trigger_definition//<startTimeValue>/$END_DATE}"
 
