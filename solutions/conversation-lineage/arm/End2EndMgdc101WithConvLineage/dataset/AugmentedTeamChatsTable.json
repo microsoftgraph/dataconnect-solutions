@@ -2,7 +2,7 @@
     "name": "AugmentedTeamChatsTable",
     "properties": {
         "linkedServiceName": {
-            "referenceName": "SynapseDedicateSqlPool",
+            "referenceName": "SynapseDedicatedSqlPool",
             "type": "LinkedServiceReference"
         },
         "annotations": [],

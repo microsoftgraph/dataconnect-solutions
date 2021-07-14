@@ -21,7 +21,7 @@
                     },
                     "logStorageSettings": {
                         "linkedServiceName": {
-                            "referenceName": "blobstorage_via_sp_linkedservice",
+                            "referenceName": "blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "path": {
@@ -191,7 +191,7 @@
                     },
                     "logStorageSettings": {
                         "linkedServiceName": {
-                            "referenceName": "blobstorage_via_sp_linkedservice",
+                            "referenceName": "blobstorage_linkedservice",
                             "type": "LinkedServiceReference"
                         },
                         "path": {

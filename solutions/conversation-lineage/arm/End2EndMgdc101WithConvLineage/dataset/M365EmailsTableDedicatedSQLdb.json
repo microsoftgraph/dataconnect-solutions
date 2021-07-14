@@ -2,7 +2,7 @@
     "name": "M365EmailsTableDedicatedSQLdb",
     "properties": {
         "linkedServiceName": {
-            "referenceName": "SynapseDedicateSqlPool",
+            "referenceName": "SynapseDedicatedSqlPool",
             "type": "LinkedServiceReference"
         },
         "annotations": [],

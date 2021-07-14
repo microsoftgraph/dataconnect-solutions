@@ -5,7 +5,7 @@
         "annotations": [],
         "type": "AzureKeyVault",
         "typeProperties": {
-            "baseUrl": "https://mgdc101-vault.vault.azure.net/"
+            "baseUrl": "<keyVaultEndpoint>"
         }
     }
 }

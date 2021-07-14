@@ -1,634 +1,631 @@
 {
-    "name": "ExplodeEmailsByRecipients",
-    "properties": {
-        "folder": {
-            "name": "mgdc101"
+    "folder": {
+        "name": "mgdc101"
+    },
+    "nbformat": 4,
+    "nbformat_minor": 2,
+    "bigDataPool": {
+        "referenceName": "DefaultPool",
+        "type": "BigDataPoolReference"
+    },
+    "sessionProperties": {
+        "driverMemory": "28g",
+        "driverCores": 4,
+        "executorMemory": "28g",
+        "executorCores": 4,
+        "numExecutors": 2,
+        "conf": {
+            "spark.dynamicAllocation.enabled": "false",
+            "spark.dynamicAllocation.minExecutors": "2",
+            "spark.dynamicAllocation.maxExecutors": "2"
+        }
+    },
+    "metadata": {
+        "saveOutput": true,
+        "synapse_widget": {
+            "version": "0.1"
         },
-        "nbformat": 4,
-        "nbformat_minor": 2,
-        "bigDataPool": {
-            "referenceName": "DefaultPool",
-            "type": "BigDataPoolReference"
+        "kernelspec": {
+            "name": "synapse_spark",
+            "display_name": "Synapse Spark"
         },
-        "sessionProperties": {
-            "driverMemory": "28g",
-            "driverCores": 4,
-            "executorMemory": "28g",
-            "executorCores": 4,
-            "numExecutors": 2,
-            "conf": {
-                "spark.dynamicAllocation.enabled": "false",
-                "spark.dynamicAllocation.minExecutors": "2",
-                "spark.dynamicAllocation.maxExecutors": "2"
-            }
+        "language_info": {
+            "name": "scala"
         },
-        "metadata": {
-            "saveOutput": true,
-            "synapse_widget": {
-                "version": "0.1"
+        "a365ComputeOptions": {
+            "id": "/subscriptions/894f56bb-ecf5-4a8b-a3e1-6b67703d7c1c/resourceGroups/mgdc101/providers/Microsoft.Synapse/workspaces/mgdc101synapse/bigDataPools/DefaultPool",
+            "name": "DefaultPool",
+            "type": "Spark",
+            "endpoint": "https://mgdc101synapse.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/DefaultPool",
+            "auth": {
+                "type": "AAD",
+                "authResource": "https://dev.azuresynapse.net"
             },
-            "kernelspec": {
-                "name": "synapse_spark",
-                "display_name": "Synapse Spark"
-            },
-            "language_info": {
-                "name": "scala"
-            },
-            "a365ComputeOptions": {
-                "id": "/subscriptions/894f56bb-ecf5-4a8b-a3e1-6b67703d7c1c/resourceGroups/mgdc101/providers/Microsoft.Synapse/workspaces/mgdc101synapse/bigDataPools/DefaultPool",
-                "name": "DefaultPool",
-                "type": "Spark",
-                "endpoint": "https://mgdc101synapse.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/DefaultPool",
-                "auth": {
-                    "type": "AAD",
-                    "authResource": "https://dev.azuresynapse.net"
+            "sparkVersion": "2.4",
+            "nodeCount": 3,
+            "cores": 4,
+            "memory": 28,
+            "extraHeader": null
+        }
+    },
+    "cells": [
+        {
+            "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
                 },
-                "sparkVersion": "2.4",
-                "nodeCount": 3,
-                "cores": 4,
-                "memory": 28,
-                "extraHeader": null
-            }
+                "nteract": {
+                    "transient": {
+                        "deleting": false
+                    }
+                },
+                "collapsed": true,
+                "tags": [
+                    "parameters"
+                ]
+            },
+            "source": [
+                "val storageAccountKey = \"\"\n",
+                "val inputContainer = \"\"\n",
+                "val storageAccountName = \"\"\n",
+                "val inputFolderPath = \"\"\n",
+                "val outputContainer = \"\"\n",
+                "val outputFolderPath = \"\""
+            ],
+            "attachments": null,
+            "outputs": [],
+            "execution_count": null
         },
-        "cells": [
-            {
-                "cell_type": "code",
-                "metadata": {
-                    "jupyter": {
-                        "source_hidden": false,
-                        "outputs_hidden": false
-                    },
-                    "nteract": {
-                        "transient": {
-                            "deleting": false
-                        }
-                    },
-                    "collapsed": true,
-                    "tags": [
-                        "parameters"
-                    ]
-                },
-                "source": [
-                    "val storageAccountKey = \"\"\n",
-                    "val inputContainer = \"\"\n",
-                    "val storageAccountName = \"\"\n",
-                    "val inputFolderPath = \"\"\n",
-                    "val outputContainer = \"\"\n",
-                    "val outputFolderPath = \"\""
-                ],
-                "attachments": null,
-                "outputs": [],
-                "execution_count": null
-            },
-            {
-                "cell_type": "code",
-                "source": [
-                    "// Case classes reflecting the schema of the email data coming from the GraphDataConnect Message table\n",
-                    "case class GdcBody(ContentType: String, Content: String)\n",
-                    "case class GdcEmailAddressFields(Name: String, Address: String)\n",
-                    "case class GdcSender(EmailAddress: GdcEmailAddressFields)\n",
-                    "case class GdcFrom(EmailAddress: GdcEmailAddressFields)\n",
-                    "case class EmailAddress(EmailAddress: GdcEmailAddressFields)\n",
-                    "case class RowInformation(errorInformation: String = \"\",\n",
-                    "                          userReturnedNoData: Option[Boolean] = None,\n",
-                    "                          isUserSummaryRow: Option[Boolean] = None,\n",
-                    "                          userHasCompleteData: Option[Boolean] = None\n",
-                    "                         )\n",
-                    "case class GdcEmail(Id: String = \"\",\n",
-                    "                    CreatedDateTime: String = \"\",\n",
-                    "                    LastModifiedDateTime: String = \"\",\n",
-                    "                    ChangeKey: String = \"\",\n",
-                    "                    Categories: Seq[String] = List(),\n",
-                    "                    ReceivedDateTime: String = \"\",\n",
-                    "                    SentDateTime: String = \"\",\n",
-                    "                    HasAttachments: Option[Boolean] = None,\n",
-                    "                    InternetMessageId: String = \"\",\n",
-                    "                    Subject: String = \"\",\n",
-                    "                    Importance: String = \"\",\n",
-                    "                    ParentFolderId: String = \"\",\n",
-                    "                    ConversationId: String = \"\",\n",
-                    "                    IsDeliveryReceiptRequested: Option[Boolean] = None,\n",
-                    "                    IsReadReceiptRequested: Option[Boolean] = None,\n",
-                    "                    IsRead: Option[Boolean] = None,\n",
-                    "                    IsDraft: Option[Boolean] = None,\n",
-                    "                    WebLink: String = \"\",\n",
-                    "                    UniqueBody: GdcBody = GdcBody(\"\", \"\"),\n",
-                    "                    Sender: GdcSender = GdcSender(GdcEmailAddressFields(\"\", \"\")),\n",
-                    "                    From: GdcFrom = GdcFrom(GdcEmailAddressFields(\"\", \"\")),\n",
-                    "                    ToRecipients: Seq[EmailAddress] = List(),\n",
-                    "                    CcRecipients: Seq[EmailAddress] = List(),\n",
-                    "                    BccRecipients: Seq[EmailAddress] = List(),\n",
-                    "                    ReplyTo: Seq[EmailAddress] = List(),\n",
-                    "                    ODataType: String = \"#Microsoft.OutlookServices.Message\",\n",
-                    "                    puser: String = \"\",\n",
-                    "                    ptenant: String = \"\",\n",
-                    "                    pAdditionalInfo: String = \"\",\n",
-                    "                    datarow: Option[Int] = None,\n",
-                    "                    userrow: Option[Int] = None,\n",
-                    "                    pagerow: Option[Int] = None,\n",
-                    "                    rowinformation: RowInformation = RowInformation()\n",
-                    "                   )\n",
-                    "\n",
-                    ""
-                ],
-                "attachments": null,
-                "outputs": [
-                    {
-                        "output_type": "display_data",
-                        "data": {
-                            "application/vnd.livy.statement-meta+json": {
-                                "spark_pool": "DefaultPool",
-                                "session_id": 49,
-                                "statement_id": 1,
-                                "state": "finished",
-                                "livy_statement_state": "available",
-                                "queued_time": "2021-07-06T11:54:27.6827549Z",
-                                "session_start_time": "2021-07-06T11:54:27.7144244Z",
-                                "execution_start_time": "2021-07-06T11:55:05.5442999Z",
-                                "execution_finish_time": "2021-07-06T11:55:09.8038319Z"
-                            },
-                            "text/plain": "StatementMeta(DefaultPool, 49, 1, Finished, Available)"
-                        }
-                    },
-                    {
-                        "name": "stdout",
-                        "output_type": "stream",
-                        "text": "defined class GdcBody\ndefined class GdcEmailAddressFields\ndefined class GdcSender\ndefined class GdcFrom\ndefined class EmailAddress\ndefined class RowInformation\ndefined class GdcEmail\n"
+        {
+            "cell_type": "code",
+            "source": [
+                "// Case classes reflecting the schema of the email data coming from the GraphDataConnect Message table\n",
+                "case class GdcBody(ContentType: String, Content: String)\n",
+                "case class GdcEmailAddressFields(Name: String, Address: String)\n",
+                "case class GdcSender(EmailAddress: GdcEmailAddressFields)\n",
+                "case class GdcFrom(EmailAddress: GdcEmailAddressFields)\n",
+                "case class EmailAddress(EmailAddress: GdcEmailAddressFields)\n",
+                "case class RowInformation(errorInformation: String = \"\",\n",
+                "                          userReturnedNoData: Option[Boolean] = None,\n",
+                "                          isUserSummaryRow: Option[Boolean] = None,\n",
+                "                          userHasCompleteData: Option[Boolean] = None\n",
+                "                         )\n",
+                "case class GdcEmail(Id: String = \"\",\n",
+                "                    CreatedDateTime: String = \"\",\n",
+                "                    LastModifiedDateTime: String = \"\",\n",
+                "                    ChangeKey: String = \"\",\n",
+                "                    Categories: Seq[String] = List(),\n",
+                "                    ReceivedDateTime: String = \"\",\n",
+                "                    SentDateTime: String = \"\",\n",
+                "                    HasAttachments: Option[Boolean] = None,\n",
+                "                    InternetMessageId: String = \"\",\n",
+                "                    Subject: String = \"\",\n",
+                "                    Importance: String = \"\",\n",
+                "                    ParentFolderId: String = \"\",\n",
+                "                    ConversationId: String = \"\",\n",
+                "                    IsDeliveryReceiptRequested: Option[Boolean] = None,\n",
+                "                    IsReadReceiptRequested: Option[Boolean] = None,\n",
+                "                    IsRead: Option[Boolean] = None,\n",
+                "                    IsDraft: Option[Boolean] = None,\n",
+                "                    WebLink: String = \"\",\n",
+                "                    UniqueBody: GdcBody = GdcBody(\"\", \"\"),\n",
+                "                    Sender: GdcSender = GdcSender(GdcEmailAddressFields(\"\", \"\")),\n",
+                "                    From: GdcFrom = GdcFrom(GdcEmailAddressFields(\"\", \"\")),\n",
+                "                    ToRecipients: Seq[EmailAddress] = List(),\n",
+                "                    CcRecipients: Seq[EmailAddress] = List(),\n",
+                "                    BccRecipients: Seq[EmailAddress] = List(),\n",
+                "                    ReplyTo: Seq[EmailAddress] = List(),\n",
+                "                    ODataType: String = \"#Microsoft.OutlookServices.Message\",\n",
+                "                    puser: String = \"\",\n",
+                "                    ptenant: String = \"\",\n",
+                "                    pAdditionalInfo: String = \"\",\n",
+                "                    datarow: Option[Int] = None,\n",
+                "                    userrow: Option[Int] = None,\n",
+                "                    pagerow: Option[Int] = None,\n",
+                "                    rowinformation: RowInformation = RowInformation()\n",
+                "                   )\n",
+                "\n",
+                ""
+            ],
+            "attachments": null,
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "application/vnd.livy.statement-meta+json": {
+                            "spark_pool": "DefaultPool",
+                            "session_id": 49,
+                            "statement_id": 1,
+                            "state": "finished",
+                            "livy_statement_state": "available",
+                            "queued_time": "2021-07-06T11:54:27.6827549Z",
+                            "session_start_time": "2021-07-06T11:54:27.7144244Z",
+                            "execution_start_time": "2021-07-06T11:55:05.5442999Z",
+                            "execution_finish_time": "2021-07-06T11:55:09.8038319Z"
+                        },
+                        "text/plain": "StatementMeta(DefaultPool, 49, 1, Finished, Available)"
                     }
-                ],
-                "execution_count": 1
-            },
-            {
-                "cell_type": "code",
-                "metadata": {
-                    "jupyter": {
-                        "source_hidden": false,
-                        "outputs_hidden": false
-                    },
-                    "nteract": {
-                        "transient": {
-                            "deleting": false
-                        }
-                    },
-                    "collapsed": true
                 },
-                "source": [
-                    "import org.apache.spark.sql.catalyst.ScalaReflection\n",
-                    "import org.apache.spark.sql.types.StructType\n",
-                    "import org.apache.spark.sql.{Dataset, SaveMode, SparkSession}\n",
-                    "val reflection_schema: StructType = ScalaReflection.schemaFor[GdcEmail].dataType.asInstanceOf[StructType]"
-                ],
-                "attachments": null,
-                "outputs": [
-                    {
-                        "output_type": "display_data",
-                        "data": {
-                            "application/vnd.livy.statement-meta+json": {
-                                "spark_pool": "DefaultPool",
-                                "session_id": 49,
-                                "statement_id": 2,
-                                "state": "finished",
-                                "livy_statement_state": "available",
-                                "queued_time": "2021-07-06T11:55:34.2862941Z",
-                                "session_start_time": null,
-                                "execution_start_time": "2021-07-06T11:55:34.3799041Z",
-                                "execution_finish_time": "2021-07-06T11:55:36.4531137Z"
-                            },
-                            "text/plain": "StatementMeta(DefaultPool, 49, 2, Finished, Available)"
-                        }
-                    },
-                    {
-                        "name": "stdout",
-                        "output_type": "stream",
-                        "text": "import org.apache.spark.sql.catalyst.ScalaReflection\nimport org.apache.spark.sql.types.StructType\nimport org.apache.spark.sql.{Dataset, SaveMode, SparkSession}\nreflection_schema: org.apache.spark.sql.types.StructType = StructType(StructField(Id,StringType,true), StructField(CreatedDateTime,StringType,true), StructField(LastModifiedDateTime,StringType,true), StructField(ChangeKey,StringType,true), StructField(Categories,ArrayType(StringType,true),true), StructField(ReceivedDateTime,StringType,true), StructField(SentDateTime,StringType,true), StructField(HasAttachments,BooleanType,true), StructField(InternetMessageId,StringType,true), StructField(Subject,StringType,true), StructField(Importance,StringType,true), StructField(ParentFolderId,StringType,true), StructField(ConversationId,StringType,true), StructField(IsDeliveryReceiptRequested,BooleanType,true), StructField(IsReadReceiptRequested,BooleanType,true), StructField(IsRead,BooleanType,true..."
-                    }
-                ],
-                "execution_count": 2
-            },
-            {
-                "cell_type": "code",
-                "metadata": {
-                    "jupyter": {
-                        "source_hidden": false,
-                        "outputs_hidden": false
-                    },
-                    "nteract": {
-                        "transient": {
-                            "deleting": false
-                        }
-                    },
-                    "collapsed": true
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": "defined class GdcBody\ndefined class GdcEmailAddressFields\ndefined class GdcSender\ndefined class GdcFrom\ndefined class EmailAddress\ndefined class RowInformation\ndefined class GdcEmail\n"
+                }
+            ],
+            "execution_count": 1
+        },
+        {
+            "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
                 },
-                "source": [
-                    "val emailsPath =  s\"abfss://$inputContainer@$storageAccountName.dfs.core.windows.net/$inputFolderPath\""
-                ],
-                "attachments": null,
-                "outputs": [
-                    {
-                        "output_type": "display_data",
-                        "data": {
-                            "application/vnd.livy.statement-meta+json": {
-                                "spark_pool": "DefaultPool",
-                                "session_id": 49,
-                                "statement_id": 3,
-                                "state": "finished",
-                                "livy_statement_state": "available",
-                                "queued_time": "2021-07-06T11:55:39.3740378Z",
-                                "session_start_time": null,
-                                "execution_start_time": "2021-07-06T11:55:39.4605898Z",
-                                "execution_finish_time": "2021-07-06T11:55:41.5269317Z"
-                            },
-                            "text/plain": "StatementMeta(DefaultPool, 49, 3, Finished, Available)"
-                        }
-                    },
-                    {
-                        "name": "stdout",
-                        "output_type": "stream",
-                        "text": "inputContainer: String = mgdc101-emails\nstorageAccountName: String = mgdc101storage\ninputFolderPath: String = m365_emails_json\nemailsPath: String = abfss://mgdc101-emails@mgdc101storage.dfs.core.windows.net/m365_emails_json\n"
+                "nteract": {
+                    "transient": {
+                        "deleting": false
                     }
-                ],
-                "execution_count": 3
-            },
-            {
-                "cell_type": "code",
-                "metadata": {
-                    "jupyter": {
-                        "source_hidden": false,
-                        "outputs_hidden": false
-                    },
-                    "nteract": {
-                        "transient": {
-                            "deleting": false
-                        }
-                    },
-                    "collapsed": true
                 },
-                "source": [
-                    "spark.conf.set(s\"fs.azure.account.key.$storageAccountName.blob.core.windows.net\",storageAccountKey)"
-                ],
-                "attachments": null,
-                "outputs": [
-                    {
-                        "output_type": "display_data",
-                        "data": {
-                            "application/vnd.livy.statement-meta+json": {
-                                "spark_pool": "DefaultPool",
-                                "session_id": 49,
-                                "statement_id": 5,
-                                "state": "finished",
-                                "livy_statement_state": "available",
-                                "queued_time": "2021-07-06T11:57:33.6442405Z",
-                                "session_start_time": null,
-                                "execution_start_time": "2021-07-06T11:57:33.7682221Z",
-                                "execution_finish_time": "2021-07-06T11:57:35.8355705Z"
-                            },
-                            "text/plain": "StatementMeta(DefaultPool, 49, 5, Finished, Available)"
-                        }
-                    },
-                    {
-                        "name": "stdout",
-                        "output_type": "stream",
-                        "text": ""
-                    }
-                ],
-                "execution_count": 5
+                "collapsed": true
             },
-            {
-                "cell_type": "code",
-                "metadata": {
-                    "jupyter": {
-                        "source_hidden": false,
-                        "outputs_hidden": false
-                    },
-                    "nteract": {
-                        "transient": {
-                            "deleting": false
-                        }
-                    },
-                    "collapsed": true
-                },
-                "source": [
-                    "import org.apache.spark.sql.DataFrame\n",
-                    "val emailDf: DataFrame = spark.sqlContext.read.schema(reflection_schema).json(emailsPath)"
-                ],
-                "attachments": null,
-                "outputs": [
-                    {
-                        "output_type": "display_data",
-                        "data": {
-                            "application/vnd.livy.statement-meta+json": {
-                                "spark_pool": "DefaultPool",
-                                "session_id": 49,
-                                "statement_id": 6,
-                                "state": "finished",
-                                "livy_statement_state": "available",
-                                "queued_time": "2021-07-06T11:57:51.9640337Z",
-                                "session_start_time": null,
-                                "execution_start_time": "2021-07-06T11:57:52.0633106Z",
-                                "execution_finish_time": "2021-07-06T11:57:58.6182335Z"
-                            },
-                            "text/plain": "StatementMeta(DefaultPool, 49, 6, Finished, Available)"
-                        }
-                    },
-                    {
-                        "name": "stdout",
-                        "output_type": "stream",
-                        "text": "import org.apache.spark.sql.DataFrame\nemailDf: org.apache.spark.sql.DataFrame = [Id: string, CreatedDateTime: string ... 31 more fields]\n"
+            "source": [
+                "import org.apache.spark.sql.catalyst.ScalaReflection\n",
+                "import org.apache.spark.sql.types.StructType\n",
+                "import org.apache.spark.sql.{Dataset, SaveMode, SparkSession}\n",
+                "val reflection_schema: StructType = ScalaReflection.schemaFor[GdcEmail].dataType.asInstanceOf[StructType]"
+            ],
+            "attachments": null,
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "application/vnd.livy.statement-meta+json": {
+                            "spark_pool": "DefaultPool",
+                            "session_id": 49,
+                            "statement_id": 2,
+                            "state": "finished",
+                            "livy_statement_state": "available",
+                            "queued_time": "2021-07-06T11:55:34.2862941Z",
+                            "session_start_time": null,
+                            "execution_start_time": "2021-07-06T11:55:34.3799041Z",
+                            "execution_finish_time": "2021-07-06T11:55:36.4531137Z"
+                        },
+                        "text/plain": "StatementMeta(DefaultPool, 49, 2, Finished, Available)"
                     }
-                ],
-                "execution_count": 6
+                },
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": "import org.apache.spark.sql.catalyst.ScalaReflection\nimport org.apache.spark.sql.types.StructType\nimport org.apache.spark.sql.{Dataset, SaveMode, SparkSession}\nreflection_schema: org.apache.spark.sql.types.StructType = StructType(StructField(Id,StringType,true), StructField(CreatedDateTime,StringType,true), StructField(LastModifiedDateTime,StringType,true), StructField(ChangeKey,StringType,true), StructField(Categories,ArrayType(StringType,true),true), StructField(ReceivedDateTime,StringType,true), StructField(SentDateTime,StringType,true), StructField(HasAttachments,BooleanType,true), StructField(InternetMessageId,StringType,true), StructField(Subject,StringType,true), StructField(Importance,StringType,true), StructField(ParentFolderId,StringType,true), StructField(ConversationId,StringType,true), StructField(IsDeliveryReceiptRequested,BooleanType,true), StructField(IsReadReceiptRequested,BooleanType,true), StructField(IsRead,BooleanType,true..."
+                }
+            ],
+            "execution_count": 2
+        },
+        {
+            "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
+                },
+                "nteract": {
+                    "transient": {
+                        "deleting": false
+                    }
+                },
+                "collapsed": true
             },
-            {
-                "cell_type": "code",
-                "metadata": {
-                    "jupyter": {
-                        "source_hidden": false,
-                        "outputs_hidden": false
-                    },
-                    "nteract": {
-                        "transient": {
-                            "deleting": false
-                        }
-                    },
-                    "collapsed": true
-                },
-                "source": [
-                    "import org.apache.spark.sql.Dataset\n",
-                    "val emailDs: Dataset[GdcEmail] = emailDf.as[GdcEmail]"
-                ],
-                "attachments": null,
-                "outputs": [
-                    {
-                        "output_type": "display_data",
-                        "data": {
-                            "application/vnd.livy.statement-meta+json": {
-                                "spark_pool": "DefaultPool",
-                                "session_id": 49,
-                                "statement_id": 7,
-                                "state": "finished",
-                                "livy_statement_state": "available",
-                                "queued_time": "2021-07-06T11:58:05.2326906Z",
-                                "session_start_time": null,
-                                "execution_start_time": "2021-07-06T11:58:05.3373496Z",
-                                "execution_finish_time": "2021-07-06T11:58:07.4019905Z"
-                            },
-                            "text/plain": "StatementMeta(DefaultPool, 49, 7, Finished, Available)"
-                        }
-                    },
-                    {
-                        "name": "stdout",
-                        "output_type": "stream",
-                        "text": "import org.apache.spark.sql.Dataset\nemailDs: org.apache.spark.sql.Dataset[GdcEmail] = [Id: string, CreatedDateTime: string ... 31 more fields]\n"
+            "source": [
+                "val emailsPath =  s\"abfss://$inputContainer@$storageAccountName.dfs.core.windows.net/$inputFolderPath\""
+            ],
+            "attachments": null,
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "application/vnd.livy.statement-meta+json": {
+                            "spark_pool": "DefaultPool",
+                            "session_id": 49,
+                            "statement_id": 3,
+                            "state": "finished",
+                            "livy_statement_state": "available",
+                            "queued_time": "2021-07-06T11:55:39.3740378Z",
+                            "session_start_time": null,
+                            "execution_start_time": "2021-07-06T11:55:39.4605898Z",
+                            "execution_finish_time": "2021-07-06T11:55:41.5269317Z"
+                        },
+                        "text/plain": "StatementMeta(DefaultPool, 49, 3, Finished, Available)"
                     }
-                ],
-                "execution_count": 7
+                },
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": "inputContainer: String = mgdc101-emails\nstorageAccountName: String = mgdc101storage\ninputFolderPath: String = m365_emails_json\nemailsPath: String = abfss://mgdc101-emails@mgdc101storage.dfs.core.windows.net/m365_emails_json\n"
+                }
+            ],
+            "execution_count": 3
+        },
+        {
+            "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
+                },
+                "nteract": {
+                    "transient": {
+                        "deleting": false
+                    }
+                },
+                "collapsed": true
             },
-            {
-                "cell_type": "code",
-                "metadata": {
-                    "jupyter": {
-                        "source_hidden": false,
-                        "outputs_hidden": false
-                    },
-                    "nteract": {
-                        "transient": {
-                            "deleting": false
-                        }
-                    },
-                    "collapsed": true
-                },
-                "source": [
-                    "// Case class reflecting a single record resulting by \"flattening an email\", i.e. by creating separate records for each recipient of an email (from To, CC, BCC fields)\n",
-                    "case class GdcEmailFlattened(Id: String = \"\",\n",
-                    "                             CreatedDateTime: String = \"\",\n",
-                    "                             LastModifiedDateTime: String = \"\",\n",
-                    "                             InternetMessageId: String = \"\",\n",
-                    "                             Subject: String = \"\",\n",
-                    "                             IsReadReceiptRequested: Option[Boolean] = None,\n",
-                    "                             IsRead: Option[Boolean] = None,\n",
-                    "                             IsDraft: Option[Boolean] = None,\n",
-                    "                             WebLink: String = \"\",\n",
-                    "                             Sender: String = \"\",\n",
-                    "                             Sender_Name: String = \"\",\n",
-                    "                             From: String = \"\",\n",
-                    "                             From_Name: String = \"\",\n",
-                    "                             ContentType: String = \"\",\n",
-                    "                             Content: String = \"\",\n",
-                    "                             Recipient: String,\n",
-                    "                             RecipientName: String,\n",
-                    "                             RecipientType: String,\n",
-                    "                             ODataType: String = \"\",\n",
-                    "                             puser: String = \"\",\n",
-                    "                             ptenant: String = \"\",\n",
-                    "                             datarow: Option[Int] = None,\n",
-                    "                             userrow: Option[Int] = None,\n",
-                    "                             pagerow: Option[Int] = None\n",
-                    "                            )"
-                ],
-                "attachments": null,
-                "outputs": [
-                    {
-                        "output_type": "display_data",
-                        "data": {
-                            "application/vnd.livy.statement-meta+json": {
-                                "spark_pool": "DefaultPool",
-                                "session_id": 49,
-                                "statement_id": 8,
-                                "state": "finished",
-                                "livy_statement_state": "available",
-                                "queued_time": "2021-07-06T11:58:13.0486433Z",
-                                "session_start_time": null,
-                                "execution_start_time": "2021-07-06T11:58:13.1459524Z",
-                                "execution_finish_time": "2021-07-06T11:58:15.2611307Z"
-                            },
-                            "text/plain": "StatementMeta(DefaultPool, 49, 8, Finished, Available)"
-                        }
-                    },
-                    {
-                        "name": "stdout",
-                        "output_type": "stream",
-                        "text": "defined class GdcEmailFlattened\n"
+            "source": [
+                "spark.conf.set(s\"fs.azure.account.key.$storageAccountName.blob.core.windows.net\",storageAccountKey)"
+            ],
+            "attachments": null,
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "application/vnd.livy.statement-meta+json": {
+                            "spark_pool": "DefaultPool",
+                            "session_id": 49,
+                            "statement_id": 5,
+                            "state": "finished",
+                            "livy_statement_state": "available",
+                            "queued_time": "2021-07-06T11:57:33.6442405Z",
+                            "session_start_time": null,
+                            "execution_start_time": "2021-07-06T11:57:33.7682221Z",
+                            "execution_finish_time": "2021-07-06T11:57:35.8355705Z"
+                        },
+                        "text/plain": "StatementMeta(DefaultPool, 49, 5, Finished, Available)"
                     }
-                ],
-                "execution_count": 8
+                },
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": ""
+                }
+            ],
+            "execution_count": 5
+        },
+        {
+            "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
+                },
+                "nteract": {
+                    "transient": {
+                        "deleting": false
+                    }
+                },
+                "collapsed": true
             },
-            {
-                "cell_type": "code",
-                "metadata": {
-                    "jupyter": {
-                        "source_hidden": false,
-                        "outputs_hidden": false
-                    },
-                    "nteract": {
-                        "transient": {
-                            "deleting": false
-                        }
-                    },
-                    "collapsed": true
-                },
-                "source": [
-                    "val emailAddressRegex = \"\"\"(?i)\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b\"\"\".r\n",
-                    "\n",
-                    "def extractEmailAddressFromAddressField(stringField: String) : String = {\n",
-                    "  val listEmailAddresses = emailAddressRegex.findAllIn(stringField).toList\n",
-                    "  if (listEmailAddresses.nonEmpty) listEmailAddresses.head else \"\"\n",
-                    "}\n",
-                    "\n",
-                    "object GdcEmailFlattened{\n",
-                    "  def apply(gdcEmail: GdcEmail, Recipient: String, RecipientName: String, RecipientType: String): GdcEmailFlattened = {\n",
-                    "    new GdcEmailFlattened(\n",
-                    "      Id = gdcEmail.Id,\n",
-                    "      CreatedDateTime = gdcEmail.CreatedDateTime,\n",
-                    "      LastModifiedDateTime = gdcEmail.LastModifiedDateTime,\n",
-                    "      InternetMessageId = gdcEmail.InternetMessageId,\n",
-                    "      Subject = gdcEmail.Subject,\n",
-                    "      IsReadReceiptRequested = gdcEmail.IsReadReceiptRequested,\n",
-                    "      IsRead = gdcEmail.IsRead,\n",
-                    "      IsDraft = gdcEmail.IsDraft,\n",
-                    "      WebLink = gdcEmail.WebLink,\n",
-                    "      Sender = if (gdcEmail.Sender!=null && gdcEmail.Sender.EmailAddress != null && gdcEmail.Sender.EmailAddress.Address!=null ) extractEmailAddressFromAddressField(gdcEmail.Sender.EmailAddress.Address) else \"\",\n",
-                    "      Sender_Name = if (gdcEmail.Sender!=null && gdcEmail.Sender.EmailAddress != null && gdcEmail.Sender.EmailAddress.Name!=null ) gdcEmail.Sender.EmailAddress.Name else \"\",\n",
-                    "      From = if (gdcEmail.From!=null && gdcEmail.From.EmailAddress != null && gdcEmail.From.EmailAddress.Address!=null ) extractEmailAddressFromAddressField(gdcEmail.From.EmailAddress.Address) else \"\",\n",
-                    "      From_Name = if (gdcEmail.From!=null && gdcEmail.From.EmailAddress != null && gdcEmail.From.EmailAddress.Name!=null ) gdcEmail.From.EmailAddress.Name else \"\",\n",
-                    "      ContentType = gdcEmail.UniqueBody.ContentType,\n",
-                    "      Content = gdcEmail.UniqueBody.Content,\n",
-                    "      Recipient = if (Recipient != null) extractEmailAddressFromAddressField(Recipient) else Recipient,\n",
-                    "      RecipientName = RecipientName,\n",
-                    "      RecipientType = RecipientType,\n",
-                    "      ODataType = gdcEmail.ODataType,\n",
-                    "      puser = gdcEmail.puser,\n",
-                    "      ptenant = gdcEmail.ptenant,\n",
-                    "      datarow = gdcEmail.datarow,\n",
-                    "      userrow = gdcEmail.userrow,\n",
-                    "      pagerow = gdcEmail.pagerow\n",
-                    "    )\n",
-                    "  }\n",
-                    "  \n",
-                    "}\n",
-                    "\n",
-                    "def flattenGdcEmail(gdcEmail: GdcEmail): Seq[GdcEmailFlattened] = {\n",
-                    "  var flattenedEmails: Seq[GdcEmailFlattened] =  gdcEmail.ToRecipients.map(recipient => GdcEmailFlattened(gdcEmail, recipient.EmailAddress.Address, recipient.EmailAddress.Name, \"To\") )\n",
-                    "  flattenedEmails ++=  gdcEmail.CcRecipients.map(recipient => GdcEmailFlattened(gdcEmail, recipient.EmailAddress.Address, recipient.EmailAddress.Name, \"Cc\") )\n",
-                    "  flattenedEmails ++=  gdcEmail.BccRecipients.map(recipient => GdcEmailFlattened(gdcEmail, recipient.EmailAddress.Address, recipient.EmailAddress.Name, \"Bcc\") )\n",
-                    "  flattenedEmails\n",
-                    "}"
-                ],
-                "attachments": null,
-                "outputs": [
-                    {
-                        "output_type": "display_data",
-                        "data": {
-                            "application/vnd.livy.statement-meta+json": {
-                                "spark_pool": "DefaultPool",
-                                "session_id": 49,
-                                "statement_id": 18,
-                                "state": "finished",
-                                "livy_statement_state": "available",
-                                "queued_time": "2021-07-06T12:08:52.3987831Z",
-                                "session_start_time": null,
-                                "execution_start_time": "2021-07-06T12:08:52.4947148Z",
-                                "execution_finish_time": "2021-07-06T12:08:54.5619061Z"
-                            },
-                            "text/plain": "StatementMeta(DefaultPool, 49, 18, Finished, Available)"
-                        }
-                    },
-                    {
-                        "name": "stdout",
-                        "output_type": "stream",
-                        "text": "emailAddressRegex: scala.util.matching.Regex = (?i)\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b\nextractEmailAddressFromAddressField: (stringField: String)String\ndefined object GdcEmailFlattened\nwarning: previously defined class GdcEmailFlattened is not a companion to object GdcEmailFlattened.\nCompanions must be defined together; you may wish to use :paste mode for this.\ngdcEmailFlatten: (gdcEmail: GdcEmail)Seq[GdcEmailFlattened]\n"
+            "source": [
+                "import org.apache.spark.sql.DataFrame\n",
+                "val emailDf: DataFrame = spark.sqlContext.read.schema(reflection_schema).json(emailsPath)"
+            ],
+            "attachments": null,
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "application/vnd.livy.statement-meta+json": {
+                            "spark_pool": "DefaultPool",
+                            "session_id": 49,
+                            "statement_id": 6,
+                            "state": "finished",
+                            "livy_statement_state": "available",
+                            "queued_time": "2021-07-06T11:57:51.9640337Z",
+                            "session_start_time": null,
+                            "execution_start_time": "2021-07-06T11:57:52.0633106Z",
+                            "execution_finish_time": "2021-07-06T11:57:58.6182335Z"
+                        },
+                        "text/plain": "StatementMeta(DefaultPool, 49, 6, Finished, Available)"
                     }
-                ],
-                "execution_count": 18
+                },
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": "import org.apache.spark.sql.DataFrame\nemailDf: org.apache.spark.sql.DataFrame = [Id: string, CreatedDateTime: string ... 31 more fields]\n"
+                }
+            ],
+            "execution_count": 6
+        },
+        {
+            "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
+                },
+                "nteract": {
+                    "transient": {
+                        "deleting": false
+                    }
+                },
+                "collapsed": true
             },
-            {
-                "cell_type": "code",
-                "metadata": {
-                    "jupyter": {
-                        "source_hidden": false,
-                        "outputs_hidden": false
-                    },
-                    "nteract": {
-                        "transient": {
-                            "deleting": false
-                        }
-                    },
-                    "collapsed": true
-                },
-                "source": [
-                    "val flattenedEmails = emailDs.flatMap(flattenGdcEmail)"
-                ],
-                "attachments": null,
-                "outputs": [
-                    {
-                        "output_type": "display_data",
-                        "data": {
-                            "application/vnd.livy.statement-meta+json": {
-                                "spark_pool": "DefaultPool",
-                                "session_id": 49,
-                                "statement_id": 19,
-                                "state": "finished",
-                                "livy_statement_state": "available",
-                                "queued_time": "2021-07-06T12:08:58.7095932Z",
-                                "session_start_time": null,
-                                "execution_start_time": "2021-07-06T12:08:58.7934085Z",
-                                "execution_finish_time": "2021-07-06T12:09:00.8542358Z"
-                            },
-                            "text/plain": "StatementMeta(DefaultPool, 49, 19, Finished, Available)"
-                        }
-                    },
-                    {
-                        "name": "stdout",
-                        "output_type": "stream",
-                        "text": "flattenedEmails: org.apache.spark.sql.Dataset[GdcEmailFlattened] = [Id: string, CreatedDateTime: string ... 22 more fields]\n"
+            "source": [
+                "import org.apache.spark.sql.Dataset\n",
+                "val emailDs: Dataset[GdcEmail] = emailDf.as[GdcEmail]"
+            ],
+            "attachments": null,
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "application/vnd.livy.statement-meta+json": {
+                            "spark_pool": "DefaultPool",
+                            "session_id": 49,
+                            "statement_id": 7,
+                            "state": "finished",
+                            "livy_statement_state": "available",
+                            "queued_time": "2021-07-06T11:58:05.2326906Z",
+                            "session_start_time": null,
+                            "execution_start_time": "2021-07-06T11:58:05.3373496Z",
+                            "execution_finish_time": "2021-07-06T11:58:07.4019905Z"
+                        },
+                        "text/plain": "StatementMeta(DefaultPool, 49, 7, Finished, Available)"
                     }
-                ],
-                "execution_count": 19
+                },
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": "import org.apache.spark.sql.Dataset\nemailDs: org.apache.spark.sql.Dataset[GdcEmail] = [Id: string, CreatedDateTime: string ... 31 more fields]\n"
+                }
+            ],
+            "execution_count": 7
+        },
+        {
+            "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
+                },
+                "nteract": {
+                    "transient": {
+                        "deleting": false
+                    }
+                },
+                "collapsed": true
             },
-            {
-                "cell_type": "code",
-                "metadata": {
-                    "jupyter": {
-                        "source_hidden": false,
-                        "outputs_hidden": false
-                    },
-                    "nteract": {
-                        "transient": {
-                            "deleting": false
-                        }
-                    },
-                    "collapsed": true
-                },
-                "source": [
-                    "val destinationFilePath =  s\"abfss://$outputContainer@$storageAccountName.dfs.core.windows.net/$outputFolderPath\"\n",
-                    "flattenedEmails.write.mode(SaveMode.Overwrite).parquet(destinationFilePath)"
-                ],
-                "attachments": null,
-                "outputs": [
-                    {
-                        "output_type": "display_data",
-                        "data": {
-                            "application/vnd.livy.statement-meta+json": {
-                                "spark_pool": "DefaultPool",
-                                "session_id": 49,
-                                "statement_id": 21,
-                                "state": "finished",
-                                "livy_statement_state": "available",
-                                "queued_time": "2021-07-06T12:09:31.5711588Z",
-                                "session_start_time": null,
-                                "execution_start_time": "2021-07-06T12:09:31.6624101Z",
-                                "execution_finish_time": "2021-07-06T12:09:37.8339051Z"
-                            },
-                            "text/plain": "StatementMeta(DefaultPool, 49, 21, Finished, Available)"
-                        }
-                    },
-                    {
-                        "name": "stdout",
-                        "output_type": "stream",
-                        "text": "outputContainer: String = mgdc101-emails\nstorageAccountName: String = mgdc101storage\noutputFolderPath: String = m365_emails_parquet_raw_test\ndestinationFilePath: String = abfss://mgdc101-emails@mgdc101storage.dfs.core.windows.net/m365_emails_parquet_raw_test\n"
+            "source": [
+                "// Case class reflecting a single record resulting by \"flattening an email\", i.e. by creating separate records for each recipient of an email (from To, CC, BCC fields)\n",
+                "case class GdcEmailFlattened(Id: String = \"\",\n",
+                "                             CreatedDateTime: String = \"\",\n",
+                "                             LastModifiedDateTime: String = \"\",\n",
+                "                             InternetMessageId: String = \"\",\n",
+                "                             Subject: String = \"\",\n",
+                "                             IsReadReceiptRequested: Option[Boolean] = None,\n",
+                "                             IsRead: Option[Boolean] = None,\n",
+                "                             IsDraft: Option[Boolean] = None,\n",
+                "                             WebLink: String = \"\",\n",
+                "                             Sender: String = \"\",\n",
+                "                             Sender_Name: String = \"\",\n",
+                "                             From: String = \"\",\n",
+                "                             From_Name: String = \"\",\n",
+                "                             ContentType: String = \"\",\n",
+                "                             Content: String = \"\",\n",
+                "                             Recipient: String,\n",
+                "                             RecipientName: String,\n",
+                "                             RecipientType: String,\n",
+                "                             ODataType: String = \"\",\n",
+                "                             puser: String = \"\",\n",
+                "                             ptenant: String = \"\",\n",
+                "                             datarow: Option[Int] = None,\n",
+                "                             userrow: Option[Int] = None,\n",
+                "                             pagerow: Option[Int] = None\n",
+                "                            )"
+            ],
+            "attachments": null,
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "application/vnd.livy.statement-meta+json": {
+                            "spark_pool": "DefaultPool",
+                            "session_id": 49,
+                            "statement_id": 8,
+                            "state": "finished",
+                            "livy_statement_state": "available",
+                            "queued_time": "2021-07-06T11:58:13.0486433Z",
+                            "session_start_time": null,
+                            "execution_start_time": "2021-07-06T11:58:13.1459524Z",
+                            "execution_finish_time": "2021-07-06T11:58:15.2611307Z"
+                        },
+                        "text/plain": "StatementMeta(DefaultPool, 49, 8, Finished, Available)"
                     }
-                ],
-                "execution_count": 21
-            }
-        ]
-    }
+                },
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": "defined class GdcEmailFlattened\n"
+                }
+            ],
+            "execution_count": 8
+        },
+        {
+            "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
+                },
+                "nteract": {
+                    "transient": {
+                        "deleting": false
+                    }
+                },
+                "collapsed": true
+            },
+            "source": [
+                "val emailAddressRegex = \"\"\"(?i)\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b\"\"\".r\n",
+                "\n",
+                "def extractEmailAddressFromAddressField(stringField: String) : String = {\n",
+                "  val listEmailAddresses = emailAddressRegex.findAllIn(stringField).toList\n",
+                "  if (listEmailAddresses.nonEmpty) listEmailAddresses.head else \"\"\n",
+                "}\n",
+                "\n",
+                "object GdcEmailFlattened{\n",
+                "  def apply(gdcEmail: GdcEmail, Recipient: String, RecipientName: String, RecipientType: String): GdcEmailFlattened = {\n",
+                "    new GdcEmailFlattened(\n",
+                "      Id = gdcEmail.Id,\n",
+                "      CreatedDateTime = gdcEmail.CreatedDateTime,\n",
+                "      LastModifiedDateTime = gdcEmail.LastModifiedDateTime,\n",
+                "      InternetMessageId = gdcEmail.InternetMessageId,\n",
+                "      Subject = gdcEmail.Subject,\n",
+                "      IsReadReceiptRequested = gdcEmail.IsReadReceiptRequested,\n",
+                "      IsRead = gdcEmail.IsRead,\n",
+                "      IsDraft = gdcEmail.IsDraft,\n",
+                "      WebLink = gdcEmail.WebLink,\n",
+                "      Sender = if (gdcEmail.Sender!=null && gdcEmail.Sender.EmailAddress != null && gdcEmail.Sender.EmailAddress.Address!=null ) extractEmailAddressFromAddressField(gdcEmail.Sender.EmailAddress.Address) else \"\",\n",
+                "      Sender_Name = if (gdcEmail.Sender!=null && gdcEmail.Sender.EmailAddress != null && gdcEmail.Sender.EmailAddress.Name!=null ) gdcEmail.Sender.EmailAddress.Name else \"\",\n",
+                "      From = if (gdcEmail.From!=null && gdcEmail.From.EmailAddress != null && gdcEmail.From.EmailAddress.Address!=null ) extractEmailAddressFromAddressField(gdcEmail.From.EmailAddress.Address) else \"\",\n",
+                "      From_Name = if (gdcEmail.From!=null && gdcEmail.From.EmailAddress != null && gdcEmail.From.EmailAddress.Name!=null ) gdcEmail.From.EmailAddress.Name else \"\",\n",
+                "      ContentType = gdcEmail.UniqueBody.ContentType,\n",
+                "      Content = gdcEmail.UniqueBody.Content,\n",
+                "      Recipient = if (Recipient != null) extractEmailAddressFromAddressField(Recipient) else Recipient,\n",
+                "      RecipientName = RecipientName,\n",
+                "      RecipientType = RecipientType,\n",
+                "      ODataType = gdcEmail.ODataType,\n",
+                "      puser = gdcEmail.puser,\n",
+                "      ptenant = gdcEmail.ptenant,\n",
+                "      datarow = gdcEmail.datarow,\n",
+                "      userrow = gdcEmail.userrow,\n",
+                "      pagerow = gdcEmail.pagerow\n",
+                "    )\n",
+                "  }\n",
+                "  \n",
+                "}\n",
+                "\n",
+                "def flattenGdcEmail(gdcEmail: GdcEmail): Seq[GdcEmailFlattened] = {\n",
+                "  var flattenedEmails: Seq[GdcEmailFlattened] =  gdcEmail.ToRecipients.map(recipient => GdcEmailFlattened(gdcEmail, recipient.EmailAddress.Address, recipient.EmailAddress.Name, \"To\") )\n",
+                "  flattenedEmails ++=  gdcEmail.CcRecipients.map(recipient => GdcEmailFlattened(gdcEmail, recipient.EmailAddress.Address, recipient.EmailAddress.Name, \"Cc\") )\n",
+                "  flattenedEmails ++=  gdcEmail.BccRecipients.map(recipient => GdcEmailFlattened(gdcEmail, recipient.EmailAddress.Address, recipient.EmailAddress.Name, \"Bcc\") )\n",
+                "  flattenedEmails\n",
+                "}"
+            ],
+            "attachments": null,
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "application/vnd.livy.statement-meta+json": {
+                            "spark_pool": "DefaultPool",
+                            "session_id": 49,
+                            "statement_id": 18,
+                            "state": "finished",
+                            "livy_statement_state": "available",
+                            "queued_time": "2021-07-06T12:08:52.3987831Z",
+                            "session_start_time": null,
+                            "execution_start_time": "2021-07-06T12:08:52.4947148Z",
+                            "execution_finish_time": "2021-07-06T12:08:54.5619061Z"
+                        },
+                        "text/plain": "StatementMeta(DefaultPool, 49, 18, Finished, Available)"
+                    }
+                },
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": "emailAddressRegex: scala.util.matching.Regex = (?i)\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b\nextractEmailAddressFromAddressField: (stringField: String)String\ndefined object GdcEmailFlattened\nwarning: previously defined class GdcEmailFlattened is not a companion to object GdcEmailFlattened.\nCompanions must be defined together; you may wish to use :paste mode for this.\ngdcEmailFlatten: (gdcEmail: GdcEmail)Seq[GdcEmailFlattened]\n"
+                }
+            ],
+            "execution_count": 18
+        },
+        {
+            "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
+                },
+                "nteract": {
+                    "transient": {
+                        "deleting": false
+                    }
+                },
+                "collapsed": true
+            },
+            "source": [
+                "val flattenedEmails = emailDs.flatMap(flattenGdcEmail)"
+            ],
+            "attachments": null,
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "application/vnd.livy.statement-meta+json": {
+                            "spark_pool": "DefaultPool",
+                            "session_id": 49,
+                            "statement_id": 19,
+                            "state": "finished",
+                            "livy_statement_state": "available",
+                            "queued_time": "2021-07-06T12:08:58.7095932Z",
+                            "session_start_time": null,
+                            "execution_start_time": "2021-07-06T12:08:58.7934085Z",
+                            "execution_finish_time": "2021-07-06T12:09:00.8542358Z"
+                        },
+                        "text/plain": "StatementMeta(DefaultPool, 49, 19, Finished, Available)"
+                    }
+                },
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": "flattenedEmails: org.apache.spark.sql.Dataset[GdcEmailFlattened] = [Id: string, CreatedDateTime: string ... 22 more fields]\n"
+                }
+            ],
+            "execution_count": 19
+        },
+        {
+            "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
+                },
+                "nteract": {
+                    "transient": {
+                        "deleting": false
+                    }
+                },
+                "collapsed": true
+            },
+            "source": [
+                "val destinationFilePath =  s\"abfss://$outputContainer@$storageAccountName.dfs.core.windows.net/$outputFolderPath\"\n",
+                "flattenedEmails.write.mode(SaveMode.Overwrite).parquet(destinationFilePath)"
+            ],
+            "attachments": null,
+            "outputs": [
+                {
+                    "output_type": "display_data",
+                    "data": {
+                        "application/vnd.livy.statement-meta+json": {
+                            "spark_pool": "DefaultPool",
+                            "session_id": 49,
+                            "statement_id": 21,
+                            "state": "finished",
+                            "livy_statement_state": "available",
+                            "queued_time": "2021-07-06T12:09:31.5711588Z",
+                            "session_start_time": null,
+                            "execution_start_time": "2021-07-06T12:09:31.6624101Z",
+                            "execution_finish_time": "2021-07-06T12:09:37.8339051Z"
+                        },
+                        "text/plain": "StatementMeta(DefaultPool, 49, 21, Finished, Available)"
+                    }
+                },
+                {
+                    "name": "stdout",
+                    "output_type": "stream",
+                    "text": "outputContainer: String = mgdc101-emails\nstorageAccountName: String = mgdc101storage\noutputFolderPath: String = m365_emails_parquet_raw_test\ndestinationFilePath: String = abfss://mgdc101-emails@mgdc101storage.dfs.core.windows.net/m365_emails_parquet_raw_test\n"
+                }
+            ],
+            "execution_count": 21
+        }
+    ]
 }

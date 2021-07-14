@@ -28,6 +28,10 @@
                         "batchEndTime": {
                             "value": "@pipeline().parameters.batchEndTime",
                             "type": "Expression"
+                        },
+                        "m365_extraction_group_id": {
+                            "value": "@pipeline().parameters.m365_extraction_group_id",
+                            "type": "Expression"
                         }
                     }
                 }
@@ -57,6 +61,10 @@
                         },
                         "batchEndTime": {
                             "value": "@pipeline().parameters.batchEndTime",
+                            "type": "Expression"
+                        },
+                        "m365_extraction_group_id": {
+                            "value": "@pipeline().parameters.m365_extraction_group_id",
                             "type": "Expression"
                         }
                     }
@@ -88,6 +96,10 @@
                         "batchEndTime": {
                             "value": "@pipeline().parameters.batchEndTime",
                             "type": "Expression"
+                        },
+                        "m365_extraction_group_id": {
+                            "value": "@pipeline().parameters.m365_extraction_group_id",
+                            "type": "Expression"
                         }
                     }
                 }
@@ -111,6 +123,10 @@
                         "batchEndTime": {
                             "value": "@pipeline().parameters.batchEndTime",
                             "type": "Expression"
+                        },
+                        "m365_extraction_group_id": {
+                            "value": "@pipeline().parameters.m365_extraction_group_id",
+                            "type": "Expression"
                         }
                     }
                 }
@@ -121,6 +137,18 @@
                 "dependsOn": [
                     {
                         "activity": "Process Emails Data",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "Process Events Data",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "Process Team Chats Data",
                         "dependencyConditions": [
                             "Succeeded"
                         ]
@@ -142,20 +170,8 @@
                             "value": "@pipeline().parameters.sql_table_name",
                             "type": "Expression"
                         },
-                        "sql_username": {
-                            "value": "@pipeline().parameters.sql_username",
-                            "type": "Expression"
-                        },
-                        "sql_password": {
-                            "value": "@pipeline().parameters.sql_password",
-                            "type": "Expression"
-                        },
                         "azure_ai_endpoint": {
                             "value": "@pipeline().parameters.azure_ai_endpoint",
-                            "type": "Expression"
-                        },
-                        "azure_ai_key": {
-                            "value": "@pipeline().parameters.azure_ai_key",
                             "type": "Expression"
                         },
                         "sql_server_name": {
@@ -176,29 +192,28 @@
                 "defaultValue": "2022-01-01T00:00:00Z"
             },
             "sql_database_name": {
-                "type": "string"
+                "type": "string",
+                "defaultValue": "<sql_database_name>"
             },
             "sql_table_name": {
-                "type": "string"
-            },
-            "sql_username": {
-                "type": "string"
-            },
-            "sql_password": {
-                "type": "string"
+                "type": "string",
+                "defaultValue": "dbo.vInternal_Interactions_one_to_many"
             },
             "azure_ai_endpoint": {
-                "type": "string"
-            },
-            "azure_ai_key": {
-                "type": "string"
+                "type": "string",
+                "defaultValue": "<azure_ai_endpoint>"
             },
             "sql_server_name": {
-                "type": "string"
+                "type": "string",
+                "defaultValue": "<sql_server_name>"
+            },  
+            "m365_extraction_group_id": {
+                "type": "string",
+                "defaultValue": "<m365_extraction_group_id>"
             }
         },
         "annotations": [],
-        "lastPublishTime": "2021-07-09T12:02:52Z"
+        "lastPublishTime": "2021-07-12T16:34:46Z"
     },
     "type": "Microsoft.Synapse/workspaces/pipelines"
 }

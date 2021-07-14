@@ -2,7 +2,7 @@
     "name": "M365UsersTableDedicatedSQLdb",
     "properties": {
         "linkedServiceName": {
-            "referenceName": "SynapseDedicateSqlPool",
+            "referenceName": "SynapseDedicatedSqlPool",
             "type": "LinkedServiceReference"
         },
         "parameters": {

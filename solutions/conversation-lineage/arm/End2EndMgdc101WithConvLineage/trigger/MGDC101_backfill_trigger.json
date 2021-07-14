@@ -1,0 +1,27 @@
+{
+    "name": "MGDC101_backfill_trigger",
+    "properties": {
+        "pipeline": {
+            "pipelineReference": {
+                "referenceName": "End2EndMgdc101WithConvLineage",
+                "type": "PipelineReference"
+            }
+        },
+        "annotations": [],
+        "runtimeState": "Stopped",
+        "type": "TumblingWindowTrigger",
+        "typeProperties": {
+            "frequency": "Hour",
+            "interval": 8760,
+            "startTime": "<startTimeValue>",
+            "endTime": "<endTimeValue>",
+            "delay": "00:00:00",
+            "maxConcurrency": 1,
+            "retryPolicy": {
+                "count": 1,
+                "intervalInSeconds": 600
+            },
+            "dependsOn": []
+        }
+    }
+}
