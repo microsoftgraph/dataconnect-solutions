@@ -82,7 +82,11 @@ def make_strong_password(length: int, special_chars: str = '#%^&-_+{}|\\:\'/`~"'
     if len(password_char_list) < length:
         password_char_list += list(choice(all_chars) for _ in range(length - current_password_length))
 
-    shuffle(password_char_list)
+    # passwords generated using this method are usually saved in Azure Key Vault, using az cli
+    # in order for the az cli command to work, the password can't start with the character '#' or '-'
+    while password_char_list[0] in ['#', '-']:
+        shuffle(password_char_list)
+
     return "".join(password_char_list)
 
 
