@@ -15,7 +15,7 @@
                 },
                 "userProperties": [],
                 "typeProperties": {
-                    "url": "https://mgdc101-vault.vault.azure.net/secrets/storageAccountKey/57166dcd7abd47c79fd32bfe4924c560?api-version=7.0",
+                    "url": "<key_vault_endpoint>secrets/storageAccountKey?api-version=7.0",
                     "connectVia": {
                         "referenceName": "AutoResolveIntegrationRuntime",
                         "type": "IntegrationRuntimeReference"

@@ -13,7 +13,7 @@
                     "referenceName": "keyvault_linkedservice",
                     "type": "LinkedServiceReference"
                 },
-                "secretName": "<secretName>"
+                "secretName": "m365-reader-secret"
             },
             "accountKind": "BlobStorage"
         },
