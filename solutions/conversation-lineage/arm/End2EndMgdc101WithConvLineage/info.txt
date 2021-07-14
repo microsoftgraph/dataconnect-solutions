@@ -1,6 +1,0 @@
-selected resource name:		End2EndMgdc101WithConvLineage
-selected resource type:		pipeline
-workspace name:			mgdc101synapse
-workspace location:		westus
-subscription id:		894f56bb-ecf5-4a8b-a3e1-6b67703d7c1c
-time of download (UTC):		Fri, 09 Jul 2021 13:32:50 GMT
