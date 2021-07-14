@@ -234,8 +234,11 @@ class SearchTermExpansionService {
 
       if (res.isEmpty) {
         List.empty[String]
+      } else if(res.filter(domain_term_mapping_line=>domain_term_mapping_line.contains(term)).isEmpty) {
+        List.empty[String]
       } else {
-        val retrievedText = res.head
+        val filteredResult = res.filter(domain_term_mapping_line=>domain_term_mapping_line.contains(term))
+        val retrievedText = filteredResult.head
 
         if (retrievedText.contains(":")) {
 
