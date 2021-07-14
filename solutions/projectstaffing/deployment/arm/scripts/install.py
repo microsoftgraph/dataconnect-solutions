@@ -123,9 +123,11 @@ def execute_user_prompts(deployment_name: str, install_config: InstallConfigurat
                                        validate_default_params=validate_default_params)
     install_config.prompt_airtable_config(deployment_name=deployment_name)
     if install_config.sql_auth:
-        # let's generate service password without prompting, it will be saved in key vaults
-        install_config.gdc_service_db_user_password = make_strong_password(length=12)
-        install_config.jgraph_db_user_password = make_strong_password(length=12)
+        # Generating service password without prompting, it will be saved in Az Key Vault.
+        # Because the password will be saved in Az Key Vault using az cli,
+        # only these special characters are allowed: #%^-_+{}\\:/~
+        install_config.gdc_service_db_user_password = make_strong_password(length=12, special_chars='#%^-_+{}\\:/~')
+        install_config.jgraph_db_user_password = make_strong_password(length=12, special_chars='#%^-_+{}\\:/~')
 
 
 def execute_deploy_mainTemplate(parsed_args):
