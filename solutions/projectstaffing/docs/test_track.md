@@ -53,14 +53,14 @@ To create a new pipeline in Azure DevOps, you have to follow the next steps:
 
 
 ## Running the pipeline
+
+Before running the API tests, the authentication should be modified to allow anonymous authentication.
+For this, please read the steps in the [API tests prerequisites](../api-tests/README.md#pre-requisites)
+
 To run the pipeline, select it from the list of available pipelines in Azure DevOps, provide required arguments and hit `Run`
 ![Image](imgs/azure_devOps_test_track_pipeline_setup.png)
 
 ### Pipeline parameters
-
-- `AppServiceAuthSession`
-
-This is the token issued to your browser once you successfully log in. Can be found in browser (steps outlined below).
 
 - `AppServiceUrl`
 
@@ -74,21 +74,4 @@ At the end of a pipeline run, the report folder will be available as a *publishe
 
 You can download the artifact to your local machine and open up the `surefire-report.html` report file, from the `target/suite` folder, in your favorite browser to access the report.
 
-### Retrieving the app service auth cookie
-In order for the tests to work we need the authentication token from the App Service.
 
-> *Note:* this token expires, make sure you're using a fresh one everytime you run the pipeline.
-
-To obtain the token from a logged-in session in the browser do the following:
-
-- open the ProjectStaffing UI of the development App Service in the browser and log in
-
-- right-click on the page and go to `Inspect` -> `Application` -> `Storage` -> `Cookies`
-
-- locate the cookie titled `AppServiceAuthSession` and copy its value
-
-![Image](imgs/AppServiceAuthSession_cookie_location.png)
-
-- the obtained token needs to be set in Azure DevOps when kicking off a new pipeline execution
-
-![Image](imgs/azure_devOps_test_track_pipeline_setup.png)

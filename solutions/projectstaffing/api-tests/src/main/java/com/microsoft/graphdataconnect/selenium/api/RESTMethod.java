@@ -24,7 +24,6 @@ public class RESTMethod extends AbstractApiMethodV2 {
             e.printStackTrace();
         }
         replaceUrlPlaceholder("base_url", System.getProperty("AppServiceUrl"));
-        addCookie("AppServiceAuthSession",System.getProperty("AppServiceAuthSession"));
         replaceUrlPlaceholder("config_url",prop.getProperty("config_url"));
         replaceUrlPlaceholder("team",prop.getProperty("team_url"));
         replaceUrlPlaceholder("employee_search",prop.getProperty("employee_search"));

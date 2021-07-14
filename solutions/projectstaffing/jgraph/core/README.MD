@@ -10,7 +10,7 @@ from the App Service Overview page.
 
 ### User Authentication
 The ProjectStaffing AppService uses the [built-in authentication mechanism of the AppService](https://docs.microsoft.com/en-us/azure/app-service/overview-authentication-authorization).   
-Anonymous access is not permitted.
+Anonymous access should only be used for App Services which are called by REST API tests. For production and development App Services, anonymous access should be avoided.
 In order to log in, you need to access the AppService UI URL and use your Azure ActiveDirectory identity to log in.
 
 

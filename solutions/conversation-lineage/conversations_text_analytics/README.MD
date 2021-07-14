@@ -3,6 +3,7 @@
 ## Table of content
 
 - [Project Description](#project-description)
+- [Prerequisites](#prerequisites)  
 - [Input Data](#input-data)
 - [Azure Ai Text Analytics usage](#azure-ai-text-analytics-usage)
 - [Deployment on azure synapse](#deployment-on-azure-synapse)
@@ -13,16 +14,33 @@
     - [Deploy the pipeline](#deploy-the-pipeline)
     - [Run the pipeline](#run-the-pipeline)
 - [Pipeline and notebook parameters](#pipeline-and-notebook-parameters)
-- [Prerequisites](#prerequisites)
 
 
 ## Project description:
-  - extract conversation analytics from the mail flow between members of a company
+  - extract conversation analytics from the conversation flow between members of a company
   - more specifically: extract sentiment and nlp entities with possible purpose of identifying conversation sentiment
   over certain topics and write it to a sql table with the goal of exposing the insights through a power-bi presentation notebook.
 
+
+## Prerequisites
+
+All the workflows are dependent on the [Graph-Data-Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview)
+and run in [Azure Synapse Analytics](https://docs.microsoft.com/en-us/azure/synapse-analytics/). 
+
+For setting up an *Azure Synapse Workspace* please follow the [official synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)    
+For setting GDC please use the following tutorial chapter from this Microsoft GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md#exercise-1-setup-office-365-tenant-and-enable-microsoft-graph-data-connect).    
+You will also need a user with [global administration role](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin).  
+
 ## Input data:
-- is `dbo.augmented_emails`. An example view is this one ![dbo_augmented_mails.png](../docs/analytics_notebook_imgs/dbo_augmented_mails.png)
+The source for the azure text analytics service is the content of the `dbo.vInternal_Interactions_one_to_many` view. 
+This view represents a data union of all the common fields of the augmented_emails, augmented_team_chats and augmented_events tables, 
+under a single schema describing interactions between users.  
+The script for the view can be found [here](../sql/private_views_creation_sql.sql)
+
+This view is created as a result of running the workflow described [here](../README.MD#tutorial-for-setting-up-the-conversation-lineage-processing-pipelines)
+
+Sample data:   
+![dbo_vInternal_Interactions_one_to_many.png](../docs/analytics_notebook_imgs/dbo_vInternal_Interactions_one_to_many.png)
 
 
 ## Azure AI Text Analytics usage.

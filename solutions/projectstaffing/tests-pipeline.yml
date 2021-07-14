@@ -9,14 +9,10 @@ pool:
   vmImage: 'ubuntu-latest'
 
 parameters:
-  - name: 'AppServiceAuthSession'
-    type: string
-    default: 'AppServiceAuthSession'
   - name: 'AppServiceUrl'
     type: string
     default: 'AppServiceUrl'
 variables:
-  token: ${{ parameters.AppServiceAuthSession }}
   url: ${{ parameters.AppServiceUrl }}
 stages:
   - stage: Carina_API_test
@@ -31,7 +27,7 @@ stages:
             displayName: 'Executing API tests'
             inputs:
               filePath: 'solutions/projectstaffing/api-tests/run_tests.sh'
-              arguments: $(token) $(url)
+              arguments: $(url)
               workingDirectory: 'solutions/projectstaffing/api-tests'
           - task: PublishPipelineArtifact@1
             inputs:

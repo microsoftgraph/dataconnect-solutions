@@ -1,6 +1,6 @@
 # Microsoft Graph data connect - One-Click Deployment
 
-Deploys an Azure Storage Account and an Azure Data Factory with a Pipeline that uses Microsoft Graph data connect to extract Mailbox Settings from your tenant.
+Deploys an Azure Storage Account and an Azure Data Factory with a Pipeline that uses Microsoft Graph data connect to extract Microsoft 365 data from your tenant.
 
 ## Parameters
 

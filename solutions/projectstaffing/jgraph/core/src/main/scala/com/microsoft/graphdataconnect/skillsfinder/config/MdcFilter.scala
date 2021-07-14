@@ -7,45 +7,55 @@ package com.microsoft.graphdataconnect.skillsfinder.config
 
 import java.io.IOException
 import java.util.UUID
-
 import com.microsoft.graphdataconnect.skillsfinder.exceptions.UnauthorizedException
 import com.microsoft.graphdataconnect.skillsfinder.service.UserService
 import javax.servlet.http.{HttpServletRequest, HttpServletResponse}
 import javax.servlet.{FilterChain, ServletException}
 import org.slf4j.{Logger, LoggerFactory, MDC}
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.context.annotation.Configuration
 
 @Configuration
 class MdcFilter(@Autowired override val userService: UserService) extends UserIdExtractionFilter(userService) {
   private val log: Logger = LoggerFactory.getLogger(classOf[MdcFilter])
 
+  @Value("${anonymous.user.default.email}")
+  private var anonymousUserDefaultEmail: String = _
+
   @throws[IOException]
   @throws[ServletException]
   override protected def doFilter(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain): Unit = {
-    try {
-      MDC.put("correlationId", getCorrelationId(request))
-      val userId: Option[String] = getUserIdFromHttpServletRequest(request)
 
-      if (userId.isDefined) {
-        MDC.put("user", userId.get)
+        try {
+          if (isAnonymousAuthEnabled) {
+            MDC.put("user", anonymousUserDefaultEmail)
+            MDC.put("correlationId", getCorrelationId(request))
+          } else {
+            MDC.put("correlationId", getCorrelationId(request))
+            val userId: Option[String] = getUserIdFromHttpServletRequest(request)
+
+            if (userId.isDefined) {
+              MDC.put("user", userId.get)
+            }
+
+          }
+        }catch {
+          case _: UnauthorizedException => None
+        }
+        finally {
+          try {
+            // filterChain.doFilter call has to be made from this finally block,
+            // otherwise if the filterChain.doFilter call would be in the try block above, if an exception is thrown from the try block
+            // filterChain.doFilter might not get called thus the UserIdExtractionFilter.doFilter will not be called
+            filterChain.doFilter(request, response)
+          } finally {
+            MDC.remove("correlationId")
+            MDC.remove("user")
+          }
+        }
       }
 
-    } catch {
-      case _: UnauthorizedException => None
-    }
-    finally {
-      try {
-        // filterChain.doFilter call has to be made from this finally block,
-        // otherwise if the filterChain.doFilter call would be in the try block above, if an exception is thrown from the try block
-        // filterChain.doFilter might not get called thus the UserIdExtractionFilter.doFilter will not be called
-        filterChain.doFilter(request, response)
-      } finally {
-        MDC.remove("correlationId")
-        MDC.remove("user")
-      }
-    }
-  }
+
 
   private def getCorrelationId(request: HttpServletRequest): String = {
     Option(request.getHeader("X-Correlation-ID")) match {

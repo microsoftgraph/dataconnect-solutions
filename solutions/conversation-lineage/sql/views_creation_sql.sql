@@ -152,13 +152,13 @@ GO
 
 CREATE VIEW [dbo].[vEmails]
 AS
-    SELECT CreatedDateTime, From_Name, IsExternalEmail, IsRead, MailToManager, MailToSubordinate, SenderDepartment, SenderDisplayName, SenderReportsTo, Sender_Name, Subject, CONCAT_WS(', ', [ToAddresses], [CCAddresses], [BCCAddresses]) as Recipients, CONCAT_WS(', ', [ToNames], [CCNames], [BCCNames]) as RecipientNames
+    SELECT InternetMessageId, CreatedDateTime, From_Name, IsExternalEmail, IsRead, MailToManager, MailToSubordinate, SenderDepartment, SenderDisplayName, SenderReportsTo, Sender_Name, Subject, CONCAT_WS(', ', [ToAddresses], [CCAddresses], [BCCAddresses]) as Recipients, CONCAT_WS(', ', [ToNames], [CCNames], [BCCNames]) as RecipientNames
     FROM dbo.augmented_emails;
 GO
 
 CREATE VIEW [dbo].[vEmails_Flattened]
 AS
-    SELECT IsExternalEmail, Recipient, Id, IsRead, MailToManager, MailToSubordinate, RecipientName, SenderCountry, SenderDepartment, Sender_Name, Subject
+    SELECT InternetMessageId, IsExternalEmail, Recipient, IsRead, MailToManager, MailToSubordinate, RecipientName, SenderCountry, SenderDepartment, Sender_Name, Subject
     FROM augmented_flattened_emails_with_managers;
 GO
 

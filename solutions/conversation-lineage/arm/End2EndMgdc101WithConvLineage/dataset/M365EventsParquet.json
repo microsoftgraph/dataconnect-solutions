@@ -1,0 +1,21 @@
+{
+    "name": "M365EventsParquet",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "blobstorage_via_sp_linkedservice",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "Parquet",
+        "typeProperties": {
+            "location": {
+                "type": "AzureBlobStorageLocation",
+                "folderPath": "m365_events_parquet",
+                "container": "events"
+            },
+            "compressionCodec": "snappy"
+        },
+        "schema": []
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}

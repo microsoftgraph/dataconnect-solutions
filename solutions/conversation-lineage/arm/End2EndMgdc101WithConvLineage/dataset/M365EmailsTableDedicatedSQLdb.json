@@ -1,0 +1,17 @@
+{
+    "name": "M365EmailsTableDedicatedSQLdb",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "SynapseDedicateSqlPool",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "AzureSqlTable",
+        "schema": [],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "flattened_emails"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}

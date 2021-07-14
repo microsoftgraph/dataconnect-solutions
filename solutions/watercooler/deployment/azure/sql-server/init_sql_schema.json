@@ -30,14 +30,14 @@
     "appservice.name": {
       "type": "String",
       "metadata": {
-        "description": " Deployment Name for Watercooler app, it will be available at https://{appservice.name}.azurewebsites.net "
+        "description": " Deployment Name for Watercooler app (has to be unique across the entire Azure, globally). It will be available at https://{appservice.name}.azurewebsites.net "
       }
     },
     "wc-service.sp.name": {
       "type": "String",
       "defaultValue": "wc-service",
       "metadata": {
-        "description": " Name of service principal for wc deployment "
+        "description": " Name of service principal for Watercooler deployment "
       }
     },
     "_artifactsLocation": {
