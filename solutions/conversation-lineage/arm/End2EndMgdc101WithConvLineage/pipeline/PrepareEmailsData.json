@@ -689,7 +689,7 @@
                 "typeProperties": {
                     "source": {
                         "type": "AzureSqlSource",
-                        "sqlReaderQuery": "SELECT DISTINCT\nSUBSTRING(e.[Recipient], CHARINDEX('@', e.[Recipient]), LEN(e.[Recipient])) as RecipientDomain \nFROM augmented_flattened_emails_with_managers e",
+                        "sqlReaderQuery": "SELECT DISTINCT\nSUBSTRING(e.[Recipient], CHARINDEX('@', e.[Recipient]), LEN(e.[Recipient])) as RecipientDomain \nFROM augmented_flattened_emails e",
                         "queryTimeout": "02:00:00",
                         "partitionOption": "None"
                     },
