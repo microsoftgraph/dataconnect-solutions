@@ -70,7 +70,14 @@ From *Text Analytics* service we'll use 2 provided api functions:
 
 ### Create an Azure Key Vault
 Create a KeyVault meant to store any sensitive pieces of information meant to be used by the Synapse pipelines.
-For example, you'll need to store the storage account key, the Cognitive service key, the Synapse SQL pool password etc.
+
+Here is a list of all the secrets that have to be saved in Azure Key Vault and what are the names that they **must** have:
+- The Azure Storage Account Key, using the name `storageAccountKey`
+- Synapse dedicated SQL pool credentials:
+    - username secret, using the name `jdbcUsername`
+    - password secret, using the name `jdbcPassword`
+- The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage,
+the name of the secret has to be `m365-reader-secret`
 
 ### Create an Azure Synapse workspace
 Create the Synapse workspace used to process all the data.
