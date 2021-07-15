@@ -57,6 +57,9 @@ prefix="https://"
 storage_account_name=${STORAGE_ACCOUNT_ENDPOINT#"$prefix"}
 storage_account_name=${storage_account_name/%$suffix}
 
+echo -e "\n\n################### Authenticating to Azure #####################\n\n "
+
+az login
 
 echo "Deploying linkedservices ... "
 
