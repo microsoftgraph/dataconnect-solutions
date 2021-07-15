@@ -99,8 +99,16 @@ In order to create a resources group please follow the steps described [here](ht
 Create a Storage account meant to store the raw data ingested from Microsoft 365, as well as intermediate data resulting
 from transforming the input data.
 In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).  
-Now, grant the service principal created above a `Storage Blob Data Contributor` role for the Storage account, by following
-the steps described [here](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal?tabs=current).
+
+When you arrive at the "Data protection" configuration step, disable all soft delete options as presented in the image below.  
+![disable soft delete](./docs/environment_setup/disable_storage_soft_delete.png)
+ 
+After the storage account is created, six blob containers have to be created with the following names: `events`, `logs`,
+`managers`, `mgdc101-emails`, `mgdc101-employee-profiles` and `team-chats`. The information on how to create a container 
+can be found [here](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal#create-a-container).
+
+Now, grant to the service principal created above and to the Synapse Workspace (that you will create), the
+`Storage Blob Data Contributor` role for the Storage account, by following the steps described [here](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal?tabs=current).
 
 ### Create an Azure Cognitive Service
 Create an instance of Azure Cognitive Services meant to be used for sentiment analysis of interactions between users.
@@ -156,6 +164,10 @@ Here is a list of all the secrets that have to be saved in Azure Key Vault and w
 - The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of
   the secret has to be `m365-reader-secret`
 - The Text Analytics Key, using the name `azure-ai-key`
+
+In order for the Synapse Workspace to be able to extract secrets from the Key Vault, the Get and List Secret Permissions
+have to be assigned to it, from the "Access policies" configurations of the Key Vault. The necessary steps that have to
+be performed in order to achieve this, are presented [here](https://docs.microsoft.com/en-us/azure/key-vault/general/assign-access-policy-portal).
   
 ### Set up PowerBI
 To create, edit and visualize the final reports over the processed data, you will need to have [PowerBI Desktop](https://docs.microsoft.com/en-us/power-bi/fundamentals/desktop-what-is-desktop) 
@@ -193,8 +205,14 @@ The script will perform `az login` for you, so you will be prompted to authentic
 In order to create/update the associated sql tables, open a sql editor on the "Tables" folder in Synapse workspace manager/Data tab:  
 ![create-tables-menu](./docs/sql_script_create_table_menu.png)
 
-Use the script located here [./sql/tables_creation.sql](./sql/tables_creation.sql) and execute it in Synapse workspace manager:  
+Use the script located here [./sql/tables_creation.sql](./sql/tables_creation.sql) and execute it in Synapse workspace manager. 
+Make sure that the script is connected to the dedicated SQL pool.  
 ![create-all-tables](./docs/sql_script_create_all_tables.png)
+
+Also there is a stored procedure that has to be created manually, the creation script is located here 
+[./sql/stored_procedure.sql](./sql/stored_procedure.sql), execute it in Synapse workspace manager as you did 
+previously for `tables_creation.sql` script.
+
 
 
 #### Sql executing from synapse-develop tab
@@ -218,6 +236,25 @@ via 2 mechanisms:
 #### Limit the number of users for which data is processed
 
 #### Limit the time span of the processed data
+
+
+### Approve Data Access Requests
+
+When the `End2EndMgdc101WithConvLineage` pipeline is triggered  to run for the first time, there will be 5 Data Access
+Requests that will be generated in the Microsoft 365 Admin Center. The Data Access Requests can be seen in the [Settings
+section of the admin center](https://portal.office.com/adminportal/home?#/Settings/PrivilegedAccess). 
+
+The Data Access Request won't show up all at the same time. First the access requests for user and managers data will show up.
+After the PrepareUsersData pipeline finishes, 3 more Data Access Request will show up, for emails, team chats and calendar
+events data.
+
+The user that approves the Data Access Requests has to be different from the user that created and deployed all the resources
+in the resource group.
+
+In order to approve a Data Access Request, click the one you want to approve, a popup will show with the two options,
+approve or deny, as shown in the image below.
+
+![admin portal](./docs/data-access-request-example.png)
 
 
 ## Architectural design
