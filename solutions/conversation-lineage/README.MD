@@ -53,16 +53,49 @@ To complete this lab, you need the following:
 For setting up Office 365 Tenant and enabling Graph Data Connect, please follow the steps from chapter `Excercise 1` 
 from this GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md#exercise-1-setup-office-365-tenant-and-enable-microsoft-graph-data-connect)
 
+### Create an Azure AD application
+Synapse pipelines need to interact with external Azure services in order to extract, process or store data. To be able
+to do this, Synapse must authenticate itself while connecting to these services. For certain services the authentication
+can be done via Managed Identity, however, for others a service principal is required.  
+In this tutorial, Synapse will need a service principal to extract data from M365 and to connect to Azure Blob Storage.   
+Therefore, you will need to create an Azure Active Directory app registration that will be used as the security principal:
+1. Open a browser and navigate to your Azure Portal at [https://portal.azure.com](https://portal.azure.com)
+2. Login using an account with global administrator rights to your Azure and Office 365 tenants.
+3. Select **Azure Active Directory** (Azure AD) from the sidebar navigation.
+4. Select **App registrations** from the **Manage** section of the sidebar on the left.
+5. Select the **New registration** button:
+   ![Create AAD app registration](./docs/environment_setup/create-aad-app-registration.png)
+6. Use the following values to create a new Azure AD application and select **Register**:
+  - **Name**: conversation-lineage-m365-reader
+  - **Supported account types**: Accounts in this organizational directory only
+  - **Redirect URI**: *Leave the default values*
+7. Locate the **Application (client) ID** and copy it as you will need it later in this lab. This will be referred to as the *service principal ID*.
+8. Locate the **Directory (tenant) ID** and copy it as you will need it later in this lab. This will be referred to as the *tenant ID*.
+9. Select **Certificates & secrets** under **Manage** in the sidebar navigation.
+10. Select the **New client secret** button. Leave **Description** empty, set **Expires** to `24 months` and choose **Add**.
+   > You can choose different values for **Description** and **Expires** if you like. Ensure you keep a copy of the 
+   > hashed key after it is saved, as it is needed later in the tutorial (to be saved in KeyVault). 
+   > The hashed value will never be shown again, so if you forget it, you will need to create a new one!
+
+   ![Screenshot of creating a password for an Azure AD application](./docs/environment_setup/create-service-principal-client-secret.png)
+
+   > This will be referenced as the *service principal key*.
+11. Using the sidebar navigation for the application, select **Owners**.
+12. Ensure your account is listed as an owner for the application. If it isn't listed as an owner, add it.
+
 ### Create an Azure resource group
-Create a resource group to hold all the Azure resources required for this project.
+Create a resource group to hold all the Azure resources required for this project.  
+In order to create a resources group please follow the steps described [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal#create-resource-groups).
 
 ### Create an Azure Storage account
 Create a Storage account meant to store the raw data ingested from Microsoft 365, as well as intermediate data resulting
 from transforming the input data.
+In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).  
+Now, grant the service principal created above a `Storage Blob Data Contributor` role for the Storage account.
 
 ### Create an Azure Cognitive Service
 Create an instance of Azure Cognitive Services meant to be used for sentiment analysis of interactions between users.
-From *Azure Cognitive Services* we'll use *Text Analytics* service.
+From *Azure Cognitive Services* we'll use *Text Analytics* service.  
 In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api?tabs=synchronous#create-a-text-analytics-resource)
 From *Text Analytics* service we'll use 2 provided api functions:
 - [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
@@ -71,13 +104,13 @@ From *Text Analytics* service we'll use 2 provided api functions:
 ### Create an Azure Key Vault
 Create a KeyVault meant to store any sensitive pieces of information meant to be used by the Synapse pipelines.
 
-Here is a list of all the secrets that have to be saved in Azure Key Vault and what are the names that they **must** have:
+Here is a list of all the secrets that have to be saved in Azure Key Vault and what their names **must** be:
 - The Azure Storage Account Key, using the name `storageAccountKey`
 - Synapse dedicated SQL pool credentials:
-    - username secret, using the name `jdbcUsername`
-    - password secret, using the name `jdbcPassword`
-- The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage,
-the name of the secret has to be `m365-reader-secret`
+    - username, using the name `jdbcUsername`
+    - secret password, using the name `jdbcPassword`
+- The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of 
+  the secret has to be `m365-reader-secret`
 
 ### Create an Azure Synapse workspace
 Create the Synapse workspace used to process all the data.
