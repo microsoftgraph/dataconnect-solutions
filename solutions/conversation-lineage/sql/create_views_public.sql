@@ -12,9 +12,9 @@ Views, in order of usage:
         Tracks all 1-on-1 interactions (eg: for an email, records separately for each sender-receiver pair).
 
     based on:
-    - augmented_flattened_emails_with_managers
-    - augmented_flattened_team_chats_with_managers
-    - augmented_flattened_events_with_managers
+    - augmented_flattened_emails
+    - augmented_flattened_team_chats
+    - augmented_flattened_events
 
 - one_to_many_interactions
         Tracks all 1-to-many interactions (eg: for an email, records 1 time per mail, for one sender and multiple receivers).
@@ -35,6 +35,7 @@ Views, in order of usage:
 
 -- drop generalized interaction views
 DROP VIEW IF EXISTS [dbo].[vInteractions_one_to_one];
+GO
 
 DROP VIEW IF EXISTS [dbo].[vInteractions_one_to_many];
 GO
@@ -80,7 +81,7 @@ AS
         [IsExternalEmail] as IsExternalInteraction, [MailToManager] as InteractionWithManager, [MailToSubordinate] as InteractionWithSubordinate,
         [Content],
         'Email' as SourceType
-    FROM dbo.augmented_flattened_emails_with_managers
+    FROM dbo.augmented_flattened_emails
 
     UNION ALL
 
@@ -90,7 +91,7 @@ AS
         [IsExternalChat]  as IsExternalInteraction, [ChatWithManager] as InteractionWithManager, [ChatWithSubordinate] as InteractionWithSubordinate,
         [Content],
         'TeamsChat' as SourceType
-    FROM dbo.augmented_flattened_team_chats_with_managers
+    FROM dbo.augmented_flattened_team_chats
 
     UNION ALL
 
@@ -101,7 +102,7 @@ AS
         [IsExternalEvent]  as IsExternalInteraction, [EventWithManager] as InteractionWithManager, [EventWithSubordinate] as InteractionWithSubordinate,
         [Content],
         'CalendarEvent' as SourceType
-    FROM dbo.augmented_flattened_events_with_managers;
+    FROM dbo.augmented_flattened_events;
 GO
 
 DECLARE @CountRecords int;
@@ -192,7 +193,7 @@ AS
         -- augmented fields
         ,[MailToManager], [MailToSubordinate], [SenderReportsTo], [SenderManagerEmail]
         ,[IsExternalEmail]
-    FROM dbo.augmented_flattened_emails_with_managers;
+    FROM dbo.augmented_flattened_emails;
 GO
 
 DECLARE @CountRecords int;
@@ -259,7 +260,7 @@ AS
         -- augmented fields
         ,[EventWithManager], [EventWithSubordinate], [OrganizerReportsTo], [OrganizerManagerEmail]
         ,[IsExternalEvent]
-    FROM dbo.augmented_flattened_events_with_managers;
+    FROM dbo.augmented_flattened_events;
 GO
 
 DECLARE @CountRecords int;
@@ -313,7 +314,7 @@ AS
         ,[ChatWithManager], [ChatWithSubordinate], [SenderReportsTo], [SenderManagerEmail]
         ,[RecipientManagerEmail], [RecipientReportsTo]
         ,[IsExternalChat]
-    FROM dbo.augmented_flattened_team_chats_with_managers;
+    FROM dbo.augmented_flattened_team_chats;
 GO
 
 DECLARE @CountRecords int;
