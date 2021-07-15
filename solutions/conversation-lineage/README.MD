@@ -83,6 +83,14 @@ Therefore, you will need to create an Azure Active Directory app registration th
 11. Using the sidebar navigation for the application, select **Owners**.
 12. Ensure your account is listed as an owner for the application. If it isn't listed as an owner, add it.
 
+### Create an Azure AD group
+While ingesting data from M365 you have the option of retrieving the data for all users (having an Office 365 license),
+or only for a specific set of users. To achieve this, create an Azure AD security group called `MGDC101 Members`.  
+The steps required to create a group and add members to it are described [here](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-groups-create-azure-portal).  
+Once the group is created, add to it users for which the M365 data (profile, emails, calendar events, team chats) should
+be processed. The users must have an Office 365 license, for their data to be actually retrieved.  
+In the **Overview** page of the group, look for the **ObjectId** and copy its value as you will need it later.
+
 ### Create an Azure resource group
 Create a resource group to hold all the Azure resources required for this project.  
 In order to create a resources group please follow the steps described [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal#create-resource-groups).
