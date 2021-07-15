@@ -184,7 +184,7 @@ To run it, execute the following command from the `arm` directory, after replaci
 values specific to the environment where the deployment will take place:
 
 ```
-./deploy.sh --workspace-name "<synapse-workspace-name>" --spark-pool-name "<spark-pool-name>" --start-date "YYYY-MM-DDTHH:mm:ssZ" --key-vault-endpoint "https://<keyvault-name>.vault.azure.net/" --storage-account-endpoint "<storage-account-endpoint>"  --service-principal-tenant-id "<tenant-id>"--service-principal-id "<sp-id>" --dedicated-sql-pool-endpoint "<dedicated-sql-pool-endpoint>" --sql-pool-database-name "<database-name>" --azure-ai-endpoint "<azure-ai-endpoint>" --m365-extraction-group-id "<group_id>"
+./deploy.sh --workspace-name "<synapse-workspace-name>" --spark-pool-name "<spark-pool-name>" --start-date "YYYY-MM-DDTHH:mm:ssZ" --key-vault-endpoint "https://<keyvault-name>.vault.azure.net/" --storage-account-endpoint "https://<storage-account-name>.blob.core.windows.net/"  --service-principal-tenant-id "<tenant-id>" --service-principal-id "<sp-id>" --dedicated-sql-pool-endpoint "<synapse-workspace-name>.sql.azuresynapse.net" --sql-pool-database-name "<dedicated-sql-pool-name>" --azure-ai-endpoint "<azure-ai-endpoint>" --m365-extraction-group-id "<group_id>"
 ```
 
 The script will perform `az login` for you, so you will be prompted to authenticate into Azure.
