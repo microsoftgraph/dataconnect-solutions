@@ -153,25 +153,29 @@ To share the reports with others you will also need an appropriate [license](htt
 
 
 ## Set up the Synapse data processing pipelines
-In order to start up the deployment log in to portal.azure.com and open an azure cloud shell:   
+To start up the deployment, log in to [https://portal.azure.com](https://portal.azure.com) and open a bash Azure Cloud Shell:
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
-Create an archive with the content of the  `arm/` [folder](./arm) and upload it using the upload functionality 
-in azure cloud shell:   
+Create an archive with the content of the  `./arm/` [folder](./arm) and upload it using the upload functionality 
+in Azure Cloud Shell:   
 ![azure_upload_files](./docs/azure_upload_files.png)
 
 After the zip archive is uploaded, unzip the archive using the following command:
 ```unzip arm.zip```
 
-### ARM deployment
-
-In order to deploy all the synapse components (linked services, pipelines, datasets, notebooks & triggers) run the 
-following command from the `arm` directory, after replacing the values of the parameters with the values specific 
-to the environment where the deployment will take place:
+This will provide you with the ARM template of each Synapse component that needs to be deployed.
+You would normally have to execute the appropriate [az synapse command](https://docs.microsoft.com/en-us/cli/azure/synapse?view=azure-cli-latest)
+specific for each entity type that needs to be deployed, and provide the ARM template of that component.
+Since this can be quite a tedious process, you are provided with a script that will deploy all the synapse components
+(linked services, pipelines, datasets, notebooks & triggers) for you.
+To run it, execute the following command from the `arm` directory, after replacing the values of the parameters with the 
+values specific to the environment where the deployment will take place:
 
 ```
 ./deploy.sh --workspace-name "<synapse-workspace-name>" --spark-pool-name "<spark-pool-name>" --start-date "YYYY-MM-DDTHH:mm:ssZ" --key-vault-endpoint "https://<keyvault-name>.vault.azure.net/" --storage-account-endpoint "<storage-account-endpoint>"  --service-principal-tenant-id "<tenant-id>"--service-principal-id "<sp-id>" --dedicated-sql-pool-endpoint "<dedicated-sql-pool-endpoint>" --sql-pool-database-name "<database-name>" --azure-ai-endpoint "<azure-ai-endpoint>" --m365-extraction-group-id "<group_id>"
 ```
+
+The script will perform `az login` for you, so you will be prompted to authenticate into Azure.
 
 ### Sql deployment
 In order to create/update the associated sql tables, open a sql editor on the "Tables" folder in Synapse workspace manager:  
