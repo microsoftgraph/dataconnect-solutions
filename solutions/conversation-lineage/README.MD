@@ -101,17 +101,6 @@ From *Text Analytics* service we'll use 2 provided api functions:
 - [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
 - [named entity recognition](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-entity-linking?tabs=version-3-1)
 
-### Create an Azure Key Vault
-Create a KeyVault meant to store any sensitive pieces of information meant to be used by the Synapse pipelines.
-
-Here is a list of all the secrets that have to be saved in Azure Key Vault and what their names **must** be:
-- The Azure Storage Account Key, using the name `storageAccountKey`
-- Synapse dedicated SQL pool credentials:
-    - username, using the name `jdbcUsername`
-    - secret password, using the name `jdbcPassword`
-- The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of 
-  the secret has to be `m365-reader-secret`
-
 ### Create an Azure Synapse workspace
 Create the Synapse workspace used to process all the data.
 For setting up a Synapse workspace, please follow the [official Synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
@@ -145,6 +134,19 @@ via Synapse triggers (described below).
 Please follow the next link to learn more about [Azure Synapse SQL architecture](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/overview-architecture)
 and about [dedicated SQL pools](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-overview-what-is).
 
+### Create an Azure Key Vault
+Create a KeyVault meant to store any sensitive pieces of information meant to be used by the Synapse pipelines.  
+To create the vault, follow [this guide](https://docs.microsoft.com/en-us/azure/key-vault/general/quick-create-portal).
+To add secrets to the vault, follow [this guide](https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal).
+
+Here is a list of all the secrets that have to be saved in Azure Key Vault and what their names **must** be:
+- The Azure Storage Account Key, using the name `storageAccountKey`
+- Synapse dedicated SQL pool credentials:
+  - username, using the name `jdbcUsername`
+  - secret password, using the name `jdbcPassword`
+- The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of
+  the secret has to be `m365-reader-secret`
+  
 ### Set up PowerBI
 To create, edit and visualize the final reports over the processed data, you will need to have [PowerBI Desktop](https://docs.microsoft.com/en-us/power-bi/fundamentals/desktop-what-is-desktop) 
 installed (either locally or on a Windows VM accessed via RDP).  
