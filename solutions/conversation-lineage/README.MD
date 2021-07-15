@@ -99,7 +99,8 @@ In order to create a resources group please follow the steps described [here](ht
 Create a Storage account meant to store the raw data ingested from Microsoft 365, as well as intermediate data resulting
 from transforming the input data.
 In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).  
-Now, grant the service principal created above a `Storage Blob Data Contributor` role for the Storage account.
+Now, grant the service principal created above a `Storage Blob Data Contributor` role for the Storage account, by following
+the steps described [here](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal?tabs=current).
 
 ### Create an Azure Cognitive Service
 Create an instance of Azure Cognitive Services meant to be used for sentiment analysis of interactions between users.
@@ -154,6 +155,7 @@ Here is a list of all the secrets that have to be saved in Azure Key Vault and w
   - secret password, using the name `jdbcPassword`
 - The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of
   the secret has to be `m365-reader-secret`
+- The Text Analytics Key, using the name `azure-ai-key`
   
 ### Set up PowerBI
 To create, edit and visualize the final reports over the processed data, you will need to have [PowerBI Desktop](https://docs.microsoft.com/en-us/power-bi/fundamentals/desktop-what-is-desktop) 
