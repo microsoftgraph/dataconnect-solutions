@@ -156,28 +156,22 @@ To share the reports with others you will also need an appropriate [license](htt
 In order to start up the deployment log in to portal.azure.com and open an azure cloud shell:   
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
-Select the necessary ARM template JSON files from the `./arm/End2EndMgdc101WithConvLineage/` [folder](./arm/End2EndMgdc101WithConvLineage) and upload them using
-the upload functionality in azure cloud shell:   
+Create an archive with the content of the  `arm/` [folder](./arm) and upload it using the upload functionality 
+in azure cloud shell:   
 ![azure_upload_files](./docs/azure_upload_files.png)
 
+After the zip archive is uploaded, unzip the archive using the following command:
+```unzip arm.zip```
 
-### Arm files deployment
-Once the files are uploaded, please execute the appropriate command specific for each entity type that needs to be deployed.   
-The documentation for Synapse deployment commands can be found [here](https://docs.microsoft.com/en-us/cli/azure/synapse?view=azure-cli-latest)
+### ARM deployment
 
-Example: in order to deploy a pipeline, run the following:
-```shell
-az synapse pipeline create --file @pipeline.json --name 'ConversationLineage' --workspace-name <Azure Synapse Workspace Name>
+In order to deploy all the synapse components (linked services, pipelines, datasets, notebooks & triggers) run the 
+following command from the `arm` directory, after replacing the values of the parameters with the values specific 
+to the environment where the deployment will take place:
+
 ```
-
-### Trigger deployment
-Synapse triggers are responsible with coordinating the processing of historical data, and the processing of future data on a scheduled basis.  
-In order to configure the Synapse triggers, please execute the appropriate trigger az commands.  
-Documentation for synapse trigger commands can be found [here](https://docs.microsoft.com/en-us/cli/azure/synapse/trigger?view=azure-cli-latest#az-synapse-trigger-create)
-
-```shell
-az synapse trigger create --workspace-name <Azure Synapse Workspace Name>  --name 'ConversationLineageTrigger' --file @trigger.json
-  ```
+./deploy.sh --workspace-name "<synapse-workspace-name>" --spark-pool-name "<spark-pool-name>" --start-date "YYYY-MM-DDTHH:mm:ssZ" --key-vault-endpoint "https://<keyvault-name>.vault.azure.net/" --storage-account-endpoint "<storage-account-endpoint>"  --service-principal-tenant-id "<tenant-id>"--service-principal-id "<sp-id>" --dedicated-sql-pool-endpoint "<dedicated-sql-pool-endpoint>" --sql-pool-database-name "<database-name>" --azure-ai-endpoint "<azure-ai-endpoint>" --m365-extraction-group-id "<group_id>"
+```
 
 ### Sql deployment
 In order to create/update the associated sql tables, open a sql editor on the "Tables" folder in Synapse workspace manager:  
