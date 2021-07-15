@@ -83,6 +83,14 @@ Therefore, you will need to create an Azure Active Directory app registration th
 11. Using the sidebar navigation for the application, select **Owners**.
 12. Ensure your account is listed as an owner for the application. If it isn't listed as an owner, add it.
 
+### Create an Azure AD group
+While ingesting data from M365 you have the option of retrieving the data for all users (having an Office 365 license),
+or only for a specific set of users. To achieve this, create an Azure AD security group called `MGDC101 Members`.  
+The steps required to create a group and add members to it are described [here](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-groups-create-azure-portal).  
+Once the group is created, add to it users for which the M365 data (profile, emails, calendar events, team chats) should
+be processed. The users must have an Office 365 license, for their data to be actually retrieved.  
+In the **Overview** page of the group, look for the **ObjectId** and copy its value as you will need it later.
+
 ### Create an Azure resource group
 Create a resource group to hold all the Azure resources required for this project.  
 In order to create a resources group please follow the steps described [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/manage-resource-groups-portal#create-resource-groups).
@@ -100,17 +108,6 @@ In order to set it up please follow the instructions from the official documenta
 From *Text Analytics* service we'll use 2 provided api functions:
 - [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
 - [named entity recognition](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-entity-linking?tabs=version-3-1)
-
-### Create an Azure Key Vault
-Create a KeyVault meant to store any sensitive pieces of information meant to be used by the Synapse pipelines.
-
-Here is a list of all the secrets that have to be saved in Azure Key Vault and what their names **must** be:
-- The Azure Storage Account Key, using the name `storageAccountKey`
-- Synapse dedicated SQL pool credentials:
-    - username, using the name `jdbcUsername`
-    - secret password, using the name `jdbcPassword`
-- The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of 
-  the secret has to be `m365-reader-secret`
 
 ### Create an Azure Synapse workspace
 Create the Synapse workspace used to process all the data.
@@ -145,6 +142,19 @@ via Synapse triggers (described below).
 Please follow the next link to learn more about [Azure Synapse SQL architecture](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/overview-architecture)
 and about [dedicated SQL pools](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-overview-what-is).
 
+### Create an Azure Key Vault
+Create a KeyVault meant to store any sensitive pieces of information meant to be used by the Synapse pipelines.  
+To create the vault, follow [this guide](https://docs.microsoft.com/en-us/azure/key-vault/general/quick-create-portal).
+To add secrets to the vault, follow [this guide](https://docs.microsoft.com/en-us/azure/key-vault/secrets/quick-create-portal).
+
+Here is a list of all the secrets that have to be saved in Azure Key Vault and what their names **must** be:
+- The Azure Storage Account Key, using the name `storageAccountKey`
+- Synapse dedicated SQL pool credentials:
+  - username, using the name `jdbcUsername`
+  - secret password, using the name `jdbcPassword`
+- The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of
+  the secret has to be `m365-reader-secret`
+  
 ### Set up PowerBI
 To create, edit and visualize the final reports over the processed data, you will need to have [PowerBI Desktop](https://docs.microsoft.com/en-us/power-bi/fundamentals/desktop-what-is-desktop) 
 installed (either locally or on a Windows VM accessed via RDP).  
