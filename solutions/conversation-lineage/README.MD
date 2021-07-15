@@ -188,12 +188,26 @@ values specific to the environment where the deployment will take place:
 The script will perform `az login` for you, so you will be prompted to authenticate into Azure.
 
 ### Sql deployment
-In order to create/update the associated sql tables, open a sql editor on the "Tables" folder in Synapse workspace manager:  
+In order to create/update the associated sql tables, open a sql editor on the "Tables" folder in Synapse workspace manager/Data tab:  
 ![create-tables-menu](./docs/sql_script_create_table_menu.png)
 
 Use the script located here [./sql/tables_creation.sql](./sql/tables_creation.sql) and execute it in Synapse workspace manager:  
 ![create-all-tables](./docs/sql_script_create_all_tables.png)
 
+
+#### Sql executing from synapse-develop tab
+
+You can also use the *develop* tab in synapse in order to run sql queries.
+In order to run a sql query from the *develop* tab, select the develop tab and from the upper right `+` icon select
+new sql script:  
+![./docs/sql_script_develop_new_sql_script.png](./docs/sql_script_develop_new_sql_script.png)
+
+It is important to specify that each time you run a sql command you have to select the **synapse dedicated pool** 
+where the query will run:
+![./docs/sql_script_run_select_pool.png](./docs/sql_script_run_select_pool.png)
+
+**Observation**: sql pools can be configured from the monitor tab in the azure synapse.
+![./docs/sql_script_pool_management.png](./docs/sql_script_pool_management.png)
 
 ### Limiting the size of the input data
 In order to minimize costs, you should consider keeping  the size of the input data reasonably small. This can be achieved
