@@ -3,7 +3,8 @@
 SPARK_POOL_NAME=""
 WORKSPACE_NAME=""
 START_DATE=""
-END_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"`
+END_DATE=`date -u +"%Y-%m-%dT%H:00:00Z"`
+INTERVAL=""
 KEY_VAULT_ENDPOINT=""
 STORAGE_ACCOUNT_ENDPOINT=""
 SP_TENANT_ID=""
@@ -31,11 +32,14 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-if ! [[ $START_DATE =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$ ]]
+if ! [[ $START_DATE =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0]{2}:[0]{2}Z$ ]]
 then 
-  echo "Date $START_DATE is in an invalid format. Expected format is YYYY-MM-DDTHH:mm:SS (e.g. 2020-01-01T06:00:00Z)."
+  echo "Date $START_DATE is in an invalid format. Expected format is YYYY-MM-DDTHH:00:00Z (e.g. 2020-01-01T06:00:00Z)."
   exit 1
 fi
+
+#Please note that this command will not work on Mac. However, it will work in Azure Cloud Shell
+INTERVAL=$(( ($(date -d $END_DATE +%s) - $(date -d $START_DATE +%s)) / 3600 ))
 
 if ! [[ "$KEY_VAULT_ENDPOINT" =~ '/'$ ]]; then 
   KEY_VAULT_ENDPOINT="$KEY_VAULT_ENDPOINT/"
@@ -183,15 +187,17 @@ az synapse pipeline create --file "$end2end_pipeline_definition" --name End2EndM
 
 echo "Deploying triggers"
 
-
+echo "Creating backfill trigger with start date $START_DATE, end date $END_DATE and interval $INTERVAL hours"
 backfill_trigger_definition=`cat ./End2EndMgdc101WithConvLineage/trigger/MGDC101_backfill_trigger.json`
 
 backfill_trigger_definition="${backfill_trigger_definition//<startTimeValue>/$START_DATE}"
 backfill_trigger_definition="${backfill_trigger_definition//<endTimeValue>/$END_DATE}"
+backfill_trigger_definition="${backfill_trigger_definition//<intervalValue>/$INTERVAL}"
 
 az synapse trigger create --file "$backfill_trigger_definition" --name MGDC101_backfill_trigger --workspace-name "$WORKSPACE_NAME"
 
 
+echo "Creating recurring trigger with start date $END_DATE, no end date and interval 24 hours"
 recurring_trigger_definition=`cat ./End2EndMgdc101WithConvLineage/trigger/MGDC101_recurring_trigger.json`
 
 recurring_trigger_definition="${recurring_trigger_definition//<startTimeValue>/$END_DATE}"
