@@ -186,6 +186,11 @@ To share the reports with others you will also need an appropriate [license](htt
 To start up the deployment, log in to [https://portal.azure.com](https://portal.azure.com) and open a bash Azure Cloud Shell:
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
+*Observation* First time when you open it, azure will display the following window requesting permission 
+to create a temporary storage account where all the deployment files that the user uploads will be stored.
+![azure_cloud_storage_request](./docs/azure_cloud_storage_request.png)
+Click: **Create Storage** and proceed further.
+
 Create an archive with the content of the  `./arm/` [folder](./arm) and upload it using the upload functionality 
 in Azure Cloud Shell:   
 ![azure_upload_files](./docs/azure_upload_files.png)
