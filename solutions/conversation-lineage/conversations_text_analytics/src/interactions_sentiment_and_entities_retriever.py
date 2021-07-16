@@ -68,7 +68,7 @@ def retrieve_interactions():
         sender_domain = sender_mail.split("@")[1].strip()
         recipient_addresses = recipient_addresses_list[:min(MAX_NUMBER_OF_RECIPIENTS, len(recipient_addresses_list))]
         recipient_names = recipient_names_list[:min(MAX_NUMBER_OF_RECIPIENTS, len(recipient_names_list))]
-        recipient_domains = list(map(lambda mail: mail.split("@")[1].strip(), recipient_addresses))
+        recipient_domains = list(map(lambda mail:  mail.split("@")[1].strip() if mail is not None and "@" in mail else "" , recipient_addresses))
 
         return {
             "sender_name": sender_name,
