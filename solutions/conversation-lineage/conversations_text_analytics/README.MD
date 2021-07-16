@@ -208,6 +208,20 @@ Usage example for azure-ai-textanalytics:
     ```  
   - more information about the usage of the cognitive services library can be found here:[Azure Text Analytics](https://azure.microsoft.com/en-us/services/cognitive-services/text-analytics/#features)
 
+### Azure API Notes & Limitations
+
+The API communicates using a JSON format
+
+JSON documents in the request body typically include an ID, text, and language code
+
+Maximum size of a single document: 5,120 characters
+
+Maximum size of a single document: 125K characters
+
+Applies to Sentiment Analysis, Opinion Mining, and Key Phrase Extraction
+
+The limit is 5 for Named Entity Recognition and Entity Linking
+
 
 ## Deployment on azure synapse
 

@@ -1,12 +1,20 @@
 # Report Pages in PowerBI presentation
 
 ## Table of contents
+- [Plugins used](#plugins-used)
 - [Conversation Lineage report](#conversation-lineage-report)
 - [Dev101](#dev101-report)
 - [Mails Management](#mails-management)
 - [Are mails read](#are-mails-read)
 - [Who interacts with whom?](#who-interacts-with-whom)
 
+
+# Plugins used
+
+The folloing plugins were added from [App Source](https://appsource.microsoft.com/en-us/marketplace/apps):
+- [Word Cloud from Microsoft](https://appsource.microsoft.com/en-us/product/power-bi-visuals/wa104380752?tab=overview)   
+- [Tornado Chart from Microsoft](https://appsource.microsoft.com/en-us/product/power-bi-visuals/wa104380768?tab=overview)  
+- [Force-Directed Graph from Microsoft](https://appsource.microsoft.com/en-us/product/power-bi-visuals/wa104380752?tab=overview)  
 
 # All report pages
 Here are all the pages from the report.

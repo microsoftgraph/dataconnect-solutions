@@ -186,6 +186,11 @@ To share the reports with others you will also need an appropriate [license](htt
 To start up the deployment, log in to [https://portal.azure.com](https://portal.azure.com) and open a bash Azure Cloud Shell:
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
+*Observation* First time when you open it, azure will display the following window requesting permission 
+to create a temporary storage account where all the deployment files that the user uploads will be stored.
+![azure_cloud_storage_request](./docs/azure_cloud_storage_request.png)
+Click: **Create Storage** and proceed further.
+
 Create an archive with the content of the  `./arm/` [folder](./arm) and upload it using the upload functionality 
 in Azure Cloud Shell:   
 ![azure_upload_files](./docs/azure_upload_files.png)
@@ -202,8 +207,23 @@ To run it, execute the following command from the `arm` directory, after replaci
 values specific to the environment where the deployment will take place:
 
 ```
-./deploy.sh --workspace-name "<synapse-workspace-name>" --spark-pool-name "<spark-pool-name>" --start-date "YYYY-MM-DDTHH:mm:ssZ" --key-vault-endpoint "https://<keyvault-name>.vault.azure.net/" --storage-account-endpoint "https://<storage-account-name>.blob.core.windows.net/"  --service-principal-tenant-id "<tenant-id>" --service-principal-id "<sp-id>" --dedicated-sql-pool-endpoint "<synapse-workspace-name>.sql.azuresynapse.net" --sql-pool-database-name "<dedicated-sql-pool-name>" --azure-ai-endpoint "<azure-ai-endpoint>" --m365-extraction-group-id "<group_id>"
+./deploy.sh --workspace-name "<synapse-workspace-name>" --spark-pool-name "<spark-pool-name>" --start-date "YYYY-MM-DD" --key-vault-endpoint "https://<keyvault-name>.vault.azure.net/" --storage-account-endpoint "https://<storage-account-name>.blob.core.windows.net/"  --service-principal-tenant-id "<tenant-id>" --service-principal-id "<sp-id>" --dedicated-sql-pool-endpoint "<synapse-workspace-name>.sql.azuresynapse.net" --sql-pool-database-name "<dedicated-sql-pool-name>" --azure-ai-endpoint "<azure-ai-endpoint>" --m365-extraction-group-id "<group_id>"
 ```
+The values for the parameters should be as follows, for: 
+- `--workspace-name`, the name of the Synapse Workspace create at [this step](#create-an-azure-synapse-workspace)
+- `--spark-pool-name`, the name of the Synapse Spark pol create at [this step](#create-a-synapse-spark-pool)
+- `--start-date`, the start date of the backfill trigger (trigger that processes data starting from given start date, 
+to current date). the format of the date has to be `YYYY-MM-DDTHH:00:00Z` (e.g. 2020-01-01T06:00:00Z)
+- `--key-vault-endpoint`, the url of the Key Vault service create at [this step](#create-an-azure-key-vault)
+- `--storage-account-endpoint`, the url of the Storage Account create at [this step](#create-an-azure-storage-account)
+- `--service-principal-tenant-id`, the tenant id of the service principal create at [this step](#create-an-azure-ad-application)
+- `--service-principal-id`, the application id of the service principal create at [this step](#create-an-azure-ad-application)
+- `--dedicated-sql-pool-endpoint`, can be found as "Dedicated SQL endpoint", on the "Overview" page of the Synapse Workspace
+ resource create at [this step](#create-an-azure-synapse-workspace)
+- `--sql-pool-database-name`, the name of the Synapse Dedicated Sql Pool resource, create at [this step](#create-a-synapse-dedicated-sql-pool)
+- `--azure-ai-endpoint`, the endpoint of the Text Analytics resource created at [this step](#create-an-azure-cognitive-service)
+- `--m365-extraction-group-id`, the Object Id of the group create at [this step](#create-an-azure-ad-group)
+
 
 The script will perform `az login` for you, so you will be prompted to authenticate into Azure.
 

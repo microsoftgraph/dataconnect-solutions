@@ -130,30 +130,7 @@
                 ""
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 49,
-                            "statement_id": 1,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-06T11:54:27.6827549Z",
-                            "session_start_time": "2021-07-06T11:54:27.7144244Z",
-                            "execution_start_time": "2021-07-06T11:55:05.5442999Z",
-                            "execution_finish_time": "2021-07-06T11:55:09.8038319Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 49, 1, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "defined class GdcBody\ndefined class GdcEmailAddressFields\ndefined class GdcSender\ndefined class GdcFrom\ndefined class EmailAddress\ndefined class RowInformation\ndefined class GdcEmail\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 1
         },
         {
@@ -177,30 +154,7 @@
                 "val reflection_schema: StructType = ScalaReflection.schemaFor[GdcEmail].dataType.asInstanceOf[StructType]"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 49,
-                            "statement_id": 2,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-06T11:55:34.2862941Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-06T11:55:34.3799041Z",
-                            "execution_finish_time": "2021-07-06T11:55:36.4531137Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 49, 2, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "import org.apache.spark.sql.catalyst.ScalaReflection\nimport org.apache.spark.sql.types.StructType\nimport org.apache.spark.sql.{Dataset, SaveMode, SparkSession}\nreflection_schema: org.apache.spark.sql.types.StructType = StructType(StructField(Id,StringType,true), StructField(CreatedDateTime,StringType,true), StructField(LastModifiedDateTime,StringType,true), StructField(ChangeKey,StringType,true), StructField(Categories,ArrayType(StringType,true),true), StructField(ReceivedDateTime,StringType,true), StructField(SentDateTime,StringType,true), StructField(HasAttachments,BooleanType,true), StructField(InternetMessageId,StringType,true), StructField(Subject,StringType,true), StructField(Importance,StringType,true), StructField(ParentFolderId,StringType,true), StructField(ConversationId,StringType,true), StructField(IsDeliveryReceiptRequested,BooleanType,true), StructField(IsReadReceiptRequested,BooleanType,true), StructField(IsRead,BooleanType,true..."
-                }
-            ],
+            "outputs": [],
             "execution_count": 2
         },
         {
@@ -221,30 +175,7 @@
                 "val emailsPath =  s\"abfss://$inputContainer@$storageAccountName.dfs.core.windows.net/$inputFolderPath\""
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 49,
-                            "statement_id": 3,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-06T11:55:39.3740378Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-06T11:55:39.4605898Z",
-                            "execution_finish_time": "2021-07-06T11:55:41.5269317Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 49, 3, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "inputContainer: String = emails\nstorageAccountName: String = mgdc101storage\ninputFolderPath: String = m365_emails_json\nemailsPath: String = abfss://emails@mgdc101storage.dfs.core.windows.net/m365_emails_json\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 3
         },
         {
@@ -265,30 +196,7 @@
                 "spark.conf.set(s\"fs.azure.account.key.$storageAccountName.blob.core.windows.net\",storageAccountKey)"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 49,
-                            "statement_id": 5,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-06T11:57:33.6442405Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-06T11:57:33.7682221Z",
-                            "execution_finish_time": "2021-07-06T11:57:35.8355705Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 49, 5, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": ""
-                }
-            ],
+            "outputs": [],
             "execution_count": 5
         },
         {
@@ -310,30 +218,7 @@
                 "val emailDf: DataFrame = spark.sqlContext.read.schema(reflection_schema).json(emailsPath)"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 49,
-                            "statement_id": 6,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-06T11:57:51.9640337Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-06T11:57:52.0633106Z",
-                            "execution_finish_time": "2021-07-06T11:57:58.6182335Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 49, 6, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "import org.apache.spark.sql.DataFrame\nemailDf: org.apache.spark.sql.DataFrame = [Id: string, CreatedDateTime: string ... 31 more fields]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 6
         },
         {
@@ -355,30 +240,7 @@
                 "val emailDs: Dataset[GdcEmail] = emailDf.as[GdcEmail]"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 49,
-                            "statement_id": 7,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-06T11:58:05.2326906Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-06T11:58:05.3373496Z",
-                            "execution_finish_time": "2021-07-06T11:58:07.4019905Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 49, 7, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "import org.apache.spark.sql.Dataset\nemailDs: org.apache.spark.sql.Dataset[GdcEmail] = [Id: string, CreatedDateTime: string ... 31 more fields]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 7
         },
         {
@@ -424,30 +286,7 @@
                 "                            )"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 49,
-                            "statement_id": 8,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-06T11:58:13.0486433Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-06T11:58:13.1459524Z",
-                            "execution_finish_time": "2021-07-06T11:58:15.2611307Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 49, 8, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "defined class GdcEmailFlattened\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 8
         },
         {
@@ -512,30 +351,7 @@
                 "}"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 49,
-                            "statement_id": 18,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-06T12:08:52.3987831Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-06T12:08:52.4947148Z",
-                            "execution_finish_time": "2021-07-06T12:08:54.5619061Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 49, 18, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "emailAddressRegex: scala.util.matching.Regex = (?i)\\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}\\b\nextractEmailAddressFromAddressField: (stringField: String)String\ndefined object GdcEmailFlattened\nwarning: previously defined class GdcEmailFlattened is not a companion to object GdcEmailFlattened.\nCompanions must be defined together; you may wish to use :paste mode for this.\ngdcEmailFlatten: (gdcEmail: GdcEmail)Seq[GdcEmailFlattened]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 18
         },
         {
@@ -556,30 +372,7 @@
                 "val flattenedEmails = emailDs.flatMap(flattenGdcEmail)"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 49,
-                            "statement_id": 19,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-06T12:08:58.7095932Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-06T12:08:58.7934085Z",
-                            "execution_finish_time": "2021-07-06T12:09:00.8542358Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 49, 19, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "flattenedEmails: org.apache.spark.sql.Dataset[GdcEmailFlattened] = [Id: string, CreatedDateTime: string ... 22 more fields]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 19
         },
         {
@@ -601,30 +394,7 @@
                 "flattenedEmails.write.mode(SaveMode.Overwrite).parquet(destinationFilePath)"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 49,
-                            "statement_id": 21,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-06T12:09:31.5711588Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-06T12:09:31.6624101Z",
-                            "execution_finish_time": "2021-07-06T12:09:37.8339051Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 49, 21, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "outputContainer: String = emails\nstorageAccountName: String = mgdc101storage\noutputFolderPath: String = m365_emails_parquet_raw_test\ndestinationFilePath: String = abfss://emails@mgdc101storage.dfs.core.windows.net/m365_emails_parquet_raw_test\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 21
         }
     ]
