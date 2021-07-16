@@ -663,7 +663,7 @@
                             "type": "string"
                         },
                         "usersInputContainer": {
-                            "value": "mgdc101-employee-profiles",
+                            "value": "users",
                             "type": "string"
                         },
                         "storageAccountName": {

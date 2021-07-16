@@ -1,13 +1,15 @@
 # Synapse SQL Scripts
-Scripts in these folder are used for either **creating** objects, **checking** objects or **select** from objects.
+Scripts in this folder are used for either **creating** database objects, **checking** objects or **select** from objects.
 
-**Important**: When saving one such script on Synapse, don't forget to connect to `synapsededicatesqlpool`, as shown in the picture, otherwise your scripts will not run in the proper context.
-![](../docs/synapse_sql_pool.png)
+**Important**: When saving one such script on Synapse, don't forget to connect to `synapsededicatesqlpool`, 
+as shown in the picture, otherwise your scripts will not run in the proper context.
+![Selecting the SQL pool for a script](../docs/synapse_sql_pool.png)
 
 ## Internal terminology
-**Raw tables** = (All) Tables that are created. They're called *raw*, since they're abstractized to views and not used directly  by consumers.
+**Raw tables** = (All) Tables that are created. They're called *raw*, since they're abstracted to views, and not used directly by consumers.
 
-**Public views** = Views that are exposed to endpoints (currently, PowerBI is the sole consumer of this data). This adds much needed decoupling between the raw tables (which might get changed with time and the evolution of the data pipelines) and the data that is imported in PowerBI.
+**Public views** = Views that are exposed to endpoints (currently, PowerBI is the sole consumer of this data). This adds much needed 
+decoupling between the raw tables (which might get changed over time and with the evolution of the data pipelines) and the data that is imported in PowerBI.
 
 **Pipeline / private views** = Views that are used in data pipelines, but are **not** to be used by consumers (PowerBI).
 

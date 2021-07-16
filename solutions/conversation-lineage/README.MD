@@ -98,23 +98,23 @@ In order to create a resources group please follow the steps described [here](ht
 ### Create an Azure Storage account
 Create a Storage account meant to store the raw data ingested from Microsoft 365, as well as intermediate data resulting
 from transforming the input data.
-In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).  
+In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/storage/common/storage-account-create?tabs=azure-portal).
 
 When you arrive at the "Data protection" configuration step, disable all soft delete options as presented in the image below.  
 ![disable soft delete](./docs/environment_setup/disable_storage_soft_delete.png)
- 
-After the storage account is created, six blob containers have to be created with the following names: `events`, `logs`,
-`managers`, `mgdc101-emails`, `mgdc101-employee-profiles` and `team-chats`. The information on how to create a container 
-can be found [here](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal#create-a-container).
+
+After the storage account is created, six blob containers have to be created with the following names: `emails`, 
+`events`, `logs`, `managers`, `users` and `team-chats`.  
+The information on how to create a container can be found [here](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal#create-a-container).
 
 Now, grant to the service principal created above and to the Synapse Workspace (that you will create), the
 `Storage Blob Data Contributor` role for the Storage account, by following the steps described [here](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal?tabs=current).
 
 ### Create an Azure Cognitive Service
 Create an instance of Azure Cognitive Services meant to be used for sentiment analysis of interactions between users.
-From *Azure Cognitive Services* we'll use *Text Analytics* service.  
+From *Azure Cognitive Services* we'll use the *Text Analytics* service.  
 In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api?tabs=synchronous#create-a-text-analytics-resource)
-From *Text Analytics* service we'll use 2 provided api functions:
+From *Text Analytics* service we'll use 2 provided API functions:
 - [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
 - [named entity recognition](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-entity-linking?tabs=version-3-1)
 
