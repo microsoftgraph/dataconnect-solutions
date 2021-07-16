@@ -210,22 +210,28 @@ values specific to the environment where the deployment will take place:
 ./deploy.sh --workspace-name "<synapse-workspace-name>" --spark-pool-name "<spark-pool-name>" --start-date "YYYY-MM-DD" --key-vault-endpoint "https://<keyvault-name>.vault.azure.net/" --storage-account-endpoint "https://<storage-account-name>.blob.core.windows.net/"  --service-principal-tenant-id "<tenant-id>" --service-principal-id "<sp-id>" --dedicated-sql-pool-endpoint "<synapse-workspace-name>.sql.azuresynapse.net" --sql-pool-database-name "<dedicated-sql-pool-name>" --azure-ai-endpoint "<azure-ai-endpoint>" --m365-extraction-group-id "<group_id>"
 ```
 The values for the parameters should be as follows, for: 
-- `--workspace-name`, the name of the Synapse Workspace create at [this step](#create-an-azure-synapse-workspace)
-- `--spark-pool-name`, the name of the Synapse Spark pol create at [this step](#create-a-synapse-spark-pool)
-- `--start-date`, the start date of the backfill trigger (trigger that processes data starting from given start date, 
-to current date). the format of the date has to be `YYYY-MM-DDTHH:00:00Z` (e.g. 2020-01-01T06:00:00Z)
-- `--key-vault-endpoint`, the url of the Key Vault service create at [this step](#create-an-azure-key-vault)
-- `--storage-account-endpoint`, the url of the Storage Account create at [this step](#create-an-azure-storage-account)
-- `--service-principal-tenant-id`, the tenant id of the service principal create at [this step](#create-an-azure-ad-application)
-- `--service-principal-id`, the application id of the service principal create at [this step](#create-an-azure-ad-application)
-- `--dedicated-sql-pool-endpoint`, can be found as "Dedicated SQL endpoint", on the "Overview" page of the Synapse Workspace
- resource create at [this step](#create-an-azure-synapse-workspace)
-- `--sql-pool-database-name`, the name of the Synapse Dedicated Sql Pool resource, create at [this step](#create-a-synapse-dedicated-sql-pool)
+- `--workspace-name`, the name of the Synapse Workspace created at [this step](#create-an-azure-synapse-workspace)
+- `--spark-pool-name`, the name of the Synapse Spark pool created at [this step](#create-a-synapse-spark-pool)
+- `--start-date`, the start date and hour of day in UTC, of the backfill trigger (trigger that processes historical data
+  starting from given start date, to the current date). The format of the date has to be `YYYY-MM-DDTHH:00:00Z` (e.g. `2020-01-01T06:00:00Z`)
+- `--key-vault-endpoint`, the URL of the Key Vault service created at [this step](#create-an-azure-key-vault)
+- `--storage-account-endpoint`, the url of the Storage Account created at [this step](#create-an-azure-storage-account)
+- `--service-principal-tenant-id`, the tenant id of the service principal created at [this step](#create-an-azure-ad-application)
+- `--service-principal-id`, the application id of the service principal created at [this step](#create-an-azure-ad-application)
+- `--dedicated-sql-pool-endpoint`, can be found as "Dedicated SQL endpoint", on the "Overview" page of the Synapse Studio created at [this step](#create-an-azure-synapse-workspace)
+- `--sql-pool-database-name`, the name of the Synapse Dedicated Sql Pool resource, created at [this step](#create-a-synapse-dedicated-sql-pool)
 - `--azure-ai-endpoint`, the endpoint of the Text Analytics resource created at [this step](#create-an-azure-cognitive-service)
-- `--m365-extraction-group-id`, the Object Id of the group create at [this step](#create-an-azure-ad-group)
-
+- `--m365-extraction-group-id`, the Object Id of the group created at [this step](#create-an-azure-ad-group)
 
 The script will perform `az login` for you, so you will be prompted to authenticate into Azure.
+
+The pipelines created by the script are orchestrated by Synapse triggers. One trigger is responsible with populating
+all the historical data from a given starting date and time, up to the start of the current hour.  
+Starting from that point, a second, recurring trigger, will process new data that will arrive in the future, by running
+every 24 hours and handling the last day's data.
+
+The deployment script will create this triggers, but they will be stopped. You will have to go to the **Manage** menu,
+select **Triggers** and then activate each of the two triggers by pressing the **Activate** triangle button.
 
 
 #### Creating SQL entities
@@ -271,8 +277,7 @@ processed. This will result in smaller pipeline execution durations, and in smal
 #### Limit the time span of the processed data
 The application processes email, calendar events and team chats data sent between users. Each such interaction occurred
 at a certain point in time. The pipelines process all such events from a starting point (in the past), up to the current
-time (to be more specific, up to the start of the current hour; from that point, new data coming in will be processed in 
-daily batches, every 24 hours).  
+time.  
 By selecting a starting point that is not very far in the past (but far enough to provide meaningful results), fewer data 
 will be processed.
 
