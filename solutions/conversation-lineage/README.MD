@@ -206,7 +206,7 @@ values specific to the environment where the deployment will take place:
 ```
 The values for the parameters should be as follows, for: 
 - `--workspace-name`, the name of the Synapse Workspace create at [this step](#create-an-azure-synapse-workspace)
-- `--spark-pool-name`, the name of the Synapse Spark pol create at [this step](#create-a-synapse-dedicated-sql-pool)
+- `--spark-pool-name`, the name of the Synapse Spark pol create at [this step](#create-a-synapse-spark-pool)
 - `--start-date`, the start date of the backfill trigger (trigger that processes data starting from given start date, 
 to current date). the format of the date has to be `YYYY-MM-DD`
 - `--key-vault-endpoint`, the url of the Key Vault service create at [this step](#create-an-azure-key-vault)
