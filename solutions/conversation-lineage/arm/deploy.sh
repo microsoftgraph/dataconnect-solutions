@@ -134,7 +134,10 @@ echo "Deploying pipelines ... "
 
 # create ConversationLineage pipeline
 
-az synapse pipeline create --file @./End2EndMgdc101WithConvLineage/pipeline/ConversationLineage.json --name ConversationLineage --workspace-name "$WORKSPACE_NAME"
+conversation_lineage_pipeline_definition=`cat ./End2EndMgdc101WithConvLineage/pipeline/ConversationLineage.json`
+conversation_lineage_pipeline_definition="${conversation_lineage_pipeline_definition//<key_vault_endpoint>/$KEY_VAULT_ENDPOINT}"
+
+az synapse pipeline create --file "$conversation_lineage_pipeline_definition" --name ConversationLineage --workspace-name "$WORKSPACE_NAME"
 
 # create PrepareUsersData pipeline
 

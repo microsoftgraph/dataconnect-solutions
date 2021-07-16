@@ -11,7 +11,7 @@
             "location": {
                 "type": "AzureBlobStorageLocation",
                 "folderPath": "m365_emails_parquet",
-                "container": "mgdc101-emails"
+                "container": "emails"
             },
             "compressionCodec": "snappy"
         },

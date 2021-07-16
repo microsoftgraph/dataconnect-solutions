@@ -101,7 +101,7 @@
                 {
                     "name": "stdout",
                     "output_type": "stream",
-                    "text": "storageAccountKey: String = y+ltmLxAIVX9XcoCQx97vdJDR6t9048volUK/oxrg2XprBQBA6J9EFhj/gdYeDb0XH07Fy/FSKTb3OYiZWhbmQ==\nusersInputContainer: String = mgdc101-employee-profiles\nstorageAccountName: String = mgdc101storage\nusersInputFolderPath: String = m365_users_json\nmanagerInputContainer: String = managers\nmanagerInputFolderPath: String = m365_managers_json\njdbcHostname: String = mgdc101synapse.sql.azuresynapse.net\njdbcPort: Int = 1433\njdbcDatabase: String = SynapseDedicatedSqlPool\njdbcUsername: String = contosoadmin\njdbcPassword: String = pYf!OY7ILQhS\n"
+                    "text": "storageAccountKey: String = y+ltmLxAIVX9XcoCQx97vdJDR6t9048volUK/oxrg2XprBQBA6J9EFhj/gdYeDb0XH07Fy/FSKTb3OYiZWhbmQ==\nusersInputContainer: String = users\nstorageAccountName: String = mgdc101storage\nusersInputFolderPath: String = m365_users_json\nmanagerInputContainer: String = managers\nmanagerInputFolderPath: String = m365_managers_json\njdbcHostname: String = mgdc101synapse.sql.azuresynapse.net\njdbcPort: Int = 1433\njdbcDatabase: String = SynapseDedicatedSqlPool\njdbcUsername: String = contosoadmin\njdbcPassword: String = pYf!OY7ILQhS\n"
                 }
             ],
             "execution_count": 18
@@ -336,7 +336,7 @@
                 {
                     "name": "stdout",
                     "output_type": "stream",
-                    "text": "usersDataInputPath: String = abfss://mgdc101-employee-profiles@mgdc101storage.dfs.core.windows.net/m365_users_json\n"
+                    "text": "usersDataInputPath: String = abfss://users@mgdc101storage.dfs.core.windows.net/m365_users_json\n"
                 }
             ],
             "execution_count": 6
