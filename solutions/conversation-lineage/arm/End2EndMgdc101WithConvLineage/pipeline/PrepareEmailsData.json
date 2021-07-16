@@ -297,7 +297,7 @@
                             "type": "string"
                         },
                         "inputContainer": {
-                            "value": "mgdc101-emails",
+                            "value": "emails",
                             "type": "string"
                         },
                         "storageAccountName": {
@@ -309,7 +309,7 @@
                             "type": "string"
                         },
                         "outputContainer": {
-                            "value": "mgdc101-emails",
+                            "value": "emails",
                             "type": "string"
                         },
                         "outputFolderPath": {

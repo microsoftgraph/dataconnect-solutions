@@ -11,7 +11,7 @@
             "location": {
                 "type": "AzureBlobStorageLocation",
                 "folderPath": "m365_emails_json",
-                "container": "mgdc101-emails"
+                "container": "emails"
             }
         }
     },
