@@ -74,25 +74,7 @@
                 "sql_server_name = \"\""
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": null,
-                            "session_id": null,
-                            "statement_id": null,
-                            "state": "session_starting",
-                            "livy_statement_state": null,
-                            "queued_time": "2021-07-12T11:36:16.6717878Z",
-                            "session_start_time": "2021-07-12T11:36:16.6984946Z",
-                            "execution_start_time": null,
-                            "execution_finish_time": null
-                        },
-                        "text/plain": "StatementMeta(, , , SessionStarting, )"
-                    }
-                }
-            ],
+            "outputs": [],
             "execution_count": 1
         },
         {
@@ -362,25 +344,7 @@
                 ""
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": null,
-                            "session_id": null,
-                            "statement_id": null,
-                            "state": "waiting",
-                            "livy_statement_state": null,
-                            "queued_time": "2021-07-12T11:36:16.8603944Z",
-                            "session_start_time": null,
-                            "execution_start_time": null,
-                            "execution_finish_time": null
-                        },
-                        "text/plain": "StatementMeta(, , , Waiting, )"
-                    }
-                }
-            ],
+            "outputs": [],
             "execution_count": null
         }
     ]

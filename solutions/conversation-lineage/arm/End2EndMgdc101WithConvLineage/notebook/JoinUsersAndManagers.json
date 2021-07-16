@@ -80,30 +80,7 @@
                 "val jdbcPassword = \"\""
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 18,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:02:58.4046964Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:02:58.5153044Z",
-                            "execution_finish_time": "2021-07-07T09:03:00.6068122Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 18, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "storageAccountKey: String = y+ltmLxAIVX9XcoCQx97vdJDR6t9048volUK/oxrg2XprBQBA6J9EFhj/gdYeDb0XH07Fy/FSKTb3OYiZWhbmQ==\nusersInputContainer: String = users\nstorageAccountName: String = mgdc101storage\nusersInputFolderPath: String = m365_users_json\nmanagerInputContainer: String = managers\nmanagerInputFolderPath: String = m365_managers_json\njdbcHostname: String = mgdc101synapse.sql.azuresynapse.net\njdbcPort: Int = 1433\njdbcDatabase: String = SynapseDedicatedSqlPool\njdbcUsername: String = contosoadmin\njdbcPassword: String = pYf!OY7ILQhS\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 18
         },
         {
@@ -227,30 +204,7 @@
                 "}"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 4,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:00:55.6402147Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:00:55.7658244Z",
-                            "execution_finish_time": "2021-07-07T09:00:57.846862Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 4, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "defined class UserDetails\ndefined class UserManager\ndefined class EmployeeProfile\ndefined object EmployeeProfile\nwarning: previously defined class EmployeeProfile is not a companion to object EmployeeProfile.\nCompanions must be defined together; you may wish to use :paste mode for this.\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 4
         },
         {
@@ -271,30 +225,7 @@
                 "spark.conf.set(s\"fs.azure.account.key.$storageAccountName.blob.core.windows.net\",storageAccountKey)"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 5,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:01:00.9103365Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:01:01.0064452Z",
-                            "execution_finish_time": "2021-07-07T09:01:03.0741667Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 5, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": ""
-                }
-            ],
+            "outputs": [],
             "execution_count": 5
         },
         {
@@ -315,30 +246,7 @@
                 "val usersDataInputPath = s\"abfss://$usersInputContainer@$storageAccountName.dfs.core.windows.net/$usersInputFolderPath\""
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 6,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:01:07.3459644Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:01:07.4361635Z",
-                            "execution_finish_time": "2021-07-07T09:01:09.4956483Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 6, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "usersDataInputPath: String = abfss://users@mgdc101storage.dfs.core.windows.net/m365_users_json\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 6
         },
         {
@@ -360,30 +268,7 @@
                 "var m365UsersDf: DataFrame = spark.read.json(usersDataInputPath)"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 7,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:01:11.7108305Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:01:11.8067569Z",
-                            "execution_finish_time": "2021-07-07T09:01:24.1867083Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 7, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "import org.apache.spark.sql.DataFrame\nm365UsersDf: org.apache.spark.sql.DataFrame = [aboutMe: string, accountEnabled: boolean ... 51 more fields]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 7
         },
         {
@@ -408,30 +293,7 @@
                 "\"puser\", \"ptenant\", \"pAdditionalInfo\", \"datarow\", \"userrow\", \"pagerow\")"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 8,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:01:26.457744Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:01:26.5548496Z",
-                            "execution_finish_time": "2021-07-07T09:01:28.6271173Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 8, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "m365UsersDf: org.apache.spark.sql.DataFrame = [aboutMe: string, birthday: string ... 30 more fields]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 8
         },
         {
@@ -452,30 +314,7 @@
                 "val m365UsersDs = m365UsersDf.as[UserDetails]"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 9,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:01:30.2354595Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:01:30.3293722Z",
-                            "execution_finish_time": "2021-07-07T09:01:32.3811359Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 9, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "m365UsersDs: org.apache.spark.sql.Dataset[UserDetails] = [aboutMe: string, birthday: string ... 30 more fields]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 9
         },
         {
@@ -496,30 +335,7 @@
                 "val managerDataInputPath = s\"abfss://$managerInputContainer@$storageAccountName.dfs.core.windows.net/$managerInputFolderPath\""
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 10,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:01:35.8354624Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:01:35.9293008Z",
-                            "execution_finish_time": "2021-07-07T09:01:37.9857161Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 10, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "managerDataInputPath: String = abfss://managers@mgdc101storage.dfs.core.windows.net/m365_managers_json\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 10
         },
         {
@@ -540,30 +356,7 @@
                 "val m365UsersManagersDf = spark.read.json(managerDataInputPath)"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 11,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:01:40.0916931Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:01:40.18332Z",
-                            "execution_finish_time": "2021-07-07T09:01:48.4428337Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 11, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "m365UsersManagersDf: org.apache.spark.sql.DataFrame = [accountEnabled: boolean, ageGroup: string ... 41 more fields]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 11
         },
         {
@@ -584,30 +377,7 @@
                 "val m365UsersManagersDs = m365UsersManagersDf.select(\"puser\", \"displayName\", \"mail\").as[UserManager]"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 12,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:01:50.6016667Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:01:50.6991305Z",
-                            "execution_finish_time": "2021-07-07T09:01:52.7598426Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 12, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "m365UsersManagersDs: org.apache.spark.sql.Dataset[UserManager] = [puser: string, displayName: string ... 1 more field]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 12
         },
         {
@@ -628,30 +398,7 @@
                 "val usersWithManagersDs = m365UsersDs.joinWith(m365UsersManagersDs, m365UsersDf(\"id\") === m365UsersManagersDs(\"puser\"), \"left\")"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 13,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:01:56.3195583Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:01:56.4101924Z",
-                            "execution_finish_time": "2021-07-07T09:01:58.4866826Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 13, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "usersWithManagersDs: org.apache.spark.sql.Dataset[(UserDetails, UserManager)] = [_1: struct<aboutMe: string, birthday: string ... 30 more fields>, _2: struct<puser: string, displayName: string ... 1 more field>]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 13
         },
         {
@@ -687,30 +434,7 @@
                 "    }"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 14,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:02:00.735479Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:02:00.8227664Z",
-                            "execution_finish_time": "2021-07-07T09:02:02.8854685Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 14, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "employeeProfilesDs: org.apache.spark.sql.Dataset[EmployeeProfile] = [aboutMe: string, birthday: string ... 32 more fields]\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 14
         },
         {
@@ -731,30 +455,7 @@
                 "val jdbcUrl = s\"jdbc:sqlserver://$jdbcHostname:$jdbcPort;database=$jdbcDatabase;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;\""
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 19,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:03:07.9456192Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:03:08.0374256Z",
-                            "execution_finish_time": "2021-07-07T09:03:10.0984315Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 19, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "jdbcUrl: String = jdbc:sqlserver://mgdc101synapse.sql.azuresynapse.net:1433;database=SynapseDedicatedSqlPool;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 19
         },
         {
@@ -786,30 +487,7 @@
                 "connectionProperties.put(\"password\", jdbcPassword)"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 20,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:03:11.6989229Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:03:11.7881096Z",
-                            "execution_finish_time": "2021-07-07T09:03:13.8433638Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 20, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "import java.util.Properties\nscope: String = https://database.windows.net/\ndriverClass: String = com.microsoft.sqlserver.jdbc.SQLServerDriver\nconnectionProperties: java.util.Properties = {}\nres17: Object = null\nres18: Object = null\nres19: Object = null\nres20: Object = null\nres21: Object = null\nres22: Object = null\nres23: Object = null\nres24: Object = null\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 20
         },
         {
@@ -831,30 +509,7 @@
                 "employeeProfilesDs.coalesce(1).write.mode(SaveMode.Append).jdbc(jdbcUrl, \"users\", connectionProperties)"
             ],
             "attachments": null,
-            "outputs": [
-                {
-                    "output_type": "display_data",
-                    "data": {
-                        "application/vnd.livy.statement-meta+json": {
-                            "spark_pool": "DefaultPool",
-                            "session_id": 65,
-                            "statement_id": 21,
-                            "state": "finished",
-                            "livy_statement_state": "available",
-                            "queued_time": "2021-07-07T09:03:17.3229376Z",
-                            "session_start_time": null,
-                            "execution_start_time": "2021-07-07T09:03:17.4157369Z",
-                            "execution_finish_time": "2021-07-07T09:03:29.7687504Z"
-                        },
-                        "text/plain": "StatementMeta(DefaultPool, 65, 21, Finished, Available)"
-                    }
-                },
-                {
-                    "name": "stdout",
-                    "output_type": "stream",
-                    "text": "import org.apache.spark.sql.SaveMode\n"
-                }
-            ],
+            "outputs": [],
             "execution_count": 21
         }
     ]
