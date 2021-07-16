@@ -3,16 +3,11 @@
 ## Table of contents
 - [Tutorial Overview](#tutorial-overview)
 - [Prerequisites](#prerequisites)
-- [Set up the Synapse data processing pipelines](#set-up-the-synapse-data-processing-pipelines)
-    - [Arm files deployment](#arm-files-deployment)
-    - [Trigger deployment](#trigger-deployment)
-    - [Sql deployment](#sql-deployment)
+- [Setting up the application](#setting-up-the-application)
 - [Architectural design](#architectural-design)
     - [Data Ingestion](#data-ingestion)
     - [Table Derivation](#table-derivation)  
     - [Sentiment and entities extraction from mails](#sentiment-and-entities-extraction-from-mails)
-    - [PowerBI presentation](#powerbi-presentation)
-
   
 ## Tutorial Overview
 This tutorial will provide you with an example of using [Graph Data Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview)
@@ -49,6 +44,8 @@ To complete this lab, you need the following:
 > A copy of email data is extracted from all users in an Office 365 tenant and copied to an Azure Blob Storage 
 > account that you maintain control over. Thus, you control who has access to the data within the Azure Blob Storage.
  
+## Setting up the application
+
 ### Set up Graph Data Connect
 For setting up Office 365 Tenant and enabling Graph Data Connect, please follow the steps from chapter `Excercise 1` 
 from this GDC [tutorial](https://github.com/microsoftgraph/msgraph-training-dataconnect/blob/master/Lab.md#exercise-1-setup-office-365-tenant-and-enable-microsoft-graph-data-connect)
@@ -115,7 +112,7 @@ Create an instance of Azure Cognitive Services meant to be used for sentiment an
 From *Azure Cognitive Services* we'll use the *Text Analytics* service.  
 In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api?tabs=synchronous#create-a-text-analytics-resource)
 
-*Observation*: when choosing the name of the service please select a name with a length of less then 15 characters. 
+*Observation*: when choosing the name of the service please select a name with a length of less than 15 characters. 
 
 From *Text Analytics* service we'll use 2 provided API functions:
 - [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
@@ -164,7 +161,8 @@ To add secrets to the vault, follow [this guide](https://docs.microsoft.com/en-u
 
 Here is a list of all the secrets that have to be saved in Azure Key Vault and what their names **must** be:
 - The Azure Storage Account Key, using the name `storageAccountKey`
-- Synapse dedicated SQL pool credentials (this are the credentials you were requested to enter while setting up the dedicated sql pool: `SQL Server admin login` and `SQL Password`):
+- Synapse dedicated SQL pool credentials (these are the credentials you were requested to enter while setting up the 
+  dedicated sql pool: `SQL Server admin login` and `SQL Password`):
   - username, using the name `jdbcUsername`
   - secret password, using the name `jdbcPassword`
 - The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of
@@ -182,16 +180,65 @@ To perform the installation, please follow [these steps](https://docs.microsoft.
 To share the reports with others you will also need an appropriate [license](https://docs.microsoft.com/en-us/power-bi/fundamentals/service-features-license-type).
 
 
+### Creating SQL entities
+The Synapse pipelines are responsible with transforming the data and exposing it to PowerBI for reporting. The end goal
+is to expose the data in tabular format, so that the data incorporates a known schema, and it can be efficiently queried. 
+As a consequence, the final data is stored in SQL tables. It is exposed to PowerBI via SQL views, built on top of those
+tables, to decouple the schema used by the pipelines from the schema exposed to PowerBI. Also, most intermediate 
+results of the transformations performed by the pipelines are also stored as SQL tables, in the SQL pool.  
+
+You will need to create all the database entities (tables, views, stored procedures) used by the pipelines, before
+actually creating the pipelines.
+To do this, you can use the **Develop** tab in Synapse Studio in order to run sql queries.
+In order to run a sql query from the **Develop** tab, open it and from the upper right `+` icon, select new **SQL script**
+![./docs/sql_script_develop_new_sql_script.png](./docs/sql_script_develop_new_sql_script.png)
+
+It is important to mention that each time you create a new SQL script, before running any SQL command, you have to select
+the dedicated SQL pool you created earlier (instead of the Built-in pool) in the **Connect To** section:
+![./docs/sql_script_run_select_pool.png](./docs/sql_script_run_select_pool.png)
+ 
+Once you've done this, copy the content of one of the files contain DDL statements (e.g. `create_tables.sql`,
+`create_views_public.sql`, `create_views_private.sql`) into the SQL script Synapse. Then hit the **Run** button and all
+the statements in the script will be run sequentially.
+
+Also, there is a stored procedure that has to be created manually.  
+The creation script is located here [./sql/stored_procedure.sql](./sql/stored_procedure.sql).
+Execute it in Synapse Studio, as you did previously for `create_tables.sql` script.
+
+> NOTE: SQL pools can be configured from the **Manage** tab in Synapse
+![./docs/sql_script_pool_management.png](./docs/sql_script_pool_management.png)
+
+More details about the SQL entities and about the SQL files provided to you can be found [here](./sql/README.md)
+
+
+### Limiting the size of the input data
+Before deploying the Synapse pipelines, in order to minimize costs, you should consider keeping  the size of the input 
+data reasonably small. This can be achieved via 2 mechanisms:
+
+#### Limit the number of users for which data is processed
+Only the data about and generated by the users that are members of the AD group [described earlier](#create-an-azure-ad-group)
+will be processed by the Synapse pipelines.  
+By providing a groups with a smaller number of members (but enough to provide meaningful results), fewer data will be
+processed. This will result in smaller pipeline execution durations, and in smaller costs (as smaller pool sizes can be used).
+
+#### Limit the time span of the processed data
+The application processes email, calendar events and team chats data sent between users. Each such interaction occurred
+at a certain point in time. The pipelines process all such events from a starting point (in the past), up to the current
+time.  
+By selecting a starting point that is not very far in the past (but far enough to provide meaningful results), fewer data
+will be processed.
+
+
 ## Set up the Synapse data processing pipelines
 To start up the deployment, log in to [https://portal.azure.com](https://portal.azure.com) and open a bash Azure Cloud Shell:
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
-*Observation* First time when you open it, azure will display the following window requesting permission 
+*Observation* First time when you open it, azure will display the following window requesting permission
 to create a temporary storage account where all the deployment files that the user uploads will be stored.
 ![azure_cloud_storage_request](./docs/azure_cloud_storage_request.png)
 Click: **Create Storage** and proceed further.
 
-Create an archive with the content of the  `./arm/` [folder](./arm) and upload it using the upload functionality 
+Create an archive with the content of the  `./arm/` [folder](./arm) and upload it using the upload functionality
 in Azure Cloud Shell:   
 ![azure_upload_files](./docs/azure_upload_files.png)
 
@@ -203,68 +250,45 @@ You would normally have to execute the appropriate [az synapse command](https://
 specific for each entity type that needs to be deployed, and provide the ARM template of that component.
 Since this can be quite a tedious process, you are provided with a script that will deploy all the synapse components
 (linked services, pipelines, datasets, notebooks & triggers) for you.
-To run it, execute the following command from the `arm` directory, after replacing the values of the parameters with the 
+To run it, execute the following command from the `arm` directory, after replacing the values of the parameters with the
 values specific to the environment where the deployment will take place:
 
 ```
 ./deploy.sh --workspace-name "<synapse-workspace-name>" --spark-pool-name "<spark-pool-name>" --start-date "YYYY-MM-DD" --key-vault-endpoint "https://<keyvault-name>.vault.azure.net/" --storage-account-endpoint "https://<storage-account-name>.blob.core.windows.net/"  --service-principal-tenant-id "<tenant-id>" --service-principal-id "<sp-id>" --dedicated-sql-pool-endpoint "<synapse-workspace-name>.sql.azuresynapse.net" --sql-pool-database-name "<dedicated-sql-pool-name>" --azure-ai-endpoint "<azure-ai-endpoint>" --m365-extraction-group-id "<group_id>"
 ```
-The values for the parameters should be as follows, for: 
-- `--workspace-name`, the name of the Synapse Workspace create at [this step](#create-an-azure-synapse-workspace)
-- `--spark-pool-name`, the name of the Synapse Spark pol create at [this step](#create-a-synapse-spark-pool)
-- `--start-date`, the start date of the backfill trigger (trigger that processes data starting from given start date, 
-to current date). the format of the date has to be `YYYY-MM-DDTHH:00:00Z` (e.g. 2020-01-01T06:00:00Z)
-- `--key-vault-endpoint`, the url of the Key Vault service create at [this step](#create-an-azure-key-vault)
-- `--storage-account-endpoint`, the url of the Storage Account create at [this step](#create-an-azure-storage-account)
-- `--service-principal-tenant-id`, the tenant id of the service principal create at [this step](#create-an-azure-ad-application)
-- `--service-principal-id`, the application id of the service principal create at [this step](#create-an-azure-ad-application)
-- `--dedicated-sql-pool-endpoint`, can be found as "Dedicated SQL endpoint", on the "Overview" page of the Synapse Workspace
- resource create at [this step](#create-an-azure-synapse-workspace)
-- `--sql-pool-database-name`, the name of the Synapse Dedicated Sql Pool resource, create at [this step](#create-a-synapse-dedicated-sql-pool)
+The values for the parameters should be as follows, for:
+- `--workspace-name`, the name of the Synapse Workspace created at [this step](#create-an-azure-synapse-workspace)
+- `--spark-pool-name`, the name of the Synapse Spark pool created at [this step](#create-a-synapse-spark-pool)
+- `--start-date`, the start date and hour of day in UTC, of the backfill trigger (trigger that processes historical data
+  starting from given start date, to the current date). The format of the date has to be `YYYY-MM-DDTHH:00:00Z` (e.g. `2020-01-01T06:00:00Z`)
+- `--key-vault-endpoint`, the URL of the Key Vault service created at [this step](#create-an-azure-key-vault)
+- `--storage-account-endpoint`, the url of the Storage Account created at [this step](#create-an-azure-storage-account)
+- `--service-principal-tenant-id`, the tenant id of the service principal created at [this step](#create-an-azure-ad-application)
+- `--service-principal-id`, the application id of the service principal created at [this step](#create-an-azure-ad-application)
+- `--dedicated-sql-pool-endpoint`, can be found as "Dedicated SQL endpoint", on the "Overview" page of the Synapse Studio created at [this step](#create-an-azure-synapse-workspace)
+- `--sql-pool-database-name`, the name of the Synapse Dedicated Sql Pool resource, created at [this step](#create-a-synapse-dedicated-sql-pool)
 - `--azure-ai-endpoint`, the endpoint of the Text Analytics resource created at [this step](#create-an-azure-cognitive-service)
-- `--m365-extraction-group-id`, the Object Id of the group create at [this step](#create-an-azure-ad-group)
-
+- `--m365-extraction-group-id`, the Object Id of the group created at [this step](#create-an-azure-ad-group)
 
 The script will perform `az login` for you, so you will be prompted to authenticate into Azure.
 
-### Sql deployment
-In order to create/update the associated sql tables, open a sql editor on the "Tables" folder in Synapse workspace manager/Data tab:  
-![create-tables-menu](./docs/sql_script_create_table_menu.png)
+The pipelines created by the script are orchestrated by Synapse triggers. One trigger is responsible with populating
+all the historical data from a given starting date and time, up to the start of the current hour.  
+Starting from that point, a second, recurring trigger, will process new data that will arrive in the future, by running
+every 24 hours and handling the last day's data.
 
-Use the script located here [./sql/tables_creation.sql](./sql/tables_creation.sql) and execute it in Synapse workspace manager. 
-Make sure that the script is connected to the dedicated SQL pool.  
-![create-all-tables](./docs/sql_script_create_all_tables.png)
-
-Also there is a stored procedure that has to be created manually, the creation script is located here 
-[./sql/stored_procedure.sql](./sql/stored_procedure.sql), execute it in Synapse workspace manager as you did 
-previously for `tables_creation.sql` script.
+The deployment script will create this triggers, but they will be stopped. You will have to go to the **Manage** menu,
+select **Triggers** and then activate each of the two triggers by pressing the **Activate** triangle button.
 
 
+### Monitoring the Synapse pipelines
+Once the Synapse pipelines are started by the triggers, they can be monitored by going to the **Monitor** tab, to the
+**Pipeline Runs** section. Once the pipelines complete, their status will become "Succeeded".  
 
-#### Sql executing from synapse-develop tab
-
-You can also use the *develop* tab in synapse in order to run sql queries.
-In order to run a sql query from the *develop* tab, select the develop tab and from the upper right `+` icon select
-new sql script:  
-![./docs/sql_script_develop_new_sql_script.png](./docs/sql_script_develop_new_sql_script.png)
-
-It is important to specify that each time you run a sql command you have to select the **synapse dedicated pool** 
-where the query will run:
-![./docs/sql_script_run_select_pool.png](./docs/sql_script_run_select_pool.png)
-
-**Observation**: sql pools can be configured from the monitor tab in the azure synapse.
-![./docs/sql_script_pool_management.png](./docs/sql_script_pool_management.png)
-
-### Limiting the size of the input data
-In order to minimize costs, you should consider keeping  the size of the input data reasonably small. This can be achieved
-via 2 mechanisms:
-
-#### Limit the number of users for which data is processed
-
-#### Limit the time span of the processed data
-
-
-### Approve Data Access Requests
+#### Approve Data Access Requests
+The first time a pipeline that read from M365 is run, it needs to be approved by a member of the "
+Consent Request Approvers" group described earlier. The pipeline stage reading from M365 will remain in pending state
+until this request is given for up to 24 hours, before timing out.
 
 When the `End2EndMgdc101WithConvLineage` pipeline is triggered  to run for the first time, there will be 5 Data Access
 Requests that will be generated in the Microsoft 365 Admin Center. The Data Access Requests can be seen in the [Settings
@@ -281,6 +305,24 @@ In order to approve a Data Access Request, click the one you want to approve, a 
 approve or deny, as shown in the image below.
 
 ![admin portal](./docs/data-access-request-example.png)
+
+
+### Creating and visualising the PowerBI reports
+The main pipeline started by the backfill trigger will in turn launch child pipelines. Once they have all successfully 
+completed and the main pipeline completes as well, the final step is to create and visualize the PowerBI reports
+on top of the data.
+
+The PowerBI presentation is based on the views created from the derived table.  
+The statements for the SQL views creation can be found [here](./sql/views_creation_sql.sql).  
+The PowerBI report can be found [here](./power_bi_presentation/MGDC%20Conversation%20Lineage.pbix).  
+The PowerBI report documentation can be found [here](./power_bi_presentation/README.MD).
+
+In order to create/update the views necessary for the PowerBI please open a sql query window:  
+![sql-query-window](./docs/sql_script_creation.png)
+
+Execute the sql script necessary for the PowerBI reports:  
+![sql-query-execution](./docs/sql_script_views_creation.png)
+
 
 
 ## Architectural design
@@ -326,15 +368,5 @@ The teams chat processing pipeline:
 
 In order to follow the setup steps for the text analytics pipeline, please consult the setup instructions [here](conversations_text_analytics/README.MD)
 
-### PowerBI presentation
-The PowerBI presentation is based on the views created from the derived table.  
-The statements for the SQL views creation can be found [here](./sql/views_creation_sql.sql).  
-The PowerBI report can be found [here](./power_bi_presentation/MGDC%20Conversation%20Lineage.pbix).  
-The PowerBI report documentation can be found [here](./power_bi_presentation/README.MD).
 
-In order to create/update the views necessary for the PowerBI please open a sql query window:  
-![sql-query-window](./docs/sql_script_creation.png)  
-
-Execute the sql script necessary for the PowerBI reports:  
-![sql-query-execution](./docs/sql_script_views_creation.png)
  
