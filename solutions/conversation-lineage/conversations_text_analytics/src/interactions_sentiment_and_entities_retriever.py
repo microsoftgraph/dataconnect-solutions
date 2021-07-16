@@ -42,7 +42,7 @@ def retrieve_interactions():
         .option("user", sql_username) \
         .option("password", sql_password) \
         .option("driver", "com.microsoft.sqlserver.jdbc.SQLServerDriver") \
-        .option("query", f"SELECT InteractionID, Content, Sender, SenderName, Recipients, RecipientNames, SourceType FROM {sql_table_name}") \
+        .option("query", f"SELECT InteractionId, Content, Sender, SenderName, Recipients, RecipientNames, SourceType FROM {sql_table_name}") \
         .load()
 
     schema = StructType([
@@ -65,10 +65,10 @@ def retrieve_interactions():
         sender_mail = interaction["Sender"]
         sender_name = interaction["SenderName"]
         source_type = interaction["SourceType"]
-        sender_domain = sender_mail.split("@")[1].strip()
+        sender_domain = sender_mail.split("@")[1].strip() if "@" in sender_mail else sender_mail
         recipient_addresses = recipient_addresses_list[:min(MAX_NUMBER_OF_RECIPIENTS, len(recipient_addresses_list))]
         recipient_names = recipient_names_list[:min(MAX_NUMBER_OF_RECIPIENTS, len(recipient_names_list))]
-        recipient_domains = list(map(lambda mail: mail.split("@")[1].strip(), recipient_addresses))
+        recipient_domains = list(map(lambda mail:  mail.split("@")[1].strip() if mail is not None and "@" in mail else "" , recipient_addresses))
 
         return {
             "sender_name": sender_name,
