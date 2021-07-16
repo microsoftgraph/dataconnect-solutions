@@ -272,7 +272,7 @@ In order to provide parameters for debugging insert a cell in which you'll defin
 The global parameters should be set as show in here:  
 - ![parameters for process conversation lineage](../docs/analytics_notebook_imgs/parameters_for_process_conversation_lineage_notebook.png)
 
-### Prerequisites
+### Spark pool prerequisites
 A requirements.txt file containing the following lines is provided: [requirements.txt](./requirements.txt)
 containing the following lines
 ```text

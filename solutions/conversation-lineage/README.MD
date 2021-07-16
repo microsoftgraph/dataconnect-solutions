@@ -135,6 +135,9 @@ the pool name in the pools list), select "Enabled", and set the desired idle dur
 
 Please follow the next link to learn more about [Apache Spark in Synapse](https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/apache-spark-overview).
 
+In the Spark pool a few libraries have to be installed, dependencies used by the spark notebooks. The necessary steps
+for installing the libraries are presented [here](./conversations_text_analytics/README.MD#spark-pool-prerequisites)  
+
 ### Create a Synapse dedicated SQL pool
 In order to keep most data transformations as accessible as possible, SQL queries are used. Also, the data is exposed
 to PowerBI for visualization in tabular format (more precisely as views). Therefore, Synapse dedicated SQL pools are 

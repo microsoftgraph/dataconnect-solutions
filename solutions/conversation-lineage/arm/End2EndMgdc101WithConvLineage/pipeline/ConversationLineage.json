@@ -104,7 +104,7 @@
                 },
                 "userProperties": [],
                 "typeProperties": {
-                    "url": "https://mgdc101-vault.vault.azure.net/secrets/jdbcUsername/9b6c80b63462497bada54c444cc5cd38?api-version=7.0",
+                    "url": "<key_vault_endpoint>secrets/jdbcUsername?api-version=7.0",
                     "connectVia": {
                         "referenceName": "AutoResolveIntegrationRuntime",
                         "type": "IntegrationRuntimeReference"
@@ -149,7 +149,7 @@
                 },
                 "userProperties": [],
                 "typeProperties": {
-                    "url": "https://mgdc101-vault.vault.azure.net/secrets/jdbcPassword/75b887c9f9414848aa81dc6a4e05ffbf?api-version=7.0",
+                    "url": "<key_vault_endpoint>secrets/jdbcPassword?api-version=7.0",
                     "connectVia": {
                         "referenceName": "AutoResolveIntegrationRuntime",
                         "type": "IntegrationRuntimeReference"
@@ -194,7 +194,7 @@
                 },
                 "userProperties": [],
                 "typeProperties": {
-                    "url": "https://mgdc101-vault.vault.azure.net/secrets/azure-ai-key/0b407db5742c4cb8b13f9fa434245c6e?api-version=7.0",
+                    "url": "<key_vault_endpoint>secrets/azure-ai-key?api-version=7.0",
                     "connectVia": {
                         "referenceName": "AutoResolveIntegrationRuntime",
                         "type": "IntegrationRuntimeReference"
