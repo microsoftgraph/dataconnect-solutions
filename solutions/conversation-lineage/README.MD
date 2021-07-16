@@ -114,6 +114,9 @@ Now, grant to the service principal created above and to the Synapse Workspace (
 Create an instance of Azure Cognitive Services meant to be used for sentiment analysis of interactions between users.
 From *Azure Cognitive Services* we'll use the *Text Analytics* service.  
 In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api?tabs=synchronous#create-a-text-analytics-resource)
+
+*Observation*: when choosing the name of the service please select a name with a length of less then 15 characters. 
+
 From *Text Analytics* service we'll use 2 provided API functions:
 - [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
 - [named entity recognition](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-entity-linking?tabs=version-3-1)
