@@ -5,7 +5,6 @@
 - [Prerequisites](#prerequisites)
 - [Set up the Synapse data processing pipelines](#set-up-the-synapse-data-processing-pipelines)
     - [Arm files deployment](#arm-files-deployment)
-    - [Trigger deployment](#trigger-deployment)
     - [Sql deployment](#sql-deployment)
 - [Architectural design](#architectural-design)
     - [Data Ingestion](#data-ingestion)
@@ -115,7 +114,7 @@ Create an instance of Azure Cognitive Services meant to be used for sentiment an
 From *Azure Cognitive Services* we'll use the *Text Analytics* service.  
 In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api?tabs=synchronous#create-a-text-analytics-resource)
 
-*Observation*: when choosing the name of the service please select a name with a length of less then 15 characters. 
+*Observation*: when choosing the name of the service please select a name with a length of less than 15 characters. 
 
 From *Text Analytics* service we'll use 2 provided API functions:
 - [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
@@ -164,7 +163,8 @@ To add secrets to the vault, follow [this guide](https://docs.microsoft.com/en-u
 
 Here is a list of all the secrets that have to be saved in Azure Key Vault and what their names **must** be:
 - The Azure Storage Account Key, using the name `storageAccountKey`
-- Synapse dedicated SQL pool credentials (this are the credentials you were requested to enter while setting up the dedicated sql pool: `SQL Server admin login` and `SQL Password`):
+- Synapse dedicated SQL pool credentials (these are the credentials you were requested to enter while setting up the 
+  dedicated sql pool: `SQL Server admin login` and `SQL Password`):
   - username, using the name `jdbcUsername`
   - secret password, using the name `jdbcPassword`
 - The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of
@@ -222,7 +222,8 @@ previously for `tables_creation.sql` script.
 
 
 #### Sql executing from synapse-develop tab
-
+The Synapse pipelines responsible with transforming the data, store intermediate data, as well as the public data
+exposed to PowerBI in tables and views.
 You can also use the *develop* tab in synapse in order to run sql queries.
 In order to run a sql query from the *develop* tab, select the develop tab and from the upper right `+` icon select
 new sql script:  
@@ -232,7 +233,12 @@ It is important to specify that each time you run a sql command you have to sele
 where the query will run:
 ![./docs/sql_script_run_select_pool.png](./docs/sql_script_run_select_pool.png)
 
-**Observation**: sql pools can be configured from the monitor tab in the azure synapse.
+
+Also, there is a stored procedure that has to be created manually.  
+The creation script is located here [./sql/stored_procedure.sql](./sql/stored_procedure.sql).
+Execute it in Synapse Studio, as you did previously for `tables_creation.sql` script.
+
+> NOTE: SQL pools can be configured from the **Manage** tab in Synapse
 ![./docs/sql_script_pool_management.png](./docs/sql_script_pool_management.png)
 
 ### Limiting the size of the input data
