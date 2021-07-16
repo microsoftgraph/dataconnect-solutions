@@ -164,7 +164,7 @@ To add secrets to the vault, follow [this guide](https://docs.microsoft.com/en-u
 
 Here is a list of all the secrets that have to be saved in Azure Key Vault and what their names **must** be:
 - The Azure Storage Account Key, using the name `storageAccountKey`
-- Synapse dedicated SQL pool credentials:
+- Synapse dedicated SQL pool credentials (this are the credentials you were requested to enter while setting up the dedicated sql pool: `SQL Server admin login` and `SQL Password`):
   - username, using the name `jdbcUsername`
   - secret password, using the name `jdbcPassword`
 - The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of
