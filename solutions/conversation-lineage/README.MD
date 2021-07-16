@@ -208,7 +208,7 @@ The values for the parameters should be as follows, for:
 - `--workspace-name`, the name of the Synapse Workspace create at [this step](#create-an-azure-synapse-workspace)
 - `--spark-pool-name`, the name of the Synapse Spark pol create at [this step](#create-a-synapse-spark-pool)
 - `--start-date`, the start date of the backfill trigger (trigger that processes data starting from given start date, 
-to current date). the format of the date has to be `YYYY-MM-DD`
+to current date). the format of the date has to be `YYYY-MM-DDTHH:00:00Z` (e.g. 2020-01-01T06:00:00Z)
 - `--key-vault-endpoint`, the url of the Key Vault service create at [this step](#create-an-azure-key-vault)
 - `--storage-account-endpoint`, the url of the Storage Account create at [this step](#create-an-azure-storage-account)
 - `--service-principal-tenant-id`, the tenant id of the service principal create at [this step](#create-an-azure-ad-application)
