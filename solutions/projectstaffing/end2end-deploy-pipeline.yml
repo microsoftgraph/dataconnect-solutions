@@ -166,7 +166,7 @@ stages:
             secretsFilter: 'prj-staffing-reader-password'
 
         - task: AzureCLI@2
-          displayName: Run install.sh for $(testDeploymentName)
+          displayName: "Run install.sh for $(testDeploymentName)"
           inputs:
             azureSubscription: $(armServiceConn)
             scriptType: 'bash'
@@ -177,7 +177,7 @@ stages:
             addSpnToEnvironment: true
 
     - job: verify
-      displayName: Verify prj-stf-3ofyrz deployment
+      displayName: Verify deployment
       dependsOn: deploy
       steps:
         - download: current
@@ -199,7 +199,7 @@ stages:
             addSpnToEnvironment: true
 
     - job: cleanup
-      displayName: Cleanup prj-stf-3ofyrz deployment
+      displayName: Cleanup successful deployment
       dependsOn: verify
       condition: and(${{ parameters.cleanUpAzureResources }}, succeeded())
       steps:
@@ -213,7 +213,7 @@ stages:
             echo "##vso[task.setvariable variable=DEPLOYMENT_SUFFIX]${DEPLOYMENT_SUFFIX}"
 
         - task: AzureCLI@2
-          displayName: Run uninstall.sh for $(testDeploymentName)
+          displayName: "Run uninstall.sh for $(testDeploymentName)"
           inputs:
             azureSubscription: $(armServiceConn)
             scriptType: 'bash'

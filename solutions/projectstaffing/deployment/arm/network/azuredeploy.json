@@ -33,9 +33,7 @@
                     {
                         "name": "default",
                         "properties": {
-                            "addressPrefix": "10.0.0.0/24",
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            "addressPrefix": "10.0.0.0/24"
                         }
                     },
                     {
@@ -67,9 +65,7 @@
                                         "serviceName": "Microsoft.Databricks/workspaces"
                                     }
                                 }
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            ]
                         }
                     },
                     {
@@ -101,17 +97,13 @@
                                         "serviceName": "Microsoft.Databricks/workspaces"
                                     }
                                 }
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            ]
                         }
                     },
                     {
                         "name": "gdc-private-endpoints",
                         "properties": {
-                            "addressPrefix": "10.0.2.0/26",
-                            "privateEndpointNetworkPolicies": "Disabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            "addressPrefix": "10.0.2.0/26"
                         }
                     },
                     {
@@ -145,9 +137,7 @@
                                         "serviceName": "Microsoft.Web/serverfarms"
                                     }
                                 }
-                            ],
-                            "privateEndpointNetworkPolicies": "Enabled",
-                            "privateLinkServiceNetworkPolicies": "Enabled"
+                            ]
                         }
                     }
                 ],
