@@ -135,7 +135,7 @@
             ],
             "properties": {
                 "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet.name'), 'wc-databricks-private')]",
-                "ignoreMissingVnetServiceEndpoint": false
+                "ignoreMissingVnetServiceEndpoint": true
             }
         },
         {
@@ -147,7 +147,7 @@
             ],
             "properties": {
                 "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet.name'), 'wc-databricks-public')]",
-                "ignoreMissingVnetServiceEndpoint": false
+                "ignoreMissingVnetServiceEndpoint": true
             }
         },
         {
@@ -159,7 +159,7 @@
             ],
             "properties": {
                 "virtualNetworkSubnetId": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnet.name'), 'watercooler-vnet')]",
-                "ignoreMissingVnetServiceEndpoint": false
+                "ignoreMissingVnetServiceEndpoint": true
             }
         },
         {
