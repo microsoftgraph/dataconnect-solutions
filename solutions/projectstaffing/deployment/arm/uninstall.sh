@@ -113,7 +113,7 @@ if [[ -n "${GDC_M365_SERVICE_SP_NAME}" ]]; then
 
 fi
 
-VNET_INTEGRATION=$(az webapp vnet-integration list -g ${RESOURCE_GROUP} --name ${APP_SERVICE_NAME}u --query "[].{Name: name}" -o tsv)
+VNET_INTEGRATION=$(az webapp vnet-integration list -g ${RESOURCE_GROUP} --name ${APP_SERVICE_NAME} --query "[].{Name: name}" -o tsv)
 if [[ -n "${VNET_INTEGRATION}" ]]; then
   echo "Remove VNET integration for app service ${APP_SERVICE_NAME} from  resource group ${RESOURCE_GROUP}"
   az webapp vnet-integration remove --name ${APP_SERVICE_NAME} --resource-group ${RESOURCE_GROUP}
