@@ -216,7 +216,7 @@ JSON documents in the request body typically include an ID, text, and language c
 
 Maximum size of a single document: 5,120 characters
 
-Maximum size of a single document: 125K characters
+Maximum size of a single document (`/analyze` endpoint): 125K characters
 
 Applies to Sentiment Analysis, Opinion Mining, and Key Phrase Extraction
 
