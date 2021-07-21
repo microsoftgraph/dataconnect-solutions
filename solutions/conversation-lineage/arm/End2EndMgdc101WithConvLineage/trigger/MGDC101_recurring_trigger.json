@@ -1,11 +1,11 @@
 {
     "name": "MGDC101_recurring_trigger",
     "properties": {
-		"pipeline": {
-			"pipelineReference": {
-				"referenceName": "End2EndMgdc101WithConvLineage",
-				"type": "PipelineReference"
-			}
+	"pipeline": {
+		"pipelineReference": {
+			"referenceName": "End2EndMgdc101WithConvLineage",
+			"type": "PipelineReference"
+		}
         },
         "annotations": [],
         "runtimeState": "Stopped",
