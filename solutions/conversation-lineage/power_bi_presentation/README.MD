@@ -14,7 +14,7 @@
 The folloing plugins were added from [App Source](https://appsource.microsoft.com/en-us/marketplace/apps):
 - [Word Cloud from Microsoft](https://appsource.microsoft.com/en-us/product/power-bi-visuals/wa104380752?tab=overview)   
 - [Tornado Chart from Microsoft](https://appsource.microsoft.com/en-us/product/power-bi-visuals/wa104380768?tab=overview)  
-- [Force-Directed Graph from Microsoft](https://appsource.microsoft.com/en-us/product/power-bi-visuals/wa104380752?tab=overview)  
+- [Force-Directed Graph from Microsoft](https://appsource.microsoft.com/en-us/product/power-bi-visuals/WA104380764?tab=overview)  
 
 # All report pages
 Here are all the pages from the report.
