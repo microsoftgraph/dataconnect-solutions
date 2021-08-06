@@ -9,11 +9,14 @@
 
 - [Building the project using Azure DevOps pipelines](#building-the-project-using-azure-devops-pipelines)
 - [Updates and deployment of individual components](#updates-and-deployment-of-individual-components)
-      1. [Updating app releases version over existing deployment](#updating-app-release-version-over-existing-deployment)
-      2. [Deploying individual components](#deploying-individual-components)
-          a. [Deploying Azure DataFactory entities](#deploying-azure-datafactory-entities)
-          b. [Deploying the Watercooler docker image](#deploying-the-watercooler-docker-image)
-          c. [Deploying jars, python scripts and python scripts to Azure Databricks cluster](#deploying-jars-python-scripts-and-python-scripts-to-azure-databricks-cluster)
+  1. [Updating app releases version over existing deployment](#updating-app-release-version-over-existing-deployment)
+  2. [Deploying individual components](#deploying-individual-components)
+     
+     a. [Deploying Azure DataFactory entities](#deploying-azure-datafactory-entities) 
+     
+     b. [Deploying the Watercooler docker image](#deploying-the-watercooler-docker-image)
+     
+     c. [Deploying jars, python scripts and python scripts to Azure Databricks cluster](#deploying-jars-python-scripts-and-python-scripts-to-azure-databricks-cluster) 
 
 - [Test environment](#test-environment)   
 
@@ -70,9 +73,9 @@ mvn clean install -DskipTests
 
     *Observation: this step is optional; if you don't have possibility to push to a given registry, please use the default provided version: 0.2.0*
     ```commandline
-docker build -t blueprint.azurecr.io/bpcs/watercooler:x.y.z .
-docker commit watercooler
-docker push blueprint.azurecr.io/bpcs/watercooler:x.y.z
+    docker build -t blueprint.azurecr.io/bpcs/watercooler:x.y.z .
+    docker commit watercooler
+    docker push blueprint.azurecr.io/bpcs/watercooler:x.y.z
     ```
 
 ### Building the deployment artifacts zip
@@ -84,22 +87,18 @@ docker push blueprint.azurecr.io/bpcs/watercooler:x.y.z
       - the schema sql file, containing the database schema creation statements
       - all the scripts and ARM templates used to deploy the application on a new environment
     
-    - navigate to `./bin` folder and execute: `commandline ./prepare_artifacts.sh --skip-maven`
-        
-    - the result of running the above command will be a tar.gz file that we recommend renaming it to `wc-x.y.z.tar.gz`:
+   - navigate to `./bin` folder and execute: `commandline ./prepare_artifacts.sh --skip-maven`
+   - the result of running the above command will be a tar.gz file that we recommend renaming it to `wc-x.y.z.tar.gz`:
         ```commandLIne
-mv build.tar.gz wc-0.2.0.tar.gz
-    ```
-    - upload the `wc-x.y.z.tar.gz` build file to a specific storage account from where you can download it via wget
+        mv build.tar.gz wc-0.2.0.tar.gz```  
+     
+   - upload the `wc-x.y.z.tar.gz` build file to a specific storage account from where you can download it via wget
 
-Observation: if you are on windows and you encounter issues running `./prepare_artifacts.sh --skip-maven` 
-you can download git-scm from here and use git-bash to run the script.
-
+> **Observation**: if you are on windows and you encounter issues running `./prepare_artifacts.sh --skip-maven` 
+>you can download git-scm from [http://git-scm.com/download/win](http://git-scm.com/download/win) and use **git-bash** to run the script. 
 
 ### Running installation for the new created build:
 In order to proceed with the installation in the Azure Cloud, please follow the instructions from here [./deployment/azure/README.MD](./deployment/azure/README.MD)
-
-
 
 
 ## Building the project using Azure DevOps pipelines
