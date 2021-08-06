@@ -1,6 +1,7 @@
 ## Watercooler deployment script
 
 ### Prerequisites
+- make sure all the groups are and AD users are set from [here](../../docs/AdminPermissions.MD)
 - log into your Azure portal and start the Cloud Shell terminal in __Bash__ mode
     - Powershell is __not__ supported!
 - ensure Azure CLI is already installed, and the version is `2.24.2` (run `az version` command)
