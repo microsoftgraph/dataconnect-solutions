@@ -98,7 +98,7 @@ mvn clean install -DskipTests
 >you can download git-scm from [http://git-scm.com/download/win](http://git-scm.com/download/win) and use **git-bash** to run the script. 
 
 ### Running installation for the new created build:
-In order to proceed with the installation in the Azure Cloud, please follow the instructions from here [./deployment/azure/README.MD](./deployment/azure/README.MD)
+In order to proceed with the installation in the Azure Cloud, please follow the instructions from here [./azure/README.MD](./azure/README.MD)
 
 
 ## Building the project using Azure DevOps pipelines
