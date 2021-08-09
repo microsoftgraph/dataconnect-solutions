@@ -27,11 +27,8 @@
     "appservice.sku": {
       "type": "object",
       "defaultValue": {
-        "name": "P2v2",
-        "tier": "PremiumV2",
-        "size": "P2v2",
-        "family": "Pv2",
-        "capacity": 1
+         "sku":  "Basic",
+        "skuCode":  "B1"
       }
     },
     "appservice.docker-config": {
@@ -145,11 +142,8 @@
         "Purpose": "Watercooler app service plan"
       },
       "sku": {
-        "name": "[parameters('appservice.sku').name]",
-        "tier": "[parameters('appservice.sku').tier]",
-        "size": "[parameters('appservice.sku').size]",
-        "family": "[parameters('appservice.sku').family]",
-        "capacity": "[parameters('appservice.sku').capacity]"
+        "name": "[parameters('appservice.sku').skuCode]",
+        "tier": "[parameters('appservice.sku').sku]",
       },
       "kind": "linux",
       "properties": {
