@@ -155,7 +155,6 @@ profile picture of each individual employee is retrieved using Microsoft Graph A
 pipeline.
 
 ### Alphabetic Documentation index
-TODO: build the documentation index again :)
 
 [ADB python scripts/PySpark jobs](./pywc/README.md)  
 [ADB scala spark jobs](docs/ADBScalaPythonJobsParameters.MD)  
