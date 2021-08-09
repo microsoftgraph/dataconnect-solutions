@@ -63,6 +63,11 @@ The watercooler components are:
 > solid knowledge of your development environment and of the differences between Windows/Unix systems is required. Some
 > adaptations of the provided instructions might be required as well, as well as some additional steps during deployment.
 
+> **Observation**: if you are on windows and you encounter issues running `./prepare_artifacts.sh --skip-maven` than it is mandatory
+> to do one of the following:
+>  - either download git-scm from [http://git-scm.com/download/win](http://git-scm.com/download/win) and use **git-bash** to run the script that will prepare the artifacts 
+>  - either run ```sed -i 's/\r$//' install.sh ``` as specified in the [./azure/README.md](./azure/README.MD#performing-a-full-deployment); (however `sed` as a command, cannot be executed only from git-bash or cygwin)
+
 
 1. Build the necessary jars using maven:
 ```commandline
@@ -94,8 +99,6 @@ mvn clean install -DskipTests
      
    - upload the `wc-x.y.z.tar.gz` build file to a specific storage account from where you can download it via wget
 
-> **Observation**: if you are on windows and you encounter issues running `./prepare_artifacts.sh --skip-maven` 
->you can download git-scm from [http://git-scm.com/download/win](http://git-scm.com/download/win) and use **git-bash** to run the script. 
 
 ### Running installation for the new created build:
 In order to proceed with the installation in the Azure Cloud, please follow the instructions from here [./azure/README.MD](./azure/README.MD)
