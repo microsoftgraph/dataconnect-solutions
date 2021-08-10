@@ -120,8 +120,8 @@
                 "annotations": [],
                 "type": "Office365",
                 "typeProperties": {
-                    "office365TenantId": "d26bf63a-a52f-436a-bf3b-531b1e378694",
-                    "servicePrincipalTenantId": "d26bf63a-a52f-436a-bf3b-531b1e378694",
+                    "office365TenantId": "[parameters('tenant.id')]",
+                    "servicePrincipalTenantId": "[parameters('tenant.id')]",
                     "servicePrincipalId": "[parameters('m365Adf-reader.sp.clientId')]",
                     "servicePrincipalKey": {
                         "type": "AzureKeyVaultSecret",
