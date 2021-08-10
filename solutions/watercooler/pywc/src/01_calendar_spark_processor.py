@@ -303,4 +303,8 @@ if __name__ == '__main__':
             logger = LogAnalyticsLogger(name="[calendar_information_extractor]")
             logger.error("Failed to get Log Analytics api key secret from key vault. " + str(e))
 
-    run_spark_job(args)
+    try:
+        run_spark_job(args)
+    except Exception as e:
+        logger.error("Error processing retrieved calendar events. They might be missing or check for other type of error. " + str(e))
+
