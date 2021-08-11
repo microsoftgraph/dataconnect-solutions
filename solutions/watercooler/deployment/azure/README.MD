@@ -196,6 +196,8 @@ The name can be obtained from the resource group name which is to be cleaned, by
 Enter deployment name: <installed-deployment-name> [press Enter]
 ```
 
+>Note: make sure you press Enter during each of this steps.
+
 If the user is a member of multiple subscriptions the uninstall script will ask for the subscription id where the deployment resides.
 The user will be shown the entire list of subscriptions to which he has access:
 ```
