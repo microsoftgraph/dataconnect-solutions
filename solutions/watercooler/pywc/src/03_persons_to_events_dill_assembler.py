@@ -162,22 +162,23 @@ def retrieve_timezone_to_mail_to_persons(calendar_events_input_path: str,
     all_recs = []
     print("=====retrieve_timezone_to_mail_to_persons")
     full_path_events_folder = calendar_events_input_path
-    print("[full_path_events_folder]:", full_path_events_folder)
-    all_files = []
-    for entry in os.listdir(full_path_events_folder):
-        entry_full_path = os.path.join(full_path_events_folder, entry)
-        if os.path.isfile(entry_full_path):
-            all_files.append(entry_full_path)
+    if calendar_events_input_path != "":
+        print("[full_path_events_folder]:", full_path_events_folder)
+        all_files = []
+        for entry in os.listdir(full_path_events_folder):
+            entry_full_path = os.path.join(full_path_events_folder, entry)
+            if os.path.isfile(entry_full_path):
+                all_files.append(entry_full_path)
 
-    for file in all_files:
-        try:
-            with open(file) as f:
-                for line in f.readlines():
-                    rec_input = json.loads(line)
-                    rec_out = process_line_spark(rec_input)
-                    all_recs.extend(rec_out)
-        except Exception as e:
-            print("======Error reading file:", file)
+        for file in all_files:
+            try:
+                with open(file) as f:
+                    for line in f.readlines():
+                        rec_input = json.loads(line)
+                        rec_out = process_line_spark(rec_input)
+                        all_recs.extend(rec_out)
+            except Exception as e:
+                print("======Error reading file:", file)
 
     all_persons = dict()
     marked_users = set()
@@ -292,8 +293,8 @@ def retrieve_timezone_to_mail_to_persons(calendar_events_input_path: str,
                 continue
             person_timezone = pytz.timezone(associatated_timezone)
 
+            person = Person(name, mail, skills, person_timezone)
             if person_timezone in all_persons and mail not in all_persons[person_timezone]:
-                person = Person(name, mail, skills, person_timezone)
                 all_persons[person_timezone][mail] = person
             else:
                 if person_timezone not in all_persons:
@@ -485,7 +486,7 @@ if __name__ == '__main__':
     timezone_names = os.path.join(args.timezone_names_path, args.timezone_names_file_name)
 
     user_profiles_input_path = retrieve_latest_run(args.user_profiles_input_path)
-    calendar_events_input_path = retrieve_latest_run(args.calendar_events_input_path)
+
     out_folder = args.output_path
     tzinfo_to_time_slots_to_persons_file_name = args.tzinfo_to_time_slots_to_persons_file_name
     tzinfo_to_day_to_freetimeslots_file_name = args.tzinfo_to_day_to_freetimeslots_file_name
@@ -512,6 +513,11 @@ if __name__ == '__main__':
             logger = LogAnalyticsLogger(name="[profiles_to_events_assembler]")
             logger.error("Failed to get Log Analytics api key secret from key vault. " + str(e))
 
+    try:
+        calendar_events_input_path = retrieve_latest_run(args.calendar_events_input_path)
+    except Exception as e:
+        print("Error retrieving the calendar event full path. Please check wheter you have events for users.")
+        calendar_events_input_path = ""
 
     try:
         puser_to_timezone_dict = retrieve_timezone_for_user(mailbox_meta_folder)
