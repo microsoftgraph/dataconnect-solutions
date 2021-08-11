@@ -17,16 +17,30 @@ Ideally, the groups should be created before running the script.
     - this defines the list of Active Directory users which are going to:
         - have Owner role over all Azure resources created by the deployment script
     - this security group is mandatory for the deployment process
+    - the group must contain the user that performs the installation and has global administration rights
+    
+#### Creating watercooler admins group
+Navigate to Azure Active Directory and click add group:
+![Azure Active Directory](../../docs/imgs/watercooler_admin_groups_00.png)
 
+In the create group window, you can manually select the users:
+![Azure Active Directory Users](../../docs/imgs/watercooler_admin_groups_01.png)
 
 ### Performing a full deployment
 Please read the full contents of this file before proceeding with the deployment
 
 1. Build artifacts  (required for deployment), by following [these steps]( ../README.MD#building-the-artifacts-zip)
 
-2. Upload prebuilt package (e.g. wc-x.y.z.zip ) onto Azure CloudShell storage and unzip into your working dir.
-   It will contain install.sh which is an entrypoint of deployment script.
-
+2. Upload prebuilt package (e.g. wc-x.y.z.zip ) onto Azure CloudShell storage and unzip into your working dir. 
+   
+   Unpacking of the artifacts is being doing using this commands
+   
+   ```unzip wc-x.y.z.zip``` (if the archive is zip) or
+   
+   ```tar -xzvf wc-x.y.z.zip ``` (if the archive is a tar.gz file).
+   
+   The archive contains install.sh which is an entrypoint of deployment script.
+    
    If the artifacts zip was ___built on a Windows machine___, you will have to perform the next steps in CloudShell:
     - because of file permissions differences between Windows and Unix based systems, the permissions to 
       the directory where the artifacts were decompressed have to be set explicitly by running the following commands:
@@ -171,7 +185,7 @@ A project deployment might need to be cleared, for example, either following a d
 start a new deployment from a clean environment) or to free up resources on Azure once a deployment is no longer needed.  
 In order to un-install the deployment you have to execute the uninstall script:
 ```
-./uninstall.sh [--subscription-id <subscription_id_string>]
+./uninstall.sh [--subscription <subscription_id_string>]
 ```
 
 The subscription id of the subscription where the deployment was made, can be passed as an argument.
@@ -181,6 +195,8 @@ The name can be obtained from the resource group name which is to be cleaned, by
 ```
 Enter deployment name: <installed-deployment-name> [press Enter]
 ```
+
+>Note: make sure you press Enter during each of this steps.
 
 If the user is a member of multiple subscriptions the uninstall script will ask for the subscription id where the deployment resides.
 The user will be shown the entire list of subscriptions to which he has access:
