@@ -180,6 +180,10 @@ Then run the following command to delete the folder containing the artifacts:
 ```rm -rf <directory_path_where_artifacts_were_decompressed>/```  
 
 
+#### Performing an installation in another subscription
+If you want to re-run the install script for another subscription it is mandatory to remove the *.wc* folder from the 
+root home folder (eg: /home/mod/.wc)
+
 ### Uninstalling a deployment
 A project deployment might need to be cleared, for example, either following a deployment failure (so that you might
 start a new deployment from a clean environment) or to free up resources on Azure once a deployment is no longer needed.  
