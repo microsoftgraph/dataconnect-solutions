@@ -128,6 +128,9 @@ if [[ -z "$SUBSCRIPTION_ID" ]]; then
   fi
 fi
 
+echo "Setting default subscription to $SUBSCRIPTION_ID"
+az account set --subscription  ${SUBSCRIPTION_ID}
+
 TENANT_ID=$(az account show --subscription "$SUBSCRIPTION_ID" --query tenantId -o tsv)
 
 echo "Deploying in subscription $SUBSCRIPTION_ID from tenant $TENANT_ID"
