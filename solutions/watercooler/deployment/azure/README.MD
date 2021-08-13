@@ -73,7 +73,9 @@ az login
     - If you desire to use a different subscription, you can pass it explicitly to the script, by providing the optional 
       argument `--subscription <subscription-id>`
         - Alternatively, if this argument is not provided, and the script encounters multiple subscriptions, then you 
-        will be prompted to choose between the default subscription and a different one
+        will be prompted to choose between the default subscription and a different one 
+        - *Observation*: If a separate subscription is selected, the user must be aware that the selected subscription 
+          will become the default one  
 
 5. Run deployment script from the working dir
     - You may change the deployment name and the region in the command below.
