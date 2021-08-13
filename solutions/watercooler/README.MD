@@ -28,7 +28,7 @@ Azure and then run the application locally while using the resources from the Az
 2. build the Watercooler App Service jar and all the ADB jars, by
    following [Building all the project jars at once section](#building-all-the-project-jars-at-once)
    
-3. setting up the python scripts and environment [./pywc/README.md](./pywc/README.md)
+3. setting up the python scripts and environment [./pywc/README.MD](./pywc/README.MD)
    
 4. prepare the zip with all the resulting artifacts (required for deployment), by
    following [./deployment/README.MD#building-the-artifacts-zip section](./deployment/README.MD#building-the-artifacts-zip)
