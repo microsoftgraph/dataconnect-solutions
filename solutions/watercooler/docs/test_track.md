@@ -1,8 +1,8 @@
-# Project Staffing test track
+# Watercooler test track
 
 ## About
 
-The Project Staffing test track uses Carina Selenium to run a suite of API tests against an existing Project Staffing deployment.
+The Watercooler test track uses Carina Selenium to run a suite of API tests against an existing Watercooler deployment.
 
 ### Relevant files:
 
@@ -64,7 +64,7 @@ This is the token issued to your browser once you successfully log in. Can be fo
 
 - `AppServiceUrl`
 
-This is the URL you used to access the Project Staffing app in browser.
+This is the URL you used to access the Watercooler app in browser.
 
 ### Test results
 At the end of a pipeline run, the report folder will be available as a *published artifact*
