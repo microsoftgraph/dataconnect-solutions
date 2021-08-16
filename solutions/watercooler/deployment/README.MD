@@ -92,10 +92,14 @@ mvn clean install -DskipTests
       - the schema sql file, containing the database schema creation statements
       - all the scripts and ARM templates used to deploy the application on a new environment
     
-   - navigate to `./bin` folder and execute: `commandline ./prepare_artifacts.sh --skip-maven`
+   - navigate to `./bin` folder and execute:
+      ```commandLIne 
+      ./prepare_artifacts.sh --skip-maven
+      ```
    - the result of running the above command will be a tar.gz file that we recommend renaming it to `wc-x.y.z.tar.gz`:
         ```commandLIne
-        mv build.tar.gz wc-0.2.0.tar.gz```  
+        mv build.tar.gz wc-0.2.0.tar.gz
+        ```  
      
    - upload the `wc-x.y.z.tar.gz` build file to a specific storage account from where you can download it via wget
 

@@ -1,4 +1,4 @@
-###Running Watercooler in production mode
+### Running Watercooler in production mode
 
 In order to run the application in production mode there are 4 steps that have to be made:
 1. The `wc-service` app registrations (service principals) need admin consent from a user with `Global administrator` role.  

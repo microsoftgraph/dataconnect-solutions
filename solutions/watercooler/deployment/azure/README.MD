@@ -55,6 +55,8 @@ Please read the full contents of this file before proceeding with the deployment
     
         ```sed -i 's/\r$//' install.sh ```
         
+        ```sed -i 's/\r$//' functions.sh ```
+
         ```sed -i 's/\r$//' uninstall.sh ```
 
 3. Log into your account using Azure CLI
