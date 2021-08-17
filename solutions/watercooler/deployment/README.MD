@@ -216,7 +216,7 @@ target environment, then it might be faster than deploying it from local env.
 - download the project artifacts zip from the AZBS location where the CI pipeline uploaded it, using `wget <wc-x.y.z.tar.gz url>`
 - unzip it
 - `cd wc`
-- continue with the instructions from [./deployment/azure/README.MD](./deployment/azure/README.MD)
+- continue with the instructions from [./azure/README.MD](./azure/README.MD)
 
 
 ## Test environment
