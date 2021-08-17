@@ -196,7 +196,7 @@ In order to un-install the deployment you have to execute the uninstall script:
 ./uninstall.sh [--subscription <subscription_id_string>]
 ```
 
-The subscription id of the subscription where the deployment was made, can be passed as an argument.
+The subscription id of the subscription where the deployment was made is a *mandatory* argument.
 
 The uninstall script will ask for the name of the deployment to be cleaned up, in order to perform all the necessary steps.  
 The name can be obtained from the resource group name which is to be cleaned, by removing the "-resources" suffix.
