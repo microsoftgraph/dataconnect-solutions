@@ -18,7 +18,7 @@ stages:
         displayName: 'Running debug script'
         steps:
           - task: Bash@3
-            displayName: 'Executing API tests'
+            displayName: 'Executing debug.sh'
             inputs:
               filePath: 'solutions/projectstaffing/bin/debug.sh'
               workingDirectory: 'solutions/projectstaffing/'
