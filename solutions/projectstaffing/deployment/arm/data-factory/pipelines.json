@@ -1212,7 +1212,7 @@
                                 },
                                 {
                                     "pypi": {
-                                        "package": "azure-storage-blob==12.5.0"
+                                        "package": "azure-storage-blob==12.7.0"
                                     }
                                 },
                                 {
@@ -1534,7 +1534,7 @@
                                 },
                                 {
                                     "pypi": {
-                                        "package": "azure-storage-blob==12.5.0"
+                                        "package": "azure-storage-blob==12.7.0"
                                     }
                                 },
                                 {
@@ -1761,7 +1761,7 @@
                                 },
                                 {
                                     "pypi": {
-                                        "package": "azure-storage-blob==12.5.0"
+                                        "package": "azure-storage-blob==12.7.0"
                                     }
                                 },
                                 {
@@ -2380,7 +2380,7 @@
                                 },
                                 {
                                     "pypi": {
-                                        "package": "azure-storage-blob==12.5.0"
+                                        "package": "azure-storage-blob==12.7.0"
                                     }
                                 },
                                 {
@@ -5030,7 +5030,7 @@
                                 },
                                 {
                                     "pypi": {
-                                        "package": "azure-storage-blob==12.5.0"
+                                        "package": "azure-storage-blob==12.7.0"
                                     }
                                 },
                                 {
