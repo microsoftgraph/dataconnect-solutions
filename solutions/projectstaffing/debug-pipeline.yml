@@ -1,0 +1,25 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+stages:
+  - stage: Debugging
+    pool:
+      vmImage: 'ubuntu-latest'
+    displayName: Running debug script
+    jobs:
+      - job: run
+        displayName: 'Running debug script'
+        steps:
+          - task: Bash@3
+            displayName: 'Executing API tests'
+            inputs:
+              filePath: 'solutions/projectstaffing/bin/debug.sh'
+              arguments: $(url)
+              workingDirectory: 'solutions/projectstaffing/'
