@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-pwsh ./debug.ps1
+pwsh ./bin/debug.ps1
