@@ -21,5 +21,4 @@ stages:
             displayName: 'Executing API tests'
             inputs:
               filePath: 'solutions/projectstaffing/bin/debug.sh'
-              arguments: $(url)
               workingDirectory: 'solutions/projectstaffing/'
