@@ -29,7 +29,7 @@ In the create group window, you can manually select the users:
 ### Performing a full deployment
 Please read the full contents of this file before proceeding with the deployment
 
-1. Build artifacts  (required for deployment), by following [these steps]( ../README.MD#building-the-artifacts-zip)
+1. Build artifacts  (required for deployment), by following [these steps]( ../README.MD#building-the-deployment-artifacts-zip)
 
 2. Upload prebuilt package (e.g. wc-x.y.z.zip ) onto Azure CloudShell storage and unzip into your working dir. 
    

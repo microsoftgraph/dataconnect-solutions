@@ -31,10 +31,10 @@ Azure and then run the application locally while using the resources from the Az
 3. setting up the python scripts and environment [./pywc/README.MD](./pywc/README.MD)
    
 4. prepare the zip with all the resulting artifacts (required for deployment), by
-   following [./deployment/README.MD#building-the-artifacts-zip section](./deployment/README.MD#building-the-artifacts-zip)
+   following [./deployment/README.MD#building-the-artifacts-zip section](./deployment/README.MD#building-the-deployment-artifacts-zip)
    
 5. to perform a fresh full deployment in Azure, please follow the steps described in the deployment
-   script's [readme file (./deployment/azure/README.md)](./deployment/azure/README.md)
+   script's [readme file (./deployment/azure/README.MD)](./deployment/azure/README.MD)
    and in the [deployment overview document (docs/WatercoolerDeploymentOverview.MD)](docs/WatercoolerDeploymentOverview.MD)
 6. to run the application in Azure, please follow [./jwc/core/README.MD#running-the-application-in-azure](./jwc/core/README.MD#running-the-application-in-azure)
 7. to run the application locally, please follow [./jwc/core/README.MD#running-the-application-locally](./jwc/core/README.MD#running-the-application-locally)
@@ -63,11 +63,11 @@ Azure and then run the application locally while using the resources from the Az
       database docker containers)
 4. Install nodejs 14.x, npm and yarn 1.22
     - required to build and run the application's UI
-    - for details please follow the [UI setup steps](./jwc/ui/README.md)
+    - for details please follow the [UI setup steps](./jwc/ui/README.MD)
 5. Install Python 3 and related environment
     - the python environment setup will differ if you plan to simply build the pygraph utils wheel locally or to do
       development and run pyspark jobs locally
-    - please follow the appropriate [python environment setup steps](./pywc/README.md#setup-guide)
+    - please follow the appropriate [python environment setup steps](./pywc/README.MD#setup-guide)
 
 #### Building all the project jars at once
 
@@ -75,17 +75,17 @@ To build the Watercooler App Service jar and all the ADB jars in one go, run the
 
 ```shell script
 cd ./jwc
-mvn clean install --DskipTests
+mvn clean install -DskipTests
 ```
 
 This approach also runs the unit tests. To build the jars without running the tests,
-run `mvn clean install --DskipTests`  
+run `mvn clean install -DskipTests`  
 The resulting jars can be found in the `target` folder of the corresponding module
 
 ### Setting up the python scripts
 
 There is no need to build any wheel,however for setting up the local dev environment please
-check [readme file](./pywc/README.md)
+check [readme file](./pywc/README.MD)
 
 ### Building the artifacts zip
 
@@ -106,7 +106,7 @@ In case changes are done to individual project components (the Watercooler App S
 etc), these components can can either be:
 
 - built individually, as described in the subsections of
-  the [local build documentation](./deployment/README.MD#building-from-source-using-the-local-development-environment),
+  the [local build documentation](./deployment/README.MD#building-the-libraries-from-local-source),
   and [deployed individually](./deployment/README.MD#deploying-individual-components)
 - built together with the entire project (either locally as described above or via
   a [build pipeline](./docs/build_pipeline.md))
@@ -156,23 +156,22 @@ pipeline.
 
 ### Alphabetic Documentation index
 
-[ADB python scripts/PySpark jobs](./pywc/README.md)  
+[ADB python scripts/PySpark jobs](./pywc/README.MD)  
 [ADB scala spark jobs](docs/ADBScalaPythonJobsParameters.MD)  
 [ADF pipelines](./docs/AzureDataFactory.MD)  
 [ADF triggers](./docs/ADF_trigger_creation_policy.md)  
 [Admin permissions](./docs/AdminPermissions.MD)  
-[Building the project locally](./deployment/README.MD#building-from-source-using-the-local-development-environment)  
+[Building the project locally](./deployment/README.MD#building-the-libraries-from-local-source)  
 [Building the project via the build pipeline](./docs/build_pipeline.md)  
 [CI track](./docs/build_pipeline.md)  
 [Components](./deployment/README.MD#project-components)   
-[Deployment](./deployment/README.MD#deployment)  
+[Deployment](./deployment/README.MD#deploying-individual-components)  
 [Deployment process details](docs/WatercoolerDeploymentOverview.MD)  
-[Deployment script](./deployment/azure/README.md)  
-[Employee profile Azure Search schema](./docs/Employee_profile_schema_example.md)  
+[Deployment script](./deployment/azure/README.MD)  
 [Full deployment](docs/WatercoolerDeploymentOverview.MD)  
 [Production mode preconditions](./docs/AdminPermissions.MD)   
-[Releasing a new version](./jwc/README.md)  
+[Releasing a new version](./jwc/README.MD)  
 [Running the application](./jwc/core/README.MD)   
 [Test track](./docs/test_track.md)  
 [Testing locally](./jwc/core/README.MD#running-the-tests-locally)  
-[UI](./jwc/ui/README.md)  
+[UI](./jwc/ui/README.MD)  
