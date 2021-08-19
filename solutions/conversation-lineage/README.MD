@@ -74,17 +74,19 @@ Therefore, you will need to create an Azure Active Directory app registration th
 1. Open a browser and navigate to your Azure Portal at [https://portal.azure.com](https://portal.azure.com)
 2. Login using an account with global administrator rights to your Azure and Office 365 tenants.
 3. Select **Azure Active Directory** (Azure AD) from the sidebar navigation.
-4. Select **App registrations** from the **Manage** section of the sidebar on the left.
-5. Select the **New registration** button:
+   ![Sidebar navigation](./docs/environment_setup/sidebar-navigation.png)
+4. Select **App registrations** from the **Manage** section of the sidebar on the left, then select the **New registration** button:
    ![Create AAD app registration](./docs/environment_setup/create-aad-app-registration.png)
-6. Use the following values to create a new Azure AD application and select **Register**:
+5. Use the following values to create a new Azure AD application and select **Register**:
   - **Name**: conversation-lineage-m365-reader
   - **Supported account types**: Accounts in this organizational directory only
   - **Redirect URI**: *Leave the default values*
-7. Locate the **Application (client) ID** and copy it as you will need it later in this lab. This will be referred to as the *service principal ID*.
-8. Locate the **Directory (tenant) ID** and copy it as you will need it later in this lab. This will be referred to as the *tenant ID*.
-9. Select **Certificates & secrets** under **Manage** in the sidebar navigation.
-10. Select the **New client secret** button. Leave **Description** empty, set **Expires** to `24 months` and choose **Add**.
+   ![App registration values](./docs/environment_setup/app-registration-values.png)
+6. Once registration is complete, the following view should appear:
+   ![Service principal ids](./docs/environment_setup/service-principal-ids.png)
+   A. Locate the **Application (client) ID** and copy it as you will need it later in this lab. This will be referred to as the *service principal ID*.
+   B. Locate the **Directory (tenant) ID** and copy it as you will need it later in this lab. This will be referred to as the *tenant ID*.
+7. Select **Certificates & secrets** under **Manage** in the sidebar navigation. Then select the **New client secret** button. Leave **Description** empty, set **Expires** to `24 months` and choose **Add**.
    > You can choose different values for **Description** and **Expires** if you like. Ensure you keep a copy of the 
    > hashed key after it is saved, as it is needed later in the tutorial (to be saved in KeyVault). 
    > The hashed value will never be shown again, so if you forget it, you will need to create a new one!
@@ -92,8 +94,8 @@ Therefore, you will need to create an Azure Active Directory app registration th
    ![Screenshot of creating a password for an Azure AD application](./docs/environment_setup/create-service-principal-client-secret.png)
 
    > This will be referenced as the *service principal key*.
-11. Using the sidebar navigation for the application, select **Owners**.
-12. Ensure your account is listed as an owner for the application. If it isn't listed as an owner, add it.
+8. Using the sidebar navigation for the application, select **Owners**.
+9. Ensure your account is listed as an owner for the application. If it isn't listed as an owner, add it.
 
 ### Create an Azure AD group
 While ingesting data from M365 you have the option of retrieving the data for all users (having an Office 365 license),
