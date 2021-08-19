@@ -439,8 +439,8 @@
                             "source": {
                                 "type": "Office365Source",
                                 "dateFilterColumn": "createdDateTime",
-                                "startTime": "2021-05-09T00:00:00Z",
-                                "endTime": "2021-06-10T00:00:00Z",
+                                "startTime": "2021-07-01T00:00:00Z",
+                                "endTime": "2021-10-01T00:00:00Z",
                                 "userScopeFilterUri": "",
                                 "outputColumns": [
                                     {
@@ -1200,8 +1200,8 @@
                             "source": {
                                 "type": "Office365Source",
                                 "dateFilterColumn": "createdDateTime",
-                                "startTime": "2021-05-09T00:00:00Z",
-                                "endTime": "2021-06-10T00:00:00Z",
+                                "startTime": "2021-07-01T00:00:00Z",
+                                "endTime": "2021-10-01T00:00:00Z",
                                 "userScopeFilterUri": "",
                                 "outputColumns": [
                                     {
