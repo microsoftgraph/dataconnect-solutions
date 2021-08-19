@@ -83,8 +83,8 @@ Therefore, you will need to create an Azure Active Directory app registration th
   - **Redirect URI**: *Leave the default values*
    ![App registration values](./docs/environment_setup/app-registration-values.png)
 6. Once registration is complete, the following view should appear:
-   ![Service principal ids](./docs/environment_setup/service-principal-ids.png)
-   A. Locate the **Application (client) ID** and copy it as you will need it later in this lab. This will be referred to as the *service principal ID*.
+   ![Service principal ids](./docs/environment_setup/service-principal-ids.png)  
+   A. Locate the **Application (client) ID** and copy it as you will need it later in this lab. This will be referred to as the *service principal ID*.  
    B. Locate the **Directory (tenant) ID** and copy it as you will need it later in this lab. This will be referred to as the *tenant ID*.
 7. Select **Certificates & secrets** under **Manage** in the sidebar navigation. Then select the **New client secret** button. Leave **Description** empty, set **Expires** to `24 months` and choose **Add**.
    > You can choose different values for **Description** and **Expires** if you like. Ensure you keep a copy of the 
