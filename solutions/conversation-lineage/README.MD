@@ -1,13 +1,28 @@
 # Conversation Lineage
 
 ## Table of contents
-- [Tutorial Overview](#tutorial-overview)
-- [Prerequisites](#prerequisites)
-- [Setting up the application](#setting-up-the-application)
-- [Architectural design](#architectural-design)
-    - [Data Ingestion](#data-ingestion)
-    - [Table Derivation](#table-derivation)  
-    - [Sentiment and entities extraction from mails](#sentiment-and-entities-extraction-from-mails)
+* [Prerequisites](#prerequisites)
+* [Setting up the application](#setting-up-the-application)
+    * [Create an Azure AD application](#create-an-azure-ad-application)
+    * [Create an Azure AD group](#create-an-azure-ad-group)
+    * [Set up Graph Data Connect](#set-up-graph-data-connect)
+    * [Create an Azure resource group](#create-an-azure-resource-group)
+    * [Create an Azure Storage account](#create-an-azure-storage-account)
+    * [Create an Azure Cognitive Service](#create-an-azure-cognitive-service)
+    * [Create an Azure Synapse workspace](#create-an-azure-synapse-workspace)
+        * [Create a Synapse Spark pool](#create-a-synapse-spark-pool)
+        * [Create a Synapse dedicated SQL pool](#create-a-synapse-dedicated-sql-pool)
+    * [Create an Azure Key Vault](#create-an-azure-key-vault)
+    * [Set up PowerBI](#set-up-powerbi)
+    * [Creating SQL entities](#creating-sql-entities)
+    * [Set up the Synapse data processing pipelines](#set-up-the-synapse-data-processing-pipelines)
+    * [Monitoring the Synapse pipelines](#monitoring-the-synapse-pipelines)
+    * [Approve Data Access Requests](#approve-data-access-requests)
+    * [Create and visualize the PowerBI reports](#create-and-visualize-the-powerbi-reports)
+* [Architectural design](#architectural-design)
+    * [Data Ingestion](#data-ingestion)
+    * [Table Derivation](#table-derivation)  
+    * [Sentiment and entities extraction from mails](#sentiment-and-entities-extraction-from-mails)
   
 ## Tutorial Overview
 This tutorial will provide you with an example of using [Graph Data Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview)
@@ -307,7 +322,7 @@ approve or deny, as shown in the image below.
 ![admin portal](./docs/data-access-request-example.png)
 
 
-### Creating and visualising the PowerBI reports
+### Create and visualize the PowerBI reports
 The main pipeline started by the backfill trigger will in turn launch child pipelines. Once they have all successfully 
 completed and the main pipeline completes as well, the final step is to create and visualize the PowerBI reports
 on top of the data.
