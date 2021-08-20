@@ -140,7 +140,8 @@ Create an instance of Azure Cognitive Services meant to be used for sentiment an
 From *Azure Cognitive Services* we'll use the *Text Analytics* service.  
 In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api?tabs=synchronous#create-a-text-analytics-resource)
 
-*Observation*: when choosing the name of the service please select a name with a length of less than 15 characters. 
+> ***IMPORTANT:***  
+> When choosing the name of the service, you MUST select a name with a length of less than 15 characters! If the name is too long, the pipeline (executed at a later step) will not be able to complete successfully.  
 
 From *Text Analytics* service we'll use 2 provided API functions:
 - [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
