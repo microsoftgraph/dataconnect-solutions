@@ -141,9 +141,9 @@ From *Azure Cognitive Services* we'll use the *Text Analytics* service.
 In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api?tabs=synchronous#create-a-text-analytics-resource)
 
 > ***IMPORTANT:***  
-> When choosing the name of the service, you MUST select a name with a length of less than 15 characters! If the name is too long, the pipeline (executed at a later step) will not be able to complete successfully.  
+> When choosing the name of the service, you MUST select a name with a length of less than 15 characters. If the name is too long, the pipeline (executed at a later step) will not  complete successfully.  
 
-From *Text Analytics* service we'll use 2 provided API functions:
+From *Text Analytics* service, we'll use 2 provided API functions:
 - [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
 - [named entity recognition](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-entity-linking?tabs=version-3-1)
 
@@ -151,6 +151,7 @@ From *Text Analytics* service we'll use 2 provided API functions:
 Create the Synapse workspace used to process all the data.
 For setting up a Synapse workspace, please follow the [official Synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
 and make sure to use your resource group.
+> NOTE: When following the above tutorial to create the Synapse workspace, be sure to create a new storage account (not the one created in an earlier [step](#create-an-azure-storage-account)) as the documentation suggests. Feel free to use your own naming conventions for the storage account and container/file system names. You only need to follow the tutorial to the point that the Synapse workspace is created, then return to this tutorial.
 
 ### Create a Synapse Spark pool
 Certain more complex transformations of data will be performed using Apache Spark. This requires the computation
