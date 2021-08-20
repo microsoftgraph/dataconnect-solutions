@@ -13,6 +13,7 @@
     * [Create an Azure Synapse workspace](#create-an-azure-synapse-workspace)
         * [Create a Synapse Spark pool](#create-a-synapse-spark-pool)
         * [Create a Synapse dedicated SQL pool](#create-a-synapse-dedicated-sql-pool)
+    * [Grant access to the Storage Accounts](#grant-access-to-the-storage-accounts)
     * [Create an Azure Key Vault](#create-an-azure-key-vault)
     * [Set up PowerBI](#set-up-powerbi)
     * [Creating SQL entities](#creating-sql-entities)
@@ -101,7 +102,13 @@ Therefore, you will need to create an Azure Active Directory app registration th
 ### Create an Azure AD group
 While ingesting data from M365 you have the option of retrieving the data for all users (having an Office 365 license),
 or only for a specific set of users. To achieve this, create an Azure AD security group called `MGDC101 Members`.  
+> NOTE: The tutorial for AD group creation (link below) mentions two possible group types: *Security* and *Microsoft 365*.  
+> Be sure to use the *Security* group type when setting up the Azure AD group.  
+> Additionally, when setting up the security group you will need to choose a Membership type: *Assigned*, *Dynamic user*, or *Dynamic device*.  
+> Unless otherwise directed by your organization, the *Assigned* membership type should be selected.
+
 The steps required to create a group and add members to it are described [here](https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-groups-create-azure-portal).  
+
 Once the group is created, add to it users for which the M365 data (profile, emails, calendar events, team chats) should
 be processed. The users must have an Office 365 license, for their data to be actually retrieved.  
 In the **Overview** page of the group, look for the **ObjectId** and copy its value as you will need it later.
@@ -120,10 +127,13 @@ When you arrive at the "Data protection" configuration step, disable all soft de
 
 After the storage account is created, six blob containers have to be created with the following names: `emails`, 
 `events`, `logs`, `managers`, `users` and `team-chats`.  
-The information on how to create a container can be found [here](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal#create-a-container).
+> NOTE: In the documentation for creating a container (see link below) it references selecting the *Blob containers* option under the Data storage section. This can be confusing, as the option has been changed to *Containers*. This is the option that should be selected.  
+> ![adls container selection](./docs/environment_setup/ADLSContainerSelect.png)
 
-Now, grant to the service principal created above and to the Synapse Workspace (that you will create), the
-`Storage Blob Data Contributor` role for the Storage account, by following the steps described [here](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal?tabs=current).
+The information on how to create a container can be found [here](https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-portal#create-a-container).
+Once complete, navigate back to *Containers* from the Storage Account resource in the Azure portal (if not already there). The container list should now look as follows:
+![adls containers](./docs/environment_setup/ADLSContainers.png)
+> NOTE: The $logs folder is created by default upon deploying the storage account. This is not to be confused with the *logs* container created above. *$logs* is used for Storage Analytics and can be ignored for the purposes of this tutorial.
 
 ### Create an Azure Cognitive Service
 Create an instance of Azure Cognitive Services meant to be used for sentiment analysis of interactions between users.
@@ -171,6 +181,10 @@ via Synapse triggers (described below).
 
 Please follow the next link to learn more about [Azure Synapse SQL architecture](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql/overview-architecture)
 and about [dedicated SQL pools](https://docs.microsoft.com/en-us/azure/synapse-analytics/sql-data-warehouse/sql-data-warehouse-overview-what-is).
+
+### Grant access to the Storage Accounts
+Now that both storage accounts have been created, grant the service principal (created at [this](#create-an-azure-ad-application) step) the
+`Storage Blob Data Contributor` role to both resources by following the steps described [here](https://docs.microsoft.com/en-us/azure/role-based-access-control/role-assignments-portal?tabs=current).
 
 ### Create an Azure Key Vault
 Create a KeyVault meant to store any sensitive pieces of information meant to be used by the Synapse pipelines.  
