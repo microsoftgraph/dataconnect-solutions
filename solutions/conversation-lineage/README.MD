@@ -1,6 +1,7 @@
 # Conversation Lineage
 
 ## Table of contents
+* [Tutorial Overview](#tutorial-overview)
 * [Prerequisites](#prerequisites)
 * [Setting up the application](#setting-up-the-application)
     * [Create an Azure AD application](#create-an-azure-ad-application)
