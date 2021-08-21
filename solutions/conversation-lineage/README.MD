@@ -135,6 +135,9 @@ Once complete, navigate back to *Containers* from the Storage Account resource i
 ![adls containers](./docs/environment_setup/ADLSContainers.png)
 > NOTE: The $logs folder is created by default upon deploying the storage account. This is not to be confused with the *logs* container created above. *$logs* is used for Storage Analytics and can be ignored for the purposes of this tutorial.
 
+Later in this tutorial, you will need the Azure Storage Account Key (to be referenced as `storageAccountKey`). This key can be acquired from the Access keys view (under the "Security + networking" section of the left navigation window) of the storage account.
+![storage account key](./docs/environment_setup/storageAccountKey.png)
+
 ### Create an Azure Cognitive Service
 Create an instance of Azure Cognitive Services meant to be used for sentiment analysis of interactions between users.
 From *Azure Cognitive Services* we'll use the *Text Analytics* service.  
