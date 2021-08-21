@@ -150,8 +150,9 @@ From *Text Analytics* service, we'll use 2 provided API functions:
 ### Create an Azure Synapse workspace
 Create the Synapse workspace used to process all the data.
 For setting up a Synapse workspace, please follow the [official Synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
-and make sure to use your resource group.
-> NOTE: When following the above tutorial to create the Synapse workspace, be sure to create a new storage account (not the one created in an earlier [step](#create-an-azure-storage-account)) as the documentation suggests. Feel free to use your own naming conventions for the storage account and container/file system names. You only need to follow the tutorial to the point that the Synapse workspace is created, then return to this tutorial.
+and make sure to use your resource group. There is one necessary step not mentioned in the documentation. Before creating the workspace, be sure to visit the **Security** tab and create SQL administrator credentials for the workspace. The values you enter for **SQL Server admin login** and **SQL Password** will be referenced later as `jdbcUsername`and `jdbcPassword`, respectively.
+![sql server credentials](./docs/environment_setup/sql_server_credentials.png)
+> NOTE: The official Synapse documentation tutorial will instruct you to create a new storage account (not the one created in an earlier [step](#create-an-azure-storage-account)). When filling in the **Workspace name**, **Data Lake Storage Storage Account name**, and **File system name** fields, feel free to use your own naming conventions. You only need to follow the tutorial to the point that the Synapse workspace is created, then return to this tutorial.
 
 ### Create a Synapse Spark pool
 Certain more complex transformations of data will be performed using Apache Spark. This requires the computation
