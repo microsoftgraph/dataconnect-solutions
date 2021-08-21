@@ -318,6 +318,17 @@ every 24 hours and handling the last day's data.
 The deployment script will create this triggers, but they will be stopped. You will have to go to the **Manage** menu,
 select **Triggers** and then activate each of the two triggers by pressing the **Activate** triangle button.
 
+> NOTE: It is possible (particularly in a Windows environment) that a "bad interpreter" error will occur that looks something like this:
+```
+bash: ./deploy.sh: /bin/bash^M: bad interpreter: No such file or directory
+```
+> If this happens, perform the following steps in the bash shell to resolve the issue:
+> 1. **Open deploy.sh file in vim editor:** ```vim deploy.sh```
+> 2. **Convert to Unix format:** Inside vim, type and enter ```:set ff=unix```
+> 3. **Save converted file:** Inside vim, type and enter ```:wq```  
+> 
+> The error should no longer be an issue.
+
 
 ### Monitoring the Synapse pipelines
 Once the Synapse pipelines are started by the triggers, they can be monitored by going to the **Monitor** tab, to the
