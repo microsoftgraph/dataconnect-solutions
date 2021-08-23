@@ -92,10 +92,11 @@ Therefore, you will need to create an Azure Active Directory app registration th
    > You can choose different values for **Description** and **Expires** if you like. Ensure you keep a copy of the 
    > hashed key after it is saved, as it is needed later in the tutorial (to be saved in KeyVault). 
    > The hashed value will never be shown again, so if you forget it, you will need to create a new one!
+   > This will be referenced as the *service principal key*.
 
    ![Screenshot of creating a password for an Azure AD application](./docs/environment_setup/create-service-principal-client-secret.png)
 
-   > This will be referenced as the *service principal key*.
+   
 8. Using the sidebar navigation for the application, select **Owners**.
 9. Ensure your account is listed as an owner for the application. If it isn't listed as an owner, add it.
 
@@ -145,6 +146,9 @@ In order to set it up please follow the instructions from the official documenta
 
 > ***IMPORTANT:***  
 > When choosing the name of the service, you MUST select a name with a length of less than 15 characters. If the name is too long, the pipeline (executed at a later step) will not  complete successfully.  
+
+Once the *Text Analytics* service is created, visit the Keys and Endpoint section (beneath Resource Management on the left navigation menu). Later in this documentation, you will require the key and endpoint values found here. Respectively, they will be referenced as `azure-ai-key` and `azure-ai-endpoint`.
+![azure ai key](./docs/environment_setup/azure-ai-key.png)
 
 From *Text Analytics* service, we'll use 2 provided API functions:
 - [sentiment analysis](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-sentiment-analysis?tabs=version-3-1)
@@ -207,7 +211,7 @@ Here is a list of all the secrets that have to be saved in Azure Key Vault and w
   dedicated sql pool: `SQL Server admin login` and `SQL Password`):
   - username, using the name `jdbcUsername`
   - secret password, using the name `jdbcPassword`
-- The secret of the service principal used to extract data from M365 and to connect to Azure Blob Storage. The name of
+- The service principal key used to extract data from M365 and to connect to Azure Blob Storage. The name of
   the secret has to be `m365-reader-secret`
 - The Text Analytics Key, using the name `azure-ai-key`
 
