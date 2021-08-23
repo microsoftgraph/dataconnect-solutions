@@ -167,6 +167,10 @@ In order to keep costs low, assuming you will use a rather small input dataset, 
 nodes to a minimum. Also, to enable automatic pausing after the pool is idle, go to `Pause Settings` (on the right of 
 the pool name in the pools list), select "Enabled", and set the desired idle duration.
 
+![spark pause settings](./docs/environment_setup/SparkPauseSettings.png)
+
+![spark pause settings2](./docs/environment_setup/SparkPauseSettings2.png)
+
 Please follow the next link to learn more about [Apache Spark in Synapse](https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/apache-spark-overview).
 
 In the Spark pool a few libraries have to be installed, dependencies used by the spark notebooks. The necessary steps
