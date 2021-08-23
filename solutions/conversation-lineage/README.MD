@@ -279,13 +279,15 @@ will be processed.
 To start up the deployment, log in to [https://portal.azure.com](https://portal.azure.com) and open a bash Azure Cloud Shell:
 ![azure cloud shell](./docs/azure_cloud_shell.png)
 
-*Observation* First time when you open it, azure will display the following window requesting permission
+*Observation:* The first time you open it, Azure will display the following window requesting permission
 to create a temporary storage account where all the deployment files that the user uploads will be stored.
-![azure_cloud_storage_request](./docs/azure_cloud_storage_request.png)
-Click: **Create Storage** and proceed further.
+![azure_cloud_storage_request](./docs/azure_cloud_storage_request.png)  
+Click **Create storage** and proceed further.
 
-Create an archive with the content of the  `./arm/` [folder](./arm) and upload it using the upload functionality
-in Azure Cloud Shell:   
+The next step requires a zip archive from the `./arm/` [folder](./arm) of the GitHub repository. Copy the folder's web address into the [prompt found here](https://download-directory.github.io/), which should look similar to this:  
+![download-directory](./docs/environment_setup/dl-directory.png)  
+
+Once the download completes, rename the file to `arm.zip` and upload it using the upload functionality in Azure Cloud Shell:   
 ![azure_upload_files](./docs/azure_upload_files.png)
 
 After the zip archive is uploaded, unzip the archive using the following command:
