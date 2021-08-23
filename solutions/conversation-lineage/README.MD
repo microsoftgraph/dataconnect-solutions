@@ -341,6 +341,7 @@ bash: ./deploy.sh: /bin/bash^M: bad interpreter: No such file or directory
 ### Monitoring the Synapse pipelines
 Once the Synapse pipelines are started by the triggers, they can be monitored by going to the **Monitor** tab, to the
 **Pipeline Runs** section. Once the pipelines complete, their status will become "Succeeded".  
+![pipeline monitoring](./docs/environment_setup/PipelineMonitoringPage.png)
 
 #### Approve Data Access Requests
 The first time a pipeline that read from M365 is run, it needs to be approved by a member of the "
