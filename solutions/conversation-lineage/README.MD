@@ -318,14 +318,15 @@ The values for the parameters should be as follows, for:
 - `--azure-ai-endpoint`, the endpoint of the Text Analytics resource created at [this step](#create-an-azure-cognitive-service)
 - `--m365-extraction-group-id`, the Object Id of the group created at [this step](#create-an-azure-ad-group)
 
-The script will perform `az login` for you, so you will be prompted to authenticate into Azure.
+The script will perform `az login` for you, so you will be prompted to authenticate into Azure.  
+![az-login](./docs/environment_setup/az-login.png)  
 
-The pipelines created by the script are orchestrated by Synapse triggers. One trigger is responsible with populating
+The pipelines created by the script are orchestrated by [Synapse triggers](https://docs.microsoft.com/en-us/azure/data-factory/how-to-create-tumbling-window-trigger?tabs=data-factory). One trigger is responsible for populating
 all the historical data from a given starting date and time, up to the start of the current hour.  
-Starting from that point, a second, recurring trigger, will process new data that will arrive in the future, by running
+Starting from that point, a second, recurring trigger will process new data that will arrive in the future, by running
 every 24 hours and handling the last day's data.
 
-The deployment script will create this triggers, but they will be stopped. You will have to go to the **Manage** menu,
+The deployment script will create these triggers, but they will be stopped. Inside of the Synapse workspace, you will have to go to the **Manage** menu,
 select **Triggers** and then activate each of the two triggers by pressing the **Activate** triangle button.
 
 > NOTE: It is possible (particularly in a Windows environment) that a "bad interpreter" error will occur that looks something like this:
@@ -341,14 +342,12 @@ bash: ./deploy.sh: /bin/bash^M: bad interpreter: No such file or directory
 
 
 ### Monitoring the Synapse pipelines
-Once the Synapse pipelines are started by the triggers, they can be monitored by going to the **Monitor** tab, to the
-**Pipeline Runs** section. Once the pipelines complete, their status will become "Succeeded".  
+Once the Synapse pipelines are started by the triggers, they can be monitored by going to the **Monitor** tab, then to the
+**Pipeline Runs** section. Once the pipelines complete, their status will become "Succeeded".  However, there are a few approvals that will be needed to allow the pipelines to finish.
 ![pipeline monitoring](./docs/environment_setup/PipelineMonitoringPage.png)
 
 #### Approve Data Access Requests
-The first time a pipeline that read from M365 is run, it needs to be approved by a member of the "
-Consent Request Approvers" group described earlier. The pipeline stage reading from M365 will remain in pending state
-until this request is given for up to 24 hours, before timing out.
+The first time a pipeline that read from M365 is run, it needs to be approved by a member of the "Consent Request Approvers" group described earlier. The pipeline stage reading from M365 will remain in a pending state for up to 24 hours until this approval is given, before timing out.
 
 When the `End2EndMgdc101WithConvLineage` pipeline is triggered  to run for the first time, there will be 5 Data Access
 Requests that will be generated in the Microsoft 365 Admin Center. The Data Access Requests can be seen in the [Settings
@@ -361,14 +360,14 @@ events data.
 The user that approves the Data Access Requests has to be different from the user that created and deployed all the resources
 in the resource group.
 
-In order to approve a Data Access Request, click the one you want to approve, a popup will show with the two options,
+In order to approve a Data Access Request, click the one you want to approve and a popup will appear with the two options,
 approve or deny, as shown in the image below.
 
 ![admin portal](./docs/data-access-request-example.png)
 
 
 ### Create and visualize the PowerBI reports
-The main pipeline started by the backfill trigger will in turn launch child pipelines. Once they have all successfully 
+The main pipeline started by the backfill trigger will, in turn, launch child pipelines. Once they have all successfully 
 completed and the main pipeline completes as well, the final step is to create and visualize the PowerBI reports
 on top of the data.
 
