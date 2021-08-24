@@ -101,7 +101,10 @@ mvn clean install -DskipTests
         mv build.tar.gz wc-0.2.0.tar.gz
         ```  
      
-   - upload the `wc-x.y.z.tar.gz` build file to a specific storage account from where you can download it via wget
+   - upload the `wc-x.y.z.tar.gz` build file to a specific storage account from where you can download it via wget:
+        ```commandline
+        wget https://testdeployment.blob.core.windows.net/watercooler-artifact/wc-x.y.z.tar.gz
+        ```
 
 
 ### Running installation for the new created build:
