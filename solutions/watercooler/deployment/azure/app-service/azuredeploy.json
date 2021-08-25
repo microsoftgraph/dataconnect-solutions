@@ -506,22 +506,6 @@
           {
             "category": "AppServiceAppLogs",
             "enabled": "[parameters('jwcCoreLogs.AppServiceAppLogs')]"
-          },
-          {
-            "category": "AppServiceFileAuditLogs",
-            "enabled": "[parameters('jwcCoreLogs.AppServiceFileAuditLogs')]"
-          },
-          {
-            "category": "AppServiceAuditLogs",
-            "enabled": "[parameters('jwcCoreLogs.AppServiceAuditLogs')]"
-          },
-          {
-            "category": "AppServiceIPSecAuditLogs",
-            "enabled": "[parameters('jwcCoreLogs.AppServiceIPSecAuditLogs')]"
-          },
-          {
-            "category": "AppServicePlatformLogs",
-            "enabled": "[parameters('jwcCoreLogs.AppServicePlatformLogs')]"
           }
         ],
         "metrics": [
