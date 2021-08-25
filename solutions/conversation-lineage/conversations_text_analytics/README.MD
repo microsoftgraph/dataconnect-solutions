@@ -287,15 +287,14 @@ The global parameters should be set as show in here:
 - ![parameters for process conversation lineage](../docs/analytics_notebook_imgs/parameters_for_process_conversation_lineage_notebook.png)
 
 ### Spark pool prerequisites
-A requirements.txt file containing the following lines is provided: [requirements.txt](./requirements.txt)
-containing the following lines
+A requirements.txt file containing the following lines is provided: [requirements.txt](./requirements.txt)  
 ```text
 azure-ai-textanalytics==5.0.0
 html2text
 ```
-
+Either download the requirements.txt file, or copy the above lines of text into a new text file and save it locally as `requirements.txt`.  
 In order to deploy the requirements in the synapse spark pool, navigate to the *Apache Spark pools* menu entry in synapse.
-Select your created spark pool and click on the spark pool package menu entry as shown here: ![../docs/analytics_notebook_imgs/spark_pool_settings.png](../docs/analytics_notebook_imgs/spark_pool_settings.png)
+Select your created spark pool, click the `...` on the spark pool and select **Packages** as shown here: ![../docs/analytics_notebook_imgs/spark_pool_settings.png](../docs/analytics_notebook_imgs/spark_pool_settings.png)
 Click on the upload icon and upload the requirements.txt file as shown here: ![../docs/analytics_notebook_imgs/spark_pool_packages.png](../docs/analytics_notebook_imgs/spark_pool_packages.png)
 
 
