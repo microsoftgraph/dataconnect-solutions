@@ -84,21 +84,21 @@ Therefore, you will need to create an Azure Active Directory app registration th
   - **Supported account types**: Accounts in this organizational directory only
   - **Redirect URI**: *Leave the default values*
    ![App registration values](./docs/environment_setup/app-registration-values.png)
-6. Once registration is complete, the following view should appear:
+6. Click **Register**.
+7. Once registration is complete, the following view should appear:
    ![Service principal ids](./docs/environment_setup/service-principal-ids.png)  
    A. Locate the **Application (client) ID** and copy it as you will need it later in this lab. This will be referred to as the *service principal ID*.  
    B. Locate the **Directory (tenant) ID** and copy it as you will need it later in this lab. This will be referred to as the *tenant ID*.
-7. Select **Certificates & secrets** under **Manage** in the sidebar navigation. Then select the **New client secret** button. Leave **Description** empty, set **Expires** to `24 months` and choose **Add**.
+8. Select **Certificates & secrets** under **Manage** in the sidebar navigation. Then select the **New client secret** button. Leave **Description** empty, set **Expires** to `24 months` and choose **Add**.
    > You can choose different values for **Description** and **Expires** if you like. Ensure you keep a copy of the 
-   > hashed key after it is saved, as it is needed later in the tutorial (to be saved in KeyVault). 
+   > hashed key (Value) after it is saved, as it will be saved to the Key Vault later in the tutorial. 
    > The hashed value will never be shown again, so if you forget it, you will need to create a new one!
    > This will be referenced as the *service principal key*.
 
    ![Screenshot of creating a password for an Azure AD application](./docs/environment_setup/create-service-principal-client-secret.png)
-
-   
-8. Using the sidebar navigation for the application, select **Owners**.
-9. Ensure your account is listed as an owner for the application. If it isn't listed as an owner, add it.
+  
+9. Using the sidebar navigation for the application, select **Owners**.
+10. Ensure your account is listed as an owner for the application. If it isn't listed as an owner, add it.
 
 ### Create an Azure AD group
 While ingesting data from M365 you have the option of retrieving the data for all users (having an Office 365 license),
@@ -112,7 +112,7 @@ The steps required to create a group and add members to it are described [here](
 
 Once the group is created, add to it users for which the M365 data (profile, emails, calendar events, team chats) should
 be processed. The users must have an Office 365 license, for their data to be actually retrieved.  
-In the **Overview** page of the group, look for the **ObjectId** and copy its value as you will need it later.
+In the **Overview** page of the group, look for the **Object Id** and copy its value as you will need it later.
 
 ### Create an Azure resource group
 Create a resource group to hold all the Azure resources required for this project.  
@@ -136,18 +136,23 @@ Once complete, navigate back to *Containers* from the Storage Account resource i
 ![adls containers](./docs/environment_setup/ADLSContainers.png)
 > NOTE: The $logs folder is created by default upon deploying the storage account. This is not to be confused with the *logs* container created above. *$logs* is used for Storage Analytics and can be ignored for the purposes of this tutorial.
 
-Later in this tutorial, you will need the Azure Storage Account Key (to be referenced as `storageAccountKey`). This key can be acquired from the Access keys view (under the "Security + networking" section of the left navigation window) of the storage account.
-![storage account key](./docs/environment_setup/storageAccountKey.png)
+Later in this tutorial, you will need the Azure Storage Account Key (to be referenced as `storageAccountKey`). This key can be acquired from the Access keys view (under the "Security + networking" section of the left navigation window) of the storage account. To enable copying of the key, select **Show keys** and then copy. 
+![storage account key](./docs/environment_setup/storageAccountKey.png)  
+
 
 ### Create an Azure Cognitive Service
 Create an instance of Azure Cognitive Services meant to be used for sentiment analysis of interactions between users.
-From *Azure Cognitive Services* we'll use the *Text Analytics* service.  
-In order to set it up please follow the instructions from the official documentation [here](https://docs.microsoft.com/en-us/azure/cognitive-services/text-analytics/how-tos/text-analytics-how-to-call-api?tabs=synchronous#create-a-text-analytics-resource)
-
+1. From *Azure Cognitive Services* we'll use the *Text Analytics* service.  
+2. Go to the Azure portal and search for `Text Analytics`.  
+3. Select the **Text analytics** service and Click **Create**.  
+4. Click **Continue to create your resource**  
+5. Select your resource group (created earlier) and an appropriate **Region**, **Name**, and **Pricing tier**. Also be sure to review and acknowledge the terms of the Responsible AI Notice.  
 > ***IMPORTANT:***  
 > When choosing the name of the service, you MUST select a name with a length of less than 15 characters. If the name is too long, the pipeline (executed at a later step) will not  complete successfully.  
 
-Once the *Text Analytics* service is created, visit the Keys and Endpoint section (beneath Resource Management on the left navigation menu). Later in this documentation, you will require the key and endpoint values found here. Respectively, they will be referenced as `azure-ai-key` and `azure-ai-endpoint`.
+6. Once complete, click **Review + create** and then **Create**.  
+7. Once the *Text Analytics* service is created, visit the Keys and Endpoint section (beneath Resource Management on the left navigation menu). Later in this documentation, you will require the key and endpoint values found here. Respectively, they will be referenced as `azure-ai-key` and `azure-ai-endpoint`.  
+
 ![azure ai key](./docs/environment_setup/azure-ai-key.png)
 
 From *Text Analytics* service, we'll use 2 provided API functions:
@@ -157,28 +162,29 @@ From *Text Analytics* service, we'll use 2 provided API functions:
 ### Create an Azure Synapse workspace
 Create the Synapse workspace used to process all the data.
 For setting up a Synapse workspace, please follow the [official Synapse documentation](https://docs.microsoft.com/en-us/azure/synapse-analytics/get-started-create-workspace)
-and make sure to use your resource group. There is one necessary step not mentioned in the documentation. Before creating the workspace, be sure to visit the **Security** tab and create SQL administrator credentials for the workspace. The values you enter for **SQL Server admin login** and **SQL Password** will be referenced later as `jdbcUsername`and `jdbcPassword`, respectively.
-![sql server credentials](./docs/environment_setup/sql_server_credentials.png)
+and make sure to use your resource group. 
+> IMPORTANT:
+> There is one necessary step not mentioned in the documentation. Before creating the workspace, be sure to visit the **Security** tab and create SQL administrator credentials for the workspace. The values you enter for **SQL Server admin login** and **SQL Password** will be referenced later as `jdbcUsername`and `jdbcPassword`, respectively.  
+
+![sql server credentials](./docs/environment_setup/sql_server_credentials.png)  
 > NOTE: The official Synapse documentation tutorial will instruct you to create a new storage account (not the one created in an earlier [step](#create-an-azure-storage-account)). When filling in the **Workspace name**, **Data Lake Storage Storage Account name**, and **File system name** fields, feel free to use your own naming conventions. You only need to follow the tutorial to the point that the Synapse workspace is created, then return to this tutorial.
 
 ### Create a Synapse Spark pool
 Certain more complex transformations of data will be performed using Apache Spark. This requires the computation
 resources of a Spark cluster. Synapse provides an integrated Spark cluster via Spark pools.  
 
-From Synapse Studio, create a Spark pool named `mgdc101synapse` by adapting the steps in [this tutorial](https://docs.microsoft.com/en-us/azure/synapse-analytics/quickstart-create-apache-spark-pool-studio).
-This can also be [done from Azure portal](https://docs.microsoft.com/en-us/azure/synapse-analytics/quickstart-create-apache-spark-pool-portal).  
+From Synapse Studio, create a Spark pool named `mgdc101synapse` by adapting the steps in [this tutorial](https://docs.microsoft.com/en-us/azure/synapse-analytics/quickstart-create-apache-spark-pool-studio#create-the-apache-spark-pool-in-synapse-studio). Return to this tutorial once you reach step 4 of the **Create a Synapse Spark pool** section.
 In order to keep costs low, assuming you will use a rather small input dataset, use small nodes and keep the number of
-nodes to a minimum. Also, to enable automatic pausing after the pool is idle, go to `Pause Settings` (on the right of 
-the pool name in the pools list), select "Enabled", and set the desired idle duration.
+nodes to a minimum. Also, to enable automatic pausing after the pool is idle, go to `Pause Settings` (on the right of the pool name in the pools list), select "Enabled", and set the desired idle duration.
 
 ![spark pause settings](./docs/environment_setup/SparkPauseSettings.png)
 
 ![spark pause settings2](./docs/environment_setup/SparkPauseSettings2.png)
 
-Please follow the next link to learn more about [Apache Spark in Synapse](https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/apache-spark-overview).
+If you would like to learn more about Apache Spark in Synapse, follow the link [here](https://docs.microsoft.com/en-us/azure/synapse-analytics/spark/apache-spark-overview).
 
-In the Spark pool a few libraries have to be installed, dependencies used by the spark notebooks. The necessary steps
-for installing the libraries are presented [here](./conversations_text_analytics/README.MD#spark-pool-prerequisites)  
+In the Spark pool, a few libraries need to be installed for the spark notebooks to execute properly. The necessary steps
+for installing the libraries are presented [here](./conversations_text_analytics/README.MD#spark-pool-prerequisites).  
 
 ### Create a Synapse dedicated SQL pool
 In order to keep most data transformations as accessible as possible, SQL queries are used. Also, the data is exposed
