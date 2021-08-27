@@ -1,0 +1,17 @@
+{
+    "name": "DS_Synapse_systemuser",
+    "properties": {
+        "annotations": [],
+        "type": "SqlPoolTable",
+        "schema": [],
+        "typeProperties": {
+            "schema": "Dataverse",
+            "table": "systemuser"
+        },
+        "sqlPool": {
+            "referenceName": "synapsededicatesqlpool",
+            "type": "SqlPoolReference"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}

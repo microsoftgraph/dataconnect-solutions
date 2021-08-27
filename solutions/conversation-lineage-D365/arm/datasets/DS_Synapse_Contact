@@ -1,0 +1,17 @@
+{
+    "name": "DS_Synapse_Contact",
+    "properties": {
+        "annotations": [],
+        "type": "SqlPoolTable",
+        "schema": [],
+        "typeProperties": {
+            "schema": "Dataverse",
+            "table": "contact"
+        },
+        "sqlPool": {
+            "referenceName": "synapsededicatesqlpool",
+            "type": "SqlPoolReference"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}

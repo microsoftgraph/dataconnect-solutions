@@ -1,0 +1,3054 @@
+{
+    "name": "PL_Copy_Dataverse_Data",
+    "properties": {
+        "activities": [
+            {
+                "name": "Copy Dataverse Contact",
+                "type": "Copy",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "02:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "SqlDWSource",
+                        "queryTimeout": "02:00:00",
+                        "partitionOption": "None"
+                    },
+                    "sink": {
+                        "type": "SqlPoolSink",
+                        "preCopyScript": "IF object_ID('Dataverse.contact') IS NOT NULL\nBEGIN\n   \n   TRUNCATE TABLE Dataverse.contact\n\nEND\n",
+                        "tableOption": "autoCreate",
+                        "sqlWriterUseTableLock": false
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "mappings": [
+                            {
+                                "source": {
+                                    "name": "Id",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "Id",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "SinkCreatedOn",
+                                    "type": "DateTime",
+                                    "physicalType": "datetime2"
+                                },
+                                "sink": {
+                                    "name": "SinkCreatedOn",
+                                    "type": "DateTime",
+                                    "physicalType": "DateTime"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "SinkModifiedOn",
+                                    "type": "DateTime",
+                                    "physicalType": "datetime2"
+                                },
+                                "sink": {
+                                    "name": "SinkModifiedOn",
+                                    "type": "DateTime",
+                                    "physicalType": "DateTime"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "statecode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "statecode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "statuscode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "statuscode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_addresstypecode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address3_addresstypecode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_addresstypecode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address1_addresstypecode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_freighttermscode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address1_freighttermscode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_shippingmethodcode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address1_shippingmethodcode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "paymenttermscode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "paymenttermscode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "gendercode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "gendercode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "preferredappointmenttimecode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "preferredappointmenttimecode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "customertypecode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "customertypecode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "customersizecode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "customersizecode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "preferredcontactmethodcode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "preferredcontactmethodcode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_freighttermscode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address2_freighttermscode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "educationcode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "educationcode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_freighttermscode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address3_freighttermscode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "accountrolecode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "accountrolecode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_shippingmethodcode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address2_shippingmethodcode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_addresstypecode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address2_addresstypecode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "territorycode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "territorycode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "preferredappointmentdaycode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "preferredappointmentdaycode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "haschildrencode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "haschildrencode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "familystatuscode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "familystatuscode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_shippingmethodcode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address3_shippingmethodcode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "leadsourcecode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "leadsourcecode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "shippingmethodcode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "shippingmethodcode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "donotpostalmail",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "donotpostalmail",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "creditonhold",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "creditonhold",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "donotbulkpostalmail",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "donotbulkpostalmail",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "donotbulkemail",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "donotbulkemail",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "donotfax",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "donotfax",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "isautocreate",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "isautocreate",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "donotemail",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "donotemail",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "participatesinworkflow",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "participatesinworkflow",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "marketingonly",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "marketingonly",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "isprivate",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "isprivate",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "isbackofficecustomer",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "isbackofficecustomer",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "merged",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "merged",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "donotphone",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "donotphone",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "donotsendmm",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "donotsendmm",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "followemail",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "followemail",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "owningbusinessunit",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "owningbusinessunit",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "owningbusinessunit_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "owningbusinessunit_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedonbehalfby",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedonbehalfby",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedonbehalfby_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedonbehalfby_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "slaid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "slaid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "slaid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "slaid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "parentcontactid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "parentcontactid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "parentcontactid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "parentcontactid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdonbehalfby",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdonbehalfby",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdonbehalfby_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdonbehalfby_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedby",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedby",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedby_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedby_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "owninguser",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "owninguser",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "owninguser_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "owninguser_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdbyexternalparty",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdbyexternalparty",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdbyexternalparty_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdbyexternalparty_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "owningteam",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "owningteam",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "owningteam_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "owningteam_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "slainvokedid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "slainvokedid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "slainvokedid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "slainvokedid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "transactioncurrencyid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "transactioncurrencyid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "transactioncurrencyid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "transactioncurrencyid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "masterid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "masterid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "masterid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "masterid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedbyexternalparty",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedbyexternalparty",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedbyexternalparty_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedbyexternalparty_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "accountid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "accountid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "accountid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "accountid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdby",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdby",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdby_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdby_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "preferredsystemuserid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "preferredsystemuserid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "preferredsystemuserid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "preferredsystemuserid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "ownerid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "ownerid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "ownerid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "ownerid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "parentcustomerid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "parentcustomerid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "parentcustomerid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "parentcustomerid_entitytype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "aging90",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 2,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "aging90",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "aging30",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 2,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "aging30",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "aging60_base",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 4,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "aging60_base",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "creditlimit",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 2,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "creditlimit",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "annualincome_base",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 4,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "annualincome_base",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "aging90_base",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 4,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "aging90_base",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "annualincome",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 2,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "annualincome",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "aging60",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 2,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "aging60",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "aging30_base",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 4,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "aging30_base",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "creditlimit_base",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 4,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "creditlimit_base",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "emailaddress2",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "emailaddress2",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "emailaddress1",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "emailaddress1",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_city",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_city",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_line1",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_line1",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_line1",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_line1",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_longitude",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 5,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "address1_longitude",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "managerphone",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "managerphone",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedon",
+                                    "type": "DateTime",
+                                    "physicalType": "datetime2"
+                                },
+                                "sink": {
+                                    "name": "modifiedon",
+                                    "type": "DateTime",
+                                    "physicalType": "DateTime"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "overriddencreatedon",
+                                    "type": "DateTime",
+                                    "physicalType": "datetime2"
+                                },
+                                "sink": {
+                                    "name": "overriddencreatedon",
+                                    "type": "DateTime",
+                                    "physicalType": "DateTime"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "yomilastname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "yomilastname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "yomifirstname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "yomifirstname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "yomifullname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "yomifullname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdbyexternalpartyname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdbyexternalpartyname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_line2",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_line2",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedbyyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedbyyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_telephone1",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_telephone1",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_line3",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_line3",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_county",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_county",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_city",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_city",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "preferredsystemuseridyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "preferredsystemuseridyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_utcoffset",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address3_utcoffset",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_primarycontactname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_primarycontactname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedbyexternalpartyyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedbyexternalpartyyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdbyyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdbyyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "entityimage_url",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "entityimage_url",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "preferredsystemuseridname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "preferredsystemuseridname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_stateorprovince",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_stateorprovince",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "mobilephone",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "mobilephone",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "parentcustomeridyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "parentcustomeridyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_country",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_country",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_line2",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_line2",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_stateorprovince",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_stateorprovince",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "assistantphone",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "assistantphone",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_line3",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_line3",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "onholdtime",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "onholdtime",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "parentcontactidyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "parentcontactidyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_longitude",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 5,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "address3_longitude",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_fax",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_fax",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "birthdate",
+                                    "type": "DateTime",
+                                    "physicalType": "datetime2"
+                                },
+                                "sink": {
+                                    "name": "birthdate",
+                                    "type": "DateTime",
+                                    "physicalType": "DateTime"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_utcoffset",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address1_utcoffset",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "versionnumber",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "versionnumber",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedbyexternalpartyname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedbyexternalpartyname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_telephone1",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_telephone1",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "exchangerate",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 12,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "exchangerate",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_composite",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_composite",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "telephone3",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "telephone3",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "description",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "description",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "childrensnames",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "childrensnames",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_latitude",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 5,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "address2_latitude",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdon",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdon",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "slaname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "slaname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_composite",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_composite",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "firstname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "firstname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "callback",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "callback",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "lastusedincampaign",
+                                    "type": "DateTime",
+                                    "physicalType": "datetime2"
+                                },
+                                "sink": {
+                                    "name": "lastusedincampaign",
+                                    "type": "DateTime",
+                                    "physicalType": "DateTime"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "employeeid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "employeeid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "processid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "processid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "owneridyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "owneridyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "governmentid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "governmentid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_line3",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_line3",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "parentcustomeridname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "parentcustomeridname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "timezoneruleversionnumber",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "timezoneruleversionnumber",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "spousesname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "spousesname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_county",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_county",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_county",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_county",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "pager",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "pager",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_postofficebox",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_postofficebox",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_telephone1",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_telephone1",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_telephone2",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_telephone2",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_telephone3",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_telephone3",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "telephone1",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "telephone1",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_addressid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_addressid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "traversedpath",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "traversedpath",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "websiteurl",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "websiteurl",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_name",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_name",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_country",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_country",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "middlename",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "middlename",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_telephone2",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_telephone2",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "entityimageid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "entityimageid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "timespentbymeonemailandmeetings",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "timespentbymeonemailandmeetings",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_upszone",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_upszone",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "entityimage_timestamp",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "entityimage_timestamp",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "owneridname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "owneridname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdonbehalfbyyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdonbehalfbyyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_composite",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_composite",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "transactioncurrencyidname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "transactioncurrencyidname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_stateorprovince",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_stateorprovince",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "externaluseridentifier",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "externaluseridentifier",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedonbehalfbyname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedonbehalfbyname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdonbehalfbyname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdonbehalfbyname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdbyexternalpartyyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdbyexternalpartyyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "mastercontactidname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "mastercontactidname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "jobtitle",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "jobtitle",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "nickname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "nickname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "managername",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "managername",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_telephone2",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_telephone2",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_telephone3",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_telephone3",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_latitude",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 5,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "address3_latitude",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "contactid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "contactid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "suffix",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "suffix",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "slainvokedidname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "slainvokedidname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_postalcode",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_postalcode",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "fax",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "fax",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "mastercontactidyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "mastercontactidyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "assistantname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "assistantname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "yomimiddlename",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "yomimiddlename",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_country",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_country",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_utcoffset",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "address2_utcoffset",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_fax",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_fax",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "owneridtype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "owneridtype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_longitude",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 5,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "address2_longitude",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "createdbyname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "createdbyname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "accountidname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "accountidname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_primarycontactname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_primarycontactname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "lastonholdtime",
+                                    "type": "DateTime",
+                                    "physicalType": "datetime2"
+                                },
+                                "sink": {
+                                    "name": "lastonholdtime",
+                                    "type": "DateTime",
+                                    "physicalType": "DateTime"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_line2",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_line2",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_upszone",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_upszone",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_name",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_name",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "salutation",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "salutation",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_postalcode",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_postalcode",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "company",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "company",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "stageid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "stageid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "utcconversiontimezonecode",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "utcconversiontimezonecode",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_postalcode",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_postalcode",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "home2",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "home2",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "anniversary",
+                                    "type": "DateTime",
+                                    "physicalType": "datetime2"
+                                },
+                                "sink": {
+                                    "name": "anniversary",
+                                    "type": "DateTime",
+                                    "physicalType": "DateTime"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "importsequencenumber",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "importsequencenumber",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "telephone2",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "telephone2",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "subscriptionid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "subscriptionid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "department",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "department",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_city",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_city",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "business2",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "business2",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_name",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_name",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_fax",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_fax",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_latitude",
+                                    "type": "Decimal",
+                                    "physicalType": "decimal",
+                                    "scale": 5,
+                                    "precision": 38
+                                },
+                                "sink": {
+                                    "name": "address1_latitude",
+                                    "type": "Decimal",
+                                    "physicalType": "Decimal"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_telephone3",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_telephone3",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "emailaddress3",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "emailaddress3",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_postofficebox",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_postofficebox",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "parentcustomeridtype",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "parentcustomeridtype",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "parentcontactidname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "parentcontactidname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedbyname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedbyname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_line1",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_line1",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_upszone",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_upszone",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "lastname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "lastname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "accountidyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "accountidyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_addressid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_addressid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "modifiedonbehalfbyyominame",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "modifiedonbehalfbyyominame",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "ftpsiteurl",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "ftpsiteurl",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "numberofchildren",
+                                    "type": "Int64",
+                                    "physicalType": "bigint"
+                                },
+                                "sink": {
+                                    "name": "numberofchildren",
+                                    "type": "Int64",
+                                    "physicalType": "Int64"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address1_postofficebox",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address1_postofficebox",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address2_primarycontactname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address2_primarycontactname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "fullname",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "fullname",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            },
+                            {
+                                "source": {
+                                    "name": "address3_addressid",
+                                    "type": "String",
+                                    "physicalType": "nvarchar"
+                                },
+                                "sink": {
+                                    "name": "address3_addressid",
+                                    "type": "String",
+                                    "physicalType": "String"
+                                }
+                            }
+                        ],
+                        "typeConversion": true,
+                        "typeConversionSettings": {
+                            "allowDataTruncation": true,
+                            "treatBooleanAsNumber": false
+                        }
+                    }
+                },
+                "inputs": [
+                    {
+                        "referenceName": "DS_Dataverse_Contact",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "DS_Contact",
+                        "type": "DatasetReference"
+                    }
+                ]
+            },
+            {
+                "name": "Copy Dataverse systemuser",
+                "type": "Copy",
+                "dependsOn": [
+                    {
+                        "activity": "Copy Dataverse Contact",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "SqlDWSource",
+                        "queryTimeout": "02:00:00",
+                        "partitionOption": "None"
+                    },
+                    "sink": {
+                        "type": "SqlPoolSink",
+                        "preCopyScript": "IF object_ID('Dataverse.systemuser') IS NOT NULL\nBEGIN\n   \n   TRUNCATE TABLE Dataverse.systemuser\n\nEND\n",
+                        "tableOption": "autoCreate",
+                        "sqlWriterUseTableLock": false
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "typeConversion": true,
+                        "typeConversionSettings": {
+                            "allowDataTruncation": true,
+                            "treatBooleanAsNumber": false
+                        }
+                    }
+                },
+                "inputs": [
+                    {
+                        "referenceName": "DS_Dataverse_SystemUser",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "DS_Synapse_systemuser",
+                        "type": "DatasetReference"
+                    }
+                ]
+            }
+        ],
+        "folder": {
+            "name": "D365"
+        },
+        "annotations": [],
+        "lastPublishTime": "2021-08-26T17:57:47Z"
+    },
+    "type": "Microsoft.Synapse/workspaces/pipelines"
+}
