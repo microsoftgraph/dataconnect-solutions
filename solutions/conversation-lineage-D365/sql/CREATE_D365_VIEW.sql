@@ -62,79 +62,48 @@ AS (
 		,Contacts.ContactEmail
 		,general_sentiment
 		,O.SourceType
-	FROM [dbo].[vInteractions_one_to_one] O
-	LEFT JOIN [dbo].[vConversationSentiment] S ON S.interaction_id = O.InteractionId
-    LEFT JOIN Users ON (users.Email = O.Sender OR users.Email = O.Recipient)
-    LEFT JOIN Contacts ON (Contacts.ContactEmail = O.Recipient OR Contacts.ContactEmail = O.Sender)
-	
+	FROM [dbo].[vInteractions_one_to_one] O, Users, Contacts, [dbo].[vConversationSentiment] S
+	WHERE S.interaction_id = O.InteractionId AND (Users.Email = O.Sender AND Contacts.ContactEmail = O.Recipient) 
+    	OR (Users.Email = O.Recipient AND Contacts.ContactEmail = O.Sender)
 ),
 
 -- Get Counts
 Counts (
-	PersonA
-	,PersonB
-	,OverallSentiment
-	,OWNER
+	OWNER
 	,Contact
-    ,SentimentCount    
+	,OverallSentiment
+	,SentimentCount    
 	)
 AS (
-	SELECT PersonA
-		,PersonB
-		,Sentiment
-		,OWNER
+	SELECT OWNER
 		,Contact
-		,COUNT(*) Count   
+		,Sentiment
+		,COUNT(*)
 	FROM Interactions
-	GROUP BY PersonA
-		,PersonB
-		,Sentiment
-		,OWNER
+	GROUP BY OWNER
 		,Contact
+		,Sentiment
 	),
 
--- Calculate Dense Rank
-DenseRank (
-	PersonA
-	,PersonB
-	,OverallSentiment
-	,OWNER
-	,Contact
-    ,Rankity
-	)
-AS (
-	SELECT PersonA
-		,PersonB
-		,OverallSentiment
-		,OWNER
-		,Contact
-		,DENSE_RANK() OVER (
-			PARTITION BY SentimentCount ORDER BY SentimentCount DESC
-			)        
-	FROM Counts
-),
-
--- Rank sentiment scores
+-- Calculate Dense Rank of sentiments
 Rankings (
-	PersonA
-	,PersonB
-	,OverallSentiment
-	,OWNER
+	OWNER
 	,Contact
-    ,Rankity
+	,OverallSentiment
+	,SentimentCount
+	,SentimentRank
 	)
 AS (
-	SELECT PersonA
-		,PersonB
-		,OverallSentiment
-		,OWNER
-		,Contact
-        ,Rankity
-	FROM DenseRank
-	WHERE Rankity = 1
-	)
+	SELECT *,
+		DENSE_RANK() OVER (
+			PARTITION BY OWNER, Contact ORDER BY SentimentCount DESC
+			) AS SentimentRank
+	FROM Counts
+)
+
+-- Fully joined view
 SELECT U.fullname OWNER
-	,U.businessunitid company
+	,U.organizationidname company
 	,U.address1_city city
 	,U.address1_stateorprovince STATE
 	,C.fullname client
@@ -146,3 +115,5 @@ SELECT U.fullname OWNER
 FROM Rankings R
 LEFT JOIN Dataverse.contact C ON C.emailaddress1 = R.Contact
 LEFT JOIN Dataverse.systemuser U ON U.internalemailaddress = R.OWNER
+WHERE R.SentimentRank = 1
+ORDER BY OWNER ASC, Contact ASC
