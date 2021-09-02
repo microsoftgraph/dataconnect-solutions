@@ -1197,7 +1197,7 @@
                             "libraries": [
                                 {
                                     "pypi": {
-                                        "package": "azure-core==1.9.0"
+                                        "package": "azure-core==1.17.0"
                                     }
                                 },
                                 {
@@ -1212,7 +1212,7 @@
                                 },
                                 {
                                     "pypi": {
-                                        "package": "azure-storage-blob==12.7.0"
+                                        "package": "azure-storage-blob==12.8.0"
                                     }
                                 },
                                 {
@@ -1534,7 +1534,7 @@
                                 },
                                 {
                                     "pypi": {
-                                        "package": "azure-storage-blob==12.7.0"
+                                        "package": "azure-storage-blob==12.8.0"
                                     }
                                 },
                                 {
@@ -1761,7 +1761,7 @@
                                 },
                                 {
                                     "pypi": {
-                                        "package": "azure-storage-blob==12.7.0"
+                                        "package": "azure-storage-blob==12.8.0"
                                     }
                                 },
                                 {
@@ -2380,7 +2380,7 @@
                                 },
                                 {
                                     "pypi": {
-                                        "package": "azure-storage-blob==12.7.0"
+                                        "package": "azure-storage-blob==12.8.0"
                                     }
                                 },
                                 {
@@ -5030,7 +5030,7 @@
                                 },
                                 {
                                     "pypi": {
-                                        "package": "azure-storage-blob==12.7.0"
+                                        "package": "azure-storage-blob==12.8.0"
                                     }
                                 },
                                 {
