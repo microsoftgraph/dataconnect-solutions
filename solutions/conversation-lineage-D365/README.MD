@@ -29,7 +29,7 @@ To complete this section, the following information will be needed from the reso
 
 > NOTE: The Dataverse (D365) tables we will use for this tutorial will be the `systemuser`, `account`, and `contact` tables. Please be sure to select these tables when initially setting up the Azure Synapse Link.  
 
-With the above information in hand, proceed to the [Microsoft documentation](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage#create-an-azure-synapse-workspace) for details on how to create the Azure Synapse Link. Return to this tutorial once you have reached the completion of the **'Connect Dataverse to Synapse workspace'** section of the documentation.
+With the above information in hand, proceed to the [Microsoft documentation](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage#create-an-azure-synapse-workspace) for details on how to create the Azure Synapse Link. This step will provide Synapse access to the data that will be paired with Conversation Lineage. Return to this tutorial once you have reached the completion of the **'Connect Dataverse to Synapse workspace'** section of the documentation.
 
 Your D365 data should now be syncing to your Azure Synapse Workspace. The data is initially stored in a Spark DB inside Synapse. In the following sections, we will copy the data to the dedicated SQL DB for merging with Conversation Lineage.
 
@@ -49,6 +49,16 @@ Your D365 data should now be syncing to your Azure Synapse Workspace. The data i
 7. The new schema should now be successfully created.
 
 > NOTE: If additional users will need access to the joined data directly in the dedicated SQL database, you can add a user by executing the contents of [this file](./sql/Add_User.sql) in a SQL script similar to the above example. 
+
+## Create CRM tables in Azure Synapse
+1. Go to the Develop tab on the left navigation, click the `+` sign and select **SQL script**  
+2. In the newly created SQL script pane, update the **Connect to** drop-down to point to your dedicated SQL pool.  
+![New SQL Script](./docs/NewSQLScript.png)  
+3. Execute the [SQL to create the CRM tables](./sql/Create_CRM_Tables.sql), where the CRM data will ultimately land.  
+
+Now, in your dedicated SQL database, the new tables should now exist along with those from Conversation Lineage. Later, the data that will populate these tables will join with Conversation Lineage to view the sentiment between users and their customers, as well as some metadata on each (city, state, title, etc).
+
+> NOTE: The tables created assume the [Common Data Model](https://docs.microsoft.com/en-us/common-data-model) and are subsets of CRM data from this structure. For future considerations, you can choose to create schema and data columns that suit the data you want to carry over into Synapse here.
 
 ## Deploy pipeline resources to Azure Synapse
 Locate the following details within your Synapse workspace, as they will be needed for the deployment script:  
