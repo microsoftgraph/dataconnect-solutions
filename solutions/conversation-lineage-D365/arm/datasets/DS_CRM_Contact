@@ -1,0 +1,50 @@
+{
+    "name": "DS_CRM_Contact",
+    "properties": {
+        "annotations": [],
+        "type": "SqlPoolTable",
+        "schema": [
+            {
+                "name": "client_id",
+                "type": "nvarchar"
+            },
+            {
+                "name": "client_email",
+                "type": "varchar"
+            },
+            {
+                "name": "full_name",
+                "type": "nvarchar"
+            },
+            {
+                "name": "job_title",
+                "type": "nvarchar"
+            },
+            {
+                "name": "department",
+                "type": "nvarchar"
+            },
+            {
+                "name": "client_city",
+                "type": "nvarchar"
+            },
+            {
+                "name": "client_state",
+                "type": "nvarchar"
+            },
+            {
+                "name": "owner_id",
+                "type": "nvarchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "crm_contact"
+        },
+        "sqlPool": {
+            "referenceName": "synapsededicatesqlpool",
+            "type": "SqlPoolReference"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}
