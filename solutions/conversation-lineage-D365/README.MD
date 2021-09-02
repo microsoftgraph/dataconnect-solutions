@@ -56,7 +56,7 @@ Your D365 data should now be syncing to your Azure Synapse Workspace. The data i
 ![New SQL Script](./docs/NewSQLScript.png)  
 3. Execute the [SQL to create the CRM tables](./sql/Create_CRM_Tables.sql), where the CRM data will ultimately land.  
 
-Now, in your dedicated SQL database, the new tables should now exist along with those from Conversation Lineage. Later, the data that will populate these tables will join with Conversation Lineage to view the sentiment between users and their customers, as well as some metadata on each (city, state, title, etc).
+In your dedicated SQL database, the new tables should now exist along with those from Conversation Lineage. Later, the data that will populate these tables will join with Conversation Lineage to view the sentiment between users and their customers, as well as some metadata on each (city, state, title, etc).
 
 > NOTE: The tables created assume the [Common Data Model](https://docs.microsoft.com/en-us/common-data-model) and are subsets of CRM data from this structure. For future considerations, you can choose to create schema and data columns that suit the data you want to carry over into Synapse here.
 
@@ -114,11 +114,10 @@ To monitor the completion of the pipeline trigger, go to **Monitor**, click **Pi
 ![Monitor Pipeline](./docs/MonitorPipeline.png)  
 
 ## Create D365 View
-1. Go to the CREATE_D365_VIEW.sql found [here](./sql/CREATE_D365_VIEW.sql).
-2. Go back to the **Develop** tab in Synapse and open a SQL script (similar to the steps in the [Update dedicated SQL pool configuration](#update-dedicated-sql-pool-configuration) section above).
-3. Ensure that the **Connect to** is set to the dedicated SQL pool.
-4. Copy the entire contents of the SQL file from step 1 above into the SQL script and click **Run**.
-5. Once complete, the view `dbo.v_ConversationSentiment_D365` should be added. To verify, go to the **Data** tab on the left navigation, expand the dedicated SQL pool and expand views.  
+1. Go back to the **Develop** tab in Synapse and open a SQL script (similar to the steps in the [Update dedicated SQL pool configuration](#update-dedicated-sql-pool-configuration) section above).
+2. Ensure that the **Connect to** is set to the dedicated SQL pool.
+3. Copy and **Run** contents of the [Create_View_ConversationLineage_CRM.sql](./sql/Create_View_ConversationLineage_CRM.sql) file.
+4. Once complete, the view `dbo.v_ConversationSentiment_CRM` should be added. To verify, go to the **Data** tab on the left navigation, expand the dedicated SQL pool and expand views.  
 ![Verify View Creation](./docs/VerifyViewCreation.png)  
 
 > NOTE: If the query executed successfully, but the view is not displayed, right-click on the **Views** folder and click **Refresh**. The view should now be displayed.
