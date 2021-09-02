@@ -9,7 +9,7 @@ pipelines.
 
 
 ### Deployment and installation from source
-In order to deploy from source please follow the steps from the [./deployment/README.MD](./deployment/README.MD)
+In order to deploy from source please following [these steps](./deployment/README.MD)
 
 ### Setting up the application
 
@@ -28,16 +28,16 @@ Azure and then run the application locally while using the resources from the Az
 2. build the Watercooler App Service jar and all the ADB jars, by
    following [Building all the project jars at once section](#building-all-the-project-jars-at-once)
    
-3. setting up the python scripts and environment [./pywc/README.MD](./pywc/README.MD)
+3. setting up the python scripts and environment by following [these steps](./pywc/README.MD)
    
 4. prepare the zip with all the resulting artifacts (required for deployment), by
-   following [./deployment/README.MD#building-the-artifacts-zip section](./deployment/README.MD#building-the-deployment-artifacts-zip)
+   following [these steps](./deployment/README.MD#building-the-deployment-artifacts-zip)
    
 5. to perform a fresh full deployment in Azure, please follow the steps described in the deployment
-   script's [readme file (./deployment/azure/README.MD)](./deployment/azure/README.MD)
-   and in the [deployment overview document (docs/WatercoolerDeploymentOverview.MD)](docs/WatercoolerDeploymentOverview.MD)
-6. to run the application in Azure, please follow [./jwc/core/README.MD#running-the-application-in-azure](./jwc/core/README.MD#running-the-application-in-azure)
-7. to run the application locally, please follow [./jwc/core/README.MD#running-the-application-locally](./jwc/core/README.MD#running-the-application-locally)
+   script's [readme file](./deployment/azure/README.MD)
+   and in the [deployment overview document](docs/WatercoolerDeploymentOverview.MD)
+6. to run the application in Azure, please following [these steps](./jwc/core/README.MD#running-the-application-in-azure)
+7. to run the application locally, please following [these steps](./jwc/core/README.MD#running-the-application-locally)
 
 #### Prerequisites
 

@@ -188,7 +188,7 @@ In this case, one solution is to go to the database and manually fix the flyway_
 rows corresponding to the divergent changes, and then building and starting the application again.
 
 
-##flyway install database:  
+## Flyway install database:  
 run these commands (for app & tests) in `core` module base directory for each DB schema change:
 ```
 mvn flyway:info flyway:clean flyway:migrate -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:1533;databaseName=jwc
@@ -201,7 +201,7 @@ mvn flyway:info flyway:clean flyway:migrate -Dflyway.user=sa -Dflyway.password='
 mvn flyway:clean -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:11533;databaseName=jwc
 ```
 
-#Sql Managed Identity connection:
+## Sql Managed Identity connection:
 ```
 CREATE USER [<identity-name>] FROM EXTERNAL PROVIDER;
 ALTER ROLE db_datareader ADD MEMBER [<identity-name>];
