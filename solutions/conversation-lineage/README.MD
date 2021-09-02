@@ -312,7 +312,7 @@ The values for the parameters should be as follows, for:
 - `--workspace-name`, the name of the Synapse Workspace created at [this step](#create-an-azure-synapse-workspace)
 - `--spark-pool-name`, the name of the Synapse Spark pool created at [this step](#create-a-synapse-spark-pool)
 - `--start-date`, the start date and hour of day in UTC, of the backfill trigger (trigger that processes historical data
-  starting from given start date, to the current date). The format of the date has to be `YYYY-MM-DDTHH:00:00Z` (e.g. `2020-01-01T06:00:00Z`)  
+  starting from given start date, to the current date). The format of the date has to be `YYYY-MM-DDTHH:00:00Z` (e.g. `2021-01-01T06:00:00Z`)  
   - ***When choosing a start date, select a date within 500 days of the current day. If this is not followed, then the backfill trigger (more on this later) will fail due to the calculated Interval (CurrentDate - StartDate) exceeding 12000 hours (500 days).***
 - `--key-vault-endpoint`, the URL of the Key Vault service created at [this step](#create-an-azure-key-vault)
 - `--storage-account-endpoint`, the url of the Storage Account created at [this step](#create-an-azure-storage-account)
