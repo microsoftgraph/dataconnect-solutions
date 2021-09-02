@@ -112,7 +112,7 @@ class UserTokenService {
         } else if (response.getStatus == HttpStatus.BAD_REQUEST && responseJSONObject.getString("error").equals("invalid_grant") && responseJSONObject.getString("error_codes").contains("65001")) {
           throw PermissionConsentMissingException(s"The user has not consented to the permission with the scope: $scope", consentRequestUrl = generateUserPermissionConsentUrl())
         } else {
-          logger.warn(s"Invalid response from microsoft. Status: ${response.getStatus}, response: ${responseJSONObject.toMap}, secret: ${urlEncodedServicePrincipalSecret}")
+          logger.warn(s"Invalid response from microsoft. Status: ${response.getStatus}, response: ${responseJSONObject.toMap}")
           throw new FailedToGetAzureServiceManagerTokenException(s"Request to get Azure Service Manager token on behalf of user failed.")
         }
       case Failure(exception: Throwable) =>
