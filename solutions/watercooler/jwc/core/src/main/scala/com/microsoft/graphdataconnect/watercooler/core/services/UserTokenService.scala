@@ -8,15 +8,12 @@ package com.microsoft.graphdataconnect.watercooler.core.services
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
-import com.microsoft.graphdataconnect.watercooler.core.exceptions.FailedToGetAzureServiceManagerTokenException
-import com.microsoft.graphdataconnect.watercooler.core.models.UserToken
+import kong.unirest.json.JSONObject
+import kong.unirest.{HttpResponse, HttpStatus, JsonNode, Unirest}
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.microsoft.graphdataconnect.watercooler.common.exceptions.UnauthorizedException
 import com.microsoft.graphdataconnect.watercooler.core.exceptions.{FailedToGetAzureServiceManagerTokenException, PermissionConsentMissingException}
 import com.microsoft.graphdataconnect.watercooler.core.models.{TokenScope, UserInfo, UserToken}
-import com.microsoft.graphdataconnect.watercooler.core.utils.JwtTokenUtils
-import kong.unirest.{HttpResponse, HttpStatus, JsonNode, Unirest}
-import kong.unirest.json.JSONObject
 import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.cache.CacheManager
@@ -29,16 +26,15 @@ import scala.collection.JavaConverters._
 @Service
 class UserTokenService {
 
+  private val logger: Logger = LoggerFactory.getLogger(classOf[UserTokenService])
+
   @Autowired
   var objectMapper: ObjectMapper = _
 
   @Value("${jwc.appservice.url}")
   var jwcUrl: String = _
 
-//  @Value("${gdcAdmins.groupId}")
-//  var gdcAdminsGroupId: String = _
-
-  @Value("${aad-app-token:#{environment.JWC_SERVICE_PRINCIPAL_SECRET}}")
+  @Value("${aad-app-token}")
   var servicePrincipalSecret: String = _
 
   @Value("${service.principal.tenantId}")
@@ -49,8 +45,6 @@ class UserTokenService {
 
   @Autowired
   var cacheManager: CacheManager = _
-
-  private val logger: Logger = LoggerFactory.getLogger(classOf[UserTokenService])
 
   def getUserId(cookieValue: String): String = {
     getUserInfo(cookieValue).userId
@@ -79,13 +73,6 @@ class UserTokenService {
         throw new UnauthorizedException("Failed to get user info from /.auth/me endpoint!")
     }
   }
-
-
-//  def isUserPartOfAdminsGroup(clientPrincipalToken: String): Boolean = {
-//    val jwtTokenHeaders = objectMapper.readValue(JwtTokenUtils.extractHeader(clientPrincipalToken), classOf[JwtTokenHeaders])
-//    val userGroups = jwtTokenHeaders.claims.filter(_.typ.equals("groups"))
-//    userGroups.exists(_.value.equals(gdcAdminsGroupId))
-//  }
 
   def getUserToken(xMsAadIdToken: String = "", refreshToken: String = "", authSessionCookie: String = "", scope: TokenScope): UserToken = {
     if (xMsAadIdToken.nonEmpty && refreshToken.nonEmpty) {
@@ -125,6 +112,7 @@ class UserTokenService {
         } else if (response.getStatus == HttpStatus.BAD_REQUEST && responseJSONObject.getString("error").equals("invalid_grant") && responseJSONObject.getString("error_codes").contains("65001")) {
           throw PermissionConsentMissingException(s"The user has not consented to the permission with the scope: $scope", consentRequestUrl = generateUserPermissionConsentUrl())
         } else {
+          logger.warn(s"Invalid response from microsoft. Status: ${response.getStatus}, response: ${responseJSONObject.toMap}, secret: ${urlEncodedServicePrincipalSecret}")
           throw new FailedToGetAzureServiceManagerTokenException(s"Request to get Azure Service Manager token on behalf of user failed.")
         }
       case Failure(exception: Throwable) =>
@@ -165,15 +153,6 @@ class UserTokenService {
     val consentUrl = s"https://login.microsoftonline.com/$tenantId/oauth2/v2.0/authorize?client_id=$clientId&response_type=code&redirect_uri=$redirectUri&response_mode=form_post&scope=$scope"
     consentUrl
   }
-
-//  def isCurrentUserAnAdmin(httpHeaders: HttpHeaders): Boolean = {
-//    if (httpHeaders.toSingleValueMap.containsKey("x-ms-client-principal")) {
-//      val clientPrincipalToken = httpHeaders.toSingleValueMap.asScala("x-ms-client-principal")
-//      isUserPartOfAdminsGroup(clientPrincipalToken)
-//    } else {
-//      false
-//    }
-//  }
 
   def getUserToken(httpHeaders: HttpHeaders, authSessionCookie: String, scope: TokenScope): UserToken = {
     val httpHeadersMap = httpHeaders.toSingleValueMap.asScala

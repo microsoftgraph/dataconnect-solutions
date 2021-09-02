@@ -10,7 +10,7 @@
     <parent>
         <groupId>com.microsoft.graphdataconnect.watercooler</groupId>
         <artifactId>watercooler</artifactId>
-        <version>0.2.1-SNAPSHOT</version>
+        <version>0.2.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <version>${jwc.common.version}</version>
