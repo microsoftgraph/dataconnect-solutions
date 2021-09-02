@@ -17,9 +17,15 @@ This tutorial provides an example of how to supplement the Conversation Lineage 
 
 ## Prerequisites
 To complete this tutorial, the following items must be completed:
+- Completion of the [Conversation Lineage](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage#conversation-lineage) tutorial.
 - Configuration of a Dynamics 365 environment (with Dataverse).
   -  If you do not already have one configured, please follow the Microsoft official documentation [here](https://docs.microsoft.com/en-us/power-platform/admin/create-environment#create-an-environment-with-a-database).
-- Completion of the [Conversation Lineage](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage#conversation-lineage) tutorial.
+- Configured data within the Dynamics 365 CRM tables that matches the Conversation Lineage data. Specifically:
+  -  D365 `User` (systemuser) table requires `internalemailaddress` entries with matching `Sender` and/or `Recipient` entries in the `dbo.vInteractions_one_to_one` view.
+  -  D365 `Contact` table requires requires `emailaddress1` entries with matching `Sender` and/or `Recipient` entries in the `dbo.vInteractions_one_to_one` view.
+    - It is also important that conversation history exists between the entities in User and Contact.
+  -  D365 `Account` table requires `primarycontactid` entries matching `contactid` in the D365 `Contact` table.
+
 
 ## Create Azure Synapse Link
 To complete this section, the following information will be needed from the resources created as part of the Conversation Lineage tutorial:
