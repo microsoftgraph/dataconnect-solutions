@@ -76,7 +76,7 @@ mvn clean install -DskipTests
 
 2. Building the docker image 
 
-    *Observation: this step is optional; if you don't have possibility to push to a given registry, please use the default provided version: 0.2.0*
+    *Observation: this step is optional; if you don't have possibility to push to a given registry, please use the default provided version: 0.2.1*
     ```commandline
     docker build -t blueprint.azurecr.io/bpcs/watercooler:x.y.z .
     docker commit watercooler
@@ -98,7 +98,7 @@ mvn clean install -DskipTests
       ```
    - the result of running the above command will be a tar.gz file that we recommend renaming it to `wc-x.y.z.tar.gz`:
         ```commandLIne
-        mv build.tar.gz wc-0.2.0.tar.gz
+        mv build.tar.gz wc-0.2.1.tar.gz
         ```  
      
    - upload the `wc-x.y.z.tar.gz` build file to a specific storage account from where you can download it via wget:

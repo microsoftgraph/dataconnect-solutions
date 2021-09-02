@@ -263,6 +263,10 @@
               "value": "[parameters('clientId')]"
             },
             {
+              "name": "JWC_SERVICE_PRINCIPAL_SECRET",
+              "value": "[parameters('clientSecret')]"
+            },
+            {
               "name": "ADF_SUBSCRIPTION_ID",
               "value": "[parameters('subscriptionId')]"
             },
