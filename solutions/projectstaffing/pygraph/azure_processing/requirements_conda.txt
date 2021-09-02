@@ -1,13 +1,13 @@
 # This file may be used to create an Conda environment
 adal==1.2.5
 azure-common==1.1.26
-azure-core==1.9.0
+azure-core==1.17.0
 azure-identity==1.5.0
 azure-keyvault==4.1.0
 azure-keyvault-certificates==4.2.1
 azure-keyvault-keys==4.3.1
 azure-keyvault-secrets==4.2.0
-azure-storage-blob==12.7.0
+azure-storage-blob==12.8.0
 databricks-connect==6.6.0
 dill==0.3.3
 gensim==3.8.0
