@@ -27,7 +27,7 @@ To complete this section, the following information will be needed from the reso
 - **Workspace Name** (Synapse workspace)
 - **Storage Account name** (the one that was created for the Azure Synapse workspace during [this step](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage#create-an-azure-synapse-workspace) of the Conversation Lineage tutorial.)
 
-> NOTE: The Dataverse (D365) tables we will use for this tutorial will be the `systemuser` and `contact` tables. Please be sure to select these tables when initially setting up the Azure Synapse Link.  
+> NOTE: The Dataverse (D365) tables we will use for this tutorial will be the `systemuser`, `account`, and `contact` tables. Please be sure to select these tables when initially setting up the Azure Synapse Link.  
 
 With the above information in hand, proceed to the [Microsoft documentation](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage#create-an-azure-synapse-workspace) for details on how to create the Azure Synapse Link. Return to this tutorial once you have reached the completion of the **'Connect Dataverse to Synapse workspace'** section of the documentation.
 
@@ -53,7 +53,8 @@ Your D365 data should now be syncing to your Azure Synapse Workspace. The data i
 ## Deploy pipeline resources to Azure Synapse
 Locate the following details within your Synapse workspace, as they will be needed for the deployment script:  
 `Dataverse DB name`  
-`Synapse Workspace name`
+`Synapse Workspace name`  
+![SynapseDetails](./docs/DeployDetails.png) 
 
 To start up the deployment, log in to [https://portal.azure.com](https://portal.azure.com) and open a bash Azure Cloud Shell:
 ![azure cloud shell](https://github.com/microsoftgraph/dataconnect-solutions/blob/main/solutions/conversation-lineage/docs/azure_cloud_shell.png)  
