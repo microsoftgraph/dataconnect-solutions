@@ -1,0 +1,77 @@
+{
+  "--application-id": {
+    "help": "application id",
+    "default": "default",
+    "type": "str"
+  },
+  "--directory-id": {
+    "help": "directory id",
+    "default": "default",
+    "type": "str"
+  },
+  "--clusters": {
+    "help": "number of clusters",
+    "default": "10",
+    "type": "str"
+  },
+  "--max-group-size": {
+    "help": "maximum group size",
+    "default": "10",
+    "type": "str"
+  },
+  "--input-assembled-data-path": {
+    "help": "Input path of assembled data",
+    "default": "/Users/mod/watercooler/watercooler-test/assembled_data",
+    "type": "str"
+  },
+  "--kmeans-data-output-path": {
+    "help": "Output path for kmeans data",
+    "default": "/Users/mod/watercooler/watercooler-test/kmeans_output",
+    "type": "str"
+  },
+  "--log-analytics-workspace-id": {
+    "help": "Log Analytics workspace id",
+    "default": " ",
+    "type": "str"
+  },
+  "--log-analytics-workspace-key-name": {
+    "help": "Log Analytics workspace key secret name",
+    "default": "log-analytics-api-key",
+    "type": "str"
+  },
+  "--adb-secret-scope-name": {
+    "help": "ADB secret scope name",
+    "default": "jwc",
+    "type": "str"
+  },
+  "--adb-sp-client-key-secret-name": {
+    "help": "Azure Databricks Service Principal client key secret name in Databricks Secrets",
+    "default": "graph-api-app-token",
+    "type": "str"
+  },
+  "--key-vault-url": {
+    "help": "Azure Key Vault url",
+    "default": "default",
+    "type": "str"
+  },
+  "--tzinfo-to-time-slots-to-persons-file-name": {
+    "help": "File name for 'time zone info to time slots to persons assembled data' file",
+    "default": "tzinfo_to_time_slots_to_persons_dict.dict.gz",
+    "type": "str"
+  },
+  "--tzinfo-to-day-to-freetimeslots-file-name": {
+    "help": "File name for 'time zone info to  day to free time slots' file",
+    "default": "tzinfo_to_day_to_freetimeslots.dict.gz",
+    "type": "str"
+  },
+  "--tzinfo-people-with-meetings-file-name": {
+    "help": "File name for 'people time zone with meetings info' data file",
+    "default": "tzinfo_people_with_meetings.dict.gz",
+    "type": "str"
+  },
+  "--timezone-generated-groups-file-name": {
+    "help": "Tmezone generated groups output file name",
+    "default": "timezone_generated_groups.dict.gz",
+    "type": "str"
+  }
+}

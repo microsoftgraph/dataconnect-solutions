@@ -88,17 +88,18 @@ For local debugging and execution of the scripts, the following configuration fi
 `profiles_enrichment_params_default.json`,`mail_enrichment_params_default.json`.
 Those should be cloned to : `config.json`, `profiles_enrichment_params.json`, `mail_enrichment_params.json` and filled with the appropriate values.
 
+All this files can be found here: [./dev_config](./dev_config/)
+
 The config file `config.json` has the following structure and is being used by all the spark job python scripts:
 ```
 {
-  "datasource_connection_string": "DefaultEndpointsProtocol=https;AccountName=[...];AccountKey=jX+YA2[...];EndpointSuffix=core.windows.net",
   "SERVICE_PRINCIPAL_SECRET": "J65H1[...]"
 }
 ```
 
 The following fields need to be filled:
 - `SERVICE_PRINCIPAL_SECRET` - the secret for the `jwc-service` service principal, that is used by all spark jobs to connect to Azure services (AZBS, AzureSql, KeyVault etc)
-- `datasource_connection_string` - necessary for getting access to the storage
+
 
 > **Make sure not to commit this file** since it will contain sensitive information! Check if the rules from the `.gitignore` file cover your file name.  
 > Only store locally information for non-critical environments, which don't contain sensitive data and which can be easily decommissioned!

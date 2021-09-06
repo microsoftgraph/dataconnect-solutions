@@ -1,0 +1,117 @@
+{
+  "--storage-account-name": {
+    "help": "storage account name",
+    "default": "watercoolerdata",
+    "type": "str"
+  },
+  "--csv-input-data-path": {
+    "help": "Output path for csv files",
+    "default": "/Users/mod/watercooler/watercooler-test/csv_output_data",
+    "type": "str"
+  },
+  "--application-id": {
+    "help": "application id",
+    "default": "ec7d067b-87b4-4783-825b-34f56bcd4d22",
+    "type": "str"
+  },
+  "--directory-id": {
+    "help": "directory id",
+    "default": "d26bf63a-a52f-436a-bf3b-531b1e378694",
+    "type": "str"
+  },
+  "--adb-secret-scope-name": {
+    "help": "ADB secret scope name",
+    "default": "gdc",
+    "type": "str"
+  },
+  "--adb-sp-client-key-secret-name": {
+    "help": "Azure Databricks Service Principal client key secret name in Databricks Secrets",
+    "default": "gdc-service-principal-secret",
+    "type": "str"
+  },
+  "--key-vault-url": {
+    "help": "Azure Key Vault url",
+    "default": "default",
+    "type": "str"
+  },
+  "--log-analytics-workspace-id": {
+    "help": "Log Analytics workspace id",
+    "default": " ",
+    "type": "str"
+  },
+  "--log-analytics-workspace-key-name": {
+    "help": "Log Analytics workspace key secret name",
+    "default": "log-analytics-api-key",
+    "type": "str"
+  },
+  "--jdbc-host": {
+    "help": "jdbc host",
+    "default": "localhost",
+    "type": "str"
+  },
+  "--jdbc-port": {
+    "help": "jdbc port",
+    "default": "1533",
+    "type": "str"
+  },
+  "--jdbc-database": {
+    "help": "database name",
+    "default": "jwc",
+    "type": "str"
+  },
+  "--jdbc-username-key-name": {
+    "help": "JDBC Username Key Name",
+    "default": "",
+    "type": "str"
+  },
+  "--jdbc-password-key-name": {
+    "help": "JDBC Password Key Name",
+    "default": "",
+    "type": "str"
+  },
+  "--use-msi-azure-sql-auth": {
+    "help": "Use Managed Service Identity (MSI) to authenticate into AzureSql or use user and password read from KeyVault instead",
+    "default": "False",
+    "type": "str2bool"
+  },
+  "--export-batch-size": {
+    "help": "Batch size for exporting the data to Azure Sql",
+    "default": "10",
+    "type": "int"
+  },
+  "--members-group-personal-meetings-file-name": {
+    "help": "Csv file name for members group personal meetings data",
+    "default": "members_group_personal_meetings.csv",
+    "type": "str"
+  },
+  "--groups-per-weeks-file-name": {
+    "help": "Csv file name for groups per week data",
+    "default": "groups_per_week.csv",
+    "type": "str"
+  },
+  "groups-per-day-file-name": {
+    "help": "Csv file name for groups per day data",
+    "default": "groups_per_day.csv",
+    "type": "str"
+  },
+  "--members-to-group-participation-file-name": {
+    "help": "Csv file name for members to group participation data",
+    "default": "members_to_group_participation.csv",
+    "type": "str"
+  },
+  "--employee-profile-file-name": {
+    "help": "Csv file name for employee profiles data",
+    "default": "employee_profile.csv",
+    "type": "str"
+  },
+  "--jdbc-user": {
+    "help": "Username for database running on localhost",
+    "default": "default",
+    "type": "str"
+  },
+  "--jdbc-password": {
+    "help": "Password for database running on localhost",
+    "default": "default",
+    "type": "str"
+  }
+}

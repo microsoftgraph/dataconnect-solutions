@@ -1,0 +1,62 @@
+{
+  "--storage-account-name": {
+    "help": "storage account name",
+    "default": "watercoolerdata",
+    "type": "str"
+  },
+  "--input-container-name": {
+    "help": "input container name",
+    "default": "watercooler-test",
+    "type": "str"
+  },
+  "--input-folder-path": {
+    "help": "input folder path",
+    "default": "events",
+    "type": "str"
+  },
+  "--output-container-name": {
+    "help": "output container name",
+    "default": "watercooler-test",
+    "type": "str"
+  },
+  "--output-folder-path": {
+    "help": "output folder path",
+    "default": "watercooler_out_events",
+    "type": "str"
+  },
+  "--application-id": {
+    "help": "application id",
+    "default": "default",
+    "type": "str"
+  },
+  "--directory-id": {
+    "help": "directory id",
+    "default": "default",
+    "type": "str"
+  },
+  "--adb-secret-scope-name": {
+    "help": "ADB secret scope name",
+    "default": "jwc",
+    "type": "str"
+  },
+  "--adb-sp-client-key-secret-name": {
+    "help": "Azure Databricks Service Principal client key secret name in Databricks Secrets",
+    "default": "graph-api-app-token",
+    "type": "str"
+  },
+  "--log-analytics-workspace-id": {
+    "help": "Log Analytics workspace id",
+    "default": " ",
+    "type": "str"
+  },
+  "--log-analytics-workspace-key-name": {
+    "help": "Log Analytics workspace key secret name",
+    "default": "log-analytics-api-key",
+    "type": "str"
+  },
+  "--key-vault-url": {
+    "help": "Azure Key Vault url",
+    "default": "default",
+    "type": "str"
+  }
+}
