@@ -196,6 +196,11 @@ In order to un-install the deployment you have to execute the uninstall script:
 ./uninstall.sh [--subscription <subscription_id_string>]
 ```
 
+Example:
+```
+./uninstall.sh --deployment-name watercoolertest --subscription xxxxxxxx-xxxx-xxxx-xxx-xxxxxxxx
+```
+
 The subscription id of the subscription where the deployment was made is a *mandatory* argument.
 
 The uninstall script will ask for the name of the deployment to be cleaned up, in order to perform all the necessary steps.  
