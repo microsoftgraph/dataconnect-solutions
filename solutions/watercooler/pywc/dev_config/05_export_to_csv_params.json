@@ -1,0 +1,90 @@
+{
+  "--application-id": {
+    "help": "application id",
+    "default": "default",
+    "type": "str"
+  },
+  "--directory-id": {
+    "help": "directory id",
+    "default": "default",
+    "type": "str"
+  },
+  "--user-profiles-input-path": {
+    "help": "Full input path in dbfs for user profiles",
+    "default": "/Users/mod/watercooler/watercooler-test/watercooler_out_profiles",
+    "type": "str"
+  },
+  "--kmeans-data-input-path": {
+    "help": "Input path for kmeans data",
+    "default": "/Users/mod/watercooler/watercooler-test/kmeans_output",
+    "type": "str"
+  },
+  "--csv-output-data-path": {
+    "help": "Output path for csv files",
+    "default": "/Users/mod/watercooler/watercooler-test/csv_output_data",
+    "type": "str"
+  },
+  "--log-analytics-workspace-id": {
+    "help": "Log Analytics workspace id",
+    "default": " ",
+    "type": "str"
+  },
+  "--log-analytics-workspace-key-name": {
+    "help": "Log Analytics workspace key secret name",
+    "default": "log-analytics-api-key",
+    "type": "str"
+  },
+  "--adb-secret-scope-name": {
+    "help": "ADB secret scope name",
+    "default": "jwc",
+    "type": "str"
+  },
+  "--adb-sp-client-key-secret-name": {
+    "help": "Azure Databricks Service Principal client key secret name in Databricks Secrets",
+    "default": "graph-api-app-token",
+    "type": "str"
+  },
+  "--key-vault-url": {
+    "help": "Azure Key Vault url",
+    "default": "default",
+    "type": "str"
+  },
+  "--tzinfo-people-with-meetings-file-name": {
+    "help": "File name for 'people time zone with meetings info' data file",
+    "default": "tzinfo_people_with_meetings.dict.gz",
+    "type": "str"
+  },
+  "--timezone-generated-groups-file-name": {
+    "help": "Tmezone generated groups output file name",
+    "default": "timezone_generated_groups.dict.gz",
+    "type": "str"
+  },
+  "--members-group-personal-meetings-file-name": {
+    "help": "Csv file name for members group personal meetings data",
+    "default": "members_group_personal_meetings.csv",
+    "type": "str"
+  },
+  "--groups-per-weeks-file-name": {
+    "help": "Csv file name for groups per week data",
+    "default": "groups_per_week.csv",
+    "type": "str"
+  },
+  "groups-per-day-file-name": {
+    "help": "Csv file name for groups per day data",
+    "default": "groups_per_day.csv",
+    "type": "str"
+  },
+  "--members-to-group-participation-file-name": {
+    "help": "Csv file name for members to group participation data",
+    "default": "members_to_group_participation.csv",
+    "type": "str"
+  },
+  "--employee-profile-file-name": {
+    "help": "Csv file name for employee profiles data",
+    "default": "employee_profile.csv",
+    "type": "str"
+  }
+}
+
+
+

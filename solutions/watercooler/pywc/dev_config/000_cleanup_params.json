@@ -1,0 +1,67 @@
+{
+  "--application-id": {
+    "help": "application id",
+    "default": "default",
+    "type": "str"
+  },
+  "--directory-id": {
+    "help": "directory id",
+    "default": "default",
+    "type": "str"
+  },
+  "--adb-secret-scope-name": {
+    "help": "ADB secret scope name",
+    "default": "gdc",
+    "type": "str"
+  },
+  "--adb-sp-client-key-secret-name": {
+    "help": "Azure Databricks Service Principal client key secret name in Databricks Secrets",
+    "default": "default",
+    "type": "str"
+  },
+  "--key-vault-url": {
+    "help": "Azure Key Vault url",
+        "default": "default",
+    "type": "str"
+  },
+  "--log-analytics-workspace-id": {
+    "help": "Log Analytics workspace id",
+    "default": " ",
+    "type": "str"
+  },
+  "--log-analytics-workspace-key-name": {
+    "help": "Log Analytics workspace key secret name",
+    "default": "log-analytics-api-key",
+    "type": "str"
+  },
+  "--jdbc-host": {
+    "help": "jdbc host",
+    "default": "default",
+    "type": "str"
+  },
+  "--jdbc-port": {
+    "help": "jdbc port",
+    "default": "1433",
+    "type": "str"
+  },
+  "--jdbc-database": {
+    "help": "database name",
+    "default": "jwc-demo",
+    "type": "str"
+  },
+  "--jdbc-username-key-name": {
+    "help": "JDBC Username Key Name",
+    "default": "azure-sql-backend-username",
+    "type": "str"
+  },
+  "--jdbc-password-key-name": {
+    "help": "JDBC Password Key Name",
+    "default": "azure-sql-backend-password",
+    "type": "str"
+  },
+  "--use-msi-azure-sql-auth": {
+    "help": "Use Managed Service Identity (MSI) to authenticate into AzureSql or use user and password read from KeyVault instead",
+    "default": "False",
+    "type": "str2bool"
+  }
+}
