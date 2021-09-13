@@ -32,6 +32,9 @@ The `exportCalendarEventsFromM365` is responsible for
 The `ProfilesExporter` is responsible for
 - exporting the profiles with the profile pictures in order to use profile information for clustering
 
+**Observation**: you might encounter the following error when running the profile exporter pipeline.
+![Error](./imgs/profile_exporter_permission_error.png)
+In this case, please verify that the right permissions are granted as specified in [./AdminPermissions.MD](./AdminPermissions.MD#running-watercooler-in-production-mode)
 
 #### End2EndUserGroupGeneration Piplines
 

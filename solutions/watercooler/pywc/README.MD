@@ -117,7 +117,9 @@ For example, to install the OpenJDK, follow the appropriate installation steps f
 or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your OS.
 
 
-## V. Spark / Databricks Setup
+## V. Spark / Databricks Setup 
+
+### MacOS/Linux
 <span id="spark-setup"></span>
 
 + install - `brew install apache-spark`
@@ -135,6 +137,31 @@ or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed i
 
 Optional objective:
 + TODO: can use local Spark while `databricks-connect` is installed and configured ?
+
+### Windows
+
+In order to have python/databricks-connect installed on windows please 
+follow the steps described in this documentation: 
+
+https://docs.databricks.com/dev-tools/databricks-connect.html
+
+Databricks documentation lists conda as a dependency for having to create the 
+python enviroment necessary for databricks-connect and pyspark libraries being installed
+on the user windows environment.
+In order to install anaconda (conda) on your window machine, please follow the steps
+described in here: 
+
+https://docs.anaconda.com/anaconda/install/windows/
+
+The steps for installing java (java sdk is a dependency for having pyspark running correctly) you can
+follow the steps described in [../README.MD](../README.MD#prerequisites)
+
+If there are any problems with the databricks-connect setup please consult
+the troubleshooting section here:
+
+https://docs.databricks.com/dev-tools/databricks-connect.html#troubleshooting
+
+
 
 ---
 
@@ -199,7 +226,7 @@ dbfs cp --overwrite *.py dbfs:/mnt/watercooler/watercooler_scripts/parameterized
 In case there's a need for a different environments (example: watercooler uses a newer java version different than java needed for spark)
 then follow the steps below:
 
-## Java Multiple Environment Setup (jenv)
+## Java Multiple Environment Setup (jenv)(linux/mac only)
 <span id="jenv-setup"></span>
 In order to allow for multiple versions of java on the same system, we use `jenv`:
 + install - `brew install jenv`
@@ -244,6 +271,9 @@ eval "$(pyenv virtualenv-init -)"
 + install - `pyenv install -v 3.7.8` => why `<3.8` ([source](https://stackoverflow.com/questions/58700384/how-to-fix-typeerror-an-integer-is-required-got-type-bytes-error-when-tryin))
 + set installed version globally - `pyenv global 3.7.8`
 + sanity check - `pyenv versions`
+
+
+For windows you can consult the documentation for pyenv here: https://github.com/pyenv-win/pyenv-win
 
 ---
 # Sources

@@ -28,10 +28,10 @@ Azure and then run the application locally while using the resources from the Az
 2. build the Watercooler App Service jar and all the ADB jars, by
    following [Building all the project jars at once section](#building-all-the-project-jars-at-once)
    
-3. setting up the python scripts and environment by following [these steps](./pywc/README.MD)
-   
-4. prepare the zip with all the resulting artifacts (required for deployment), by
+3. prepare the zip with all the resulting artifacts (required for deployment), by
    following [these steps](./deployment/README.MD#building-the-deployment-artifacts-zip)
+
+4. setting up the python scripts and environment by following [these steps](./pywc/README.MD)
    
 5. to perform a fresh full deployment in Azure, please follow the steps described in the deployment
    script's [readme file](./deployment/azure/README.MD)
@@ -78,9 +78,14 @@ cd ./jwc
 mvn clean install -DskipTests
 ```
 
-This approach also runs the unit tests. To build the jars without running the tests,
-run `mvn clean install -DskipTests`  
-The resulting jars can be found in the `target` folder of the corresponding module
+This approach also will skip the unit tests. 
+To build the jars without skipping the tests,
+run `mvn clean install`.
+However, in order to have your tests pass, you'll have to provide connectivity to a sql database.
+To provide access to the database follow the steps described  [here](./jwc/core/README.MD#mssql-local-database-configuration)
+
+The resulting jars can be found in the `target` folder of the corresponding module.
+
 
 ### Setting up the python scripts
 
