@@ -2984,7 +2984,7 @@
                 ],
                 "outputs": [
                     {
-                        "referenceName": "DS_Contact",
+                        "referenceName": "DS_Synapse_Contact",
                         "type": "DatasetReference"
                     }
                 ]
@@ -3042,13 +3042,67 @@
                         "type": "DatasetReference"
                     }
                 ]
+            },
+            {
+                "name": "Copy Dataverse Account",
+                "type": "Copy",
+                "dependsOn": [
+                    {
+                        "activity": "Copy Dataverse systemuser",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "02:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "SqlDWSource",
+                        "queryTimeout": "02:00:00",
+                        "partitionOption": "None"
+                    },
+                    "sink": {
+                        "type": "SqlPoolSink",
+                        "preCopyScript": "IF object_ID('Dataverse.Account') IS NOT NULL\nBEGIN\n   \n   TRUNCATE TABLE Dataverse.Account\n\nEND\n",
+                        "tableOption": "autoCreate",
+                        "sqlWriterUseTableLock": false
+                    },
+                    "enableStaging": false,
+                    "translator": {
+                        "type": "TabularTranslator",
+                        "typeConversion": true,
+                        "typeConversionSettings": {
+                            "allowDataTruncation": true,
+                            "treatBooleanAsNumber": false
+                        }
+                    }
+                },
+                "inputs": [
+                    {
+                        "referenceName": "DS_Dataverse_Account",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "DS_Synapse_Account",
+                        "type": "DatasetReference"
+                    }
+                ]
             }
         ],
         "folder": {
-            "name": "D365"
+            "name": "CRM"
         },
         "annotations": [],
-        "lastPublishTime": "2021-08-26T17:57:47Z"
+        "lastPublishTime": "2021-09-01T19:30:17Z"
     },
     "type": "Microsoft.Synapse/workspaces/pipelines"
 }
