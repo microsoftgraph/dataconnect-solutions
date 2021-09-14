@@ -6,15 +6,23 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID ('dbo.crm_user') IS NOT NULL
+DROP TABLE [dbo].[crm_user]
+
 CREATE TABLE [dbo].[crm_user]
 (
 	[user_id] [nvarchar](36)  NULL,
-	[aad_oid] [nvarchar](36)  NULL,
-	[full_name] [nvarchar](200)  NULL,
-	[primary_email] [varchar](100)  NULL,
-	[title] [nvarchar](128)  NULL,
-	[location_city] [nvarchar](128)  NULL,
-	[location_state] [nvarchar](128)  NULL
+    	[aad_oid] [nvarchar](36)  NULL,
+    	[full_name] [nvarchar](200)  NULL,
+    	[primary_email] [varchar](100)  NULL,
+    	[title] [nvarchar](128)  NULL,
+    	[location_city] [nvarchar](128)  NULL,
+    	[location_state] [nvarchar](128)  NULL,
+    	[source_system] [nvarchar](36) NULL,
+	[source_id] [nvarchar](100)  NULL,
+	[pipeline_run_id] [nvarchar](36)  NULL,
+	[created] [datetime2](3)  NOT NULL,
+	[modified] [datetime2](3)  NULL
 )
 WITH
 (
@@ -24,7 +32,7 @@ WITH
 GO
 
 
----------------------------- Table to hold client contacts ----------------------------
+---------------------------- Table to hold client contact ----------------------------
 
 
 SET ANSI_NULLS ON
@@ -32,16 +40,24 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID ('dbo.crm_contact') IS NOT NULL
+DROP TABLE [dbo].[crm_contact]
+
 CREATE TABLE [dbo].[crm_contact]
 (
 	[client_id] [nvarchar](36)  NULL,
-	[client_email] [varchar](100)  NULL,
-	[full_name] [nvarchar](160)  NULL,
-	[job_title] [nvarchar](100)  NULL,
-	[department] [nvarchar](100)  NULL,
-	[client_city] [nvarchar](80)  NULL,
-	[client_state] [nvarchar](50)  NULL,
-	[owner_id] [nvarchar](36)  NULL
+    	[client_email] [varchar](100)  NULL,
+    	[full_name] [nvarchar](160)  NULL,
+    	[job_title] [nvarchar](100)  NULL,
+    	[department] [nvarchar](100)  NULL,
+    	[client_city] [nvarchar](80)  NULL,
+    	[client_state] [nvarchar](50)  NULL,
+    	[owner_id] [nvarchar](36)  NULL,
+    	[source_system] [nvarchar](36) NULL,
+	[source_id] [nvarchar](100)  NULL,
+	[pipeline_run_id] [nvarchar](36)  NULL,
+	[created] [datetime2](3)  NOT NULL,
+	[modified] [datetime2](3)  NULL
 )
 WITH
 (
@@ -59,15 +75,24 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF OBJECT_ID ('dbo.crm_account') IS NOT NULL
+DROP TABLE [dbo].[crm_account]
+
+
 CREATE TABLE [dbo].[crm_account]
 (
 	[account_name] [nvarchar](160)  NULL,
-	[primary_contact] [nvarchar](36)  NULL,
-	[city] [nvarchar](80)  NULL,
-	[state] [nvarchar](50)  NULL,
-	[website_url] [nvarchar](200)  NULL,
-	[number_employees] [bigint] NULL,
-	[revenue] [decimal](38,2)  NULL
+    	[primary_contact] [nvarchar](36)  NULL,
+    	[city] [nvarchar](80)  NULL,
+    	[state] [nvarchar](50)  NULL,
+    	[website_url] [nvarchar](200)  NULL,
+    	[number_employees] [bigint] NULL,
+    	[revenue] [decimal](38,2)  NULL,
+    	[source_system] [nvarchar](36) NULL,
+	[source_id] [nvarchar](100)  NULL,
+	[pipeline_run_id] [nvarchar](36)  NULL,
+	[created] [datetime2](3)  NOT NULL,
+	[modified] [datetime2](3)  NULL
 )
 WITH
 (
