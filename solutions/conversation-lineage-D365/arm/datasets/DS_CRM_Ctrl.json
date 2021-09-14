@@ -1,0 +1,17 @@
+{
+    "name": "DS_CRM_Ctrl",
+    "properties": {
+        "annotations": [],
+        "type": "SqlPoolTable",
+        "schema": [],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "crm_ctrl"
+        },
+        "sqlPool": {
+            "referenceName": "synapsededicatesqlpool",
+            "type": "SqlPoolReference"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}
