@@ -1,0 +1,294 @@
+{
+    "name": "PL_Load_CRM_Landing_Tables",
+    "properties": {
+        "activities": [
+            {
+                "name": "Get Tables to Copy",
+                "type": "Lookup",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "7.00:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "userProperties": [],
+                "typeProperties": {
+                    "source": {
+                        "type": "SqlPoolSource",
+                        "sqlReaderQuery": "SELECT DISTINCT ProcessID, LastUpdate FROM dbo.crm_ctrl WHERE IsActive = 1",
+                        "queryTimeout": "02:00:00"
+                    },
+                    "dataset": {
+                        "referenceName": "DS_CRM_Ctrl",
+                        "type": "DatasetReference"
+                    },
+                    "firstRowOnly": false
+                }
+            },
+            {
+                "name": "Process Tables",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "Create Table Backups",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@activity('Get Tables to Copy').output.value",
+                        "type": "Expression"
+                    },
+                    "activities": [
+                        {
+                            "name": "Execute CRM Copy Stored Procedure",
+                            "type": "SqlServerStoredProcedure",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "7.00:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "storedProcedureName": "[dbo].[sp_crm_copytable]",
+                                "storedProcedureParameters": {
+                                    "ControlSchemaName": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.ControlSchemaName",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "ControlTableName": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.ControlTableName",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "MappingSchemaName": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.MappingSchemaName",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "MappingTableName": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.MappingTableName",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "PipelineRunId": {
+                                        "value": {
+                                            "value": "@pipeline().RunId",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "ProcessId": {
+                                        "value": {
+                                            "value": "@item().ProcessId",
+                                            "type": "Expression"
+                                        },
+                                        "type": "Int32"
+                                    }
+                                }
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "SynapseDedicatedSqlPool",
+                                "type": "LinkedServiceReference"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "Create Table Backups",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "Get Tables to Copy",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@activity('Get Tables to Copy').output.value",
+                        "type": "Expression"
+                    },
+                    "activities": [
+                        {
+                            "name": "Backup Tables",
+                            "type": "SqlServerStoredProcedure",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "7.00:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "storedProcedureName": "[dbo].[sp_crm_backup_table]",
+                                "storedProcedureParameters": {
+                                    "BackupTablePrefix": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.BackupTablePrefix",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "ControlSchemaName": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.ControlSchemaName",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "ControlTableName": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.ControlTableName",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "ProcessId": {
+                                        "value": {
+                                            "value": "@item().ProcessId",
+                                            "type": "Expression"
+                                        },
+                                        "type": "Int32"
+                                    }
+                                }
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "SynapseDedicatedSqlPool",
+                                "type": "LinkedServiceReference"
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "Restore Backup Tables on Failure",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "Process Tables",
+                        "dependencyConditions": [
+                            "Failed"
+                        ]
+                    }
+                ],
+                "userProperties": [],
+                "typeProperties": {
+                    "items": {
+                        "value": "@activity('Get Tables to Copy').output.value",
+                        "type": "Expression"
+                    },
+                    "activities": [
+                        {
+                            "name": "Restore Backup Tables",
+                            "type": "SqlServerStoredProcedure",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "7.00:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "userProperties": [],
+                            "typeProperties": {
+                                "storedProcedureName": "[dbo].[sp_crm_table_restore]",
+                                "storedProcedureParameters": {
+                                    "BackupTablePrefix": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.BackupTablePrefix",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "ControlSchemaName": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.ControlSchemaName",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "ControlTableName": {
+                                        "value": {
+                                            "value": "@pipeline().parameters.ControlTableName",
+                                            "type": "Expression"
+                                        },
+                                        "type": "String"
+                                    },
+                                    "LastUpdate": {
+                                        "value": {
+                                            "value": "@item().LastUpdate",
+                                            "type": "Expression"
+                                        },
+                                        "type": "DateTime"
+                                    },
+                                    "ProcessId": {
+                                        "value": {
+                                            "value": "@item().ProcessId",
+                                            "type": "Expression"
+                                        },
+                                        "type": "Int32"
+                                    }
+                                }
+                            },
+                            "linkedServiceName": {
+                                "referenceName": "SynapseDedicatedSqlPool",
+                                "type": "LinkedServiceReference"
+                            }
+                        }
+                    ]
+                }
+            }
+        ],
+        "parameters": {
+            "ControlSchemaName": {
+                "type": "string",
+                "defaultValue": "dbo"
+            },
+            "ControlTableName": {
+                "type": "string",
+                "defaultValue": "crm_ctrl"
+            },
+            "BackupTablePrefix": {
+                "type": "string",
+                "defaultValue": "bkup_"
+            },
+            "MappingSchemaName": {
+                "type": "string",
+                "defaultValue": "dbo"
+            },
+            "MappingTableName": {
+                "type": "string",
+                "defaultValue": "crm_mapping"
+            }
+        },
+        "folder": {
+            "name": "CRM"
+        },
+        "annotations": [],
+        "lastPublishTime": "2021-09-14T04:38:18Z"
+    },
+    "type": "Microsoft.Synapse/workspaces/pipelines"
+}
