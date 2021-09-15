@@ -48,7 +48,7 @@ do
 
  json_definition=`cat $file_path`
  
-
+echo "az synapse dataset create  --file \"$json_definition\" --name \"$dataset_name\" --workspace-name \"$WORKSPACE_NAME\""
  az synapse dataset create  --file "$json_definition" --name "$dataset_name" --workspace-name "$WORKSPACE_NAME"
 done
 
