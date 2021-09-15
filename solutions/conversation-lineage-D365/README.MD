@@ -5,6 +5,7 @@
 * [Prerequisites](#prerequisites)
 * [Create Azure Synapse Link](#create-azure-synapse-link)
 * [Update dedicated SQL pool configuration](#update-dedicated-sql-pool-configuration)
+* [Create CRM tables and Stored Procedures in Azure Synapse](#create-crm-tables-and-stored-procedures-in-azure-synapse)
 * [Deploy pipeline resources to Azure Synapse](#deploy-pipeline-resources-to-azure-synapse)
 * [Create D365 View](#create-d365-view)
 * [Query the view](#query-the-view)
@@ -56,7 +57,7 @@ Your D365 data should now be syncing to your Azure Synapse Workspace. The data i
 
 > NOTE: If additional users will need access to the joined data directly in the dedicated SQL database, you can add a user by executing the contents of [this file](./sql/Add_User.sql) in a SQL script similar to the above example. 
 
-## Create CRM tables in Azure Synapse
+## Create CRM tables and Stored Procedures in Azure Synapse
 1. Go to the Develop tab on the left navigation, click the `+` sign and select **SQL script**  
 2. In the newly created SQL script pane, update the **Connect to** drop-down to point to your dedicated SQL pool.  
 ![New SQL Script](./docs/NewSQLScript.png)  
@@ -65,6 +66,17 @@ Your D365 data should now be syncing to your Azure Synapse Workspace. The data i
 In your dedicated SQL database, the new tables should now exist along with those from Conversation Lineage. Later, the data that will populate these tables will join with Conversation Lineage to view the sentiment between users and their customers, as well as some metadata on each (city, state, title, etc).
 
 > NOTE: The tables created assume the [Common Data Model](https://docs.microsoft.com/en-us/common-data-model) and are subsets of CRM data from this structure. For future considerations, you can choose to create schema and data columns that suit the data you want to carry over into Synapse here.
+
+In another SQL script (or the same as above), execute the following SQL scripts against the `synapsededicatesqlpool`:
+- [create_crm_control_tables](./sql/create_crm_control_tables.sql): *Creates the crm_control table that handles source to destination table mappings*
+- [create_sp_crm_backup_table](./sql/create_sp_crm_backup_table.sql): *Stored Procedure to backup table data prior to processing new data*
+- [create_sp_crm_copytable](./sql/create_sp_crm_copytable.sql): *Stored Procedure to update/insert data from source tables to landing tables*
+- [create_sp_crm_table_restore](./sql/create_sp_crm_table_restore.sql): *Stored Procedure to restore backups as the primary landing tables should the [create_sp_crm_copytable] process fail*
+- [insert_crm_ctrl](./sql/insert_crm_ctrl.sql): *Inserts records into the crm_ctrl table*
+> NOTE: Before executing the **insert_crm_mapping.sql** script, be sure to execute a `SELECT ProcessId, SinkTableName FROM dbo.crm_ctrl` command and identify the ProcessId for each table (*i.e. 'crm_contact', 'crm_user', 'crm_account'*), as that will be needed in the **insert_crm_mapping.sql** script below.
+![CRM_Ctrl Select Process Id](./docs/SelectCrmControlProcessId.png)  
+- [insert_crm_mapping](./sql/insert_crm_mapping.sql): *Inserts records into the crm_mapping table*
+   - Replace the default `ProcessId` value with those obtained in the note above. ***Please ensure you supply the correct ProcessId for each table in the insert statement to ensure the mappings work correctly!***
 
 ## Deploy pipeline resources to Azure Synapse
 Locate the following details within your Synapse workspace, as they will be needed for the deployment script:  
