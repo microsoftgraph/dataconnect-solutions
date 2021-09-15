@@ -47,26 +47,41 @@ do
 
 
  json_definition=`cat $file_path`
-
+ 
 
  az synapse dataset create  --file "$json_definition" --name "$dataset_name" --workspace-name "$WORKSPACE_NAME"
 done
 
 echo "Deploying pipelines ... "
 
-for file in ./pipelines/*
-do
+# create Dataverse pipeline
 
- file_path="$file"
- prefix="./pipelines/"
- suffix=".json"
- 
+dataverse_pipeline_definition=`cat ./pipelines/PL_Copy_Dataverse_Data.json`
+
+az synapse pipeline create --file "$dataverse_pipeline_definition" --name PL_Copy_Dataverse_Data --workspace-name "$WORKSPACE_NAME"
+
+# create PL_Load_CRM_Landing_Tables
+
+# generate default parameter values
+
+control_schema_name="dbo"
+control_table_name="crm_ctrl"
+backup_table_prefix="bkup_"
+mapping_schema_name="dbo"
+mapping_table_name="crm_mapping"
+
 # create pipeline
 
-pipeline_name=${file_path/#$prefix}
+load_landing_tables_pipeline_definition=`cat ./pipelines/PL_Load_CRM_Landing_Tables.json`
 
-pipeline_name=${pipeline_name/%$suffix}
+load_landing_tables_pipeline_definition="${load_landing_tables_pipeline_definition//<ControlSchemaName>/$control_schema_name}"
+load_landing_tables_pipeline_definition="${load_landing_tables_pipeline_definition//<ControlTableName>/$control_table_name}"
+load_landing_tables_pipeline_definition="${load_landing_tables_pipeline_definition//<BackupTablePrefix>/$backup_table_prefix}"
+load_landing_tables_pipeline_definition="${load_landing_tables_pipeline_definition//<MappingSchemaName>/$mapping_schema_name}"
+load_landing_tables_pipeline_definition="${load_landing_tables_pipeline_definition//<MappingTableName>/$mapping_table_name}"
 
-conversation_lineage_pipeline_definition=`cat $file_path`
 
-az synapse pipeline create --file "$conversation_lineage_pipeline_definition" --name "$pipeline_name" --workspace-name "$WORKSPACE_NAME"
+
+
+
+
