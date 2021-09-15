@@ -36,7 +36,7 @@ To complete this section, the following information will be needed from the reso
 
 > NOTE: The Dataverse (D365) tables we will use for this tutorial will be the `systemuser`, `account`, and `contact` tables. Please be sure to select these tables when initially setting up the Azure Synapse Link.  
 
-With the above information in hand, proceed to the [Microsoft documentation](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage#create-an-azure-synapse-workspace) for details on how to create the Azure Synapse Link. This step will provide Synapse access to the data that will be paired with Conversation Lineage. Return to this tutorial once you have reached the completion of the **'Connect Dataverse to Synapse workspace'** section of the documentation.
+With the above information in hand, proceed to the [Microsoft documentation](https://docs.microsoft.com/en-us/powerapps/maker/data-platform/azure-synapse-link-synapse#connect-dataverse-to-synapse-workspace) for details on how to create the Azure Synapse Link. This step will provide Synapse access to the data that will be paired with Conversation Lineage. Return to this tutorial once you have reached the completion of the **'Connect Dataverse to Synapse workspace'** section of the documentation.
 
 Your D365 data should now be syncing to your Azure Synapse Workspace. The data is initially stored in a Spark DB inside Synapse. In the following sections, we will copy the data to the dedicated SQL DB for merging with Conversation Lineage.
 
