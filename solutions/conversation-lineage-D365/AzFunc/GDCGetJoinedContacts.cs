@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +6,6 @@ using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Generic;
 using System.Data;
@@ -17,10 +15,7 @@ using GDC.Models.Input;
 using GDC.Commands;
 using GDC.Models;
 
-
-
-
-
+//meaningless comment
 namespace GDC.Functions
 {
     public static class GDCGetJoinedContacts
@@ -33,6 +28,8 @@ namespace GDC.Functions
         {
             GDCGetTablesInput gdcInput;
             string sqlConnectionString;
+
+
 
             try
             {
@@ -54,18 +51,34 @@ namespace GDC.Functions
                 return new BadRequestObjectResult($"An error occurred while pulling secrets from Key Vault: {ex.ToString()}");
             }
 
-            string contactsJson = null;
-
+            string contactsReturn = null; 
 
             try
             {
                 List<GDCContact> contacts = new List<GDCContact>();
+
+
                 using (IDbConnection db = new SqlConnection(sqlConnectionString))
                 {
-                    contacts = db.Query<GDCContact>(@"SELECT * FROM dbo.crm_contact").ToList();
+                    contacts = db.Query<GDCContact>(@"SELECT * FROM dbo.v_ConversationSentiment_CRM", 300).ToList();                    
                 }
 
-                contactsJson = JsonConvert.SerializeObject(contacts, Formatting.Indented);
+                if(gdcInput.returnFormat == "csv")
+                {
+
+                    contactsReturn = CSVCreator.CreateCSVTextFile(contacts);
+
+                   return new OkObjectResult(contactsReturn);
+                   
+                }
+                else
+                {        
+                   
+                   contactsReturn = JsonConvert.SerializeObject(contacts, Formatting.Indented);
+
+                   return new OkObjectResult(contactsReturn);
+                }
+                //Stupid worthless comment
 
             }
             catch (System.Exception ex)
@@ -73,7 +86,6 @@ namespace GDC.Functions
                 return new BadRequestObjectResult($"An error occured getting contacts from the SQL Database. {ex.ToString()}");
             }
 
-                return new OkObjectResult(contactsJson);
         }
 
     }
