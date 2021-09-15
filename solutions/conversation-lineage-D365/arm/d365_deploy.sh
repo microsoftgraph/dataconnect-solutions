@@ -54,17 +54,19 @@ done
 
 echo "Deploying pipelines ... "
 
-# create Dataverse pipeline
+for file in ./pipelines/*
+do
 
-conversation_lineage_pipeline_definition=`cat ./pipelines/PL_Copy_Dataverse_Data.json`
+ file_path="$file"
+ prefix="./pipelines/"
+ suffix=".json"
+ 
+# create pipeline
 
-az synapse pipeline create --file "$conversation_lineage_pipeline_definition" --name PL_Copy_Dataverse_Data --workspace-name "$WORKSPACE_NAME"
+pipeline_name=${file_path/#$prefix}
 
+pipeline_name=${pipeline_name/%$suffix}
 
+conversation_lineage_pipeline_definition=`cat $file_path`
 
-
-
-
-
-
-
+az synapse pipeline create --file "$conversation_lineage_pipeline_definition" --name "$pipeline_name" --workspace-name "$WORKSPACE_NAME"
