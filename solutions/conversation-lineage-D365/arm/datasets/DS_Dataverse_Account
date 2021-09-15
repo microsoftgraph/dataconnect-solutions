@@ -1,0 +1,854 @@
+{
+    "name": "DS_Dataverse_Account",
+    "properties": {
+        "linkedServiceName": {
+            "referenceName": "LS_Dataverse",
+            "type": "LinkedServiceReference"
+        },
+        "annotations": [],
+        "type": "AzureSqlDWTable",
+        "schema": [
+            {
+                "name": "Id",
+                "type": "nvarchar"
+            },
+            {
+                "name": "SinkCreatedOn",
+                "type": "datetime2",
+                "scale": 7
+            },
+            {
+                "name": "SinkModifiedOn",
+                "type": "datetime2",
+                "scale": 7
+            },
+            {
+                "name": "statecode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "statuscode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "preferredcontactmethodcode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "accountratingcode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "address1_shippingmethodcode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "businesstypecode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "industrycode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "shippingmethodcode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "preferredappointmenttimecode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "address2_shippingmethodcode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "territorycode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "preferredappointmentdaycode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "paymenttermscode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "accountclassificationcode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "address1_addresstypecode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "ownershipcode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "address2_freighttermscode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "address2_addresstypecode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "address1_freighttermscode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "customersizecode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "customertypecode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "accountcategorycode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "donotpostalmail",
+                "type": "nvarchar"
+            },
+            {
+                "name": "marketingonly",
+                "type": "nvarchar"
+            },
+            {
+                "name": "donotbulkemail",
+                "type": "nvarchar"
+            },
+            {
+                "name": "donotbulkpostalmail",
+                "type": "nvarchar"
+            },
+            {
+                "name": "donotphone",
+                "type": "nvarchar"
+            },
+            {
+                "name": "donotsendmm",
+                "type": "nvarchar"
+            },
+            {
+                "name": "isprivate",
+                "type": "nvarchar"
+            },
+            {
+                "name": "participatesinworkflow",
+                "type": "nvarchar"
+            },
+            {
+                "name": "merged",
+                "type": "nvarchar"
+            },
+            {
+                "name": "creditonhold",
+                "type": "nvarchar"
+            },
+            {
+                "name": "donotfax",
+                "type": "nvarchar"
+            },
+            {
+                "name": "donotemail",
+                "type": "nvarchar"
+            },
+            {
+                "name": "followemail",
+                "type": "nvarchar"
+            },
+            {
+                "name": "modifiedby",
+                "type": "nvarchar"
+            },
+            {
+                "name": "modifiedby_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "modifiedonbehalfby",
+                "type": "nvarchar"
+            },
+            {
+                "name": "modifiedonbehalfby_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "owningbusinessunit",
+                "type": "nvarchar"
+            },
+            {
+                "name": "owningbusinessunit_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdby",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdby_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "transactioncurrencyid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "transactioncurrencyid_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "modifiedbyexternalparty",
+                "type": "nvarchar"
+            },
+            {
+                "name": "modifiedbyexternalparty_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "owninguser",
+                "type": "nvarchar"
+            },
+            {
+                "name": "owninguser_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "owningteam",
+                "type": "nvarchar"
+            },
+            {
+                "name": "owningteam_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdonbehalfby",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdonbehalfby_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "slainvokedid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "slainvokedid_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "masterid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "masterid_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "parentaccountid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "parentaccountid_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "preferredsystemuserid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "preferredsystemuserid_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "primarycontactid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "primarycontactid_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "slaid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "slaid_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdbyexternalparty",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdbyexternalparty_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ownerid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ownerid_entitytype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "aging90",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 2
+            },
+            {
+                "name": "creditlimit_base",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 4
+            },
+            {
+                "name": "aging60_base",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 4
+            },
+            {
+                "name": "marketcap",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 2
+            },
+            {
+                "name": "revenue_base",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 4
+            },
+            {
+                "name": "aging60",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 2
+            },
+            {
+                "name": "marketcap_base",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 4
+            },
+            {
+                "name": "revenue",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 2
+            },
+            {
+                "name": "aging90_base",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 4
+            },
+            {
+                "name": "aging30_base",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 4
+            },
+            {
+                "name": "creditlimit",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 2
+            },
+            {
+                "name": "aging30",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 2
+            },
+            {
+                "name": "address2_postalcode",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_longitude",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 5
+            },
+            {
+                "name": "address2_county",
+                "type": "nvarchar"
+            },
+            {
+                "name": "masteraccountidname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_county",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_line3",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_longitude",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 5
+            },
+            {
+                "name": "address1_telephone2",
+                "type": "nvarchar"
+            },
+            {
+                "name": "transactioncurrencyidname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_upszone",
+                "type": "nvarchar"
+            },
+            {
+                "name": "processid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_name",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_stateorprovince",
+                "type": "nvarchar"
+            },
+            {
+                "name": "masteraccountidyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "emailaddress1",
+                "type": "nvarchar"
+            },
+            {
+                "name": "owneridyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_country",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_upszone",
+                "type": "nvarchar"
+            },
+            {
+                "name": "exchangerate",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 12
+            },
+            {
+                "name": "address1_line2",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdbyexternalpartyyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_city",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_utcoffset",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "address2_stateorprovince",
+                "type": "nvarchar"
+            },
+            {
+                "name": "versionnumber",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "entityimageid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "modifiedon",
+                "type": "datetime2",
+                "scale": 7
+            },
+            {
+                "name": "createdon",
+                "type": "nvarchar"
+            },
+            {
+                "name": "accountid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_utcoffset",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "modifiedbyyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "overriddencreatedon",
+                "type": "datetime2",
+                "scale": 7
+            },
+            {
+                "name": "modifiedbyname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "modifiedonbehalfbyname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "entityimage_url",
+                "type": "nvarchar"
+            },
+            {
+                "name": "primarytwitterid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_line2",
+                "type": "nvarchar"
+            },
+            {
+                "name": "yominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_latitude",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 5
+            },
+            {
+                "name": "primarysatoriid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "fax",
+                "type": "nvarchar"
+            },
+            {
+                "name": "timezoneruleversionnumber",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "createdonbehalfbyyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_composite",
+                "type": "nvarchar"
+            },
+            {
+                "name": "owneridtype",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_name",
+                "type": "nvarchar"
+            },
+            {
+                "name": "parentaccountidname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "telephone3",
+                "type": "nvarchar"
+            },
+            {
+                "name": "parentaccountidyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "entityimage_timestamp",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "modifiedbyexternalpartyname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "emailaddress3",
+                "type": "nvarchar"
+            },
+            {
+                "name": "emailaddress2",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_country",
+                "type": "nvarchar"
+            },
+            {
+                "name": "telephone2",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdbyexternalpartyname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "lastusedincampaign",
+                "type": "datetime2",
+                "scale": 7
+            },
+            {
+                "name": "accountnumber",
+                "type": "nvarchar"
+            },
+            {
+                "name": "traversedpath",
+                "type": "nvarchar"
+            },
+            {
+                "name": "primarycontactidname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "timespentbymeonemailandmeetings",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_primarycontactname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "preferredsystemuseridname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdonbehalfbyname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_postofficebox",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_latitude",
+                "type": "decimal",
+                "precision": 38,
+                "scale": 5
+            },
+            {
+                "name": "modifiedbyexternalpartyyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "primarycontactidyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "slaname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_composite",
+                "type": "nvarchar"
+            },
+            {
+                "name": "ftpsiteurl",
+                "type": "nvarchar"
+            },
+            {
+                "name": "sic",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_line1",
+                "type": "nvarchar"
+            },
+            {
+                "name": "lastonholdtime",
+                "type": "datetime2",
+                "scale": 7
+            },
+            {
+                "name": "address1_telephone1",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_fax",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_telephone3",
+                "type": "nvarchar"
+            },
+            {
+                "name": "description",
+                "type": "nvarchar"
+            },
+            {
+                "name": "stageid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "telephone1",
+                "type": "nvarchar"
+            },
+            {
+                "name": "websiteurl",
+                "type": "nvarchar"
+            },
+            {
+                "name": "utcconversiontimezonecode",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "stockexchange",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_addressid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_city",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_primarycontactname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_addressid",
+                "type": "nvarchar"
+            },
+            {
+                "name": "onholdtime",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "address1_line1",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_line3",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdbyyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_telephone1",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_telephone2",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address2_telephone3",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_postofficebox",
+                "type": "nvarchar"
+            },
+            {
+                "name": "createdbyname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "tickersymbol",
+                "type": "nvarchar"
+            },
+            {
+                "name": "numberofemployees",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "owneridname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "modifiedonbehalfbyyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "address1_fax",
+                "type": "nvarchar"
+            },
+            {
+                "name": "importsequencenumber",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "name",
+                "type": "nvarchar"
+            },
+            {
+                "name": "slainvokedidname",
+                "type": "nvarchar"
+            },
+            {
+                "name": "preferredsystemuseridyominame",
+                "type": "nvarchar"
+            },
+            {
+                "name": "sharesoutstanding",
+                "type": "bigint",
+                "precision": 19
+            },
+            {
+                "name": "address1_postalcode",
+                "type": "nvarchar"
+            }
+        ],
+        "typeProperties": {
+            "schema": "dbo",
+            "table": "account"
+        }
+    },
+    "type": "Microsoft.Synapse/workspaces/datasets"
+}
