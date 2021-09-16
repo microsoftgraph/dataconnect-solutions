@@ -1,21 +1,26 @@
 #!/usr/bin/env bash
 
+#
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+#
+
 [[ $@ =~ (^|[[:space:]])"--skip-maven"($|[[:space:]]) ]] && SKIP_MAVEN=1 || SKIP_MAVEN=0
 
 set -e
 
-PROJECT_ROOT="$( cd "$(dirname $(dirname  "$0" ))" >/dev/null 2>&1 ; pwd -P )/.."
+export PROJECT_ROOT="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )/../"
 
-echo "resolved project_root" "$PROJECT_ROOT" "$SCRIPTPATH"
+echo "resolved project_root as: ${PROJECT_ROOT}"
 
 pushd "${PROJECT_ROOT}"
 
-  rm -Rf wc \
-          && echo "Cleaned up target/output"
-  mkdir -p "${PROJECT_ROOT}"/bin/wc
-  cp -r deployment/azure/* "${PROJECT_ROOT}"/bin/wc
+  rm -Rf target/output/wc \
+          && echo "Cleaned up 'target/output/wc' build directory"
+  mkdir -p target/output/wc
+  cp -r deployment/azure/ target/output/wc
 
-  ARTIFACTS_DIR="${PROJECT_ROOT}"/bin/wc/scripts/artifacts
+  ARTIFACTS_DIR="${PROJECT_ROOT}"/target/output/wc/azure/scripts/artifacts/
   mkdir -p ${ARTIFACTS_DIR}
 
   pushd "${PROJECT_ROOT}/jwc"
@@ -23,7 +28,7 @@ pushd "${PROJECT_ROOT}"
   [[ $SKIP_MAVEN -eq 1 ]] || mvn -DskipTests clean install
     cp events-creator/target/jwc-events-creator.jar                           "${ARTIFACTS_DIR}"
     cp profiles-extractor/target/jwc-profiles-extractor.jar                   "${ARTIFACTS_DIR}"
-    cp core/src/main/resources/db/migration/V0001__init.sql                   "${PROJECT_ROOT}"/bin/wc/sql-server/schema.sql
+    cp core/src/main/resources/db/migration/V0001__init.sql                   "${PROJECT_ROOT}"/target/output/wc/sql-server/schema.sql
   popd
 
   cp pywc/src/000_cleanup.py                                                   "${ARTIFACTS_DIR}"
@@ -37,7 +42,3 @@ pushd "${PROJECT_ROOT}"
   cp pywc/src/06_spark_export_to_sql.py                                        "${ARTIFACTS_DIR}"
 
 popd
-
-rm -rf build.tar.gz
-tar -czvf build.tar.gz ./wc
-rm -rf ./wc
