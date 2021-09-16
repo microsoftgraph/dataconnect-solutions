@@ -1,17 +1,63 @@
 {
     "name": "DS_CRM_Ctrl",
     "properties": {
+        "linkedServiceName": {
+            "referenceName": "SynapseDedicatedSqlPool",
+            "type": "LinkedServiceReference"
+        },
         "annotations": [],
-        "type": "SqlPoolTable",
-        "schema": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "ProcessId",
+                "type": "int",
+                "precision": 10
+            },
+            {
+                "name": "SourceSystem",
+                "type": "nvarchar"
+            },
+            {
+                "name": "SourceSchemaName",
+                "type": "nvarchar"
+            },
+            {
+                "name": "SourceTableName",
+                "type": "nvarchar"
+            },
+            {
+                "name": "SourceLastModifiedColumn",
+                "type": "nvarchar"
+            },
+            {
+                "name": "SourceMergeKey",
+                "type": "nvarchar"
+            },
+            {
+                "name": "SinkSchemaName",
+                "type": "nvarchar"
+            },
+            {
+                "name": "SinkTableName",
+                "type": "nvarchar"
+            },
+            {
+                "name": "SinkMergeKey",
+                "type": "nvarchar"
+            },
+            {
+                "name": "IsActive",
+                "type": "bit"
+            },
+            {
+                "name": "LastUpdate",
+                "type": "datetime2",
+                "scale": 3
+            }
+        ],
         "typeProperties": {
             "schema": "dbo",
             "table": "crm_ctrl"
-        },
-        "sqlPool": {
-            "referenceName": "synapsededicatesqlpool",
-            "type": "SqlPoolReference"
         }
-    },
-    "type": "Microsoft.Synapse/workspaces/datasets"
+    }
 }
