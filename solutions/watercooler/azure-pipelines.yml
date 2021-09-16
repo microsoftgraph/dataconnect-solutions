@@ -8,60 +8,128 @@ parameters:
   - name: 'skipTests'
     type: boolean
     default: false
+  - name: 'uploadArtifacts'
+    type: boolean
+    default: false
+  - name: 'pushDockerImages'
+    type: boolean
+    default: false
 
 trigger: none
 
 resources:
-  - repo: self
+- repo: self
 
 variables:
   tag: ${{ parameters.tag_override }}
   skipTests: ${{ parameters.skipTests  }}
+  containerRegistryServConn: contosohub_docker_registry
+  blobStorageServConn: contoso_devops_arm_connection
+  dockerRepositoryName: microsoft-gdc/watercooler
+  storageName: prjstfartifacts
+  containerName: repository
+  testDBUser: sa
+  testDBPass: password_!23
+  databaseName: gdc_database
 
 stages:
-  - stage: build
-    pool:
-      vmImage: 'ubuntu-latest'
-    displayName: Build Watercooler
-    jobs:
-      - job: jwc_build
-        displayName: Building Watercooler
-        steps:
-          - task: Docker@2
-            displayName: Login to blueprint.azurecr.io
-            inputs:
-              command: login
-              containerRegistry: blueprint_docker_registry
-          - task: DockerCompose@0
-            displayName: Run test db
-            inputs:
-              action: Run services
-              dockerRegistryEndpoint: blueprint_docker_registry
-              dockerComposeFile: deployment/local/test/docker-compose.yml
-              projectName: $(Build.Repository.Name)-tests
-              qualifyImageNames: true
-              serviceName: jwc_database-test
-              buildImages: false
-              abortOnContainerExit: true
-              detached: true
-          - task: Maven@3
-            displayName: Running maven build
-            inputs:
-              mavenPomFile: 'jwc/pom.xml'
-              mavenOptions: '-Xmx3072m'
-              javaHomeOption: 'JDKVersion'
-              jdkVersionOption: '1.8'
-              publishJUnitResults: true
-              testResultsFiles: '**/TEST-*.xml'
-              options: '-DskipTests=$(skipTests) -DdockerTag=$(tag)'
-              goals: 'clean package'
-          - task: Docker@2
-            displayName: 'Build an image bpcs/jwc:$(tag)'
-            inputs:
-              command: buildAndPush
-              containerRegistry: blueprint_docker_registry
-              repository: bpcs/watercooler
-              buildContext: '$(Build.SourcesDirectory)/jwc/core'
-              dockerfile: '$(Build.SourcesDirectory)/jwc/core/Dockerfile'
-              tags: |
-                $(tag)
+- stage: build
+  pool:
+    vmImage: 'ubuntu-latest'
+  displayName: Build Watercooler
+  jobs:
+  - job: jwc_build
+    displayName: Building Watercooler
+    steps:
+      - task: Docker@2
+        displayName: Login to $(containerRegistryServConn)
+        inputs:
+          command: login
+          containerRegistry: $(containerRegistryServConn)
+      - task: DockerCompose@0
+        displayName: Run test db
+        inputs:
+          action: Run services
+          dockerComposeFile: solutions/watercooler/deployment/local/docker-compose.yml
+          projectName: $(Build.Repository.Name)-tests
+          qualifyImageNames: true
+          serviceName: jwc_database-test
+          buildImages: false
+          abortOnContainerExit: true
+          detached: true
+      - task: Bash@3
+        displayName: Create the test DB
+        inputs:
+          targetType: 'inline'
+          script: |
+            sleep 20s
+            docker exec -i $(docker ps -aqf "name=jwc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <solutions/watercooler/deployment/local/create-database.sql
+            docker exec -i $(docker ps -aqf "name=jwc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U $(testDBUser) -P '$(testDBPass)' -d master <solutions/watercooler/deployment/local/create-database.sql
+      - task: Maven@3
+        displayName: Running maven build
+        inputs:
+          mavenPomFile: 'solutions/watercooler/jwc/pom.xml'
+          mavenOptions: '-Xmx3072m'
+          javaHomeOption: 'JDKVersion'
+          jdkVersionOption: '1.8'
+          publishJUnitResults: true
+          testResultsFiles: '**/TEST-*.xml'
+          options: '-DskipTests=$(skipTests) -DdockerTag=$(tag)'
+          goals: 'clean package'
+      - task: Docker@2
+        displayName: 'Build an image $(dockerRepositoryName):$(tag)'
+        inputs:
+          ${{ if eq(parameters.pushDockerImages, true) }}:
+            command: buildAndPush
+          ${{ if not(eq(parameters.pushDockerImages, true)) }}:
+            command: build
+          containerRegistry: $(containerRegistryServConn)
+          repository: $(dockerRepositoryName)
+          buildContext: '$(Build.SourcesDirectory)/solutions/watercooler/jwc/core'
+          dockerfile: '$(Build.SourcesDirectory)/solutions/watercooler/jwc/core/Dockerfile'
+          tags: |
+            $(tag)
+      - task: Bash@3
+        displayName: Preparing artifacts
+        condition: ${{ parameters.uploadArtifacts }}
+        inputs:
+          filePath: 'solutions/watercooler/bin/prepare_artifacts.sh'
+          arguments: '--skip-maven'
+      - task: ArchiveFiles@2
+        displayName: Archiving artifacts
+        condition: ${{ parameters.uploadArtifacts }}
+        inputs:
+          rootFolderOrFile: 'solutions/watercooler/target/output/wc'
+          includeRootFolder: false
+          archiveType: 'zip'
+          archiveFile: 'watercooler-$(tag).zip'
+          replaceExistingArchive: true
+      - task: PublishPipelineArtifact@1
+        condition: ${{ parameters.uploadArtifacts }}
+        inputs:
+          targetPath: '$(System.DefaultWorkingDirectory)/watercooler-$(tag).zip'
+          artifact: 'deployment-package'
+          publishLocation: 'pipeline'
+- stage: uploadArtifacts
+  pool:
+    vmImage: 'windows-latest'
+  displayName: Upload Watercooler artifacts
+  condition: and(${{ parameters.uploadArtifacts }}, succeeded())
+  jobs:
+  - job: artifacts_upload
+    displayName: Uploading artifacts
+    steps:
+      - task: DownloadPipelineArtifact@2
+        inputs:
+          buildType: 'current'
+          artifactName: 'deployment-package'
+          patterns: '**/watercooler-$(tag).zip'
+          targetPath: '$(Pipeline.Workspace)'
+      - task: AzureFileCopy@4
+        inputs:
+          SourcePath: '$(Pipeline.Workspace)\watercooler-$(tag).zip'
+          azureSubscription: '$(blobStorageServConn)'
+          Destination: 'AzureBlob'
+          storage: '$(storageName)'
+          ContainerName: '$(containerName)'
+          BlobPrefix: 'builds/watercooler-$(tag).zip'
