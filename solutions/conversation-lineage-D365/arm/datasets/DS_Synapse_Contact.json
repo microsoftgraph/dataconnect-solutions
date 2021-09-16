@@ -1,17 +1,71 @@
 {
     "name": "DS_Synapse_Contact",
     "properties": {
+        "linkedServiceName": {
+            "referenceName": "SynapseDedicatedSqlPool",
+            "type": "LinkedServiceReference"
+        },
         "annotations": [],
-        "type": "SqlPoolTable",
-        "schema": [],
+        "type": "AzureSqlTable",
+        "schema": [
+            {
+                "name": "client_id",
+                "type": "nvarchar"
+            },
+            {
+                "name": "client_email",
+                "type": "varchar"
+            },
+            {
+                "name": "full_name",
+                "type": "nvarchar"
+            },
+            {
+                "name": "job_title",
+                "type": "nvarchar"
+            },
+            {
+                "name": "department",
+                "type": "nvarchar"
+            },
+            {
+                "name": "client_city",
+                "type": "nvarchar"
+            },
+            {
+                "name": "client_state",
+                "type": "nvarchar"
+            },
+            {
+                "name": "owner_id",
+                "type": "nvarchar"
+            },
+            {
+                "name": "source_system",
+                "type": "nvarchar"
+            },
+            {
+                "name": "source_id",
+                "type": "nvarchar"
+            },
+            {
+                "name": "pipeline_run_id",
+                "type": "nvarchar"
+            },
+            {
+                "name": "created",
+                "type": "datetime2",
+                "scale": 3
+            },
+            {
+                "name": "modified",
+                "type": "datetime2",
+                "scale": 3
+            }
+        ],
         "typeProperties": {
             "schema": "Dataverse",
             "table": "contact"
-        },
-        "sqlPool": {
-            "referenceName": "synapsededicatesqlpool",
-            "type": "SqlPoolReference"
         }
-    },
-    "type": "Microsoft.Synapse/workspaces/datasets"
+    }
 }
