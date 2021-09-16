@@ -1,0 +1,13 @@
+**/*.pkl
+**/*.dill
+**/*~
+**/__pycache__
+**/.editorconfig
+.idea
+*.iml
+logs
+.DS_Store
+**/TAGS
+/target/
+build.tar.gz
+build.zip

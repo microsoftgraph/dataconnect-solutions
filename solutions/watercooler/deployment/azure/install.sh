@@ -21,7 +21,7 @@ DEBUG=
 DOCKER_PASSWORD=
 SUBSCRIPTION_ID=
 NO_INPUT=
-DOCKER_USER="watercooler-readonly-token"
+DOCKER_USER="watercooler-reader"
 
 set -e
 WORKDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
@@ -96,7 +96,7 @@ fi
 if [[ -z "$DOCKER_PASSWORD" ]]; then
   # prompt_non_empty_str_value -p "Enter docker repository password: " DOCKER_PASSWORD
   # For now, using hardcoded password to public Watercpp;er docker images repository
-  DOCKER_PASSWORD="7O9P2Bg8+2Tu6nD5PpQc+aFb4eNrmmJc"
+  DOCKER_PASSWORD="juABmWGLGtblqjNBlp=b6/UITojgEDOP"
 fi
 
 RESOURCE_GROUP="${DEPLOYMENT_NAME}-resources"
