@@ -69,7 +69,7 @@ The watercooler components are:
 >  - either run ```sed -i 's/\r$//' install.sh ``` as specified in the [./azure/README.md](./azure/README.MD#performing-a-full-deployment); (however `sed` as a command, cannot be executed only from git-bash or cygwin)
 
 
-1. Build the necessary jars using maven run in the jwc folder:
+1. Build the necessary jars using maven run in the `jwc` folder:
 
 For faster builds do (-DskipTests will skip running tests):
 ```commandline
@@ -77,7 +77,7 @@ mvn clean install -DskipTests
 ```
 
 This approach also will skip the unit tests. 
-To build the jars without skipping the tests,
+To build the jars without skipping the tests, navigate to `jwc` folder and
 run `mvn clean install`.
 However, in order to have your tests pass, you'll have to provide connectivity to a sql database.
 To provide access to the database follow the steps described  [here](../jwc/core/README.MD#mssql-local-database-configuration)

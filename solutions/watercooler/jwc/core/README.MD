@@ -60,6 +60,8 @@ run the above mentioned docker commands with the linux syntax.
 - The application will have to connect to a database that contains the data related to the watercooler groups and user profiles
   The following tables are necessary in order for the application to be fully functional:
   `configurations`, `employee_profile`, `groups_per_day`, `groups_per_week`, `members_group_personal_meetings`, `members_to_group_participation`.
+  In order to create them, manually connect to the database using a tool like [dBeaver](https://dbeaver.io/) and 
+  manually execute the script from [here](../../deployment/azure/sql-server/schema.sql)  
 
 - The following env variable has to be set in order for the app to connect to the local mssql container:
 ```
@@ -169,72 +171,4 @@ Alternatively, the unit tests automatically get run when you build a module, as 
 mvn clean install
 ```
 
----
 
-### Update database schema using flyway
-Run these commands (for app & tests) in `core` module base directory to manually apply DB schema change:
-```
-mvn flyway:info flyway:clean flyway:migrate -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:1433;databaseName=jwc
-
-mvn flyway:info flyway:clean flyway:migrate -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:11433;databaseName=jwc  
-```
-Normally, if flyway is enabled, the schema changes are applied automatically when the application starts, so these steps are rarely necessary.
-
----
-
-### Handling schema conflicts when flyway is enabled
-If flyway is enabled, and you attempt to run the application using a schema version which is not "historically derived"
-from the current schema in the database, then flyway will throw an error, and the application will fail to start.  
-This usually happens when an application version is deployed, then another version is deployed which started from
-an older point in the git history, and both application versions contain divergent changes to the DB schema, compared to
-their common point in the git history.
-In this case, one solution is to go to the database and manually fix the flyway_schema_history table, by deleting the
-rows corresponding to the divergent changes, and then building and starting the application again.
-
-
-## Flyway install database:  
-run these commands (for app & tests) in `core` module base directory for each DB schema change:
-```
-mvn flyway:info flyway:clean flyway:migrate -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:1433;databaseName=jwc
-```
-
-```
-mvn flyway:info flyway:clean flyway:migrate -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:11433;databaseName=jwc
-```
-```
-mvn flyway:clean -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:11533;databaseName=jwc
-```
-
-## Sql Managed Identity connection:
-```
-CREATE USER [<identity-name>] FROM EXTERNAL PROVIDER;
-ALTER ROLE db_datareader ADD MEMBER [<identity-name>];
-ALTER ROLE db_datawriter ADD MEMBER [<identity-name>];
-ALTER ROLE db_ddladmin ADD MEMBER [<identity-name>];
-GO
-
-CREATE USER [watercooler-dev] FROM EXTERNAL PROVIDER;
-ALTER ROLE db_datareader ADD MEMBER [watercooler-dev];
-ALTER ROLE db_datawriter ADD MEMBER [watercooler-dev];
-ALTER ROLE db_ddladmin ADD MEMBER [watercooler-dev];
-GO
-
-CREATE USER [watercooler-demo] FROM EXTERNAL PROVIDER;
-ALTER ROLE db_datareader ADD MEMBER [watercooler-demo];
-ALTER ROLE db_datawriter ADD MEMBER [watercooler-demo];
-ALTER ROLE db_ddladmin ADD MEMBER [watercooler-demo];
-GO
-
-CREATE USER [watercooler-service] FROM EXTERNAL PROVIDER;
-ALTER ROLE db_datareader ADD MEMBER [watercooler-service];
-ALTER ROLE db_datawriter ADD MEMBER [watercooler-service];
-ALTER ROLE db_ddladmin ADD MEMBER [watercooler-service];
-GO
-```
-   
-`jdbc:sqlserver://watercooler-bde.database.windows.net:1433;database=JWC_dev;authentication=ActiveDirectoryMSI;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30`
-
-```
-update groups_per_day set [day] = dateadd(hour, -2, [day]);
-update groups_per_week set [day] = dateadd(hour, -2, [day]);
-```
