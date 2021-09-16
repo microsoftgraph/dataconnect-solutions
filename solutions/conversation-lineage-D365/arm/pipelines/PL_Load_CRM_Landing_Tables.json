@@ -16,9 +16,10 @@
                 "userProperties": [],
                 "typeProperties": {
                     "source": {
-                        "type": "SqlPoolSource",
+                        "type": "AzureSqlSource",
                         "sqlReaderQuery": "SELECT DISTINCT ProcessID, LastUpdate FROM dbo.crm_ctrl WHERE IsActive = 1",
-                        "queryTimeout": "02:00:00"
+                        "queryTimeout": "02:00:00",
+                        "partitionOption": "None"
                     },
                     "dataset": {
                         "referenceName": "DS_CRM_Ctrl",
@@ -288,7 +289,7 @@
             "name": "CRM"
         },
         "annotations": [],
-        "lastPublishTime": "2021-09-14T04:38:18Z"
+        "lastPublishTime": "2021-09-14T13:28:33Z"
     },
     "type": "Microsoft.Synapse/workspaces/pipelines"
 }
