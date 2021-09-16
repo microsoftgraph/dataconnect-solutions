@@ -36,7 +36,7 @@ However, the equivalent steps can be done in your favorite IDE.
 #### Mssql local database configuration
 - In order to set up a local database run the deployment/local/docker-compose.yml file
 ```shell script
-cd deployment/local/test
+cd deployment/local
 docker-compose -f ./docker-compose.yml up -d
 ```
 - Two docker containers will start each running a mssql server. One will be used for running the application locally, the other for running tests locally
