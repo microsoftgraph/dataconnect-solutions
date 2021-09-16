@@ -35,9 +35,9 @@
       "type": "object",
       "defaultValue": {
         "password": "none",
-        "server": "blueprint.azurecr.io",
+        "server": "contosohub.azurecr.io",
         "username": "none",
-        "image": "bpcs/watercooler",
+        "image": "microsoft-gdc/watercooler",
         "tag": "none"
       }
     },

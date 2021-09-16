@@ -1,10 +1,10 @@
 FROM java:8-jdk-alpine
-MAINTAINER bpcs.com
+MAINTAINER graphdataconnect.com
 
-ENV SERVICE_USER=bpcs
-ENV JWC_CONF_DIR=/etc/bpcs/jwc/conf/
-ENV JWC_WORK_DIR=/usr/bpcs/jwc
-ENV JWC_LOG_DIR=/var/log/bpcs/jwc
+ENV SERVICE_USER=graphdataconnect
+ENV JWC_CONF_DIR=/etc/graphdataconnect/jwc/conf/
+ENV JWC_WORK_DIR=/usr/graphdataconnect/jwc
+ENV JWC_LOG_DIR=/var/log/graphdataconnect/jwc
 ENV PORT 8080
 ENV SSH_PORT 2222
 
@@ -32,7 +32,7 @@ RUN apk update && apk add ca-certificates && update-ca-certificates && apk add o
         && rm -rf /var/cache/apk/* \
         && rm -rf "/tmp/"*
 
-RUN adduser -h /home/$SERVICE_USER -g 'Blueprint Service User' -D $SERVICE_USER $SERVICE_USER  && \
+RUN adduser -h /home/$SERVICE_USER -g 'GraphDataConnect Service User' -D $SERVICE_USER $SERVICE_USER  && \
         echo "$SERVICE_USER ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 RUN mkdir -p ${JWC_LOG_DIR} ${JWC_CONF_DIR}
