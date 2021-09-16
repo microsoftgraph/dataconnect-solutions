@@ -161,11 +161,12 @@ the troubleshooting section here:
 
 https://docs.databricks.com/dev-tools/databricks-connect.html#troubleshooting
 
+Installation sanity checks are provided by the windows specific documentation for the above mentioned libraries.
 
 
 ---
 
-## VI. Setup Sanity Checks
+## VI. Setup Sanity Checks (Linux/Mac only)
 <span id="finishing-setup"></span>
 Check your PATH:
 + `echo $PATH | tr ":" "\n"`
@@ -254,13 +255,13 @@ Set JDK needed for Spark:
 + sanity check - `java -version`
 
 
-## Python Multiple Environment Setup (pyenv)
+## Python Multiple Environment Setup (pyenv) (linux/mac only)
 <span id="pyenv-setup"></span>
 Similar to what we did for Java, in this case for Python.  
 Please see the [installation section](https://github.com/pyenv/pyenv#installation) of the project's [github page](https://github.com/pyenv/pyenv)  
 For an installation guide covering several systems, please read https://wilsonmar.github.io/pyenv/  
 The steps below describe the installation process for mac:
-+ install - `brew install pyenv pyenv-virtualenv`
++ install - `brew install pyenv pyenv-virtualenv` ; for linux you can follow the instructions from [here](https://realpython.com/intro-to-pyenv/) 
 + append the following to config file (`~/.bashrc` or `~/.zshrc`) and run `source` or restart/open new shell:
 ```shell script
 export PATH="$HOME/.pyenv/bin:$PATH"
