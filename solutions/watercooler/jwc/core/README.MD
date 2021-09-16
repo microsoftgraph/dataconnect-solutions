@@ -50,8 +50,8 @@ docker exec -i $(docker ps -aqf "name=jwc_database-test$") /opt/mssql-tools/bin/
 
 For windows: execute `docker ps` and retrieve the container id-s for the `jwc_database` and `jwc_database-test`:
 ```commandline
-docker exec -i container_id_for_jwc_database /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
-docker exec -i container_id_for_jwc_database_test /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
+docker exec -i container_id_for_jwc_database /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "password_!23" -d master <./create-database.sql
+docker exec -i container_id_for_jwc_database_test /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "password_!23" -d master <./create-database.sql
 
 ```
 Or you can use git-bash from here: https://git-scm.com/download/win and in the terminal provided by git-bash you can 
