@@ -71,7 +71,7 @@ Azure and then run the application locally while using the resources from the Az
 
 #### Building all the project jars at once
 
-To build the Watercooler App Service jar and all the ADB jars in one go, run the following commands:
+To build the Watercooler App Service jar and all the ADB jars in one go,navigate to `jwc` folder and run the following commands:
 
 ```shell script
 cd ./jwc
@@ -80,7 +80,7 @@ mvn clean install -DskipTests
 
 This approach also will skip the unit tests. 
 To build the jars without skipping the tests,
-run `mvn clean install`.
+navigate to `jwc` folder and run `mvn clean install`.
 However, in order to have your tests pass, you'll have to provide connectivity to a sql database.
 To provide access to the database follow the steps described  [here](./jwc/core/README.MD#mssql-local-database-configuration)
 
