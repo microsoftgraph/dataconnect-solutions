@@ -62,10 +62,11 @@ run the above mentioned docker commands with the linux syntax.
   `configurations`, `employee_profile`, `groups_per_day`, `groups_per_week`, `members_group_personal_meetings`, `members_to_group_participation`.
   In order to create them, manually connect to the database using a tool like [dBeaver](https://dbeaver.io/) and 
   manually execute the script from [here](../../deployment/azure/sql-server/schema.sql)  
+  In case you want to run the tests `mvn test` you also have to manually create the tables in the jwc_database-test.
 
 - The following env variable has to be set in order for the app to connect to the local mssql container:
 ```
-SQLCONNSTR_JWC_SERVER=jdbc:sqlserver://localhost:1433;databaseName=JWC_database;user=sa;password=password_!23;
+SQLCONNSTR_JWC_SERVER=jdbc:sqlserver://localhost:1433;databaseName=jwc_database;user=sa;password=password_!23;
 ```
 
 #### Copy the app service auth cookie locally
@@ -160,7 +161,7 @@ DEMO_DATA_STORAGE_ACCOUNT_NAME=<demo_data_storage_account>
 ```
 
 ### Running the tests locally
-The JWC_database-test docker container needs to be running for the tests to work.  
+The jwc_database-test docker container needs to be running for the tests to work.  
 The tests can then be run either using maven or the IDE.  
 To run the tests via maven, simply run the following command from the `jwc` folder, or the specific module which you want to test
 ```
