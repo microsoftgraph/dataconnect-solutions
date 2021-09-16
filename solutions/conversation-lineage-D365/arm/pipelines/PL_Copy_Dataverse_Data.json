@@ -21,9 +21,10 @@
                         "partitionOption": "None"
                     },
                     "sink": {
-                        "type": "SqlPoolSink",
+                        "type": "AzureSqlSink",
                         "preCopyScript": "IF object_ID('Dataverse.contact') IS NOT NULL\nBEGIN\n   \n   TRUNCATE TABLE Dataverse.contact\n\nEND\n",
                         "tableOption": "autoCreate",
+                        "disableMetricsCollection": false,
                         "sqlWriterUseTableLock": false
                     },
                     "enableStaging": false,
@@ -3015,9 +3016,10 @@
                         "partitionOption": "None"
                     },
                     "sink": {
-                        "type": "SqlPoolSink",
-                        "preCopyScript": "IF object_ID('Dataverse.systemuser') IS NOT NULL\nBEGIN\n   \n   TRUNCATE TABLE Dataverse.systemuser\n\nEND\n",
+                        "type": "AzureSqlSink",
+                        "preCopyScript": "IF object_ID('Dataverse.systemuser') IS NOT NULL\nBEGIN\n   \n   TRUNCATE TABLE Dataverse.systemuser\n\nEND",
                         "tableOption": "autoCreate",
+                        "disableMetricsCollection": false,
                         "sqlWriterUseTableLock": false
                     },
                     "enableStaging": false,
@@ -3069,9 +3071,10 @@
                         "partitionOption": "None"
                     },
                     "sink": {
-                        "type": "SqlPoolSink",
+                        "type": "AzureSqlSink",
                         "preCopyScript": "IF object_ID('Dataverse.Account') IS NOT NULL\nBEGIN\n   \n   TRUNCATE TABLE Dataverse.Account\n\nEND\n",
                         "tableOption": "autoCreate",
+                        "disableMetricsCollection": false,
                         "sqlWriterUseTableLock": false
                     },
                     "enableStaging": false,
