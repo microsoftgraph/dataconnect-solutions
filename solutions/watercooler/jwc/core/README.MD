@@ -43,8 +43,8 @@ docker-compose -f ./docker-compose.yml up -d
 
 - After the containers have started for the first time, run the following commands in order to create the `JWC_database` in each mssql server:
 ```shell script
-docker exec -i $(docker ps -aqf "name=JWC_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
-docker exec -i $(docker ps -aqf "name=JWC_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
+docker exec -i $(docker ps -aqf "name=jwc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
+docker exec -i $(docker ps -aqf "name=jwc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
 ```
 
 - The application will have to connect to a database that contains the data related to the same employees that are stored in Azure Search.
