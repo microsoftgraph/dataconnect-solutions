@@ -2,7 +2,7 @@ version: '2.4'
 services:
   jwc_database:
     container_name: jwc_database
-    image: blueprint.azurecr.io/bpcs/mssql-server:db_jwcv1
+    image: contosohub.azurecr.io/microsoft-gdc/mssql-server:db_jwcv1
     restart: on-failure
 
     environment:
@@ -18,7 +18,7 @@ services:
 
   jwc_database-test:
     container_name: jwc_database-test
-    image: blueprint.azurecr.io/bpcs/mssql-server:db_jwcv1
+    image: contosohub.azurecr.io/microsoft-gdc/mssql-server:db_jwcv1
     restart: on-failure
 
     environment:

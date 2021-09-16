@@ -90,9 +90,8 @@ The resulting jars can be found in the `target` folder of the corresponding modu
 
     *Observation: this step is optional; if you don't have possibility to push to a given registry, please use the default provided version: 0.2.1*
     ```commandline
-    docker build -t blueprint.azurecr.io/bpcs/watercooler:x.y.z .
-    docker commit watercooler
-    docker push blueprint.azurecr.io/bpcs/watercooler:x.y.z
+    docker build -t contosohub.azurecr.io/microsoft-gdc/watercooler:x.y.z
+    docker push contosohub.azurecr.io/microsoft-gdc/watercooler:x.y.z
     ```
 
 ### Building the deployment artifacts zip
@@ -188,7 +187,7 @@ Updating Azure DataFactory entities:
       - from the App Service UI -> Deployment Center, using Azure Container Registry
          - for this to work, the App Service and the Container Registry must be in the same subscription
       - from the Azure CLI using the following command  
-        `az webapp config container set --name <app-service-name> --resource-group <existing_gdc_resource_group_name> --docker-custom-image-name blueprint.azurecr.io/bpcs/watercooler:<docker_image_tag> --docker-registry-server-url https://blueprint.azurecr.io  -u jwc-readonly-token -p <password>`
+        `az webapp config container set --name <app-service-name> --resource-group <existing_gdc_resource_group_name> --docker-custom-image-name contosohub.azurecr.io/microsoft-gdc/watercooler:<docker_image_tag> --docker-registry-server-url https://contosohub.azurecr.io  -u jwc-readonly-token -p <password>`
 - update required AppService env variables (Application Settings, Connection Settings) from the Configuration page
 - start the application
 
