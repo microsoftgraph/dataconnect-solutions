@@ -22,13 +22,14 @@ pushd "${PROJECT_ROOT}"
 
   ARTIFACTS_DIR="${PROJECT_ROOT}"/target/output/wc/azure/scripts/artifacts/
   mkdir -p ${ARTIFACTS_DIR}
+  mkdir -p "${PROJECT_ROOT}"/target/output/wc/sql-server/
 
   pushd "${PROJECT_ROOT}/jwc"
 
   [[ $SKIP_MAVEN -eq 1 ]] || mvn -DskipTests clean install
     cp events-creator/target/jwc-events-creator.jar                           "${ARTIFACTS_DIR}"
     cp profiles-extractor/target/jwc-profiles-extractor.jar                   "${ARTIFACTS_DIR}"
-    cp core/src/main/resources/db/migration/V0001__init.sql                   "${PROJECT_ROOT}"target/output/wc/sql-server/schema.sql
+    cp core/src/main/resources/db/migration/V0001__init.sql                   "${PROJECT_ROOT}"/target/output/wc/sql-server/schema.sql
   popd
 
   cp pywc/src/000_cleanup.py                                                   "${ARTIFACTS_DIR}"
