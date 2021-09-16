@@ -7,6 +7,7 @@
 * [Update dedicated SQL pool configuration](#update-dedicated-sql-pool-configuration)
 * [Create CRM tables and Stored Procedures in Azure Synapse](#create-crm-tables-and-stored-procedures-in-azure-synapse)
 * [Deploy pipeline resources to Azure Synapse](#deploy-pipeline-resources-to-azure-synapse)
+* [Execute pipelines](#execute-pipelines)
 * [Create D365 View](#create-d365-view)
 * [Query the view](#query-the-view)
 
@@ -126,10 +127,19 @@ bash: ./d365_deploy.sh: /bin/bash^M: bad interpreter: No such file or directory
 > 
 > The error should no longer occur.
 
-Once the deployment is complete, go to the **Integrate** tab on the left navigation in Synapse and locate the **Copy Dataverse Data** pipeline.  
-Click **Add Trigger** and select **Trigger now**.  
+
+## Execute pipelines
+Once the deployment is complete, go to the **Integrate** tab on the left navigation in Synapse and locate the following pipelines:  
+1. **PL_Copy_Dataverse_Data**: This pipeline copies the data from the `dataverse` DB (created during the [Create Azure Synapse Link step](#create-azure-synapse-link)) into the Synapse Dedicated SQL pool.  
+2. **PL_Load_CRM_Landing_Tables**: This pipeline handles processing the data from the tables at the previous step (Dataverse.Account, Dataverse.contact, and Dataverse.systemuser) into the CRM landing tables (dbo.crm_account, dbo.crm_contact, and dbo.crm_user).  
+
+We will execute the pipelines in the order indicated above. Once a pipeline has been selected, click **Add Trigger** and select **Trigger now**.  
+![Trigger Pipeline](./docs/TriggerPipeline.png)  
+
 To monitor the completion of the pipeline trigger, go to **Monitor**, click **Pipeline runs** and verify that the pipeline succeeds before proceeding, as this will ensure that the D365 data is successfully copied to the dedicated SQL DB.
 ![Monitor Pipeline](./docs/MonitorPipeline.png)  
+
+> NOTE: Please wait for the successful completion of the first pipeline before initiating the second, as we will need the data to be landed in the Dedicated SQL Pool before attempting to copy to the final CRM landing tables.
 
 ## Create D365 View
 1. Go back to the **Develop** tab in Synapse and open a SQL script (similar to the steps in the [Update dedicated SQL pool configuration](#update-dedicated-sql-pool-configuration) section above).
