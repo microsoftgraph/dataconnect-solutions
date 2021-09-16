@@ -34,7 +34,7 @@ However, the equivalent steps can be done in your favorite IDE.
 
 
 #### Mssql local database configuration
-- In order to set up a local database run the deployment/local/docker-compose.yml file
+- In order to set up a local database,make sure that docker is running, and run the deployment/local/docker-compose.yml file
 ```shell script
 cd deployment/local
 docker-compose -f ./docker-compose.yml up -d
@@ -42,13 +42,22 @@ docker-compose -f ./docker-compose.yml up -d
 - Two docker containers will start each running a mssql server. One will be used for running the application locally, the other for running tests locally
 
 - After the containers have started for the first time, run the following commands in order to create the `JWC_database` in each mssql server:
+For linux/mac-os:
 ```shell script
 docker exec -i $(docker ps -aqf "name=jwc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
 docker exec -i $(docker ps -aqf "name=jwc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
 ```
 
-- The application will have to connect to a database that contains the data related to the same employees that are stored in Azure Search.
-  In order to achieve this, the employee data will have to be exported from Azure Sql and imported into a local mssql docker container.
+For windows: execute `docker ps` and retrieve the container id-s for the `jwc_database` and `jwc_database-test`:
+```commandline
+docker exec -i container_id_for_jwc_database /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
+docker exec -i container_id_for_jwc_database_test /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
+
+```
+Or you can use git-bash from here: https://git-scm.com/download/win and in the terminal provided by git-bash you can 
+run the above mentioned docker commands with the linux syntax.
+
+- The application will have to connect to a database that contains the data related to the watercooler groups and user profiles
   The following tables are necessary in order for the application to be fully functional:
   `configurations`, `employee_profile`, `groups_per_day`, `groups_per_week`, `members_group_personal_meetings`, `members_to_group_participation`.
 
@@ -149,11 +158,6 @@ DEMO_DATA_STORAGE_ACCOUNT_NAME=<demo_data_storage_account>
 ```
 
 ### Running the tests locally
-The following environment variable has to be set:
-```
-AZURE_SEARCH_APIKEY=<key_value>
-```
-(although, at the moment, there are no tests that interact with Azure Search, so AZURE_SEARCH_APIKEY isn't used)  
 The JWC_database-test docker container needs to be running for the tests to work.  
 The tests can then be run either using maven or the IDE.  
 To run the tests via maven, simply run the following command from the `jwc` folder, or the specific module which you want to test

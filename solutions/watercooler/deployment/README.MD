@@ -139,7 +139,7 @@ Depending on what changed form one release to another, some or all of the steps 
    - changes to DB schema
 - update the App Service
    - detailed deployment steps provided in the [Deploying individual components](#deploying-the-Watercooler-docker-image) section
-   - changes to DB schema (and some changes to Azure Search indexes schema) make deploying the application mandatory
+
 
 ### Deploying individual components
 
