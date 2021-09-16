@@ -93,7 +93,7 @@ object ConfigArgs {
     }
 
     //this setup is needed in order to make OParser ignore spring related parameters that are not defined in the parser
-    //e.g. --spring.datasource.username=sa --spring.datasource.url=jdbc:sqlserver://localhost:1533;databaseName=jwc;
+    //e.g. --spring.datasource.username=sa --spring.datasource.url=jdbc:sqlserver://localhost:1433;databaseName=jwc;
     val setup: OParserSetup = new DefaultOParserSetup {
       override def errorOnUnknownArgument: Boolean = false
     }

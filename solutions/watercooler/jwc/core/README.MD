@@ -191,11 +191,11 @@ rows corresponding to the divergent changes, and then building and starting the 
 ## Flyway install database:  
 run these commands (for app & tests) in `core` module base directory for each DB schema change:
 ```
-mvn flyway:info flyway:clean flyway:migrate -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:1533;databaseName=jwc
+mvn flyway:info flyway:clean flyway:migrate -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:1433;databaseName=jwc
 ```
 
 ```
-mvn flyway:info flyway:clean flyway:migrate -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:11533;databaseName=jwc
+mvn flyway:info flyway:clean flyway:migrate -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:11433;databaseName=jwc
 ```
 ```
 mvn flyway:clean -Dflyway.user=sa -Dflyway.password='password_!23' -Dflyway.url=jdbc:sqlserver://localhost:11533;databaseName=jwc

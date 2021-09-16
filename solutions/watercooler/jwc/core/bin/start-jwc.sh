@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT license. See LICENSE file in the project root for full license information.
+#
+
 set -e
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
@@ -15,7 +20,7 @@ sed -i "s/SSH_PORT/$SSH_PORT/g" /etc/ssh/sshd_config
 
 echo "Running Watercooler server with classpath , config folder ${JWC_CONF_DIR}"
 
-ARGS="-XX:+ExitOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/usr/bpcs/ethos ${EXTRA_OPTS}"
+ARGS="-XX:+ExitOnOutOfMemoryError -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/usr/graphdataconnect/jwc ${EXTRA_OPTS}"
 
 if [[ -n "${SERVICE_USER}" ]]; then
   if [[ -n "${JWC_LOG_DIR}" ]]; then

@@ -51,7 +51,7 @@
   },
   "--jdbc-port": {
     "help": "jdbc port",
-    "default": "1533",
+    "default": "1433",
     "type": "str"
   },
   "--jdbc-database": {

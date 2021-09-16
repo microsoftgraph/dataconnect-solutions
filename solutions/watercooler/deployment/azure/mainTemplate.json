@@ -419,8 +419,8 @@
                         "value": {
                             "username": "[parameters('docker.login')]",
                             "password": "[parameters('docker.password')]",
-                                "server": "blueprint.azurecr.io",
-                            "image": "bpcs/watercooler",
+                                "server": "contosohub.azurecr.io",
+                            "image": "microsoft-gdc/watercooler",
                             "tag": "[parameters('appservice.version')]"
                         }
                     },
