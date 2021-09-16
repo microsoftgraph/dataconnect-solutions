@@ -80,6 +80,11 @@ load_landing_tables_pipeline_definition="${load_landing_tables_pipeline_definiti
 load_landing_tables_pipeline_definition="${load_landing_tables_pipeline_definition//<MappingSchemaName>/$mapping_schema_name}"
 load_landing_tables_pipeline_definition="${load_landing_tables_pipeline_definition//<MappingTableName>/$mapping_table_name}"
 
+az synapse pipeline create --file "$load_landing_tables_pipeline_definition" --name PL_Load_CRM_Landing_Tables --workspace-name "$WORKSPACE_NAME"
+
+
+
+
 
 
 
