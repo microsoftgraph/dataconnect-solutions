@@ -10,12 +10,7 @@
     },
     "logs.workspace.sku": {
       "type": "string",
-      "defaultValue": "free",
-      "allowedValues": [
-        "free",
-        "standalone",
-        "pernode"
-      ],
+      "defaultValue": "pergb2018",
       "metadata": {
         "description": "Specify the SKU for Log Analytics"
       }
