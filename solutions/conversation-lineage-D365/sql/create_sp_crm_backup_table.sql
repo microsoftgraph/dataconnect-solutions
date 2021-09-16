@@ -1,4 +1,4 @@
-ALTER PROCEDURE dbo.sp_crm_backup_table  @ProcessId INT, @ControlSchemaName NVARCHAR(36), @ControlTableName NVARCHAR(100),
+CREATE PROCEDURE dbo.sp_crm_backup_table  @ProcessId INT, @ControlSchemaName NVARCHAR(36), @ControlTableName NVARCHAR(100),
                 @BackupTablePrefix NVARCHAR(36)
 AS 
 
