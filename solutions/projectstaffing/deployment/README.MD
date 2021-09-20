@@ -75,7 +75,7 @@ You have two options for building the project:
     - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark jobs)
 2. Install latest Maven 3 version
     - download the latest maven 3 binary distribution archive from https://maven.apache.org/download.cgi, for Windows 
-    use maven 3.8.1 (https://mirror.efect.ro/apache/maven/maven-3/3.8.1/binaries/), the other version might not work
+    use maven 3.8.1 (https://mirror.efect.ro/apache/maven/maven-3/3.8.1/binaries/), the other versions might not work
     - installation steps: https://maven.apache.org/install.html
     - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark jobs)
 3. Install docker

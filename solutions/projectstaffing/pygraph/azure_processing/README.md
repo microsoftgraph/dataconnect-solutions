@@ -162,7 +162,7 @@ described in here:
 https://docs.anaconda.com/anaconda/install/windows/
 
 The steps for installing java (java sdk is a dependency for having pyspark running correctly) you can
-follow the steps described in [../README.MD](../README.MD#prerequisites)
+follow the steps described in [../README.MD](../../deployment/README.MD#prerequisites)
 
 If there are any problems with the databricks-connect setup please consult
 the troubleshooting section here:

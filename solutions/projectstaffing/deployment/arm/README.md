@@ -174,7 +174,7 @@ A project deployment might need to be cleared, for example, either following a d
 start a new deployment from a clean environment) or to free up resources on Azure once a deployment is no longer needed.  
 In order to un-install the deployment you have to execute the uninstall script:
 ```
-./uninstall.sh [--subscription-id <subscription_id_string>]
+./uninstall.sh [--subscription <subscription_id_string>]
 ```
 
 Example:
