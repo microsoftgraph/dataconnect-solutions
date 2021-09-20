@@ -146,9 +146,33 @@ or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed i
 Optional objective:
 + TODO: can use local Spark while `databricks-connect` is installed and configured ?
 
+### Windows
+
+In order to have python/databricks-connect installed on windows please 
+follow the steps described in this documentation: 
+
+https://docs.databricks.com/dev-tools/databricks-connect.html
+
+Databricks documentation lists conda as a dependency for having to create the 
+python enviroment necessary for databricks-connect and pyspark libraries being installed
+on the user windows environment.
+In order to install anaconda (conda) on your window machine, please follow the steps
+described in here: 
+
+https://docs.anaconda.com/anaconda/install/windows/
+
+The steps for installing java (java sdk is a dependency for having pyspark running correctly) you can
+follow the steps described in [../README.MD](../README.MD#prerequisites)
+
+If there are any problems with the databricks-connect setup please consult
+the troubleshooting section here:
+
+https://docs.databricks.com/dev-tools/databricks-connect.html#troubleshooting
+
+
 ---
 
-## VI. Setup Sanity Checks
+## VI. Setup Sanity Checks (Linux/Mac only)
 <span id="finishing-setup"></span>
 Check your PATH:
 + `echo $PATH | tr ":" "\n"`
@@ -188,7 +212,7 @@ eval "$(pyenv virtualenv-init -)"
 In case there's a need for a different environments (example: jgraph uses a newer java version different than java needed for spark) 
 then follow the steps below:
 
-## Java Multiple Environment Setup (jenv)
+## Java Multiple Environment Setup (jenv for linux/mac only)
 <span id="jenv-setup"></span>
 In order to allow for multiple versions of java on the same system, we use `jenv`:
 + install - `brew install jenv`
@@ -216,13 +240,13 @@ Set JDK needed for Spark:
 + sanity check - `java -version`
 
 
-## Python Multiple Environment Setup (pyenv)
+## Python Multiple Environment Setup (pyenv for linux/mac only)
 <span id="pyenv-setup"></span>
 Similar to what we did for Java, in this case for Python.  
 Please see the [installation section](https://github.com/pyenv/pyenv#installation) of the project's [github page](https://github.com/pyenv/pyenv)  
 For an installation guide covering several systems, please read https://wilsonmar.github.io/pyenv/  
 The steps below describe the installation process for mac:
-+ install - `brew install pyenv pyenv-virtualenv`
++ install - `brew install pyenv pyenv-virtualenv` ; for linux you can follow the instructions from [here](https://realpython.com/intro-to-pyenv/) 
 + append the following to config file (`~/.bashrc` or `~/.zshrc`) and run `source` or restart/open new shell:
 ```shell script
 export PATH="$HOME/.pyenv/bin:$PATH"
@@ -233,6 +257,8 @@ eval "$(pyenv virtualenv-init -)"
 + install - `pyenv install -v 3.7.8` => why `<3.8` ([source](https://stackoverflow.com/questions/58700384/how-to-fix-typeerror-an-integer-is-required-got-type-bytes-error-when-tryin))
 + set installed version globally - `pyenv global 3.7.8`
 + sanity check - `pyenv versions`
+
+For Windows you can consult the documentation for pyenv here: https://github.com/pyenv-win/pyenv-win
 
 ---
 # Sources
