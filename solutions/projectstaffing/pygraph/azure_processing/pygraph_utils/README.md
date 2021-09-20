@@ -24,7 +24,8 @@ performing the following steps:
     - the actual name of the file will vary based on the current package version which has been released (independent 
       of the application version), e.g. `pygraph_utils-0.1.7-py3-none-any.whl`
     
-> Note: If `pip` is linked to Python 2 on your system, then use `pip3` instead
+> Note: If `pip` is linked to Python 2 on your system, then use `pip3` instead. Also, if `python` is linked to Python 2 
+> use `python3` instead of `python`.
 
 ### Using the wheel locally for development
 1. Set the current directory to `pygraph/azure_processing/pygraph_utils/dist`

@@ -69,11 +69,13 @@ You have two options for building the project:
 ### Prerequisites
 1. Install JDK 1.8
     - for example, to install the OpenJDK, follow the appropriate installation steps from: https://openjdk.java.net/install/
-      (Ubuntu), https://wiki.openjdk.java.net/display/jdk8u (Windows 10), https://adoptopenjdk.net/?variant=openjdk8 (macOS), 
-      or search online for a more detailed installation guide, matching your OS
+      for Ubuntu, https://wiki.openjdk.java.net/display/jdk8u for Windows 10 (use 8u292-b10 version, the other versions might 
+      not work), https://adoptopenjdk.net/?variant=openjdk8 (macOS), or search online for a more detailed installation guide, 
+      matching your OS
     - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark jobs)
 2. Install latest Maven 3 version
-    - download the latest maven 3 binary distribution archive from https://maven.apache.org/download.cgi
+    - download the latest maven 3 binary distribution archive from https://maven.apache.org/download.cgi. For Windows 
+    use maven 3.8.1 (https://mirror.efect.ro/apache/maven/maven-3/3.8.1/binaries/), the other versions might not work.
     - installation steps: https://maven.apache.org/install.html
     - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark jobs)
 3. Install docker
@@ -135,7 +137,10 @@ To build the ProjectStaffing App Service jar and all the ADB jars in one go, run
 cd ./jgraph
 mvn clean install
 ```
-This approach also runs the unit tests. To build the jars without running the tests, run `mvn clean install -DskipTests`  
+This approach also runs the unit tests. However, in order to have your tests pass, you'll have to provide connectivity 
+to a sql database. To provide access to the database follow the steps described [here](../jgraph/core/README.MD#mssql-local-database-configuration).
+
+To build the jars without running the tests, run `mvn clean install -DskipTests`  
 The resulting jars can be found in the `target` folder of the corresponding module
 
 ### Building the python utils wheel
