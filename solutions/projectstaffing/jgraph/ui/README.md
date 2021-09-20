@@ -32,7 +32,7 @@ For local development follow the steps below:
 
 #### 1. Install dependencies
 
-Run `yarn install` command to install all dependencies. This will install all dependencies listed in [package.json](package.json) file without having to install them manually.
+Set your current directory to `jgraph/ui` and run `yarn install` command to install all dependencies. This will install all dependencies listed in [package.json](package.json) file without having to install them manually.
 
 ##### Some of the most important libraries:
 
@@ -56,7 +56,7 @@ Target values for all proxies in [vue.config.js](vue.config.js) file should be c
 
 #### Build using `yarn`
 
-For local `ui` module build run `yarn build`.
+In order to build the `ui` module, set your current directory to `jgraph/ui` and run the `yarn build` command.
 
 Upon build completion the dist files will be outputted in `target/dist` directory due to `outputDir` setting in [vue.config.js](vue.config.js) file.
 
