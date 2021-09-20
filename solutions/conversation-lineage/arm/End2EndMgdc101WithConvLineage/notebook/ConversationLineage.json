@@ -134,7 +134,7 @@
                 "        sender_domain = sender_mail.split(\"@\")[1].strip()\n",
                 "        recipient_addresses = recipient_addresses_list[:min(MAX_NUMBER_OF_RECIPIENTS, len(recipient_addresses_list))]\n",
                 "        recipient_names = recipient_names_list[:min(MAX_NUMBER_OF_RECIPIENTS, len(recipient_names_list))]\n",
-                "        recipient_domains = list(map(lambda mail: mail.split(\"@\")[1].strip(), recipient_addresses))\n",
+                "        recipient_domains = list(map(lambda mail: mail.split(\"@\")[1].strip() if '@' in mail else 'unknowndomain', recipient_addresses))\n",
                 "\n",
                 "        return {\n",
                 "            \"sender_name\": sender_name,\n",
