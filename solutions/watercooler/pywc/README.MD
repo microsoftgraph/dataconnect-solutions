@@ -146,11 +146,13 @@ In order to run/debug from your local machine you have to have `databricks-conne
 After that you'll have to configure it by running the `databricks-connect configure` and introduce the necessary
 values for the host/token/cluster_id/port.
 ![databricsk_connect_configure](./imgs/databricks_connect_configure.png)
+
 In order to obtain the token, navigate to ![azure_databricsk_workspace](./imgs/azure_databricsk_workspace.png)
-And in the Settings/User Settings you can generate a new token that you'll use in the `databricks-connect configure` step.
+and in the Settings/User Settings you can generate a new token that you'll use in the `databricks-connect configure` step.
 ![databricsk_configure_token](./imgs/databricks_generated_new_token.png)
 
-You can obtain more information about this step in the official support documentation [here](https://docs.databricks.com/dev-tools/databricks-connect.html#step-2-configure-connection-properties)
+You can obtain more information about this step in the official support documentation [here](https://docs.databricks.com/dev-tools/databricks-connect.html#step-2-configure-connection-properties). 
+
 At the end of the databricks-connect configuration the command `databricks-connect test` should work successfully.
 
 
