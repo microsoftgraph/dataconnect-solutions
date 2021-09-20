@@ -137,7 +137,10 @@ To build the ProjectStaffing App Service jar and all the ADB jars in one go, run
 cd ./jgraph
 mvn clean install
 ```
-This approach also runs the unit tests. To build the jars without running the tests, run `mvn clean install -DskipTests`  
+This approach also runs the unit tests. However, in order to have your tests pass, you'll have to provide connectivity 
+to a sql database. To provide access to the database follow the steps described [here](../jgraph/core/README.MD#mssql-local-database-configuration).
+
+To build the jars without running the tests, run `mvn clean install -DskipTests`  
 The resulting jars can be found in the `target` folder of the corresponding module
 
 ### Building the python utils wheel
