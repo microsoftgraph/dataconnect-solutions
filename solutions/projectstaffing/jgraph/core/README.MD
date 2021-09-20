@@ -82,9 +82,17 @@ docker-compose -f ./docker-compose.yml up -d
 - Two docker containers will start each running a mssql server. One will be used for running the application locally, the other for running tests locally
   
 - After the containers have started for the first time, run the following commands in order to create the `gdc_database` in each mssql server:
+
+For linux/mac-os:
 ```shell script
 docker exec -i $(docker ps -aqf "name=gdc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
 docker exec -i $(docker ps -aqf "name=gdc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
+```
+
+For Windows: execute `docker ps` and retrieve the container id-s for the `gdc_database` and `gdc_database-test`:
+```commandline
+docker exec -i container_id_for_gdc_database /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
+docker exec -i container_id_for_gdc_database-test /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
 ```
 
 - The application will have to connect to a database that contains the data related to the same employees that are stored in Azure Search. 
