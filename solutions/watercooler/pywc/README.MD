@@ -31,11 +31,11 @@ During development, the pyspark jobs can be run either:
 
 ## Setting up environment for Development
 Steps:
-+ [I. Python Setup](#python-setup)
-+ [II. Development conda environment setup](#development-conda-environment-setup)
-+ [III. Configure local python scripts to run with Databricks](#local-development-config)
-+ [IV. Java Setup](#java-setup)
-+ [V. Spark / Databricks Setup](#spark-setup)
++ [I. Java Setup](#i-java-setup)
++ [II. Python Setup](#ii-python-setup)
++ [III. Configure local python scripts to run with databricsk](#iii-configure-local-python-scripts-to-run-with-databricks)
++ [IV. Development and debugging](#iv-development-and-debugging)
++ [V. Development tips](#v-development-tips)
 + [VI. Setup Sanity Checks](#finishing-setup)
 
 Additionally, you can consider the following steps:
@@ -45,7 +45,18 @@ Additionally, you can consider the following steps:
 
 ---
 # Detailed setup steps
-## I. Python Setup
+
+## I. Java Setup
+<span id="java-setup"></span>
+Please install a JDK 8 appropriate to your OS, if you haven't done so already. License terms differ from one JDK supplier
+to another (e.g. Oracle vs OpenJDK), so please read license conditions carefully when choosing supplier.  
+For example, to install the OpenJDK, follow the appropriate installation steps from https://openjdk.java.net/install/
+or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your OS.
+This is necessary for pyspark connectivity
+
+---
+
+## II. Python Setup
 <span id="python-setup"></span>
 
 ### 1. Install Python bundled with Anaconda
@@ -61,17 +72,16 @@ Install the reference Python:
 #### Windows
 Install using the install instruction from here https://docs.anaconda.com/anaconda/install/windows/
 
+When installing the necessary libraries use only the *Anaconda Powershell Prompt* that gets installed with Anaconda.
 
-### 3. Environment setup
+
+### 2. Conda Environment setup (linux/mac/windows)
 Set up your environment, and activate it both in your shell and in your IDE:
 + `conda create --name jwc python=3.7`
 + `conda activate jwc`
-
-
-
-## II. Development conda environment setup
-<span id="development-conda-environment-setup"></span>
 + `pip install -r requirements.txt`
++ `pip install databricks-connect==8.1.0`
+
 
 If any changes to the setup are needed, remember to document changes in requirements:
 + preferably with conda: `conda list --export > requirements_conda.txt` (rather than `pip freeze > requirements.txt`)
@@ -80,17 +90,85 @@ Any subsequent installs have to be made in the:
 + activated conda environment - `conda install package-name=2.3.4`
 + outside conda environment - `conda install package-name=2.3.4 -n jwc`
 
+
+### 3. Spark / Databricks Setup 
+
+#### MacOS/Linux
+<span id="spark-setup"></span>
+
++ install - `brew install apache-spark`
+  + usually located in `/usr/local/Cellar/apache-spark/3.0.1/libexec/`
+
++ install - `pip3  install databricks-connect==8.1` - this version is needed for our current Databricks configuration (Runtime version: 8.1 (includes Apache Spark 3.1.1, Scala 2.12))
++ sanity check - `python3 -c 'import pyspark'`
+
++ sanity check - `spark-shell` (use `:quit`)
++ sanity check - `pyspark` (use `quit()`)
++ configure according to the below specs - `databricks-connect configure`
++ check - `databricks-connect test`
+  + may error if pyspark wasn't uninstalled / left garbage folders (for some reason) -> `rm -rf /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/pyspark`
+
+
+#### Windows
+
+After creating the `jwc` environment and installing `databrics-connect==8.1.0" the only 
+steps remaining are configuration and the sanity check.
+
++ configure according to the below specs - `databricks-connect configure`
++ check - `databricks-connect test`
+
+
+If there are any problems with the databricks-connect setup please consult
+the troubleshooting section here: https://docs.databricks.com/dev-tools/databricks-connect.html#troubleshooting
+
+Installation sanity checks are provided by the windows specific documentation for the above mentioned libraries.
+
+*Observation*: when running `databricks-connect test` you might encounter the following error:
+
+```commandline
+ERROR Shell: Failed to locate the winutils binary in the hadoop binary path
+java.io.IOException: Could not locate executable null\bin\winutils.exe in the Hadoop binaries.
+```
+
+In this scenario: [official databricks documentation](https://docs.databricks.com/dev-tools/databricks-connect.html#cannot-find-winutilsexe-on-windows) 
+points you to hadoop installation instructions.
+However there might be a shortcut by  performing this steps:
+- clone https://github.com/cdarlint/winutils
+- in environment variables set:
+  - HADOOP_HOME=c:\Users\admin\work\winutils\hadoop-2.9.2
+  - extend PATH with the following entry %HADOOP_HOME%\bin
+
+After you completed this step, close the anaconda power shell terminal, reopen it, activate the `jwc` environment,
+and only after that you can re-run `databricks-connect test`.
+
+#### Databricks-connect local configuration (windows/mac/linux).
+In order to run/debug from your local machine you have to have `databricks-connect` (version 8.1.0) tool functionally installed.
+After that you'll have to configure it by running the `databricks-connect configure` and introduce the necessary
+values for the host/token/cluster_id/port.
+![databricsk_connect_configure](./imgs/databricks_connect_configure.png)
+In order to obtain the token, navigate to ![azure_databricsk_workspace](./imgs/azure_databricsk_workspace.png)
+And in the Settings/User Settings you can generate a new token that you'll use in the `databricks-connect configure` step.
+![databricsk_configure_token](./imgs/databricks_generated_new_token.png)
+
+You can obtain more information about this step in the official support documentation [here](https://docs.databricks.com/dev-tools/databricks-connect.html#step-2-configure-connection-properties)
+At the end of the databricks-connect configuration the command `databricks-connect test` should work successfully.
+
+
+
+---
+
+
 ## III. Configure local python scripts to run with Databricks
 <span id="local-development-config"></span>
 The environment specific configuration for each job can be provided via a configurations file.
 
-For local debugging and execution of the scripts, the following configuration file templates are provided: `config_default.json`,
-`profiles_enrichment_params_default.json`,`mail_enrichment_params_default.json`.
-Those should be cloned to : `config.json`, `profiles_enrichment_params.json`, `mail_enrichment_params.json` and filled with the appropriate values.
+For local debugging and execution of the scripts, the following configuration file templates are provided: `config_default.json` and a list of 
+specific script params.
+`config_default.json` should be cloned to : `config_test.json`
 
-All this files can be found here: [./dev_config](./dev_config/)
+Script specific parameters can be found here: [./dev_config](./dev_config/)
 
-The config file `config.json` has the following structure and is being used by all the spark job python scripts:
+The config file `config_default.json` has the following structure and is being used by all the spark job python scripts:
 ```
 {
   "SERVICE_PRINCIPAL_SECRET": "J65H1[...]"
@@ -109,121 +187,80 @@ Be mindful if cluster is active/inactive, in order to:
 + minimize load - if cluster is used for upgrade / demo
 + Total Cost of Ownership (abbrev. TCO) - cluster doesn't have to be spun up needlessly, costs should be limited.
 
-## IV. Java Setup
-<span id="java-setup"></span>
-Please install a JDK 8 appropriate to your OS, if you haven't done so already. License terms differ from one JDK supplier
-to another (e.g. Oracle vs OpenJDK), so please read license conditions carefully when choosing supplier.  
-For example, to install the OpenJDK, follow the appropriate installation steps from https://openjdk.java.net/install/
-or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed installation guide, matching your OS.
 
 
-## V. Spark / Databricks Setup 
+## IV. Development and debugging.
 
-### MacOS/Linux
-<span id="spark-setup"></span>
+In order to run `01_calendar_spark_processor.py` on spark, you need the following prerequisites
 
-+ install - `brew install apache-spark`
-  + usually located in `/usr/local/Cellar/apache-spark/3.0.1/libexec/`
+### Run end-to-end `End2EndDataCollectorPipeline` in Azure Data Factory.
+Navigate to Azure Data Factory studio in your resource group.
+And run the End2EndDataCollectorPipeline.
+This is necessary because the End2EndDataCollectorPipeline will first retrieve the calendar, mailbox and profile data
+from gdc. And the collected data will serve as input data to this scripts.
+![End2EndDataCollectorPipeline](./imgs/End2EndDataCollectorPipeline.png)
+The output of this pipeline run will be found in the `data` container in the events folder.
+![output](./imgs/storage_pipeline_folders.png)
 
-+ install - `pip3  install databricks-connect==8.1` - this version is needed for our current Databricks configuration (Runtime version: 8.1 (includes Apache Spark 3.1.1, Scala 2.12))
-+ sanity check - `python3 -c 'import pyspark'`
+### config_test.json
+Necessary configuration files:
+copy `config_default.json` to `config_test.json` in the `pywc/src` folder and fill in the 
+missing value of the `SERVICE_PRINCIPAL_SECRET` with the value retrieved from the keyvault.
 
-+ sanity check - `spark-shell` (use `:quit`)
-+ sanity check - `pyspark` (use `quit()`)
-+ configure according to the below specs - `databricks-connect configure`
-+ check - `databricks-connect test`
-  + may error if pyspark wasn't uninstalled / left garbage folders (for some reason) -> `rm -rf /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/pyspark`
+In order to retrieve the  `SERVICE_PRINCIPAL_SECRET` from keyvaul you have to perform the following stes:
+- navigate to the deployment resource group
+![resource_group](./imgs/resource_group_view.png)  
 
+- select the keyvault that has a name that begins with `WCBackend`
+![keyvault](./imgs/wc_backend_keyvault.png)
+  
+- select the `wc-service-principal-secret` and click the version label and the following view will open
+![principal_secret_value](./imgs/wc_principal_secret_value.png)
+  
+- copy the principal secret value and paste it in the `config_test.json`
 
-Optional objective:
-+ TODO: can use local Spark while `databricks-connect` is installed and configured ?
+### script parameter files. eg: 01_calendar_spark_processor_params.json
 
-### Windows
+The `01_calendar_spark_processor.py` script uses for debugging in local mode  
+a file called `01_calendar_spark_processor_params.json` which is placed in the home folder
+of the user called `.watercooler`. 
+The path can be changed from the code.
 
-In order to have python/databricks-connect installed on windows please 
-follow the steps described in this documentation: 
+In order to fill the values of the parameters in the `01_calendar_spark_processor_params.json` file 
+you have to provide the following mandatory parameter values: `['--storage-account-name', '--input-container-name', '--input-folder-path', '--output-container-name', '--output-folder-path', '--application-id', '--directory-id', '--key-vault-url']`
+as in the following example:
+![param_values](./imgs/json_config_files_with_values.png)
 
-https://docs.databricks.com/dev-tools/databricks-connect.html
+Some of the values can be filled from the ADF pipeline global parameters page from Azure DataFactory Studio.
+![global_parameters_for_adf_studio](./imgs/global_parameters_for_adf_studio.png)
 
-Databricks documentation lists conda as a dependency for having to create the 
-python enviroment necessary for databricks-connect and pyspark libraries being installed
-on the user windows environment.
-In order to install anaconda (conda) on your window machine, please follow the steps
-described in here: 
-
-https://docs.anaconda.com/anaconda/install/windows/
-
-The steps for installing java (java sdk is a dependency for having pyspark running correctly) you can
-follow the steps described in [../README.MD](../README.MD#prerequisites)
-
-If there are any problems with the databricks-connect setup please consult
-the troubleshooting section here:
-
-https://docs.databricks.com/dev-tools/databricks-connect.html#troubleshooting
-
-Installation sanity checks are provided by the windows specific documentation for the above mentioned libraries.
-
-
----
-
-## VI. Setup Sanity Checks (Linux/Mac only)
-<span id="finishing-setup"></span>
-Check your PATH:
-+ `echo $PATH | tr ":" "\n"`
-+ if there are duplicates, `echo $PATH` and clean in your IDE of preference
-  + purge references to system-wide python (such as: `/Library/Frameworks/Python.framework/Versions/3.8/bin`) - these will confuse the system as to which `databricks-connect` to use, among others (eg: `site-packages` location used)
-  + ( **VERY IMPORTANT** ) if Spark previously used in the system, `unset SPARK_HOME` - this along with other package confusion can lead to a faulty setup (hard to diagnose errors like "*TypeError: 'Java Package' object is not callable*")
+Run the script. The output of the script will be found in the `watercooler_out_events` folder from the `data` blob.
 
 
-Note: ( **VERY IMPORTANT** ) Perform sanity checks for faulty `PATH` or `SPARK_HOME` set in the following locations:
-+ `~/.bash_rc`, `~/.bash_profile`
-+ `~/.zsh_rc`, `~/.zprofile`
+## V. Development tips
 
-Note: Also try to perform sanity checks in a new tab and your IDE of choice:
-+ for `jenv`, `pyenv`, `databricks-connect` (mentioned below).
-+ run `python spark_test.py` and check the Spark UI
-
-Your config file (`~/.bashrc` or `~/.zshrc`) should look at the end like this:
-```shell script
-# set only if not using databricks-connect
-# export SPARK_HOME="/usr/local/Cellar/apache-spark/3.0.1/libexec"
-# export PYSPARK_PYTHON="python3"
-# export PATH=$PATH:$SPARK_HOME/bin
-# export PATH=$PATH:$PYSPARK_PYTHON
-
-export PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
-
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
-```
-
-## VII. Development tips
-
-## If a custom container+folder needs to be mounted to a specific location in adbfs:
-+TODO: explain the container and the folders within container and the access key
+If a custom container+folder needs to be mounted to a specific location in adbfs:
 
 ```
 dbutils.fs.mount(
- source = "wasbs://watercooler-test@gdcblueprintsampledata.blob.core.windows.net",
+ source = "wasbs://watercooler-test@teststorage.blob.core.windows.net",
  mount_point = "/mnt/watercooler",
- extra_configs = {"fs.azure.account.key.gdcblueprintsampledata.blob.core.windows.net":"AccessKey" })
+ extra_configs = {"fs.azure.account.key.teststorage.blob.core.windows.net":"AccessKey" })
 ```
 
-More information about the databricks file system can be found [here](https://docs.databricks.com/data/databricks-file-system.html)
+More information about the databricks file system can be found [here](https:./imgs.databricks.com/data/databricks-file-system.html)
 
-## Uploading the scripts to the ADB cluster
+Uploading the scripts to the ADB cluster:
 During development, modified scripts can be upload to the following location on Azure Databricks File System:  `dbfs ls dbfs:/mnt/watercooler/watercooler_scripts/parameterized`
 The command for upload the scripts is the following and has to be executed from the [./pywc/parametrized_scripts](./pywc/parametrized_scripts) folder.
-```buildoutcfg
+```
 dbfs cp --overwrite *.py dbfs:/mnt/watercooler/watercooler_scripts/parameterized
 ```
 
 
 ---
 ---
-# Additional
+# Additional development information
 In case there's a need for a different environments (example: watercooler uses a newer java version different than java needed for spark)
 then follow the steps below:
 
@@ -280,12 +317,9 @@ For windows you can consult the documentation for pyenv here: https://github.com
 # Sources
 
 ## More links:
-+ https://docs.oracle.com/javase/8/docs/technotes/guides/install/mac_jdk.html
++ https:./imgs.oracle.com/javase/./imgs/technotes/guides/install/mac_jdk.html
 + https://medium.com/@chamikakasun/how-to-manage-multiple-java-version-in-macos-e5421345f6d0
 + https://github.com/jenv/jenv/issues/212
 + https://stackoverflow.com/questions/41129504/pycharm-with-pyenv
-+ https://docs.databricks.com/dev-tools/databricks-connect.html
++ https:./imgs.databricks.com/dev-tools/databricks-connect.html
 
-
-
-        
