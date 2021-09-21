@@ -15,7 +15,6 @@ In order to log in, you need to access the AppService UI URL and use your Azure 
 
 
 ## Running the Application locally
-TODO: verify this one
 Although a completely standalone local deployment is not possible (the app still needs to rely on certain services,
 such as Active Directory, from an existing development deployment in Azure), it is useful to run the
 app locally as this allows both fast development and testing of new features, as well as debugging in case of problems.
@@ -41,7 +40,7 @@ docker-compose -f ./docker-compose.yml up -d
 ```
 - Two docker containers will start each running a mssql server. One will be used for running the application locally, the other for running tests locally
 
-- After the containers have started for the first time, run the following commands in order to create the `JWC_database` in each mssql server:
+- After the containers have started for the first time, run the following commands in order to create the `jwc_database` in each mssql server:
 For linux/mac-os:
 ```shell script
 docker exec -i $(docker ps -aqf "name=jwc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
@@ -50,24 +49,104 @@ docker exec -i $(docker ps -aqf "name=jwc_database-test$") /opt/mssql-tools/bin/
 
 For windows: execute `docker ps` and retrieve the container id-s for the `jwc_database` and `jwc_database-test`:
 ```commandline
-docker exec -i container_id_for_jwc_database /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "password_!23" -d master <./create-database.sql
-docker exec -i container_id_for_jwc_database_test /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "password_!23" -d master <./create-database.sql
+docker exec -i <<container_id_for_jwc_database>> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "password_!23" -d master <./create-database.sql
+docker exec -i <<container_id_for_jwc_database_test>> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "password_!23" -d master <./create-database.sql
 
 ```
+
+
+
 Or you can use git-bash from here: https://git-scm.com/download/win and in the terminal provided by git-bash you can 
 run the above mentioned docker commands with the linux syntax.
 
 - The application will have to connect to a database that contains the data related to the watercooler groups and user profiles
   The following tables are necessary in order for the application to be fully functional:
   `configurations`, `employee_profile`, `groups_per_day`, `groups_per_week`, `members_group_personal_meetings`, `members_to_group_participation`.
-  In order to create them, manually connect to the database using a tool like [dBeaver](https://dbeaver.io/) and 
-  manually execute the script from [here](../../deployment/azure/sql-server/schema.sql)  
-  In case you want to run the tests `mvn test` you also have to manually create the tables in the jwc_database-test.
+  - In order to create tables run the following commands docker container  
+      From project root directory, execute:    
+      For Linux/mac-os:     
+      ```
+        docker exec -i $(docker ps -aqf "name=jwc_database$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d jwc <./jwc/core/src/main/resources/db/migration/V0001__init.sql
+        docker exec -i $(docker ps -aqf "name=jwc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d jwc <./jwc/core/src/main/resources/db/migration/V0001__init.sql
+      ```
+      For Windows:
+      ```
+        docker exec -i <<container_id_for_jwc_database>> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "password_!23" -d jwc <./jwc/core/src/main/resources/db/migration/V0001__init.sql
+        docker exec -i <<container_id_for_jwc_database_test>> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "password_!23" -d jwc <./jwc/core/src/main/resources/db/migration/V0001__init.sql
+      ```
 
-- The following env variable has to be set in order for the app to connect to the local mssql container:
+
+## Environment variables  
+The application uses a list of environment variables which allows the developer to adapt application's settings to his own development environment.  
+Please note that some environment variables are mandatory to set. The application will start with default values but some functionality won't work.   
 ```
-SQLCONNSTR_JWC_SERVER=jdbc:sqlserver://localhost:1433;databaseName=jwc_database;user=sa;password=password_!23;
+JWC_DATASOURCE_URL=jdbc:sqlserver://localhost:1433;databaseName=jwc;
 ```
+ - The SQL server URL connection. Ip/domain, Port and database name can be changed.   
+
+```
+JWC_DATASOURCE_USERNAME=sa
+```
+ - The SQL server username. The server was initially configured to use 'sa' username
+
+```
+JWC_DATASOURCE_PASSWORD=password_!23
+```
+ - The SQL server password. The server was initially configured to accept this password
+
+
+### Mandatory environment variables   
+In order to set this values, you need to have already one active deployment as described in [Running the Application locally](#Running the Application locally) sections
+
+```
+AZURE_KEY_VAULT_URI=
+```
+ - The Azure KeyVault URL of your active deployment
+ ![image](../../docs/imgs/copy_keyvault_url.png)
+ 
+```
+JWC_SERVICE_PRINCIPAL_SECRET=
+```
+- the secret of the service principal (app registration) used by the jwc App Service;
+  the secret is stored in the App Key Vault, the name of the secret is jwc-jwc-service-principal-secret     
+ ![image](../../docs/imgs/keyvault_service_principal_secret.png)
+```
+SERVICE_PRINCIPAL_TENANT_ID=
+```
+ - the tenant id of the service principal (app registration) used by the JWC App Service   
+ ![image](../../docs/imgs/copy_tenant_id_from_app_service.png)
+
+```
+SERVICE_PRINCIPAL_CLIENT_ID=
+```
+ - the client id of the Web App service principal (app registration) used by the jwc App Service   
+  ![image](../../docs/imgs/copy_service_pricipal_id.png)   
+  
+```
+ADF_SUBSCRIPTION_ID=
+```
+ - the subscription id of the Azure Data Factory service   
+   ![image](../../docs/imgs/copy_subscription_id.png)  
+
+```
+ADF_RESOURCE_GROUP_NAME=
+```
+ - the name of the resource group where the application is deployed   
+ ![image](../../docs/imgs/copy_resource_group_name.png)  
+ 
+```
+ADF_NAME=
+```
+ - the name of the Azure Data Factory service name   
+ ![image](../../docs/imgs/copy_adf_name.png)  
+   
+```
+JWC_APPSERVICE_URL=   
+```
+- the url of the jwc App Service running in Azure  
+ ![image](../../docs/imgs/copy_app_url.png)  
+
+
 
 #### Copy the app service auth cookie locally
 Since while running in an AppService the Watercooler app uses the built-in authentication mechanism of the AppService,
@@ -121,43 +200,27 @@ The value of the `x-ms-client-principal` , `x-ms-token-aad-id-token`, `x-ms-toke
 when `JWC_LOG_LEVEL` env variable value is `debug`. This has to be set from jwc App Service `Configurations` section.  
 When `JWC_LOG_LEVEL` is configured as described above, every request will contain the authentication headers.
 
-In order to use the "Ingestion Mode Switch" and "HR Data Upload" functionalities locally, the following env variables will have to be set:
-- the url of the jwc App Service running in Azure
+In order to use the "Ingestion Mode Switch" and "HR Data Upload" functionalities locally, the following env variables will have to be set as described in [Environment variables](#Environment variables) section
 ```
-JWC_APPSERVICE_URL=<JWC_url> 
+JWC_APPSERVICE_URL=<JWC_url>
 ```
-- the tenant id of the service principal (app registration) used by the jwc App Service
 ```
 SERVICE_PRINCIPAL_TENANT_ID=<tenant_id>  
 ```
-- the client id of the service principal (app registration) used by the jwc App Service
 ```
 SERVICE_PRINCIPAL_CLIENT_ID=<client_id> 
 ```
-- the secret of the service principal (app registration) used by the jwc App Service;
-  the secret is stored in the App Key Vault, the name of the secret is jwc-jwc-service-principal-secret
 ```
 JWC_SERVICE_PRINCIPAL_SECRET=<sp_secret> 
 ```
-- the subscription id of the Azure Data Factory service
 ```
 ADF_SUBSCRIPTION_ID=<subscription_id> 
 ```
-- the name of the resource group where the application is deployed
 ```
 ADF_RESOURCE_GROUP_NAME=<resource_group_name>
 ```
-- the name of the Azure Data Factory service name
 ```
 ADF_NAME=<azure_data_factory_service_name>
-```
-- the name of the Security Group that contains the users that are considered admins of the application
-```
-JWC_ADMINS_GROUP_ID=<admins_group_object_id>
-```
-- the name of the storage account that contains the simulated and sample data
-```
-DEMO_DATA_STORAGE_ACCOUNT_NAME=<demo_data_storage_account>
 ```
 
 ### Running the tests locally
