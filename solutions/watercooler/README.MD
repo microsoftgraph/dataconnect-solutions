@@ -96,7 +96,7 @@ check [readme file](./pywc/README.MD)
 ### Building the artifacts zip
 
 After all the project artifacts were build as described above, from the Watercooler root folder
-run ` cd ./bin` and after that `./prepare_artifacts.sh`  
+run ` cd ./bin` and after that `./prepare_artifacts.sh --skip-maven`  
 After this is complete, there will be a `build.tar.gz` file that you'll have to rename to
  `watercooler-<release_version>.tar.gz` (e.g. watercooler-x.y.z)  
 Compress this folder into a zip archive (e.g. watercooler-x.y.z.tar.gz).  

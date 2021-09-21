@@ -63,7 +63,7 @@ The watercooler components are:
 > solid knowledge of your development environment and of the differences between Windows/Unix systems is required. Some
 > adaptations of the provided instructions might be required as well, as well as some additional steps during deployment.
 
-> **Observation**: if you are on windows and you encounter issues running `./prepare_artifacts.sh --skip-maven` than it is mandatory
+> **Observation**: if you are on windows and you encounter issues running `./prepare_artifacts.sh` than it is mandatory
 > to do one of the following:
 >  - either download git-scm from [http://git-scm.com/download/win](http://git-scm.com/download/win) and use **git-bash** to run the script that will prepare the artifacts 
 >  - either run ```sed -i 's/\r$//' install.sh ``` as specified in the [./azure/README.md](./azure/README.MD#performing-a-full-deployment); (however `sed` as a command, cannot be executed only from git-bash or cygwin)
@@ -105,7 +105,7 @@ The resulting jars can be found in the `target` folder of the corresponding modu
     
    - navigate to `./bin` folder and execute:
       ```commandLIne 
-      ./prepare_artifacts.sh --skip-maven
+      ./prepare_artifacts.sh 
       ```
    - the result of running the above command will be a tar.gz file that we recommend renaming it to `wc-x.y.z.tar.gz`:
         ```commandLIne

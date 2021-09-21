@@ -43,3 +43,6 @@ pushd "${PROJECT_ROOT}"
   cp pywc/src/06_spark_export_to_sql.py                                        "${ARTIFACTS_DIR}"
 
 popd
+
+rm -rf build.tar.gz
+tar -czvf build.tar.gz "${PROJECT_ROOT}"/target/output/wc
