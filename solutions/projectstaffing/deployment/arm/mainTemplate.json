@@ -167,34 +167,6 @@
                 "description": " App Service SKU name "
             }
         },
-        "appservice.sku.tier": {
-            "type": "string",
-            "defaultValue": "Standard",
-            "metadata": {
-                "description": " App Service SKU tier "
-            }
-        },
-        "appservice.sku.size": {
-            "type": "string",
-            "defaultValue": "S2",
-            "metadata": {
-                "description": " App Service SKU size "
-            }
-        },
-        "appservice.sku.family": {
-            "type": "string",
-            "defaultValue": "S",
-            "metadata": {
-                "description": " App Service SKU family "
-            }
-        },
-        "appservice.sku.capacity": {
-            "type": "int",
-            "defaultValue": 1,
-            "metadata": {
-                "description": " App Service SKU capacity "
-            }
-        },
         "adf.name": {
             "type": "string",
             "defaultValue": "gdc-adf",
@@ -525,18 +497,6 @@
                     },
                     "appservice.sku.name": {
                         "value": "[parameters('appservice.sku.name')]"
-                    },
-                    "appservice.sku.tier": {
-                        "value": "[parameters('appservice.sku.tier')]"
-                    },
-                    "appservice.sku.size": {
-                        "value": "[parameters('appservice.sku.size')]"
-                    },
-                    "appservice.sku.family": {
-                        "value": "[parameters('appservice.sku.family')]"
-                    },
-                    "appservice.sku.capacity": {
-                        "value": "[parameters('appservice.sku.capacity')]"
                     },
                     "alert.admin.email": {
                         "value": "[parameters('alert.admin.email')]"
