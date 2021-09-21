@@ -85,17 +85,16 @@ function select_subscription() {
   OUTPUT_VAR_NAME=$2
   DEFAULT_ANSWER="$3"
 
-
-    if [[ $(az account list --output tsv | wc -l )  -gt  "1" ]]; then
+  if [[ $(az account list --output tsv | wc -l) -gt "1" ]]; then
       echo "Multiple subscriptions found"
       az account list --output table
       echo "--------------------------------------------------"
       echo "Current subscription: "
-      az account list --output table | grep "${SUBSCRIPTION_ID}"
-      yes_no_confirmation $MSG reply_yn
+      az account list --output table | grep "${DEFAULT_ANSWER}"
+      yes_no_confirmation "$MSG" reply_yn
       if [[ "${reply_yn}" == false ]]
       then
-          prompt_non_empty_str_value "Please provide the desired SubscriptionId, from the list displayed above. " ${OUTPUT_VAR_NAME} ${DEFAULT_ANSWER}
+          prompt_non_empty_str_value "Please provide the desired SubscriptionId, from the list displayed above. " "${OUTPUT_VAR_NAME}" "${DEFAULT_ANSWER}"
       fi
     fi
 
