@@ -78,7 +78,7 @@ az login
       Please read prompted instructions carefully.
     - Using the `--debug` option will expose the output of all AzureCLI commands the script executes during deployment.
 ```
-./install.sh --deployment-name project-staffing --location westus --docker-password <docker-registry-password> --debug
+./install.sh --deployment-name project-staffing --location westus --debug
 ```
 
 > **Note:** Azure CloudShell has default idle timeout of 20 minutes,
