@@ -17,6 +17,7 @@ Ideally, the groups should be created before running the script.
         - have Owner role over all Azure resources created by the deployment script
         - have access to restricted application functionalities, such as switching the ingestion mode or uploading new HR Data files
     - this security group is mandatory for the deployment process
+    > Note: the user performing the deployment must be a member of this group!
 - ProjectStaffing employees group
     - this defines the list of Active Directory accounts which are going to be processed by the application
     - the Project Staffing application ingests and processes employee M365 profiles and email data to infer skills and
@@ -116,15 +117,12 @@ for the URL in the Overview tab, as shown below:
 ### Notes
 #### Service Principals
 The following service principals get created by the deployment script (if they didn't already exist)
-- gdc-service
+- <app-service-name>-gdc-service
     - this service principal is meant to be used mainly by the ADB jobs run by the ADF pipelines
-- gdc-m365-reader
+- <app-service-name>-gdc-m365-reader
     - this service principal is meant to be used by ADF linked service used to read Office 365 data via Graph Data Connect
-    - this service principal and "gdc-service" have predefined names, therefore they might need to be reused from one
-      deployment to another
 - <deployment-name>-jgraph-aad-web-app
     - this service principal is meant to be used by the AppService
-    - this service principal has a globally unique name, since it relies on the app service name which is also unique
 
 If the “gdc-service” and “gdc-m365-reader” service principals already exist when the script is run:
 - the script will ask the user if the existing service principal should be used
@@ -140,8 +138,8 @@ Once the script has been run for the first time on a given environment (on the C
 you want to perform changes to the python environment impacting the script, make sure to do them in the virtual env.
 
 The deployment script stores its internal state (finished stages, prompted values, auto-generated secrets, etc.) in the `~/.gdc` folder.  
-This helps with rerunning the script after partial failures, by remembering previously provided inputs and by
-skipping certain previously completed steps.  
+This helps with rerunning the script (i.e., retrying deployment) after partial failures, by remembering previously
+provided inputs and by skipping certain previously completed steps.  
 Please note that if failures occur in certain inconsistent states, then this folder needs to be deleted, and the deployment
 started from a clean state.
 
@@ -154,10 +152,11 @@ clean state, you can either run the uninstall script (described below) or perfor
 - delete the virtualenv folder created by the previous deployment `~/.gdc-env`
     - `rm -rf ~/.gdc-env`
 - optionally, delete the service principals created by the previous deployment:
-    - <app-service-name>-jgraph-aad-web-app
-    - gdc-service, gdc-m365-reader
+    - <deployment-name>-jgraph-aad-web-app
+    - <app-service-name>-gdc-service, <app-service-name>-gdc-m365-reader
         - should be deleted only if they were created by the deployment process (i.e. they are not used elsewhere)
-        - providing their secrets during the next deployment is a better approach than deleting them
+        - providing their secrets during the next deployment is a better approach than deleting them, if you are about
+        to perform another deployment using the same App Service name
 
 If the artifacts used for installation were __built on a Windows machine__, and you want to delete the folder containing
 the artifacts, you might not be able to do that straight away, because of differences between Windows and Unix systems
@@ -208,22 +207,20 @@ subscription_name  AzureCloud   subscription_id  Enabled  True
 
 Then the script will ask if the current subscription is the one where the deployment resides:
 ```
-Is the deploy part of this subscription? (Y/n) 
+Would you like to uninstall the deployment from this subscription? (Y/n)
 ```
 
 If the answer is `No` then the specific subscription id will have to be provided. 
 
-Uninstall script will also ask if the 'gdc-service' and 'gdc-m365-reader' service principals should be deleted. The
-next deployment will create them again. Alternatively, you could leave them in place, and simply provide their secrets
-when performing the next deployment.  
-__Since these service principals are global and could be used by multiple deployments, deleting them should only be done
-with caution, if you are sure they are only used by the deployment which is about to be deleted!__
+Uninstall script will also ask if the '<app-service-name>-gdc-service' and '<app-service-name>-gdc-m365-reader' service 
+principals should be deleted. If the same app service name is used, the next deployment will create them again. 
+Alternatively, you could leave them in place, and simply provide their secrets when performing the next deployment.
 ```
-Would you like delete the 'gdc-service' and 'gdc-m365-reader' service principals? This is only recommended if you want to redeploy from scratch and these principals are not used elsewhere! (Y/n)
+Deleting a service principal is only recommended if you want to redeploy from scratch and the principal is not used elsewhere! Please confirm you want to delete the <service_principal_name> service principal (Y/n)
 ```
-The script will also delete the jgraph-aad-web-app AD app registration.
+The script will also delete the <deployment-name>-jgraph-aad-web-app AD app registration.
 
-Confirmation will be asked to delete deployment's the resourced group `<installed-deployment-name>-resources` and the
+Confirmation will be asked to delete the deployment's resourced group `<installed-deployment-name>-resources` and the
 install script's local internal files (in `~/.gdc` and `~/.gdc-env`)
 ```
 Deleting resource group <installed-deployment-name>-resources
