@@ -54,6 +54,7 @@ Azure and then run the application locally while using the resources from the Az
 
 2. Install latest Maven 3 version
     - download the latest maven 3 binary distribution archive from https://maven.apache.org/download.cgi
+    - the newest maven version tested is 3.8.1
     - installation steps: https://maven.apache.org/install.html
     - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark
       jobs)
