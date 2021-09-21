@@ -31,15 +31,25 @@
       "type": "bool",
       "defaultValue": false
     },
-    "appservice.sku": {
-      "type": "object",
-      "defaultValue": {
-        "name": "P2v2",
-        "tier": "PremiumV2",
-        "size": "P2v2",
-        "family": "Pv2",
-        "capacity": 1
-      }
+    "appservice.sku.name": {
+      "type": "string",
+      "defaultValue": "S2"
+    },
+    "appservice.sku.tier": {
+      "type": "string",
+      "defaultValue": "Standard"
+    },
+    "appservice.sku.size": {
+      "type": "string",
+      "defaultValue": "S2"
+    },
+    "appservice.sku.family": {
+      "type": "string",
+      "defaultValue": "S"
+    },
+    "appservice.sku.capacity": {
+      "type": "int",
+      "defaultValue": 1
     },
     "appservice.docker-config": {
       "type": "object",
@@ -153,11 +163,11 @@
         "Purpose": "GDC app service plan"
       },
       "sku": {
-        "name": "[parameters('appservice.sku').name]",
-        "tier": "[parameters('appservice.sku').tier]",
-        "size": "[parameters('appservice.sku').size]",
-        "family": "[parameters('appservice.sku').family]",
-        "capacity": "[parameters('appservice.sku').capacity]"
+        "name": "[parameters('appservice.sku.name')]",
+        "tier": "[parameters('appservice.sku.tier')]",
+        "size": "[parameters('appservice.sku.size')]",
+        "family": "[parameters('appservice.sku.family')]",
+        "capacity": "[parameters('appservice.sku.capacity')]"
       },
       "kind": "linux",
       "properties": {
