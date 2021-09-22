@@ -1949,7 +1949,7 @@
                 "sasUri": "[parameters('SAASUrl')]"
             }
         },
-        "dependsOn": []
+        "dependsOn": ["[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"]
     },
     {
         "name": "[concat(variables('dataFactoryName'), '/DestinationBinary')]",
