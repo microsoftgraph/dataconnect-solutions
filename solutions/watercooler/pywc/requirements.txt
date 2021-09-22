@@ -14,3 +14,4 @@ dill
 adal
 joblib
 Babel
+analytics-logger-rest
