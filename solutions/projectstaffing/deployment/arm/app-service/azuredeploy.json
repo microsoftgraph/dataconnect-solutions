@@ -31,15 +31,9 @@
       "type": "bool",
       "defaultValue": false
     },
-    "appservice.sku": {
-      "type": "object",
-      "defaultValue": {
-        "name": "P2v2",
-        "tier": "PremiumV2",
-        "size": "P2v2",
-        "family": "Pv2",
-        "capacity": 1
-      }
+    "appservice.sku.name": {
+      "type": "string",
+      "defaultValue": "S2"
     },
     "appservice.docker-config": {
       "type": "object",
@@ -96,10 +90,6 @@
       "type": "bool",
       "defaultValue": true
     },
-    "jgraphCoreLogs.AppServiceFileAuditLogs": {
-      "type": "bool",
-      "defaultValue": true
-    },
     "jgraphCoreLogs.AppServiceAuditLogs": {
       "type": "bool",
       "defaultValue": true
@@ -150,14 +140,10 @@
       "name": "[variables('appservice.serverfarm.name')]",
       "location": "[parameters('location')]",
       "tags": {
-        "Purpose": "GDC app service plan"
+        "Purpose": "Project Staffing app service plan"
       },
       "sku": {
-        "name": "[parameters('appservice.sku').name]",
-        "tier": "[parameters('appservice.sku').tier]",
-        "size": "[parameters('appservice.sku').size]",
-        "family": "[parameters('appservice.sku').family]",
-        "capacity": "[parameters('appservice.sku').capacity]"
+        "name": "[parameters('appservice.sku.name')]"
       },
       "kind": "linux",
       "properties": {
@@ -178,7 +164,7 @@
         "[resourceId('Microsoft.Web/serverfarms', variables('appservice.serverfarm.name'))]"
       ],
       "tags": {
-        "Purpose": "GDC Jgraph app "
+        "Purpose": "Project Staffing app"
       },
       "kind": "app,linux,container",
       "identity": {
@@ -386,7 +372,7 @@
         "[resourceId('Microsoft.Web/sites', parameters('appservice.name'))]"
       ],
       "tags": {
-        "Purpose": "GDC Jgraph configuration"
+        "Purpose": "Project Staffing configuration"
       },
       "properties": {
         "numberOfWorkers": 1,
@@ -541,10 +527,6 @@
           {
             "category": "AppServiceAppLogs",
             "enabled": "[parameters('jgraphCoreLogs.AppServiceAppLogs')]"
-          },
-          {
-            "category": "AppServiceFileAuditLogs",
-            "enabled": "[parameters('jgraphCoreLogs.AppServiceFileAuditLogs')]"
           },
           {
             "category": "AppServiceAuditLogs",

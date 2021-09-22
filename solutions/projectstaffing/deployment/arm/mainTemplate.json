@@ -160,6 +160,13 @@
                 "description": " Application docker image version to be pulled from the container registry  "
             }
         },
+        "appservice.sku.name": {
+            "type": "string",
+            "defaultValue": "S2",
+            "metadata": {
+                "description": " App Service SKU name "
+            }
+        },
         "adf.name": {
             "type": "string",
             "defaultValue": "gdc-adf",
@@ -487,6 +494,9 @@
                     },
                     "appservice.name": {
                         "value": "[parameters('appservice.name')]"
+                    },
+                    "appservice.sku.name": {
+                        "value": "[parameters('appservice.sku.name')]"
                     },
                     "alert.admin.email": {
                         "value": "[parameters('alert.admin.email')]"
