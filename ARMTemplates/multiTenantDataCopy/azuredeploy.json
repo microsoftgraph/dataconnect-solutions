@@ -45,7 +45,8 @@
   "variables": {
     "dataFactoryName": "[concat('M365-', uniqueString(resourceGroup().id))]",
     "destinationAdlsAccountName": "[concat('astore', uniqueString(resourceGroup().id))]",
-    "dataSetName": "[split(parameters('DataSet'), ' ')[0]]"
+    "dataSetName": "[split(parameters('DataSet'), ' ')[0]]",
+    "destinationFileName": "[concat(split(parameters('SAASUrl'), '?')[0], '/', concat(uniqueString(resourceGroup().id), '.json'), split(parameters('SAASUrl'), '?')[1])]"
   },
   "resources": [
     {
@@ -2476,7 +2477,7 @@
             "annotations": [],
             "type": "AzureBlobStorage",
             "typeProperties": {
-                "sasUri": "[parameters('SAASUrl')]"
+                "sasUri": "[variables('destinationFileName')]"
             }
         },
         "dependsOn": ["[resourceId('Microsoft.DataFactory/factories', variables('dataFactoryName'))]"]
