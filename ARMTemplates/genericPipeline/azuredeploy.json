@@ -56,7 +56,7 @@
           }
         ],
         "arguments": "[format(' -AppID {0} -TenantId {1} -AppToGet {2}', parameters('AppId'), subscription().tenantId, parameters('AppId'))]",
-        "primaryScriptUri": "https://raw.githubusercontent.com/NikCharlebois/MicrosoftGraphDataConnectLab/main/Utilities/GetServicePrincipalId.ps1",
+        "primaryScriptUri": "https://raw.githubusercontent.com/NikCharlebois/dataconnect-solutions/main/ARMTemplates/SupportScripts/GetServicePricipalId.ps1",
         "timeout": "PT30M",
         "cleanupPreference": "OnSuccess",
         "retentionInterval": "P1D",
