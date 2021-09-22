@@ -246,6 +246,12 @@ Problem:
 Solution:
   - `conda install pywin32` (taken from [here](https://stackoverflow.com/questions/58612306/how-to-fix-importerror-dll-load-failed-while-importing-win32api) )
 
+Problem:
+  - In VSCode you might encounter `. Authentication failed: Can't connect to HTTPS URL because the SSL module is not available.`
+
+Solution
+  - Add path to conda's libraries to PATH, e.g. `C:\Users\user\Miniconda3\Library\bin` to `%PATH%`.
+
 
 ## V. Development tips
 
