@@ -140,7 +140,7 @@
       "name": "[variables('appservice.serverfarm.name')]",
       "location": "[parameters('location')]",
       "tags": {
-        "Purpose": "GDC app service plan"
+        "Purpose": "Project Staffing app service plan"
       },
       "sku": {
         "name": "[parameters('appservice.sku.name')]"
@@ -164,7 +164,7 @@
         "[resourceId('Microsoft.Web/serverfarms', variables('appservice.serverfarm.name'))]"
       ],
       "tags": {
-        "Purpose": "GDC Jgraph app "
+        "Purpose": "Project Staffing app"
       },
       "kind": "app,linux,container",
       "identity": {
@@ -372,7 +372,7 @@
         "[resourceId('Microsoft.Web/sites', parameters('appservice.name'))]"
       ],
       "tags": {
-        "Purpose": "GDC Jgraph configuration"
+        "Purpose": "Project Staffing configuration"
       },
       "properties": {
         "numberOfWorkers": 1,
