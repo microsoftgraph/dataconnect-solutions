@@ -90,10 +90,6 @@
       "type": "bool",
       "defaultValue": true
     },
-    "jgraphCoreLogs.AppServiceFileAuditLogs": {
-      "type": "bool",
-      "defaultValue": true
-    },
     "jgraphCoreLogs.AppServiceAuditLogs": {
       "type": "bool",
       "defaultValue": true
@@ -531,10 +527,6 @@
           {
             "category": "AppServiceAppLogs",
             "enabled": "[parameters('jgraphCoreLogs.AppServiceAppLogs')]"
-          },
-          {
-            "category": "AppServiceFileAuditLogs",
-            "enabled": "[parameters('jgraphCoreLogs.AppServiceFileAuditLogs')]"
           },
           {
             "category": "AppServiceAuditLogs",
