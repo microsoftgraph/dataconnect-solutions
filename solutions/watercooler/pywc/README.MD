@@ -77,7 +77,7 @@ When installing the necessary libraries use only the *Anaconda Powershell Prompt
 
 ### 2. Conda Environment setup (linux/mac/windows)
 Set up your environment, and activate it both in your shell and in your IDE:
-+ `conda create --name jwc python=3.7`
++ `conda create --name jwc python=3.8`
 + `conda activate jwc`
 + `pip install -r requirements.txt`
 + `pip install databricks-connect==8.1.0`
@@ -229,20 +229,28 @@ of the user called `.watercooler`.
 The path can be changed from the code.
 
 In order to fill the values of the parameters in the `01_calendar_spark_processor_params.json` file 
-you have to provide the following mandatory parameter values: `['--storage-account-name', '--input-container-name', '--input-folder-path', '--output-container-name', '--output-folder-path', '--application-id', '--directory-id', '--key-vault-url']`
+you have to provide the following **mandatory** parameter **values**: `['--storage-account-name', '--input-container-name', '--input-folder-path', '--output-container-name', '--output-folder-path', '--application-id', '--directory-id', '--key-vault-url']`
 as in the following example:
 ![param_values](./imgs/json_config_files_with_values.png)
+However, you'll still need to have the rest of the parameters filled with default values: `['--log-analytics-workspace-key-name','--log-analytics-workspace-id','--adb-secret-scope-name','--adb-sp-client-key-secret-name']`
 
 Some of the values can be filled from the ADF pipeline global parameters page from Azure DataFactory Studio.
 ![global_parameters_for_adf_studio](./imgs/global_parameters_for_adf_studio.png)
 
 Run the script. The output of the script will be found in the `watercooler_out_events` folder from the `data` blob.
 
+### Possible errors encountered on Windows 
+Problem:
+  - You might encounter `ImportError: DLL load failed while importing win32file: The specified module could not be found.`
+
+Solution:
+  - `conda install pywin32` (taken from [here](https://stackoverflow.com/questions/58612306/how-to-fix-importerror-dll-load-failed-while-importing-win32api) )
+
 
 ## V. Development tips
 
-If a custom container+folder needs to be mounted to a specific location in adbfs:
-
+If a custom container+folder needs to be mounted to a specific location in adbfs, the user will
+have to run the following snippet of code in a azure databricks notebook.
 ```
 dbutils.fs.mount(
  source = "wasbs://watercooler-test@teststorage.blob.core.windows.net",
@@ -255,6 +263,7 @@ More information about the databricks file system can be found [here](https:./im
 Uploading the scripts to the ADB cluster:
 During development, modified scripts can be upload to the following location on Azure Databricks File System:  `dbfs ls dbfs:/mnt/watercooler/watercooler_scripts/parameterized`
 The command for upload the scripts is the following and has to be executed from the [./pywc/parametrized_scripts](./pywc/parametrized_scripts) folder.
+The following command will have to be executed from command line.
 ```
 dbfs cp --overwrite *.py dbfs:/mnt/watercooler/watercooler_scripts/parameterized
 ```
