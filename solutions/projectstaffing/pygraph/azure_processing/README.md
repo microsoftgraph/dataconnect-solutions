@@ -60,11 +60,12 @@ or
   + you can do a silent install by adding the `-b` parameter, but PATH will remain unmodified, so you'll need to run `eval "$(~/anaconda3/bin/conda shell.bash hook)"`
 
 #### Windows
-Install using the install instruction from here https://docs.anaconda.com/anaconda/install/windows/
+Install using the install instruction from here https://docs.anaconda.com/anaconda/install/windows/.  
+Use Anaconda Powershell Prompt to run all python related commands.
 
-
-### 3. Environment setup
-Set up your environment, and activate it both in your shell and in your IDE:
+### 2. Environment setup
+Set up your environment, and activate it both in your shell and in your IDE by following the steps below.  
+On Windows, these steps must be performed using Anaconda Powershell Prompt.
 + `conda create --name gdc python=3.7`
 + `conda activate gdc`
 
