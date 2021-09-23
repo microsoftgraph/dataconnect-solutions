@@ -172,7 +172,7 @@
                 "collapsed": true
             },
             "source": [
-                "val emailsPath =  s\"abfss://$inputContainer@$storageAccountName.dfs.core.windows.net/$inputFolderPath\""
+                "val emailsPath =  s\"wasbs://$inputContainer@$storageAccountName.blob.core.windows.net/$inputFolderPath\""
             ],
             "attachments": null,
             "outputs": [],
@@ -390,7 +390,7 @@
                 "collapsed": true
             },
             "source": [
-                "val destinationFilePath =  s\"abfss://$outputContainer@$storageAccountName.dfs.core.windows.net/$outputFolderPath\"\n",
+                "val destinationFilePath =  s\"wasbs://$outputContainer@$storageAccountName.blob.core.windows.net/$outputFolderPath\"\n",
                 "flattenedEmails.write.mode(SaveMode.Overwrite).parquet(destinationFilePath)"
             ],
             "attachments": null,
