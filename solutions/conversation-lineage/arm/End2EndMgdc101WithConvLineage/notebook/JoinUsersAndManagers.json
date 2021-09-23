@@ -243,7 +243,7 @@
                 "collapsed": true
             },
             "source": [
-                "val usersDataInputPath = s\"abfss://$usersInputContainer@$storageAccountName.dfs.core.windows.net/$usersInputFolderPath\""
+                "val usersDataInputPath = s\"wasbs://$usersInputContainer@$storageAccountName.blob.core.windows.net/$usersInputFolderPath\""
             ],
             "attachments": null,
             "outputs": [],
@@ -332,7 +332,7 @@
                 "collapsed": true
             },
             "source": [
-                "val managerDataInputPath = s\"abfss://$managerInputContainer@$storageAccountName.dfs.core.windows.net/$managerInputFolderPath\""
+                "val managerDataInputPath = s\"wasbs://$managerInputContainer@$storageAccountName.blob.core.windows.net/$managerInputFolderPath\""
             ],
             "attachments": null,
             "outputs": [],
