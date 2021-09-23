@@ -33,9 +33,9 @@
         "description": "The name of the dataset to export."
       }
     },
-    "SAASUrl":{
+    "SASUrl":{
         "type": "string",
-        "metadata": "SAAS Url of the destination storage account to store the content to, including the token."
+        "metadata": "Shared Access Signature Url of the destination storage account to store the content to, including the token."
     },
     "DestinationContainer":{
         "type": "string",
@@ -46,7 +46,7 @@
     "dataFactoryName": "[concat('M365-', uniqueString(resourceGroup().id))]",
     "destinationAdlsAccountName": "[concat('astore', uniqueString(resourceGroup().id))]",
     "dataSetName": "[split(parameters('DataSet'), ' ')[0]]",
-    "destinationFileName": "[concat(split(parameters('SAASUrl'), '?')[0], '/', concat(uniqueString(resourceGroup().id), '.json?'), split(parameters('SAASUrl'), '?')[1])]"
+    "destinationFileName": "[concat(split(parameters('SASUrl'), '?')[0], '/', concat(uniqueString(resourceGroup().id), '.json?'), split(parameters('SASUrl'), '?')[1])]"
   },
   "resources": [
     {
