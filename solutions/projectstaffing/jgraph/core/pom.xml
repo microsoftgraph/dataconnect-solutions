@@ -20,8 +20,8 @@
     <version>1.4.3</version>
 
     <scm>
-        <url>https://bp-product@dev.azure.com/bp-product/gdc/_git/gdc</url>
-        <connection>scm:git:https://bp-product@dev.azure.com/bp-product/gdc/_git/gdc</connection>
+        <url>https://github.com/microsoftgraph/dataconnect-solutions</url>
+        <connection>scm:git:https://github.com/microsoftgraph/dataconnect-solutions</connection>
     </scm>
 
     <properties>

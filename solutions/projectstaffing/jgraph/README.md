@@ -10,12 +10,13 @@ Precondition: the code to be released should have been previously properly teste
     1. make sure that if there are changes made to employees or emails indices the changes are reflected in the definition of the exportEmployeeToAzureSearch and exportEmailsToAzureSearch activities
         and EnrichedEmployeesForIndexing and EnrichedMailsForIndexing datasets
 8. commit the changes
-9. build a new docker image via the https://dev.azure.com/bp-product/gdc/_build?definitionId=5 Azure DevOps pipeline, using the new version (e.g. x.y.z) as `tag_override` argument
+9. build a new docker image via the [https://dev.azure.com/DataConnectSolutions/MGDC%20Solutions/_build?definitionId=2](https://dev.azure.com/DataConnectSolutions/MGDC%20Solutions/_build?definitionId=2) 
+   Azure DevOps pipeline, using the new version (e.g. x.y.z) as `tag_override` argument. Make sure to enable the `pushDockerImages` flag.
 10. create a new zip with the new deliverables (alternatively, the steps below are performed automatically by the Azure DevOps pipeline if the `uploadArtifacts` flag is enabled)
     1. from the `gdc` project root run `./bin/prepare_artifacts.sh`
     2. after this is complete, go to target/output and rename the `arm` folder into `gdc-<release_version>` (e.g. gdc-x.y.z)
     3. compress this folder into a zip archive (e.g. gdc-x.y.z.zip)
-    4. upload the archive into the GDC public artifacts AZBS container: `bpartifactstorage -> gdc-artifacts -> builds`
+    4. upload the archive into the Project Staffing build artifacts AZBS container: `prjstfartifacts -> repository -> builds`
 11. deploy the new artifacts on the target environment
     1. on `dev` environment, this usually involves jGraph and all ADB jobs (jars and python scripts)
 12. ideally, test the new release on a clean test environment

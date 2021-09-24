@@ -116,9 +116,9 @@ profile picture of each individual employee is retrieved using Microsoft Graph A
 
 ### Data ingestion modes
 
-Since, due to security and privacy concerns, using an organization's real Microsoft 365 data requires the involvement
-and approval of the IT department (which can take a long time), the application comes with three data ingestion modes,
-out of which two modes rely on example datasets:
+Due to security and privacy concerns, using an organization's real Microsoft 365 data requires the involvement and
+approval of the IT department. This can take a long time. Therefore, the application comes with three data ingestion 
+modes, out of which two modes rely on example datasets:
 
 - Production mode
     - retrieves real production data from the three data sources mentioned above
@@ -129,16 +129,22 @@ out of which two modes rely on example datasets:
 - Simulated mode
     - relies on a set of artificially generated employee profiles and emails
     - meant for presentation and demonstration purposes
-    - the files in this dataset can be manually downloaded using `wget <link>` from the following links:
-        - https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/simulated-data/m365_users/generated_user_profiles.json
-        - https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/simulated-data/m365_managers/generated_managers.json
-        - https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/simulated-data/m365_emails/generated_emails.json
-        - https://bpartifactstorage.blob.core.windows.net/gdc-artifacts/simulated-data/hr_data/generated_hr_data.csv
+    - the files in this dataset can be manually downloaded using `wget <link>` from any one of 4 geographically  
+      replicated storage accounts. Please use the one that is most convenient for you. 
+        - `prjstfartifacts` -> West US 2
+        - `prjstfartifacts` -> Southeast Asia
+        - `prjstfartifactseu` -> Germany West Central
+        - `prjstfartifactssouth` -> Brazil South
+    - for each storage account, the dataset consists of 4 files, which can be accessed at the following links:
+        - `https://<storage_account>.blob.core.windows.net/public-artifacts/simulated-data/m365_users/generated_user_profiles.json`
+        - `https://<storage_account>.blob.core.windows.net/public-artifacts/simulated-data/m365_managers/generated_managers.json`
+        - `https://<storage_account>.blob.core.windows.net/public-artifacts/simulated-data/m365_emails/generated_emails.json`
+        - `https://<storage_account>.blob.core.windows.net/public-artifacts/simulated-data/hr_data/generated_hr_data.csv`
     - this data automatically gets copied by the deployment script to the `demodata<deploymentHash>` storage account
       of the deployment resource group, in the `simulated-data` container, in the following respective folders:
       `m365_users`, `m365_managers`, `m365_emails`, `hr_data`
         - any manual changes to the simulated data require uploading it to these locations
-        - in simulated mode, the ADF pipelines retrieve the data from these 4 locations, instead of the production data sources described above
+        - in simulated mode, the ADF pipelines retrieve the data from these locations, instead of the production data sources described above
 
 - Sample mode
     - relies on a subset of real internal data obtained from employees who explicitly provided some of their emails and profile data
