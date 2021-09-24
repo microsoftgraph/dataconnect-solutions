@@ -11,16 +11,27 @@ We are going to use a [python wheel](https://realpython.com/python-wheels/) to a
 ### Building the wheel
 Providing a wheel packaging the common code is the reference approach as far as Databricks is considered.  
 Depending on the python setup performed, you might need to activate a python virtualenv or a conda environment before
-performing the following steps:
+performing the following steps. Please make sure you completed the python setup steps in 
+
+Make sure you have a 3.7 python environment activated, by following the steps described [here](../README.md#1-install-python-bundled-with-anaconda)
+
+#### Executing the packaging of the python_utils library
+On Windows, execute these steps from Anaconda Powershell Prompt:
 1. Set your current directory to `pygraph/azure_processing/pygraph_utils`
-2. Run the following command to create the `.whl` file:
+2. Optionally, clear the results of previous builds
+```
+rm -Recurse build
+rm -Recurse dist
+rm -Recurse pygraph_utils.egg-info 
+```
+3. Run the following command to create the `.whl` file:
     + ```pip install wheel``` (if not already installed)  
     + ```python setup.py sdist bdist_wheel ```
-3. Three new directories will be generated under `/pygraph_utils`:
+4. Three new directories will be generated under `/pygraph_utils`:
     + build
     + dist
     + pygraph_utils.egg-info
-4. The resulting `.whl` wheel file can be found in the `dist` folder
+5. The resulting `.whl` wheel file can be found in the `dist` folder
     - the actual name of the file will vary based on the current package version which has been released (independent 
       of the application version), e.g. `pygraph_utils-0.1.7-py3-none-any.whl`
     

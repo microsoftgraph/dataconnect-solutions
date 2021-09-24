@@ -147,8 +147,22 @@ The resulting jars can be found in the `target` folder of the corresponding modu
 The steps required to build the pygraph utils wheel are defined in the pygraph_utils [readme file](../pygraph/azure_processing/pygraph_utils/README.md)
 
 ### Building the artifacts zip
-After all the project artifacts were build as described above, from the ProjectStaffing root folder run `./bin/prepare_artifacts.sh`  
-After this is complete, go to `target/output/gdc` and rename the `arm` folder into `gdc-<release_version>` (e.g. gdc-x.y.z)  
+After all the project artifacts were build as described above, from the ProjectStaffing root folder run `./bin/prepare_artifacts.sh`.  
+
+Since the script was designed for mac/linux systems, when running it on Windows via Powershell, the last part handling 
+the python utils wheel normally fails. This could be avoided if you explicitly configured Powershell and Git Bash so 
+that python3 and pip3 (e.g. the ones from the gdc conda environment) are directly accessible, however setting this up is
+out of the scope of this documentation. 
+As such, there are a few steps you will need to manually perform on Windows, from Powershell:
+1. verify the wheel was built. From the project root run `ls solutions/projectstaffing/pygraph/azure_processing/pygraph_utils/dist`
+    - check the wheel file exists and that it has the proper timestamp
+2. if it does not exist, use Anaconda Powershell Prompt to follow the Windows specific steps to [manually build the wheel](../pygraph/azure_processing/pygraph_utils/README.md#building-the-wheel)
+3. copy the wheel file to the build artifacts folder
+```shell script
+cp solutions/projectstaffing/pygraph/azure_processing/pygraph_utils/dist/pygraph_utils-*.whl solutions/projectstaffing/target/output/gdc/arm/scripts/artifacts
+```
+
+After this is complete, go to `target/output/gdc` and rename the `arm` folder into `gdc-<release_version>` (e.g. gdc-x.y.z).  
 Compress this folder into a zip archive (e.g. gdc-x.y.z.zip).  
 If desired, upload the archive to the project deliverables AZBS storage account, to make it available for download and deployment
 

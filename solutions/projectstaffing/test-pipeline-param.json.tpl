@@ -53,6 +53,9 @@
     "appservice.name": {
       "value": "prjstf-app-{{ DEPLOYMENT_SUFFIX | default('3ofyrz') }}"
     },
+    "appservice.sku.name": {
+      "value": "S2"
+    },
     "appservice.version": {
       "value": "{{ TAG }}"
     },
