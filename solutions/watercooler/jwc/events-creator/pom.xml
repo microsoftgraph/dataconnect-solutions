@@ -16,9 +16,10 @@
 
     <artifactId>events-creator</artifactId>
     <name>events-creator</name>
+
     <scm>
-        <url>https://bp-product@dev.azure.com/bp-product/watercooler/_git/watercooler</url>
-        <connection>scm:git:https://bp-product@dev.azure.com/bp-product/watercooler/_git/watercooler</connection>
+        <url>https://github.com/microsoftgraph/dataconnect-solutions</url>
+        <connection>scm:git:https://github.com/microsoftgraph/dataconnect-solutions</connection>
     </scm>
 
     <properties>
