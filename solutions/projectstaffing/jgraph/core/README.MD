@@ -74,7 +74,7 @@ following the next steps:
 same), and `gdc-employees-<date>` which is the employees index name (the name has a date suffix)
 
 #### Mssql local database configuration
-- In order to set up a local database run the deployment/local/docker-compose.yml file
+- In order to set up a local database run the `deployment/local/docker-compose.yml` file. 
 ```shell script
 cd deployment/local
 docker-compose -f ./docker-compose.yml up -d
@@ -89,10 +89,12 @@ docker exec -i $(docker ps -aqf "name=gdc_database$") /opt/mssql-tools/bin/sqlcm
 docker exec -i $(docker ps -aqf "name=gdc_database-test$") /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
 ```
 
-For Windows: execute `docker ps` and retrieve the container id-s for the `gdc_database` and `gdc_database-test`:
-```commandline
-docker exec -i container_id_for_gdc_database /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
-docker exec -i container_id_for_gdc_database-test /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master <./create-database.sql
+For Windows: 
+Use Powershell. Make sure you are in the `deployment/local` folder. Execute `docker ps` and retrieve the container ids 
+for the `gdc_database` and `gdc_database-test` containers, and replace them in the commands below:
+```shell script
+Get-Content ./create-database.sql | docker exec -i <container_id_for_gdc_database> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master
+Get-Content ./create-database.sql | docker exec -i <container_id_for_gdc_database-test> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P 'password_!23' -d master
 ```
 
 - The application will have to connect to a database that contains the data related to the same employees that are stored in Azure Search. 

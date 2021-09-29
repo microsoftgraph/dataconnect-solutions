@@ -10,7 +10,7 @@
         3. [Building the ADB jars](#building-the-adb-jars)
         4. [Building all the project's jars at once](#building-all-the-projects-jars-at-once)
         5. [Building the python utils wheel](#building-the-python-utils-wheel)
-        6. [Building the artifacts zip](#building-the-artifacts-zip)
+        6. [Building the deployment artifacts zip](#building-the-deployment-artifacts-zip)
     - [Building the project using Azure DevOps pipelines](#building-the-project-using-azure-devops-pipelines)
 - [Deployment](#deployment)
     - [Performing deployment on a new environment](#performing-deployment-on-a-new-environment)
@@ -75,7 +75,7 @@ You have two options for building the project:
     - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark jobs)
 2. Install latest Maven 3 version
     - download the latest maven 3 binary distribution archive from https://maven.apache.org/download.cgi. For Windows 
-    use maven 3.8.1 (https://mirror.efect.ro/apache/maven/maven-3/3.8.1/binaries/), the other versions might not work.
+    use maven 3.8.1 (https://mirror.efect.ro/apache/maven/maven-3/3.8.1/binaries/), as other versions might not work.
     - installation steps: https://maven.apache.org/install.html
     - required to build, develop and run the project's JVM based components (the AppService code and ADB scala spark jobs)
 3. Install docker
@@ -88,6 +88,18 @@ You have two options for building the project:
     - the python environment setup will differ if you plan to simply build the pygraph utils wheel locally or 
       if you want to do development and run pyspark jobs locally
     - please follow the appropriate [python environment setup steps](../pygraph/azure_processing/README.md#setup-guide)
+
+> NOTE: building certain components will also run the tests for that component.  
+> **On Windows**, certain tests relying on Apache Spark will fail with the following exception:  
+> `ERROR Shell: Failed to locate the winutils binary in the hadoop binary path
+> java.io.IOException: Could not locate executable null\bin\winutils.exe in the Hadoop binaries.`   
+> In this scenario the [official databricks documentation](https://docs.databricks.com/dev-tools/databricks-connect.html#cannot-find-winutilsexe-on-windows)
+> points you to hadoop installation instructions. However, there might be a shortcut by performing the following steps:
+> - clone https://github.com/cdarlint/winutils
+> - in environment variables set:
+>    - HADOOP_HOME=<path_to_folder_where_winutils_was_cloned>\winutils\hadoop-2.9.2
+>    - extend PATH with the following entry %HADOOP_HOME%\bin
+> - close the PowerShell terminal, reopen it, and only after that you can re-run the desired build command
 
 ### Building the App Service
 Building the ProjectStaffing App Service jar requires the following two modules to have been previously built:
@@ -115,7 +127,7 @@ mvn clean install
 ```
 This approach also runs the unit tests. To build the app without running the tests, run `mvn clean install -DskipTests`  
 The resulting jar (jgraph-core-<version>.jar) can be found in `jgraph/core/target/`  
-The resulting jar can then be [run locally](../jgraph/core/README.MD)  
+The resulting jar can then be [run locally](../jgraph/core/README.MD).  
 Normally, the ProjectStaffing App Service jar is not built as a standalone artifact, but instead it is built by  
 the [CI build pipeline](../docs/build_pipeline.md) into a docker image, and deployed as such into the App Service.
 > Note: if changes were performed to the jgraph-common module, it will have to be rebuilt before building the current module
@@ -146,8 +158,12 @@ The resulting jars can be found in the `target` folder of the corresponding modu
 ### Building the python utils wheel
 The steps required to build the pygraph utils wheel are defined in the pygraph_utils [readme file](../pygraph/azure_processing/pygraph_utils/README.md)
 
-### Building the artifacts zip
+### Building the deployment artifacts zip
 After all the project artifacts were build as described above, from the ProjectStaffing root folder run `./bin/prepare_artifacts.sh`.  
+
+> NOTE: if you are on Windows and you encounter issues running `./prepare_artifacts.sh`, then do one of the following:
+>   - either download git-scm from [http://git-scm.com/download/win](http://git-scm.com/download/win) and use **git-bash** to run the script that will prepare the artifacts
+>   - either run ```sed -i 's/\r$//' prepare_artifacts.sh```; (however `sed` as a command, cannot be executed only from git-bash or cygwin)
 
 Since the script was designed for mac/linux systems, when running it on Windows via Powershell, the last part handling 
 the python utils wheel normally fails. This could be avoided if you explicitly configured Powershell and Git Bash so 

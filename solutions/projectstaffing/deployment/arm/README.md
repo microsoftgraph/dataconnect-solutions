@@ -29,7 +29,7 @@ Ideally, the groups should be created before running the script.
 ### Performing a full deployment
 Please read the full contents of this file before proceeding with the deployment
 
-1. Build artifacts  (required for deployment), by following [these steps]( ../README.MD#building-the-artifacts-zip)
+1. Build artifacts  (required for deployment), by following [these steps]( ../README.MD#building-the-deployment-artifacts-zip)
 
 2. Upload prebuilt package (e.g. gdc-x.y.z.zip ) onto Azure CloudShell storage and unzip into your working dir.
    It will contain install.sh which is an entrypoint of deployment script.
@@ -47,7 +47,9 @@ Please read the full contents of this file before proceeding with the deployment
       In order to remove the trailing `\r` character, run the following commands:
     
         ```sed -i 's/\r$//' install.sh ```
-        
+      
+        ```sed -i 's/\r$//' functions.sh ```
+
         ```sed -i 's/\r$//' uninstall.sh ```
 
 3. Log into your account using Azure CLI
@@ -66,7 +68,9 @@ az login
     - If you desire to use a different subscription, you can pass it explicitly to the script, by providing the optional 
       argument `--subscription <subscription-id>`
         - Alternatively, if this argument is not provided, and the script encounters multiple subscriptions, then you 
-        will be prompted to choose between the default subscription and a different one
+          will be prompted to choose between the default subscription and a different one
+        - *Observation*: If a separate subscription is selected, the user must be aware that the selected subscription 
+          will become the default one
 
 5. Run deployment script from the working dir
     - You may change the deployment name and the region in the command below.
@@ -167,6 +171,9 @@ file permissions. Run the following commands in order to solve the problem:
 Then run the following command to delete the folder containing the artifacts:  
 ```rm -rf <directory_path_where_artifacts_were_decompressed>/```  
 
+#### Performing an installation in another subscription
+If you want to re-run the install script for another subscription it is mandatory to remove the `~/.gdc` folder in the 
+Cloud Shell home folder of the deploying user.
 
 ### Uninstalling a deployment
 A project deployment might need to be cleared, for example, either following a deployment failure (so that you might

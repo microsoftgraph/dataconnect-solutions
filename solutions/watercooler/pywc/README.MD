@@ -132,10 +132,10 @@ java.io.IOException: Could not locate executable null\bin\winutils.exe in the Ha
 
 In this scenario: [official databricks documentation](https://docs.databricks.com/dev-tools/databricks-connect.html#cannot-find-winutilsexe-on-windows) 
 points you to hadoop installation instructions.
-However there might be a shortcut by  performing this steps:
+However, there might be a shortcut by performing the following steps:
 - clone https://github.com/cdarlint/winutils
 - in environment variables set:
-  - HADOOP_HOME=c:\Users\admin\work\winutils\hadoop-2.9.2
+  - HADOOP_HOME=<path_to_folder_where_winutils_was_cloned>\winutils\hadoop-2.9.2
   - extend PATH with the following entry %HADOOP_HOME%\bin
 
 After you completed this step, close the anaconda power shell terminal, reopen it, activate the `jwc` environment,

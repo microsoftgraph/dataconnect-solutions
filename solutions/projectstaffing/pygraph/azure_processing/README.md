@@ -73,6 +73,7 @@ On Windows, these steps must be performed using Anaconda Powershell Prompt.
 
 ## II. Development conda environment setup
 <span id="development-conda-environment-setup"></span>
+Run the following commands from the `<project_root>/pygraph/azure_processing` folder.
 + `pip install -r requirements_conda.txt`
 
 If any changes to the setup are needed, remember to document changes in requirements:
@@ -149,14 +150,13 @@ Optional objective:
 
 ### Windows
 
-In order to have python/databricks-connect installed on windows please 
-follow the steps described in this documentation: 
+In order to have python/databricks-connect installed on Windows, please follow the steps described in this documentation: 
 
 https://docs.databricks.com/dev-tools/databricks-connect.html
 
 Databricks documentation lists conda as a dependency for having to create the 
-python enviroment necessary for databricks-connect and pyspark libraries being installed
-on the user windows environment.
+python environment necessary for databricks-connect and pyspark libraries being installed
+on the user Windows environment.
 In order to install anaconda (conda) on your window machine, please follow the steps
 described in here: 
 
