@@ -35,7 +35,7 @@ You will also need a user with [global administration role](https://docs.microso
 The source for the azure text analytics service is the content of the `dbo.vInternal_Interactions_one_to_many` view. 
 This view represents a data union of all the common fields of the augmented_emails, augmented_team_chats and augmented_events tables, 
 under a single schema describing interactions between users.  
-The script for the view can be found [here](../sql/private_views_creation_sql.sql)
+The script for the view can be found [here](../sql/create_views_private.sql)
 
 This view is created as a result of running the workflow described [here](../README.MD#tutorial-for-setting-up-the-conversation-lineage-processing-pipelines)
 
