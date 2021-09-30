@@ -84,41 +84,61 @@ Any subsequent installs have to be made in the:
 + outside conda environment - `conda install package-name=2.3.4 -n gdc`
 
 > Note: Latest requirements file has the `smart_open` import bug from gensim patched by upgrading smart_open (`conda update smart_open`). 
-> You shouldn't encounter this error unless `gensim` reinstalls the faulty `smart_open` version.
+> You shouldn't encounter this error unless `gensim` re-installs the faulty `smart_open` version.
 
 
 ## III. Configure local python scripts to run with Databricks
 <span id="local-development-config"></span>
+The pygraph scripts use a Spark cluster for bulk data processing. The scripts can be executed locally, while connecting
+to a remote Azure Databricks cluster for the Spark processing. This connection is established through databricks-connect.  
+This approach relies on an existing ProjectStaffing deployment in Azure, and requires information from several components
+of that deployment (e.g. from the Azure Databricks workspace and cluster, from the key vault and storage account used, etc.).  
+
+> NOTE: Before running any pygraph job locally, first build the pygraph utils wheel by following [these steps](./pygraph_utils/README.md#building-the-wheel).
+
 The environment specific configuration for each job can be provided via a configurations file.  
 
 For local debugging and execution of the scripts, the following configuration file templates are provided: `config_default.json`,
 `profiles_enrichment_params_default.json`,`mail_enrichment_params_default.json`.
-Those should be cloned to : `config.json`, `profiles_enrichment_params.json`, `mail_enrichment_params.json` and filled with the appropriate values.
+Those should be cloned to : `config.json`, `profiles_enrichment_params.json`, `mail_enrichment_params.json` and filled 
+with the appropriate values from the ProjectStaffing deployment in Azure.  
 
 The config file `config.json` has the following structure and is being used by all the spark job python scripts:
 ```
 {
-  "key": "jX+YA2[...]",
-  "datasource_connection_string": "DefaultEndpointsProtocol=https;AccountName=[...];AccountKey=jX+YA2[...];EndpointSuffix=core.windows.net",
-  "azure_search_api_key": "83E4C[...]",
+  "key": "[...]",
+  "datasource_connection_string": "DefaultEndpointsProtocol=https;AccountName=[...];AccountKey=[...];EndpointSuffix=core.windows.net",
+  "azure_search_api_key": "[...]",
   "endpoint": "https://[...].search.windows.net/",
-  "SERVICE_PRINCIPAL_SECRET": "J65H1[...]"
+  "SERVICE_PRINCIPAL_SECRET": "[...]"
 }
 ```
 
+> NOTE: If you want to debug mail_enrichment_processor.py, then only SERVICE_PRINCIPAL_SECRET is required in config.json
+
 The following fields need to be filled:
-- `SERVICE_PRINCIPAL_SECRET` - the secret for the `gdc-service` service principal, that is used by all spark jobs to connect to Azure services (AZBS, AzureSql, KeyVault etc)
+- `SERVICE_PRINCIPAL_SECRET` - the secret for the `<app-service-name>-gdc-service` service principal, that is used by 
+   all spark jobs to connect to Azure services (AZBS, AzureSql, KeyVault etc.). It can be retrieved from the 
+   `prjstf-backend-<deployment_hash>` vault, or a new secret can be created in the app registration in AAD.
 - `key` - azure storage key
 - `azure_search_api_key` - azure search api key
 - `endpoint` - azure search service URL
 
-> **Make sure not to commit this file** since it will contain sensitive information! Check if the rules from the `.gitignore` file cover your file name.  
+The information required to fill `profiles_enrichment_params.json` and `mail_enrichment_params.json` can be retrieved
+from the ADF pipelines (of the ProjectStaffing deployment in Azure) that run the corresponding pyspark scripts, and also 
+from the Global parameters of the data factory.
+For example, the input for `profiles_enrichment_params.json` can be retrieved by selecting the `enrichEmployeeProfile`
+activity of the `enrichEmployeeProfile` pipeline, and then accessing `Settings -> Parameters`
+![retrieve profile enrichment params](../../docs/imgs/retrieve_profile_enrichment_params.png)  
+![retrieve params from ADF Global parameters](../../docs/imgs/adf_global_parameters.png)
+
+> **Make sure not to commit these files** since they will contain sensitive information! Check if the rules from the `.gitignore` file cover your file name.  
 > Only store locally information for non-critical environments, which don't contain sensitive data and which can be easily decommissioned!
 
 
 Be mindful if cluster is active/inactive, in order to:
 + minimize load - if cluster is used for upgrade / demo
-+ Total Cost of Ownership (abbrev. TCO) - cluster doesn't have to be spun up needlessly, costs should be limited.
++ minimize Total Cost of Ownership - cluster doesn't have to be spun up needlessly, costs should be limited.
 
 
 ## IV. Java Setup
@@ -132,15 +152,20 @@ or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed i
 ## V. Spark / Databricks Setup
 <span id="spark-setup"></span>
 
+#### MacOS/Linux
 + install - `brew install apache-spark`
     + usually located in `/usr/local/Cellar/apache-spark/3.0.1/libexec/`
 
+#### Linux/macOS/Windows
+On Windows use Anaconda Powershell Prompt and activate your `gdc` conda environment as described above. 
+If the commands below can't find `pip3` or `python3`, use `pip` and `python` instead (assuming they don't point to python 2).  
 + install - `pip3  install databricks-connect==6.6.0` - this version is needed for our current Databricks configuration (5.5.* at least, 6.4 should also work)
 + sanity check - `python3 -c 'import pyspark'`
-
 + sanity check - `spark-shell` (use `:quit`)
 + sanity check - `pyspark` (use `quit()`)
-+ configure according to the below specs - `databricks-connect configure`
++ running `spark-shell` will probably prompt you to first configure databricks-connect and accept its license agreement 
+  by running `databricks-connect configure`. Run this command, accept the terms and provide the information specific to
+  the Databricks cluster you would like to connect to.
 + check - `databricks-connect test`
     + may error if pyspark wasn't uninstalled / left garbage folders (for some reason) -> `rm -rf /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/pyspark`
 
@@ -148,7 +173,7 @@ or https://jdk.java.net/java-se-ri/8-MR3, or search online for a more detailed i
 Optional objective:
 + TODO: can use local Spark while `databricks-connect` is installed and configured ?
 
-### Windows
+#### Windows
 
 In order to have python/databricks-connect installed on Windows, please follow the steps described in this documentation: 
 
@@ -169,6 +194,20 @@ If there are any problems with the databricks-connect setup please consult
 the troubleshooting section here:
 
 https://docs.databricks.com/dev-tools/databricks-connect.html#troubleshooting
+
+
+### Possible errors encountered on Windows
+Problem:
+- You might encounter `ImportError: DLL load failed while importing win32file: The specified module could not be found.`
+
+Solution:
+- `conda install pywin32` (taken from [here](https://stackoverflow.com/questions/58612306/how-to-fix-importerror-dll-load-failed-while-importing-win32api) )
+
+Problem:
+- In VSCode you might encounter `. Authentication failed: Can't connect to HTTPS URL because the SSL module is not available.`
+
+Solution
+- Add the path to conda's libraries to PATH, e.g. `C:\Users\user\Miniconda3\Library\bin` to `%PATH%`.
 
 
 ---
@@ -210,7 +249,7 @@ eval "$(pyenv virtualenv-init -)"
 ---
 ---
 # Additional
-In case there's a need for a different environments (example: jgraph uses a newer java version different than java needed for spark) 
+In case there's a need for a different environments (e.g.: jgraph uses a newer java version, different from java needed for spark) 
 then follow the steps below:
 
 ## Java Multiple Environment Setup (jenv for linux/mac only)
@@ -259,7 +298,7 @@ eval "$(pyenv virtualenv-init -)"
 + set installed version globally - `pyenv global 3.7.8`
 + sanity check - `pyenv versions`
 
-For Windows you can consult the documentation for pyenv here: https://github.com/pyenv-win/pyenv-win
+For Windows, you can consult the documentation for pyenv here: https://github.com/pyenv-win/pyenv-win
 
 ---
 # Sources

@@ -18,3 +18,4 @@ smart_open==1.8.0
 spacy==2.3.1
 tqdm==4.55.1
 wheel==0.36.2
+pyyaml==5.4.1
