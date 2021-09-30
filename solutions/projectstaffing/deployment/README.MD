@@ -81,6 +81,8 @@ You have two options for building the project:
 3. Install docker
     - follow the installation steps specific to your OS from https://docs.docker.com/get-docker/
     - required for building and publishing the AppService docker image, and for running tests locally (the tests use database docker containers)
+    - on Windows, if you are using Docker with WSL backend, you might receive an error telling you that you need the latest 
+      Linux kernel to be installed. In this case, please follow steps 1-5 from https://docs.microsoft.com/en-us/windows/wsl/install-manual
 4. Install nodejs 14.x, npm and yarn 1.22
     - required to build and run the application's UI
     - for details please follow the [UI setup steps](../jgraph/ui/README.md#project-setup)
