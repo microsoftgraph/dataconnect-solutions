@@ -383,17 +383,9 @@ The main pipeline started by the backfill trigger will, in turn, launch child pi
 completed and the main pipeline completes as well, the final step is to create and visualize the PowerBI reports
 on top of the data.
 
-The PowerBI presentation is based on the views created from the derived table.  
-The statements for the SQL views can be found [here](./sql).  
-The PowerBI report can be found [here](./power_bi_presentation/MGDC%20Conversation%20Lineage.pbix).  
-The PowerBI report documentation can be found [here](./power_bi_presentation/README.MD).
+A sample PowerBI report can be found [here](./power_bi_presentation/MGDC%20Conversation%20Lineage.pbix). This report can be downloaded and viewed on any machine with a PowerBI Desktop license.  
 
-In order to create/update the views necessary for the PowerBI please open a sql query window:  
-![sql-query-window](./docs/sql_script_creation.png)
-
-Execute the sql script necessary for the PowerBI reports:  
-![sql-query-execution](./docs/sql_script_views_creation.png)
-
+To configure the data source for the above report to connect to your Conversation Lineage data, please see the documentation [here](./power_bi_presentation/README.MD).
 
 
 ## Architectural design
