@@ -50,7 +50,9 @@ By default, the port is 8080. This can be changed by adding the `port` parameter
 Dev server is configured to proxy pass all requests to http://localhost:7655/ where the `core` module should normally run.  
 Target values for all proxies in [vue.config.js](vue.config.js) file should be changed if running `core` module on different port.
 
-**Note 1:** After accessing http://localhost:8080 you will need to add `AppServiceAuthSession` cookie for ui to authenticate through a deployed and running instance of the jGraph application. The cookie has to be from the same domain set in the env variable `JGRAPH_APPSERVICE_URL`
+> **Note 1:** After accessing http://localhost:8080 you will need to add `AppServiceAuthSession` cookie for ui to 
+> authenticate through a deployed and running instance of the jGraph application. The cookie has to be from the same 
+> domain set in the env variable `JGRAPH_APPSERVICE_URL`
 
 ### Build
 
@@ -65,4 +67,5 @@ Upon build completion the dist files will be outputted in `target/dist` director
 The `mvn` command will build the `ui` module using the settings described in `pom.xml` file.  
 Make sure to navigate to the `ui` directory and then run `mvn clean install`. This will only build the ui module, outputted in `target/dist` directory.
 
-**Note 2:** After building `ui` module using `mvn` you'll need to start the `core` module and navigate to http://localhost:7655. Please follow the same steps in **Note 1**
+> **Note 2:** After building `ui` module using `mvn` you'll need to start the `core` module and navigate to http://localhost:7655. 
+> Please follow the same steps in **Note 1**

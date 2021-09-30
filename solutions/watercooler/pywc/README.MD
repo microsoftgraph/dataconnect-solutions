@@ -92,6 +92,11 @@ Any subsequent installs have to be made in the:
 
 
 ### 3. Spark / Databricks Setup 
+The pywc scripts use a Spark cluster for bulk data processing. The scripts can be executed locally, while connecting
+to a remote Azure Databricks cluster for the Spark processing. This connection is established through databricks-connect.  
+This approach relies on an existing Watercooler deployment in Azure, and requires information from several components
+of that deployment (e.g. from the Azure Databricks workspace and cluster, from the key vault and storage account used, etc.).
+
 
 #### MacOS/Linux
 <span id="spark-setup"></span>
@@ -99,12 +104,17 @@ Any subsequent installs have to be made in the:
 + install - `brew install apache-spark`
   + usually located in `/usr/local/Cellar/apache-spark/3.0.1/libexec/`
 
+#### Linux/MacOS/Windows
+On Windows use Anaconda Powershell Prompt and activate your `gdc` conda environment as described above.
+If the commands below can't find `pip3` or `python3`, use `pip` and `python` instead (assuming they don't point to python 2).
 + install - `pip3  install databricks-connect==8.1` - this version is needed for our current Databricks configuration (Runtime version: 8.1 (includes Apache Spark 3.1.1, Scala 2.12))
 + sanity check - `python3 -c 'import pyspark'`
 
 + sanity check - `spark-shell` (use `:quit`)
 + sanity check - `pyspark` (use `quit()`)
-+ configure according to the below specs - `databricks-connect configure`
++ running `spark-shell` will probably prompt you to first configure databricks-connect and accept its license agreement
+  by running `databricks-connect configure`. Run this command, accept the terms and provide the information specific to
+  the Databricks cluster you would like to connect to.
 + check - `databricks-connect test`
   + may error if pyspark wasn't uninstalled / left garbage folders (for some reason) -> `rm -rf /Library/Frameworks/Python.framework/Versions/3.8/lib/python3.8/site-packages/pyspark`
 
@@ -132,10 +142,10 @@ java.io.IOException: Could not locate executable null\bin\winutils.exe in the Ha
 
 In this scenario: [official databricks documentation](https://docs.databricks.com/dev-tools/databricks-connect.html#cannot-find-winutilsexe-on-windows) 
 points you to hadoop installation instructions.
-However there might be a shortcut by  performing this steps:
+However, there might be a shortcut by performing the following steps:
 - clone https://github.com/cdarlint/winutils
 - in environment variables set:
-  - HADOOP_HOME=c:\Users\admin\work\winutils\hadoop-2.9.2
+  - HADOOP_HOME=<path_to_folder_where_winutils_was_cloned>\winutils\hadoop-2.9.2
   - extend PATH with the following entry %HADOOP_HOME%\bin
 
 After you completed this step, close the anaconda power shell terminal, reopen it, activate the `jwc` environment,
@@ -250,7 +260,7 @@ Problem:
   - In VSCode you might encounter `. Authentication failed: Can't connect to HTTPS URL because the SSL module is not available.`
 
 Solution
-  - Add path to conda's libraries to PATH, e.g. `C:\Users\user\Miniconda3\Library\bin` to `%PATH%`.
+  - Add the path to conda's libraries to PATH, e.g. `C:\Users\user\Miniconda3\Library\bin` to `%PATH%`.
 
 
 ## V. Development tips
@@ -264,10 +274,10 @@ dbutils.fs.mount(
  extra_configs = {"fs.azure.account.key.teststorage.blob.core.windows.net":"AccessKey" })
 ```
 
-More information about the databricks file system can be found [here](https:./imgs.databricks.com/data/databricks-file-system.html)
+More information about the databricks file system can be found [here](https://docs.databricks.com/data/databricks-file-system.html)
 
 Uploading the scripts to the ADB cluster:
-During development, modified scripts can be upload to the following location on Azure Databricks File System:  `dbfs ls dbfs:/mnt/watercooler/watercooler_scripts/parameterized`
+During development, modified scripts can be uploaded to the following location on Azure Databricks File System:  `dbfs ls dbfs:/mnt/watercooler/watercooler_scripts/parameterized`
 The command for upload the scripts is the following and has to be executed from the [./pywc/parametrized_scripts](./pywc/parametrized_scripts) folder.
 The following command will have to be executed from command line.
 ```
@@ -315,7 +325,7 @@ Similar to what we did for Java, in this case for Python.
 Please see the [installation section](https://github.com/pyenv/pyenv#installation) of the project's [github page](https://github.com/pyenv/pyenv)  
 For an installation guide covering several systems, please read https://wilsonmar.github.io/pyenv/  
 The steps below describe the installation process for mac:
-+ install - `brew install pyenv pyenv-virtualenv` ; for linux you can follow the instructions from [here](https://realpython.com/intro-to-pyenv/) 
++ install - `brew install pyenv pyenv-virtualenv` ; for Linux you can follow the instructions from [here](https://realpython.com/intro-to-pyenv/) 
 + append the following to config file (`~/.bashrc` or `~/.zshrc`) and run `source` or restart/open new shell:
 ```shell script
 export PATH="$HOME/.pyenv/bin:$PATH"
@@ -328,15 +338,15 @@ eval "$(pyenv virtualenv-init -)"
 + sanity check - `pyenv versions`
 
 
-For windows you can consult the documentation for pyenv here: https://github.com/pyenv-win/pyenv-win
+For Windows, you can consult the documentation for pyenv here: https://github.com/pyenv-win/pyenv-win
 
 ---
 # Sources
 
 ## More links:
-+ https:./imgs.oracle.com/javase/./imgs/technotes/guides/install/mac_jdk.html
++ https://docs.oracle.com/javase/8/docs/technotes/guides/install/mac_jdk.html
 + https://medium.com/@chamikakasun/how-to-manage-multiple-java-version-in-macos-e5421345f6d0
 + https://github.com/jenv/jenv/issues/212
 + https://stackoverflow.com/questions/41129504/pycharm-with-pyenv
-+ https:./imgs.databricks.com/dev-tools/databricks-connect.html
++ https://docs.databricks.com/dev-tools/databricks-connect.html
 

@@ -98,7 +98,7 @@ The resulting jars can be found in the `target` folder of the corresponding modu
    - build via bin/prepare_artifacts.sh
    - needs to be uploaded to a "project deliverables AZBS storage account", to make it easily accessible to admins performing deployments
    - contains:
-      - the jars, python scripts and python wheel files, defining Spark jobs run on ADB by ADF pipelines
+      - the jars, python scripts and python wheel files, defining Spark jobs that run on ADB via ADF pipelines
       - the pipelines.json file, defining the ADF entities
       - the schema sql file, containing the database schema creation statements
       - all the scripts and ARM templates used to deploy the application on a new environment

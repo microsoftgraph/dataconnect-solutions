@@ -9,7 +9,7 @@ pipelines.
 
 
 ### Deployment and installation from source
-In order to deploy from source please following [these steps](./deployment/README.MD)
+In order to deploy from source please follow [these steps](./deployment/README.MD)
 
 ### Setting up the application
 
@@ -36,8 +36,8 @@ Azure and then run the application locally while using the resources from the Az
 5. to perform a fresh full deployment in Azure, please follow the steps described in the deployment
    script's [readme file](./deployment/azure/README.MD)
    and in the [deployment overview document](docs/WatercoolerDeploymentOverview.MD)
-6. to run the application in Azure, please following [these steps](./jwc/core/README.MD#running-the-application-in-azure)
-7. to run the application locally, please following [these steps](./jwc/core/README.MD#running-the-application-locally)
+6. to run the application in Azure, please follow [these steps](./jwc/core/README.MD#running-the-application-in-azure)
+7. to run the application locally, please follow [these steps](./jwc/core/README.MD#running-the-application-locally)
 
 #### Prerequisites
 
