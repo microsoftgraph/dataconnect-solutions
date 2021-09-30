@@ -384,7 +384,7 @@ completed and the main pipeline completes as well, the final step is to create a
 on top of the data.
 
 The PowerBI presentation is based on the views created from the derived table.  
-The statements for the SQL views creation can be found [here](./sql/views_creation_sql.sql).  
+The statements for the SQL views can be found [here](./sql).  
 The PowerBI report can be found [here](./power_bi_presentation/MGDC%20Conversation%20Lineage.pbix).  
 The PowerBI report documentation can be found [here](./power_bi_presentation/README.MD).
 
