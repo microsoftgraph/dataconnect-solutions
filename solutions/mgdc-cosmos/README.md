@@ -64,16 +64,20 @@ The tutorial assume that you already have graph data connect in Azure Synapse. F
 ## Update Azure Key Vault
 
 1. In your Azure Keyvault You will need to add following keys:
-    a. gremlinEndpoint - Value: wss://<CosmosDB Instance Name>.gremlin.cosmos.azure.com:443/  (<CosmosDB Instance Name> is the name of your Cosmos DB instance.
-    b. gremlinUsername - Value: /dbs/<database id>/colls/<graph id>  (Use the <database id> and <graph id> you entered in the steps above.
-    c. gremlinPassword - Value: <Cosmos DB Primary Key>  (You can find this my click on Keys on the Cosmos DB OVerview screen in the Portal.)
+2. gremlinEndpoint - Value: wss://<CosmosDB Instance Name>.gremlin.cosmos.azure.com:443/  (<CosmosDB Instance Name> is the name of your Cosmos DB instance.
+3. gremlinUsername - Value: /dbs/<database id>/colls/<graph id>  (Use the <database id> and <graph id> you entered in the steps above.
+4. gremlinPassword - Value: <Cosmos DB Primary Key>  (You can find this my click on Keys on the Cosmos DB OVerview screen in the Portal.)
+
 
 ## Update Synapse Workspace
 
 ### Add Workspace Package to Spark Pool
    
 1. Download the file: [gremlinpython-3.5.1-py2.py3-none-any.whl](https://github.com/microsoftgraph/dataconnect-solutions/blob/main/solutions/mgdc-cosmos/packages/gremlinpython-3.5.1-py2.py3-none-any.whl)
-2. 
+2. In the Azure portal navigate to the OVerview page for your Synapse Workspace.
+3. Click Apache Spark pools in the left menu bar, then click on the spark pool you've previously created.
+4. Click on Packages i the left menu bar.
+   
    
 ### Import Python Notebook
 
