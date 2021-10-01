@@ -26,6 +26,8 @@ With the above information ready, complete the following:
 1. Download a copy of the .pbix report from the link [here](https://github.com/microsoftgraph/dataconnect-solutions/blob/main/solutions/conversation-lineage/power_bi_presentation/MGDC%20Conversation%20Lineage.pbix).  
 2. Open the report on a machine with access to PowerBI Desktop.  
 3. We will be updating the data source connection next, so hit the `escape` key or close out of all prompts until none are left.  
+>  NOTE: You will likely see an **Enable script visuals** prompt. This is not necessary for our PowerBI visualizations, so please click cancel to avoid unnecessary installation steps.  
+>  ![Enable Script Visuals](../docs/power_bi/EnableScriptVisuals_PBI.png)
 4. Once you are no longer prompted, go to the **Home** tab on the ribbon and select ***Transform data > Data source settings***.  
 ![DataSourceSettings_PBI](../docs/power_bi/DataSourceSettings_PBI.png)   
 5. In the **Data source settings** window, select ***Change Source...*** in the bottom left-hand corner.  
@@ -38,6 +40,8 @@ With the above information ready, complete the following:
 ![SQLAuth_PBI](../docs/power_bi/SQLAuth_PBI.png)
 9. Click **Save**.
 10. Once the connection has been established, the data should begin populating for each visualization.  
+> NOTE: The tabs for `[H]Tables` and `[H]Targets` will likely have the following message. Click the **Fix this** button and the visuals should refresh with data from the newly connected views.  
+> ![FixThis](../docs/power_bi/FixThis_PBI.png)
 11. The report updates should now be complete.
  
 
