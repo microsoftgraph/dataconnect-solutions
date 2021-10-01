@@ -175,6 +175,9 @@ and make sure to use your resource group.
 Certain more complex transformations of data will be performed using Apache Spark. This requires the computation
 resources of a Spark cluster. Synapse provides an integrated Spark cluster via Spark pools.  
 
+> NOTE: The default Apache Spark version when creating a Spark pool is 2.4. For this tutorial, please ensure you select 3.1 from the drop-down on the Additional settings tab when configuring the new Spark pool.
+> ![Spark3.1](./docs/Spark3.1.png)  
+
 From Synapse Studio, create a Spark pool named `mgdc101synapse` by adapting the steps in [this tutorial](https://docs.microsoft.com/en-us/azure/synapse-analytics/quickstart-create-apache-spark-pool-studio#create-the-apache-spark-pool-in-synapse-studio). Return to this tutorial once you reach step 4 of the **Create a Synapse Spark pool** section.
 In order to keep costs low, assuming you will use a rather small input dataset, use small nodes and keep the number of
 nodes to a minimum. Also, to enable automatic pausing after the pool is idle, go to `Pause Settings` (on the right of the pool name in the pools list), select "Enabled", and set the desired idle duration.
