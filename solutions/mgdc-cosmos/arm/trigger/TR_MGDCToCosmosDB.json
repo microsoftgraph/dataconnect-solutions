@@ -1,0 +1,29 @@
+{
+    "name": "TR_MGDCToCosmosDB",
+    "properties": {
+        "annotations": [],
+        "runtimeState": "Stopped",
+        "pipelines": [
+            {
+                "pipelineReference": {
+                    "referenceName": "PL_MGDC_CosmosDB",
+                    "type": "PipelineReference"
+                },
+                "parameters": {
+                    "sql_database_name": "synapsededicatesqlpool",
+                    "sql_server_name": "cl-zach-synapse2",
+                    "keyvault_name": "kv-cl-zach"
+                }
+            }
+        ],
+        "type": "ScheduleTrigger",
+        "typeProperties": {
+            "recurrence": {
+                "frequency": "Day",
+                "interval": 1,
+                "startTime": "2021-09-28T00:00:00Z",
+                "timeZone": "UTC"
+            }
+        }
+    }
+}
