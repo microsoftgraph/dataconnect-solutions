@@ -385,8 +385,7 @@ on top of the data.
 
 A sample PowerBI report can be found [here](./power_bi_presentation/MGDC%20Conversation%20Lineage.pbix). This report can be downloaded and viewed on any machine with a PowerBI Desktop license.  
 
-To configure the data source for the above report to connect to your Conversation Lineage data, please see the documentation [here](./power_bi_presentation/README.MD).
-
+To configure the data source for the above report to connect to your Conversation Lineage data, please see the documentation [here](./power_bi_presentation/README.MD#update-powerbi-data-source).
 
 ## Architectural design
 
