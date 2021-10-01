@@ -11,7 +11,6 @@
     * [Import Pipeline](#import-pipeline)
     * [Add Trigger](#add-trigger)
 * [Execute Pipeline](#execute-pipeline)
-* [Monitor Pipeline](#monitor-pipeline)
 * [Query Data in Cosmos DB](#query-data-in-cosmos-db)
 
 ## Tutorial Overview
@@ -100,20 +99,35 @@ The tutorial assume that you already have graph data connect in Azure Synapse. F
 1. Download the file: [PL_MGDC_CosmosDB.zip](https://github.com/microsoftgraph/dataconnect-solutions/blob/main/solutions/mgdc-cosmos/arm/pipeline/PL_MGDC_CosmosDB.zip)
 2. Inside your Azure SYnapse workspace click on the Integrate Icon.
 3. Click on the + symbol then click on Import.
-4. Navigate to and select File 2 then click Open
-   
-Update pipeline parameters:
-* `sql_database_name`
-* `sql_server_name`
-* `keyvault_name`
+4. Navigate to and select PL_MGDC_CosmosDB.zip then click Open
+5. Open the pipeline ** MGDCToCosmosDB and Update the following pipeline parameters:
+   a. sql_database_name - Set this to the name of your dedicated SQL pool.
+   b. sql_server_name - Set this to the name of your Azure Synapse Workspace
+   c. keyvault_name - Set this ot the name of your Keyvault.
 
 ### Add Trigger
 
+1. In the Synapse workspace Click the **Integrate** icon, then click on **MGDCToCosmosDB** pipeline. 
+2. Click on **Trigger** then **New/Edit**.
+3. in The Choose trigger... drop down select **New**
+4. Fill out the fields in the tigger with your prefered values then Click **OK*
+
 ## Execute Pipeline
 
-## Monitor Pipeline
+1. In the Synapse workspace Click the **Integrate** icon, then click on **MGDCToCosmosDB** pipeline. 
+2. Click on **Trigger** then **Trigger Now.**
 
 ## Query Data in Cosmos DB
+
+1. In the Azure Portal, from the Overview page of the Azure Cosmos DB instance you click on **Data Explorer**.
+2. Exand your Database and Graph and click on the line that says **Graph**. 
+3. You either click on **Load Graph** to do some basic exploration of the data or execute a gremlin query to get something more specific. Ex. g.V('Office365-User').as('b').bothE().as('e').select ('b', 'e').  Office365-User would be a user that's available on your MGDC data set.
+
+## Setting Up Linkcurious for Cosmos DB
+
+It is highly recommended that you use a robust graph visualization tool such as [Linkcurious](http://linkurio.us/) for navigating the data. You can find instructions for setting up Linkcurious for Cosmos DB [here](https://doc.linkurio.us/admin-manual/latest/configure-cosmos/). You will need the information you recorded earlier to in the tutorial to configure Linkcurious.
+
+There are other graph visualization tools available if you decide not to use Linkcurious.
 
 
 
