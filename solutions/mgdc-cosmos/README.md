@@ -18,8 +18,8 @@
 This tutorial will provide an example of how to load [Graph Data Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview)
 (GDC) to gain insights into a Cosmos DB Grmelin API Graph database. By doing this, you will learn the key steps and Azure technologies required to build your own GDC based Graph database.  
 
-You will learn how to:
-Take GDC data already loaded into Azure Synapse and model and load the data into a CosmosDB Gremlin API
+**You will learn how to**:
+- Take GDC data already loaded into Azure Synapse and model and load the data into a CosmosDB Gremlin API
 
 ## Prerequisites
 
@@ -29,22 +29,23 @@ To complete this lab, you need the following:
   - If you do not have one, you can obtain one (for free) here: [https://azure.microsoft.com/free](https://azure.microsoft.com/free/)
   - The account used to perform the set up must have the [**Contributor** role for the subscription granted to it](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin),
     in order to be able to create the various infrastructure components described below
-  - The Azure subscription must be in the same tenant as the Office 365 tenant as Graph Data Connect will only export 
+  - The Azure subscription must be in the same tenant as the Office 365 tenant, as Graph Data Connect will only export 
     data to an Azure subscription in the same tenant, not across tenants.
 - Office 365 tenancy
   - If you do not have one, you obtain one (for free) by signing up to the [Office 365 Developer Program](https://developer.microsoft.com/office/dev-program).
   - Multiple Office 365 users with emails sent & received
   - Access to at least two accounts that meet the following requirements:
-  - One of the two accounts must be a global tenant administrator & have the **global administrator** role granted (just one account)
+      - One of the two accounts must be a global tenant administrator
+      - That same account must have the **global administrator** role granted
 - Workplace Analytics licenses
-  - Access to the Microsoft Graph data connect toolset is available through [Workplace Analytics](https://products.office.com/en-us/business/workplace-analytics), 
+  - Access to the Microsoft Graph Cata Connect toolset is available through [Workplace Analytics](https://products.office.com/en-us/business/workplace-analytics), 
     which is licensed on a per-user, per-month basis.
   - To learn more please see [Microsoft Graph data connect policies and licensing](https://docs.microsoft.com/en-us/graph/data-connect-policies)
 
 > NOTE: The screenshots and examples used in this lab are from an Office 365 test tenant with fake email data from test users. 
 > You can use your own Office 365 tenant to perform the same steps. No data is written to Office 365. 
 
-The tutorial assumes that you already have graph data connect in Azure Synapse. For an example of how to load that data into Azure Synapse you can refer to the [Coversation Lineage Tutorial](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage).
+The tutorial assumes that you already have Graph Data Connect in Azure Synapse. For an example of how to load that data into Azure Synapse, you can refer to the [Coversation Lineage Tutorial](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage).
 
 ## Create and Configure Azure Cosmos DB
 
@@ -98,6 +99,7 @@ In your Azure Keyvault, you will need to add following keys:
 3. Click on the + symbol, then select **Import**.
 4. Navigate to and select **File 1**, then click **Open**.
 
+![import_notebook](./docs/develop-import.png)
    
 ### Import Pipeline
    
