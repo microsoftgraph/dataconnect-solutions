@@ -78,60 +78,64 @@ In your Azure Keyvault, you will need to add following keys:
 ### Add Workspace Package to Spark Pool
    
 1. Download the file: [gremlinpython-3.5.1-py2.py3-none-any.whl](https://github.com/microsoftgraph/dataconnect-solutions/blob/main/solutions/mgdc-cosmos/packages/gremlinpython-3.5.1-py2.py3-none-any.whl)
-2. In your Synapse Worksapce click on **Manage** then click on **Workspace Packages**.
-3. Click on Upload at the Top.
-4. In the dialog box on the right click on the folder icon. Navigate to the **gremlinpython-3.5.1-py2.py3-none-any.whl** file you downloaded and click open.
-5. Click on the **Upload** button at the button of the dialog box.
-6. In the Azure portal navigate to the OVerview page for your Synapse Workspace.
-7. Click **Apache Spark pools** in the left menu bar, then click on the spark pool you've previously created.
-8. Click on **Packages** in the left menu bar.
-9. Click on **Select from Workspace packages**.
-10. Chick the box next to **gremlinpython-3.5.1-py2.py3-none-any.whl** the click **Select**.
-11. Click **Save** at the top.
+2. In your Synapse Workspace, in the **Manage hub**, click on **Workspace packages**.
+3. Click on Upload near the top of the window to open the `Upload packages` dialog box.
+   A. In the dialog box, click on the folder icon. 
+   B. Navigate to the **gremlinpython-3.5.1-py2.py3-none-any.whl** file you downloaded and click open.
+   C. Click on the **Upload** button at the bottom of the dialog box.
+4. In the Azure portal, navigate to the Overview page for your Synapse Workspace.
+5. Click **Apache Spark pools** in the left menu bar, then click on the spark pool you've previously created.
+6. Click on **Packages** in the left menu bar.
+7. Click on **Select from workspace packages**.
+   A. Check the box next to **gremlinpython-3.5.1-py2.py3-none-any.whl**, then click **Select**.
+8. Click **Save** at the top of the window.
    
    
 ### Import Python Notebook
 
 1. Download the file: [MGDCToCosmosDB.ipynb](https://github.com/microsoftgraph/dataconnect-solutions/blob/main/solutions/mgdc-cosmos/arm/notebook/MGDCToCosmosDB.ipynb)
-2. Inside your Azure SYnapse workspace click on the **Develop** icon.
-3. Click on the + symbol then click on Import.
-4. Navigate to and select File 1 then click Open
+2. Inside your Azure Synapse workspace, navigate to the **Develop hub**.
+3. Click on the + symbol, then select **Import**.
+4. Navigate to and select **File 1**, then click **Open**.
 
    
 ### Import Pipeline
    
 1. Download the file: [PL_MGDC_CosmosDB.zip](https://github.com/microsoftgraph/dataconnect-solutions/blob/main/solutions/mgdc-cosmos/arm/pipeline/PL_MGDC_CosmosDB.zip)
-2. Inside your Azure SYnapse workspace click on the Integrate Icon.
-3. Click on the + symbol then click on Import.
-4. Navigate to and select PL_MGDC_CosmosDB.zip then click Open
-5. Open the pipeline ** MGDCToCosmosDB and Update the following pipeline parameters:
-   a. sql_database_name - Set this to the name of your dedicated SQL pool.
-   b. sql_server_name - Set this to the name of your Azure Synapse Workspace
-   c. keyvault_name - Set this ot the name of your Keyvault.
+2. Inside your Azure Synapse workspace, navigate to the **Integrate hub**.
+3. Click on the + symbol, then select **Import**.
+4. Navigate to and select **PL_MGDC_CosmosDB.zip** then click **Open**.
+5. Open the **MGDCToCosmosDB** pipeline and update the following pipeline parameters:  
+   a. `sql_database_name` - Set this to the name of your dedicated SQL pool.  
+   b. `sql_server_name` - Set this to the name of your Azure Synapse workspace.  
+   c. `keyvault_name` - Set this ot the name of your Keyvault.
 
 ### Add Trigger
 
-1. In the Synapse workspace Click the **Integrate** icon, then click on **MGDCToCosmosDB** pipeline. 
+1. In the Synapse workspace, navigate to the **Integrate hub**, then select the **MGDCToCosmosDB** pipeline. 
 2. Click on **Trigger** then **New/Edit**.
-3. in The Choose trigger... drop down select **New**
-4. Fill out the fields in the tigger with your prefered values then Click **OK*
+3. In the **Choose trigger...** dropdown, select **New**
+4. Fill out the fields in the trigger with your prefered values, then click **OK**
 
 ## Execute Pipeline
 
-1. In the Synapse workspace Click the **Integrate** icon, then click on **MGDCToCosmosDB** pipeline. 
-2. Click on **Trigger** then **Trigger Now.**
+1. In the Synapse workspace, navigate to the **Integrate hub**, then click on **MGDCToCosmosDB** pipeline. 
+2. Click on **Trigger**, then **Trigger Now.**  
+
+With this step complete, our Cosmos DB instance should be populated with data.
 
 ## Query Data in Cosmos DB
 
-1. In the Azure Portal, from the Overview page of the Azure Cosmos DB instance you click on **Data Explorer**.
-2. Exand your Database and Graph and click on the line that says **Graph**. 
-3. You either click on **Load Graph** to do some basic exploration of the data or execute a gremlin query to get something more specific. Ex. g.V('Office365-User').as('b').bothE().as('e').select ('b', 'e').  Office365-User would be a user that's available on your MGDC data set.
+1. In the Azure portal, from the Overview page of the Azure Cosmos DB instance you created, click on **Data Explorer**.
+2. Expand your database and graph dropdowns, then click on the **Graph** option. 
+3. Click the **Load Graph** button near the window center (or **Execute Gremlin Query** on the right) to do some basic exploration of the data. 
+
+Execute different queries to investigate more specific data. For example:  
+1. ```g.E()``` to view the edge data
+2. ```g.V('<office365-user>').as('b').bothE().as('e').select ('b', 'e')```, where `office365-user` would be a user that's available on your MGDC data set.
 
 ## Setting Up Linkcurious for Cosmos DB
 
-It is highly recommended that you use a robust graph visualization tool such as [Linkurious](http://linkurio.us/) for navigating the data. You can find instructions for setting up Linkcurious for Cosmos DB [here](https://doc.linkurio.us/admin-manual/latest/configure-cosmos/). You will need the information you recorded earlier to in the tutorial to configure Linkcurious.
+It is highly recommended that you use a robust graph visualization tool such as [Linkurious](http://linkurio.us/) for navigating the data. You can find instructions for setting up Linkurious for Cosmos DB [here](https://doc.linkurio.us/admin-manual/latest/configure-cosmos/). You will need the information you recorded earlier in the tutorial to configure Linkurious.
 
-There are other graph visualization tools available if you decide not to use Linkcurious.
-
-
-
+There are [other recommended graph visualization tools](https://docs.microsoft.com/en-us/azure/cosmos-db/graph/graph-visualization-partners) aside from Linkurious.
