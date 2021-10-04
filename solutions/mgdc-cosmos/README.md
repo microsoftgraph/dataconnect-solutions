@@ -68,9 +68,9 @@ In your Azure Keyvault, you will need to add following keys:
    - `cosmosDB-instance-name` is the name of your Cosmos DB instance.
 - **Gremlin Username**: `/dbs/<database-id>/colls/<graph-id>`  
    - `database-id` and `graph-id` are the database id and graph id you entered in the steps above.
-- **Gremlin Password**: `CosmosDBPrimaryKey`  
-   - You can find this by clicking on Keys on the Cosmos DB Overview screen in the Portal.
-
+- **Gremlin Password**: Your Cosmos DB Primary Key`  
+   - You can find this by clicking on Keys on the Cosmos DB Overview screen in the Portal.  
+![gremlin API keys](./docs/gremlin_keys.png)
 
 ## Update Synapse Workspace
 
