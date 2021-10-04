@@ -41,31 +41,35 @@ To complete this lab, you need the following:
     which is licensed on a per-user, per-month basis.
   - To learn more please see [Microsoft Graph data connect policies and licensing](https://docs.microsoft.com/en-us/graph/data-connect-policies)
 
-> NOTE: The screenshots and examples used in this lab are from an Office 365 test tenant with fake email from test users. 
+> NOTE: The screenshots and examples used in this lab are from an Office 365 test tenant with fake email data from test users. 
 > You can use your own Office 365 tenant to perform the same steps. No data is written to Office 365. 
 
-The tutorial assume that you already have graph data connect in Azure Synapse. For an example of how to load that data into Azure Synapse you can refer to the [Coversation Lineage Tutorial](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage).
+The tutorial assumes that you already have graph data connect in Azure Synapse. For an example of how to load that data into Azure Synapse you can refer to the [Coversation Lineage Tutorial](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage).
 
 ## Create and Configure Azure Cosmos DB
 
 1. Open a browser and navigate to your Azure Portal at [https://portal.azure.com](https://portal.azure.com)
-2. In the search bar type **Azure Cosmos DB** and then Click on **Azure Cosmos DB** in the Services list.
-3. Click on Create then Click on the Create button in the section labled  **Gremlin (Graph)**.
-4. Select your prefered Subscription, Resource Group and Location. Type in the name you'd like to use for your Cosmos DB instance. Record this name as you will need it later in the tutorial.
-5. Choose your prefered pricing option then Click on Review and Create.
-6. From the Overview page of the Azure Cosmos DB instance you just created click on Data Explorer.
-7. Click on New Graph.
-8. Select Create New and enter a Database id and a Graph id and make a record of the value. You will need them later in the tutorial.
-9. Choose data throughput that will meet your needs.
-10. For the Partition Key enter in **/pk**
-11. Click OK
+2. In the search bar, type **Azure Cosmos DB** and then Click on **Azure Cosmos DB** in the Services list.
+3. Click on Create then Click on the Create button in the section labled  **Gremlin (Graph)**.  
+   A. Select your prefered Subscription, Resource Group and Location.  
+   B. Type in the name you'd like to use for your Cosmos DB instance. Record this name as you will need it later in the tutorial.  
+   C. Choose your prefered pricing option then Click on Review and Create.  
+4. From the Overview page of the Azure Cosmos DB instance you just created, click on Data Explorer.
+5. Click on New Graph, then select the option to create a New Graph  
+   A. Enter a Database id and a Graph id and make a record of the value. You will need them later in the tutorial.  
+   B. Choose data throughput that will meet your needs.  
+   C. For the Partition Key, enter in **/pk**  
+   D. Click OK
 
 ## Update Azure Key Vault
 
-1. In your Azure Keyvault You will need to add following keys:
-2. gremlinEndpoint - Value: wss://CosmosDBInstanceName.gremlin.cosmos.azure.com:443/  (CosmosDBInstanceName is the name of your Cosmos DB instance.)
-3. gremlinUsername - Value: /dbs/databaseid/colls/graphid  (Use the database id and graph id you entered in the steps above.)
-4. gremlinPassword - Value: CosmosDBPrimaryKey  (You can find this by click on Keys on the Cosmos DB Overview screen in the Portal.)
+In your Azure Keyvault, you will need to add following keys:  
+- **Gremlin Endpoint**: `wss://<cosmosDB-instance-name>.gremlin.cosmos.azure.com:443/`  
+   - `cosmosDB-instance-name` is the name of your Cosmos DB instance.
+- **Gremlin Username**: `/dbs/<database-id>/colls/<graph-id>`  
+   - `database-id` and `graph-id` are the database id and graph id you entered in the steps above.
+- **Gremlin Password**: `CosmosDBPrimaryKey`  
+   - You can find this by clicking on Keys on the Cosmos DB Overview screen in the Portal.
 
 
 ## Update Synapse Workspace
@@ -125,7 +129,7 @@ The tutorial assume that you already have graph data connect in Azure Synapse. F
 
 ## Setting Up Linkcurious for Cosmos DB
 
-It is highly recommended that you use a robust graph visualization tool such as [Linkcurious](http://linkurio.us/) for navigating the data. You can find instructions for setting up Linkcurious for Cosmos DB [here](https://doc.linkurio.us/admin-manual/latest/configure-cosmos/). You will need the information you recorded earlier to in the tutorial to configure Linkcurious.
+It is highly recommended that you use a robust graph visualization tool such as [Linkurious](http://linkurio.us/) for navigating the data. You can find instructions for setting up Linkcurious for Cosmos DB [here](https://doc.linkurio.us/admin-manual/latest/configure-cosmos/). You will need the information you recorded earlier to in the tutorial to configure Linkcurious.
 
 There are other graph visualization tools available if you decide not to use Linkcurious.
 
