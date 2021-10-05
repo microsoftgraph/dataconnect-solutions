@@ -14,7 +14,6 @@ Contains the email messages from a user’s mailbox.
 
 | Name                       | Type     | Description                                                                                                                                                                                                              |
 | -------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-
 | puser                         | string   | The unique identifier of the user.  |
 | ReceivedDateTime           | datetime | The date and time the message was received.                                                                                                                                                                              |
 | SentDateTime               | datetime | The date and time the message was sent.                                                                                                                                                                                  |
