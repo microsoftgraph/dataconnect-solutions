@@ -28,7 +28,6 @@ To complete this tutorial, the following items must be completed:
     - It is also important that conversation history exists between the entities in User and Contact.
   -  D365 `Account` table requires `primarycontactid` entries matching `contactid` in the D365 `Contact` table.
 
-
 ## Create Azure Synapse Link
 To complete this section, the following information will be needed from the resources created as part of the Conversation Lineage tutorial:
 - **Resource Group Name**
@@ -158,3 +157,60 @@ Click the `...` next to the view name and select **New SQL script** and **Select
 
 We can now see the resulting joined dataset.  
 ![View Result](./docs/ViewResult.png)
+
+## Setting up the Azure Function Application
+
+### Add a Secret to KeyVault
+ 1. Add a new secret to your Conversatin lineage key vault.
+    a. Secet Name: sqldedicatedpoolConnectionString
+    b. Value: Server=tcp:<Synapse Worksapce Name>.sql.azuresynapse.net,1433;Initial Catalog=synapsededicatesqlpool;Persist Security Info=False;User ID=sqladminuser;Password=P@$sW0rD!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=120;
+
+ Note: <Synapse Worksapce Name> is the name of your Synapse workspace.
+  
+### Create Azure Funtion App
+
+	1. From the portal home page, search for "Function App" then click on Funciton APP in the search results.
+	2. Click on Create
+	3. Choose the subscription and resource group you've previously created.
+	4. Enter a name for the function app (e.g. mgdc-crm-api)
+	5. Select Runtime Stack ".NET"
+	6. Select Version 3.1
+	7. Select the prefered region. This should be the same region as your GDC and Synapse resources.
+	8. Click Next to go to the Hosting Tab.
+	9. Select a preexisting storage account or create a new one for the Function app to use.
+	10. Select the Windows Operating system.
+	11. Choose your prefered plan type. Default recommended is Consumption (Serverless)
+	12. Click on Review and Create
+  
+### Identity and authorization setup
+
+	1. Click on App Keys on the left navigation bar.
+	2. Under Host Keys, click on New Host Keys
+	3. Name the host key apikey and leave the value blank. Save this value for later.
+	4. Click on Identity on the left navigation bar.
+	5. Set the status to on and clikc save. Make note of the Object (principle) ID
+	6. Go to your previous configured Key Vault and create a access policy for the Azure Function Object (principle) ID you just created. 
+  
+### Code setup and Deployment
+
+	1. Click on Functions in the left navigation bar for your Function App in the portal.
+	2. Click on Create. Choose your prefered Development Environment from the drop down and follow the present instructions these instructions will be specifically for VSCode.
+	3. Copy the files from the https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/conversation-lineage-D365/AzFunc folder into the your local project location.
+	4. On your Azure Tab on the under Functions > Local Project > Functions > Click on "Run buid task to update this list...
+	5. Under Functions > <your subscription>  > Right Click on your function app and click deploy to function app.
+  
+### Testing
+	1. Go to the portal and in your Fuction App click on the GDCGetJoinedContacts function.'
+	2. Click Code + Test
+	3. Click on Test/Run
+	4. For Http method select "POST"
+	5. for Key select "apikey (Host key)"
+	6. Post the following information in the body section:
+}
+    "keyVaultURI": "<Your Key Vault URI>",
+    "sqlConnectionStringSecret": "sqldedicatedpoolConnectionString",
+    "returnFormat": "JSON"
+} 
+  7. Click Run
+  
+		
