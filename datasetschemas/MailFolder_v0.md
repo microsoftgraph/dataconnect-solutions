@@ -14,6 +14,7 @@ Contains the mail folders from each user's mailbox.
 
 | Name             | Type   | Description                                                          |
 | ---------------- | ------ | -------------------------------------------------------------------- |
+| puser                         | string   | The unique identifier of the user.  
 | id               | string | The mailFolder's unique identifier.                                  |
 | displayName      | string | The mailFolder's display name.                                       |
 | parentFolderId   | string | The unique identifier for the mailFolder's parent mailFolder.        |
