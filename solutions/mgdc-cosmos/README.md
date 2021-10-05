@@ -38,7 +38,7 @@ To complete this lab, you need the following:
       - One of the two accounts must be a global tenant administrator
       - That same account must have the **global administrator** role granted
 - Workplace Analytics licenses
-  - Access to the Microsoft Graph Cata Connect toolset is available through [Workplace Analytics](https://products.office.com/en-us/business/workplace-analytics), 
+  - Access to the Microsoft Graph Data Connect toolset is available through [Workplace Analytics](https://products.office.com/en-us/business/workplace-analytics), 
     which is licensed on a per-user, per-month basis.
   - To learn more please see [Microsoft Graph data connect policies and licensing](https://docs.microsoft.com/en-us/graph/data-connect-policies)
 
@@ -51,26 +51,27 @@ The tutorial assumes that you already have Graph Data Connect in Azure Synapse. 
 
 1. Open a browser and navigate to your Azure Portal at [https://portal.azure.com](https://portal.azure.com)
 2. In the search bar, type **Azure Cosmos DB** and then Click on **Azure Cosmos DB** in the Services list.
-3. Click on Create then Click on the Create button in the section labled  **Gremlin (Graph)**.  
+3. Click on **Create**, then click on the **Create** button in the section labled **Gremlin (Graph)**.  
    A. Select your prefered Subscription, Resource Group and Location.  
-   B. Type in the name you'd like to use for your Cosmos DB instance. Record this name as you will need it later in the tutorial.  
-   C. Choose your prefered pricing option then Click on Review and Create.  
-4. From the Overview page of the Azure Cosmos DB instance you just created, click on Data Explorer.
-5. Click on New Graph, then select the option to create a New Graph  
-   A. Enter a Database id and a Graph id and make a record of the value. You will need them later in the tutorial.  
-   B. Choose data throughput that will meet your needs.  
-   C. For the Partition Key, enter in **/pk**  
-   D. Click OK
+   B. Type in the *Account Name* you'd like to use for your Cosmos DB instance. We will refer to this name later in the tutorial as `cosmos-name`.  
+   C. Choose your prefered pricing option, then click on **Review + Create** and proceed to **Create**.  
+   D. The Cosmos DB instance will take a little time to deply.  
+4. From the Overview page of the Azure Cosmos DB instance you just created, click on **Data Explorer**.
+5. Click on **New Graph**, then select the option to create a **New Graph**.  
+   A. Enter a *Database id* and a *Graph id* and make a record of the values. We will reference them later in the tutorial as `database-id` and `graph-id`, respectively.  
+   B. Choose **Database throughput** that will meet your needs.  
+   C. For the *Partition key*, enter in `/pk`.  
+   D. Click **OK**.
 
 ## Update Azure Key Vault
 
-In your Azure Keyvault, you will need to add following keys:  
-- **Gremlin Endpoint**: `wss://<cosmosDB-instance-name>.gremlin.cosmos.azure.com:443/`  
-   - `cosmosDB-instance-name` is the name of your Cosmos DB instance.
-- **Gremlin Username**: `/dbs/<database-id>/colls/<graph-id>`  
-   - `database-id` and `graph-id` are the database id and graph id you entered in the steps above.
-- **Gremlin Password**: Your Cosmos DB Primary Key`  
-   - You can find this by clicking on Keys on the Cosmos DB Overview screen in the Portal.  
+In your Azure Keyvault, you will need to add the following keys:  
+- *gremlinEndpoint* with value `wss://<cosmos-name>.gremlin.cosmos.azure.com:443/`  
+   - `cosmos-name` is the name of your Cosmos DB instance created earlier.
+- *gremlinUsername* with value `/dbs/<database-id>/colls/<graph-id>`  
+   - `database-id` and `graph-id` are the *Database id* and *Graph id* you entered in the steps above.
+- *gremlinPassword* with your Cosmos DB *Primary Key* as the value.  
+   - You can find this by clicking on **Keys** on the Cosmos DB Overview screen in the Portal.  
 ![gremlin API keys](./docs/gremlin_keys.png)
 
 ## Update Synapse Workspace
