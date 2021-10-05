@@ -14,6 +14,7 @@ Contains the messages sent from each user's mailbox.
 
 | Name                       | Type     | Description                                                                                                                                                                                                              |
 | -------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| puser                         | string   | The unique identifier of the user.  |
 | Id                         | string   | The unique identifier of the message.                                                                                                                                                                                    |
 | CreatedDateTime            | datetime | The date and time the message was created.                                                                                                                                                                               |
 | LastModifiedDateTime       | datetime | The date and time the message was last changed.                                                                                                                                                                          |

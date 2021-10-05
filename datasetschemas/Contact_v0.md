@@ -14,6 +14,7 @@ Contains the available information from each user’s address book.
 
 | Name                 | Type     | Description                                                                                                                                                                      |
 | -------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| puser                         | string   | The unique identifier of the user.   
 | AssistantName        | string   | The name of the contact's assistant.                                                                                                                                             |
 | Birthday             | datetime | contact's birthday.                                                                                                                                                              |
 | BusinessAddress      | string   | The contact's business address. Format: STRUCT<Street : STRING, City : STRING, State : STRING, CountryOrRegion : STRING, PostalCode : STRING>                                    |

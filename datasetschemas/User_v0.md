@@ -14,6 +14,7 @@ Contains user information (DisplayName, UserPrincipalName, and other information
 
 | Name                 | Type   | Description                                               |
 | -------------------- | ------ | --------------------------------------------------------- |
+| puser                         | string   | The unique identifier of the user.  |
 | ExternalEmailAddress | string | The user's external email address.                        |
 | Languages            | string | The languages the user understands. Format: ARRAY<STRING> |
 | Name                 | string | The user's name.                                          |

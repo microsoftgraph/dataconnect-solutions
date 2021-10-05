@@ -14,6 +14,7 @@ Contains the mailbox settings of each user.
 
 | Name                    | Type   | Description                                                                                                            |
 | ----------------------- | ------ | ---------------------------------------------------------------------------------------------------------------------- |
+| puser                         | string   | The unique identifier of the user.  
 | archiveFolder           | string | Folder ID of an archive folder for the user.                                                                           |
 | timeZone                | string | The default time zone for the user's mailbox.                                                                          |
 | automaticRepliesSetting | string | Configuration settings to automatically notify the sender of an incoming email with a message from the signed-in user. |
