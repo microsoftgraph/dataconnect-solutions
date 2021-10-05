@@ -99,6 +99,7 @@ In your Azure Keyvault, you will need to add the following keys:
 2. Inside your Azure Synapse workspace, navigate to the **Develop hub**.
 3. Click on the + symbol, then select **Import**.
 4. Navigate to the downloaded notebook file, select it, then click **Open**.
+5. Attach your spark pool to the notebook.
 
 ![import_notebook](./docs/develop-import.png)
    
@@ -111,7 +112,9 @@ In your Azure Keyvault, you will need to add the following keys:
 5. Open the **PL_MGDC_CosmosDB** pipeline and update the following pipeline parameters:  
    a. `sql_database_name` - Set this to the name of your dedicated SQL pool.  
    b. `sql_server_name` - Set this to the name of your Azure Synapse workspace.  
-   c. `keyvault_name` - Set this to the name of your Keyvault.
+   c. `keyvault_name` - Set this to the name of your Keyvault.  
+6. Click the notebook card in the pipeline and navigate to the **Settings** tab.
+   a. Attach the MGDCToCosmosDB notebook here.
 
 ### Add Trigger
 
@@ -119,6 +122,7 @@ In your Azure Keyvault, you will need to add the following keys:
 2. Click on **Trigger** then **New/Edit**.
 3. In the **Choose trigger...** dropdown, select **New**
 4. Fill out the fields in the trigger with your prefered values, then click **OK**
+5. Publish the changes to the workspace.
 
 ## Execute Pipeline
 
