@@ -16,7 +16,7 @@
 ## Tutorial Overview
 
 This tutorial will provide an example of how to load [Graph Data Connect](https://docs.microsoft.com/en-us/graph/data-connect-concept-overview)
-(GDC) to gain insights into a Cosmos DB Grmelin API Graph database. By doing this, you will learn the key steps and Azure technologies required to build your own GDC based Graph database.  
+(GDC) to gain insights into a Cosmos DB Gremlin API Graph database. By doing this, you will learn the key steps and Azure technologies required to build your own GDC based Graph database.  
 
 **You will learn how to**:
 - Take GDC data already loaded into Azure Synapse and model and load the data into a CosmosDB Gremlin API
