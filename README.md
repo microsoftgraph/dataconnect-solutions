@@ -11,7 +11,7 @@ online meeting groups with the intention of helping employees connect better. Th
 Microsoft Graph Data Connect using Azure Data Factory (ADF)
 pipelines.
 
-## [Conversation Lineage Dynamics 365](solutions/conversation-lineage-D365/README.md)
+## [Conversation Lineage Dynamics 365](solutions/conversation-lineage-D365/README.MD)
 
 This tutorial provides an example of how to supplement the Conversation Lineage solution with Dynamics 365 data. In this specific example, you will learn how to:
 * Extract data from D365 using Dataverse/Azure Synapse Link
