@@ -11,15 +11,28 @@ online meeting groups with the intention of helping employees connect better. Th
 Microsoft Graph Data Connect using Azure Data Factory (ADF)
 pipelines.
 
-## [Analyze Microsoft 365 emails](solutions/moveM365datatoAzure/README.md)
+## [Conversation Lineage Dynamics 365](solutions/conversation-lineage-D365/README.md)
+
+This tutorial provides an example of how to supplement the Conversation Lineage solution with Dynamics 365 data. In this specific example, you will learn how to:
+* Extract data from D365 using Dataverse/Azure Synapse Link
+* Connect the D365 data to Conversation Lineage via Synapse Pipelines and SQL views
+* Query the joined dataset
+
+## [MGDC with Azure Cosmos DB](solutions/mgdc-cosmos/README.md)
+
+This tutorial will provide an example of how to load Graph Data Connect (GDC) to gain insights into a Cosmos DB Gremlin API Graph database. By doing this, you will learn the key steps and Azure technologies required to build your own GDC based Graph database.
+
+## [Analyze M365 emails](solutions/moveM365datatoAzure/README.md)
 
 In this sample you will use Microsoft Graph Data Connect to analyze emails from an organization in Microsoft 365 to find subject matter experts on specific topics.
 
-## [Using Microsoft 365 data with Azure analytics to build intelligent applications](solutions/whoknowswho/README.md)
+## [Using M365 data with Azure analytics to build intelligent applications](solutions/whoknowswho/README.md)
 
-In this sample you will use Microsoft Graph Data Connect brings Microsoft 365 data and Azure resources to independent software vendors (ISVs). This system enables ISVs to build intelligent applications with Microsoft's most valuable data and best development tools. Microsoft 365 customers will gain innovative or industry-specific applications that enhance their productivity while keeping full control over their data. For more information, see [Overview](https://github.com/OfficeDev/MS-Graph-Data-Connect/wiki)
+In this sample you will use Microsoft Graph Data Connect brings Microsoft 365 data and Azure resources to independent software vendors (ISVs). This system enables ISVs to build intelligent applications with Microsoft's most valuable data and best development tools. Microsoft 365 customers will gain innovative or industry-specific applications that enhance their productivity while keeping full control over their data.
 
-## Give us your feedback
+<br />
+
+# Give us your feedback
 
 Your feedback is important to us.
 
@@ -27,10 +40,14 @@ Your feedback is important to us.
 - We also encourage you to fork, make the fix, and do a pull request of your proposed changes. See [CONTRIBUTING.md](CONTRIBUTING.md) for contributing guidelines.
 - To let us know about your programming experience, what you would like to see in future versions, code samples, and so on, enter your suggestions and ideas at [Microsoft 365 Developer Platform Tech Community](https://techcommunity.microsoft.com/t5/microsoft-365-developer-platform/idb-p/Microsoft365DeveloperPlatform/label-name/Microsoft%20Graph).
 
-## Code of conduct
+<br />
+
+# Code of conduct
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
-## Copyright
+<br />
+
+# Copyright
 
 Copyright (c) 2021 Microsoft Corporation. All rights reserved.

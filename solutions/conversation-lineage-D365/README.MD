@@ -161,11 +161,14 @@ We can now see the resulting joined dataset.
 ## Setting up the Azure Function Application
 
 ### Add a Secret to KeyVault
- 1. Add a new secret to your Conversatin lineage key vault.
-    a. Secet Name: sqldedicatedpoolConnectionString
-    b. Value: Server=tcp:<Synapse Worksapce Name>.sql.azuresynapse.net,1433;Initial Catalog=synapsededicatesqlpool;Persist Security Info=False;User ID=sqladminuser;Password=P@$sW0rD!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=120;
 
- Note: <Synapse Worksapce Name> is the name of your Synapse workspace.
+ 1. Add a new secret to your Conversatin lineage key vault.
+
+	a. Secet Name: `sqldedicatedpoolConnectionString`
+
+    b. Value: `Server=tcp:<Synapse Worksapce Name>.sql.azuresynapse.net,1433;Initial Catalog=synapsededicatesqlpool;Persist Security Info=False;User ID=sqladminuser;Password=P@$sW0rD!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=120;`
+
+ > NOTE: `<Synapse Worksapce Name>` is the name of your Synapse workspace.
   
 ### Create Azure Funtion App
 
@@ -206,11 +209,11 @@ We can now see the resulting joined dataset.
 	4. For Http method select "POST"
 	5. for Key select "apikey (Host key)"
 	6. Post the following information in the body section:
-}
-    "keyVaultURI": "<Your Key Vault URI>",
-    "sqlConnectionStringSecret": "sqldedicatedpoolConnectionString",
-    "returnFormat": "JSON"
-} 
-  7. Click Run
+		{
+			"keyVaultURI": "<Your Key Vault URI>",
+			"sqlConnectionStringSecret": "sqldedicatedpoolConnectionString",
+			"returnFormat": "JSON"
+		} 
+  	7. Click Run
   
 		
