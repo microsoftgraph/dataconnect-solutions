@@ -67,7 +67,7 @@ The pipeline is composed of the following components:
 #### End2EndEmailsPipeline
 The `End2EndEmailsPipeline` is responsible for
 - retrieving emails within a given time interval 
-    - the interval is defined based on two pipeline parameters: `batchStartTime` and `batchStartTime`
+    - the interval is defined based on two pipeline parameters: `batchStartTime` and `batchEndTime`
         - these get initialized by an ADF tumbling window trigger, based on the window start and end times
     - retrieves email of the "GDC employees" group members, when running in production mode
         - this is the group which gets prompted for during deployment
@@ -77,7 +77,7 @@ The `End2EndEmailsPipeline` is responsible for
 
 The pipeline is composed of the following components:
 - `Set batchDateTime` - extracts the UTC date and time corresponding to the current batch of emails being processed
-- `Set batchDateTime` - extracts the month corresponding to the current batch of emails being processed
+- `Set batchMonth` - extracts the month corresponding to the current batch of emails being processed
 - `Set batchYear` - extracts the year corresponding to the current batch of emails being processed
 - `Set batchTimeBasedSubpath` - builds the structure of a folder hierarchy  that is specific to the time window of the 
   current batch. This path component will be reused relative to various parent folders, to allow passing the data 
