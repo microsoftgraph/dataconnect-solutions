@@ -80,6 +80,21 @@
         },
         {
             "cell_type": "code",
+            "metadata": {
+                "jupyter": {
+                    "source_hidden": false,
+                    "outputs_hidden": false
+                },
+                "nteract": {
+                    "transient": {
+                        "deleting": false
+                    }
+                },
+                "collapsed": true,
+                "tags": [
+                    "parameters"
+                ]
+            },
             "source": [
                 "// Case classes reflecting the schema of the email data coming from the GraphDataConnect Message table\n",
                 "case class GdcBody(ContentType: String, Content: String)\n",
