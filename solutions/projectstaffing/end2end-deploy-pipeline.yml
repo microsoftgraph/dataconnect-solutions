@@ -25,13 +25,13 @@ variables:
 
 trigger: none
 
-schedules:
-  - cron: "0 0 * * 1,2,3,4,5"
-    displayName: Daily midnight build
-    branches:
-      include:
-        - main
-    always: true
+#schedules:
+#  - cron: "0 0 * * 1,2,3,4,5"
+#    displayName: Daily midnight build
+#    branches:
+#      include:
+#        - main
+#    always: true
 
 resources:
   - repo: self
