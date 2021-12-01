@@ -197,7 +197,7 @@ The deployment steps are described in the deployment script [readme file](../dep
 and in the [deployment overview ](../docs/ProjectStaffingDeploymentOverview.MD)
 
 ### Updating app release version over existing deployment
-Depending on what changed form one release to another, some or all of the steps below need to be performed:
+Depending on what changed from one release to another, some or all of the steps below need to be performed:
 - update ADB libraries (jars, python scripts and python utils wheel)
     - detailed deployment steps provided in the [Deploying individual components](#deploying-jars-python-scripts-and-python-utils-wheel-to-azure-databricks-cluster) section
     - the jars current are: cleanup-jgraph.jar, latest-reply-extractor.jar, airtable-to-hr-data.jar, hr-data-to-azure-sql.jar, m365-user-to-azure-sql.jar, replace-current-search-index.jar, update-azure-sql-data-version.jar
