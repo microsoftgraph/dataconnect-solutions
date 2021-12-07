@@ -101,7 +101,7 @@ fi
 if [[ -z "$DOCKER_PASSWORD" ]]; then
   #  read -p "Enter docker repository password: " -r -s DOCKER_PASSWORD
   # For now, using hardcoded password to public ProjectStaffing docker images repository
-  DOCKER_PASSWORD="WrldcSWhcrkQAdgqclsPATRw2DLbclW/"
+  DOCKER_PASSWORD="zVTbIFk+YcnfgaZw76Pu0RbacLSOG9kg"
 fi
 
 RESOURCE_GROUP="${DEPLOYMENT_NAME}-resources"
