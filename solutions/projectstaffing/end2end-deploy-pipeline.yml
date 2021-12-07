@@ -162,7 +162,7 @@ stages:
           displayName: Import docker password from keyvault
           inputs:
             azureSubscription:  $(armServiceConn)
-            keyVaultName: prj-stf-system-vault
+            keyVaultName: prj-stf-infra-vault
             secretsFilter: 'prj-staffing-reader-password'
 
         - task: AzureCLI@2
