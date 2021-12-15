@@ -96,7 +96,7 @@
                 "publicNetworkAccess": "Enabled"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'), '/default')]"
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'), '/default/Microsoft.Storage/storageAccounts/blobServices')]"
             ]
         },
         {
