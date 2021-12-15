@@ -190,40 +190,6 @@
                     }
                 }
             }
-        },
-        {
-            "type": "Microsoft.Synapse/workspaces/securityAlertPolicies",
-            "apiVersion": "2021-06-01",
-            "name": "[concat(parameters('WorkspaceName'), '/Default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Synapse/workspaces', parameters('WorkspaceName'))]"
-            ],
-            "properties": {
-                "state": "Disabled",
-                "disabledAlerts": [
-                    ""
-                ],
-                "emailAddresses": [
-                    ""
-                ],
-                "emailAccountAdmins": false,
-                "retentionDays": 0
-            }
-        },
-        {
-            "type": "Microsoft.Synapse/workspaces/vulnerabilityAssessments",
-            "apiVersion": "2021-06-01",
-            "name": "[concat(parameters('WorkspaceName'), '/Default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Synapse/workspaces', parameters('WorkspaceName'))]"
-            ],
-            "properties": {
-                "recurringScans": {
-                    "isEnabled": false,
-                    "emailSubscriptionAdmins": true
-                },
-                "storageContainerPath": "SecureString"
-            }
         }
     ]
 }
