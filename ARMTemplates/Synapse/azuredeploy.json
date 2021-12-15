@@ -8,7 +8,7 @@
         }
     },
     "variables": {
-        "synapseStorageExternalId": "[concat('/subscriptions/', subscription().id, '/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/')]",
+        "synapseStorageExternalId": "[concat('/subscriptions/', subscription().id, '/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Storage/storageAccounts/')]",
         "storageAccountName": "[concat('mgdcstorage', uniqueString(resourceGroup().id))]"
     },
     "resources": [
