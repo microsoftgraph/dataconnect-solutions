@@ -9,7 +9,7 @@
     },
     "variables": {
         "synapseStorageExternalId": "[concat('/subscriptions/', subscription().id, '/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Storage/storageAccounts/')]",
-        "storageAccountName": "[concat('mgdcstorage', uniqueString(resourceGroup().id))]"
+        "storageAccountName": "[concat('mgdcsynapsestorage', uniqueString(resourceGroup().id))]"
     },
     "resources": [
         {
@@ -54,7 +54,7 @@
             "apiVersion": "2021-06-01",
             "name": "[concat(variables('storageAccountName'), '/default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
             ],
             "sku": {
                 "name": "Standard_RAGRS",
