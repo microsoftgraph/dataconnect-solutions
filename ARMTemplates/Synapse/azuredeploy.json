@@ -2,64 +2,51 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "vulnerabilityAssessments_Default_storageContainerPath": {
-            "type": "SecureString"
-        },
-        "workspaces_mgdcworkspace_name": {
+        "WorkspaceName": {
             "defaultValue": "mgdcworkspace",
             "type": "String"
         },
-        "storageAccounts_mgdcsynapsestorage_externalid": {
-            "defaultValue": "/subscriptions/e36c1dc0-a003-4c6f-8114-df0b51c68cd8/resourceGroups/AzureSynapseDemo/providers/Microsoft.Storage/storageAccounts/mgdcsynapsestorage",
-            "type": "String"
+        "vulnerabilityAssessments_Default_storageContainerPath": {
+            "type": "SecureString"
         }
     },
-    "variables": {},
+    "variables": {
+        "synapseStorageExternalId": "[concat('/subscriptions/', subscription().id, '/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/mgdcstorage', uniqueString(resourceGroup().id))]"
+    },
     "resources": [
         {
             "type": "Microsoft.Synapse/workspaces",
             "apiVersion": "2021-06-01",
-            "name": "[parameters('workspaces_mgdcworkspace_name')]",
+            "name": "[parameters('WorkspaceName')]",
             "location": "westeurope",
             "identity": {
                 "type": "SystemAssigned"
             },
             "properties": {
                 "defaultDataLakeStorage": {
-                    "resourceId": "[parameters('storageAccounts_mgdcsynapsestorage_externalid')]",
+                    "resourceId": "[variables('synapseStorageExternalId')]",
                     "accountUrl": "https://mgdcsynapsestorage.dfs.core.windows.net",
                     "filesystem": "mgdcsynapsefs"
                 },
                 "encryption": {},
                 "connectivityEndpoints": {
-                    "web": "[concat('https://web.azuresynapse.net?workspace=%2fsubscriptions%2fe36c1dc0-a003-4c6f-8114-df0b51c68cd8%2fresourceGroups%2fAzureSynapseDemo%2fproviders%2fMicrosoft.Synapse%2fworkspaces%2f', parameters('workspaces_mgdcworkspace_name'))]",
-                    "dev": "[concat('https://', parameters('workspaces_mgdcworkspace_name'), '.dev.azuresynapse.net')]",
-                    "sqlOnDemand": "[concat(parameters('workspaces_mgdcworkspace_name'), '-ondemand.sql.azuresynapse.net')]",
-                    "sql": "[concat(parameters('workspaces_mgdcworkspace_name'), '.sql.azuresynapse.net')]"
+                    "web": "[concat('https://web.azuresynapse.net?workspace=%2fsubscriptions%2f', subscription().id,'%2fresourceGroups%2f',resourceGroup().id,'%2fproviders%2fMicrosoft.Synapse%2fworkspaces%2f', parameters('WorkspaceName'))]",
+                    "dev": "[concat('https://', parameters('WorkspaceName'), '.dev.azuresynapse.net')]",
+                    "sqlOnDemand": "[concat(parameters('WorkspaceName'), '-ondemand.sql.azuresynapse.net')]",
+                    "sql": "[concat(parameters('WorkspaceName'), '.sql.azuresynapse.net')]"
                 },
-                "managedResourceGroupName": "synapseworkspace-managedrg-1ea1f2cb-f0f9-4126-8c8e-4c0eb904fd3b",
+                "managedResourceGroupName": "[concat('synapseworkspace-managedrg-', uniqueString(resourceGroup().id))]",
                 "sqlAdministratorLogin": "sqladminuser",
                 "privateEndpointConnections": [],
-                "workspaceRepositoryConfiguration": {
-                    "accountName": "NikCharlebois",
-                    "collaborationBranch": "main",
-                    "lastCommitId": "08b1174218a3872e4de6cbac288de4084b5c0f9a",
-                    "repositoryName": "AzureSynapseARM",
-                    "rootFolder": "/",
-                    "type": "WorkspaceGitHubConfiguration"
-                },
-                "publicNetworkAccess": "Enabled",
-                "cspWorkspaceAdminProperties": {
-                    "initialWorkspaceAdminObjectId": "9abce74d-d108-475f-a2cb-bbb82f484982"
-                }
+                "publicNetworkAccess": "Enabled"
             }
         },
         {
             "type": "Microsoft.Synapse/workspaces/auditingSettings",
             "apiVersion": "2021-06-01",
-            "name": "[concat(parameters('workspaces_mgdcworkspace_name'), '/Default')]",
+            "name": "[concat(parameters('WorkspaceName'), '/Default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_mgdcworkspace_name'))]"
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('WorkspaceName'))]"
             ],
             "properties": {
                 "retentionDays": 0,
@@ -73,10 +60,10 @@
         {
             "type": "Microsoft.Synapse/workspaces/bigDataPools",
             "apiVersion": "2021-06-01",
-            "name": "[concat(parameters('workspaces_mgdcworkspace_name'), '/MGDCSParkPool')]",
+            "name": "[concat(parameters('WorkspaceName'), '/MGDCSParkPool')]",
             "location": "westeurope",
             "dependsOn": [
-                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_mgdcworkspace_name'))]"
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('WorkspaceName'))]"
             ],
             "properties": {
                 "creationDate": "2021-12-15T13:50:11.03Z",
@@ -105,9 +92,9 @@
         {
             "type": "Microsoft.Synapse/workspaces/extendedAuditingSettings",
             "apiVersion": "2021-06-01",
-            "name": "[concat(parameters('workspaces_mgdcworkspace_name'), '/Default')]",
+            "name": "[concat(parameters('WorkspaceName'), '/Default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_mgdcworkspace_name'))]"
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('WorkspaceName'))]"
             ],
             "properties": {
                 "retentionDays": 0,
@@ -121,9 +108,9 @@
         {
             "type": "Microsoft.Synapse/workspaces/firewallRules",
             "apiVersion": "2021-06-01",
-            "name": "[concat(parameters('workspaces_mgdcworkspace_name'), '/allowAll')]",
+            "name": "[concat(parameters('WorkspaceName'), '/allowAll')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_mgdcworkspace_name'))]"
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('WorkspaceName'))]"
             ],
             "properties": {
                 "startIpAddress": "0.0.0.0",
@@ -133,9 +120,9 @@
         {
             "type": "Microsoft.Synapse/workspaces/integrationruntimes",
             "apiVersion": "2021-06-01",
-            "name": "[concat(parameters('workspaces_mgdcworkspace_name'), '/AutoResolveIntegrationRuntime')]",
+            "name": "[concat(parameters('WorkspaceName'), '/AutoResolveIntegrationRuntime')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_mgdcworkspace_name'))]"
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('WorkspaceName'))]"
             ],
             "properties": {
                 "type": "Managed",
@@ -149,9 +136,9 @@
         {
             "type": "Microsoft.Synapse/workspaces/securityAlertPolicies",
             "apiVersion": "2021-06-01",
-            "name": "[concat(parameters('workspaces_mgdcworkspace_name'), '/Default')]",
+            "name": "[concat(parameters('WorkspaceName'), '/Default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_mgdcworkspace_name'))]"
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('WorkspaceName'))]"
             ],
             "properties": {
                 "state": "Disabled",
@@ -168,16 +155,16 @@
         {
             "type": "Microsoft.Synapse/workspaces/vulnerabilityAssessments",
             "apiVersion": "2021-06-01",
-            "name": "[concat(parameters('workspaces_mgdcworkspace_name'), '/Default')]",
+            "name": "[concat(parameters('WorkspaceName'), '/Default')]",
             "dependsOn": [
-                "[resourceId('Microsoft.Synapse/workspaces', parameters('workspaces_mgdcworkspace_name'))]"
+                "[resourceId('Microsoft.Synapse/workspaces', parameters('WorkspaceName'))]"
             ],
             "properties": {
                 "recurringScans": {
                     "isEnabled": false,
                     "emailSubscriptionAdmins": true
                 },
-                "storageContainerPath": "[parameters('vulnerabilityAssessments_Default_storageContainerPath')]"
+                "storageContainerPath": "SecureString"
             }
         }
     ]
