@@ -94,7 +94,10 @@
                 "sqlAdministratorLogin": "sqladminuser",
                 "privateEndpointConnections": [],
                 "publicNetworkAccess": "Enabled"
-            }
+            },
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'), '/default')]"
+            ]
         },
         {
             "type": "Microsoft.Synapse/workspaces/auditingSettings",
