@@ -5,13 +5,11 @@
         "WorkspaceName": {
             "defaultValue": "mgdcworkspace",
             "type": "String"
-        },
-        "vulnerabilityAssessments_Default_storageContainerPath": {
-            "type": "SecureString"
         }
     },
     "variables": {
-        "synapseStorageExternalId": "[concat('/subscriptions/', subscription().id, '/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/mgdcstorage', uniqueString(resourceGroup().id))]"
+        "synapseStorageExternalId": "[concat('/subscriptions/', subscription().id, '/resourceGroups/',resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/')]",
+        "storageAccountName": "[concat('mgdcstorage', uniqueString(resourceGroup().id))]"
     },
     "resources": [
         {
@@ -24,9 +22,9 @@
             },
             "properties": {
                 "defaultDataLakeStorage": {
-                    "resourceId": "[variables('synapseStorageExternalId')]",
-                    "accountUrl": "https://mgdcsynapsestorage.dfs.core.windows.net",
-                    "filesystem": "mgdcsynapsefs"
+                    "resourceId": "[concat(variables('synapseStorageExternalId'), variables('storageAccountName'))]",
+                    "accountUrl": "[concat('https://', variables('storageAccountName'), '.dfs.core.windows.net')]",
+                    "filesystem": "[concat(parameters('WorkspaceName'), 'fs')]"
                 },
                 "encryption": {},
                 "connectivityEndpoints": {
