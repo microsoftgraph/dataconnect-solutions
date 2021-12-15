@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "WorkspaceName": {
-            "defaultValue": "mgdcworkspace",
+            "defaultValue": "[concat('mgdcwsp', uniqueString(resourceGroup().id))]",
             "type": "String"
         }
     },
