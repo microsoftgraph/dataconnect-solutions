@@ -8,7 +8,7 @@
         }
     },
     "variables": {
-        "synapseStorageExternalId": "[concat('/subscriptions/', subscription().id, '/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Storage/storageAccounts/')]",
+        "synapseStorageExternalId": "[concat('/subscriptions/', subscription().id,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Storage/storageAccounts/')]",
         "storageAccountName": "[concat('mgdcsynapse', uniqueString(resourceGroup().id))]"
     },
     "resources": [
@@ -96,7 +96,7 @@
                 "publicNetworkAccess": "Enabled"
             },
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts',variables('storageAccountName'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccountName'), 'default')]"
             ]
         },
         {
