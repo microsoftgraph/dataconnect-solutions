@@ -1,5 +1,5 @@
 ## Context:
-The MGDCSeeder script was developed by the Microsoft Graph Customer & Partner Experience team (CPx) and can be used to generate fictive Microsoft 365 signals (emails, meeting invites, team chats, etc.) across a Microsoft 365 demo environment. The script can be executed locally on a machine or can be executed in the cloud via any automation tool (e.g. Azure Automation Runbook). By specifying a path to a location that contains various files, the script is able to read the content of these files and generate the randomize the content of the signals to be created. 
+The MGDCSeeder script was developed by the Microsoft Graph Customer & Partner Experience team (CPx) and can be used to generate fictive Microsoft 365 signals (emails, contacts, meeting invites, team chats, etc.) across a Microsoft 365 demo environment. The script can be executed locally on a machine or can be executed in the cloud via any automation tool (e.g. Azure Automation Runbook). By specifying a path to a location that contains various files, the script is able to read the content of these files and generate the randomize the content of the signals to be created. 
 
 Important to note that the script is not able to generate custom timestamps for the signals. This means that in order to generate signals over a period of, say one week, the script will need to be executed in loop over that period of time. For example, when sending an email, the generated email message will have the Sent Time stamp of when the script was executed.
 
@@ -44,9 +44,10 @@ On the next screen, click on **Application permissions**:
  ![image](https://user-images.githubusercontent.com/2547149/146807863-c0598479-5127-4e08-8066-03112af14bac.png)
 
 From the list of permissions, make sure you check the following:
-•	Calendar.ReadWrite
-•	Mail.Send
-•	User.Read.All
+* Calendar.ReadWrite
+* Contacts.ReadWrite
+* Mail.Send
+* User.Read.All
 Then click on the **Add permissions** button at the bottom.
  ![image](https://user-images.githubusercontent.com/2547149/146807877-d2c9deef-4283-4544-859d-12acada2c956.png)
 
@@ -66,6 +67,7 @@ Once you’ve downloaded the data set, extract it to a local folder on the machi
 In a new PowerShell console on the machine where you will be executing the script, run the following commands to install the required Microsoft Graph PowerShell SDK modules:
 -	Install-Module Microsoft.Graph.Authentication
 -	Install-Module Microsoft.Graph.Calendar
+- Install-Module Microsoft.Graph.PersonalContacts
 - Install-Module Microsoft.Graph.Teams
 - Install-Module Microsoft.Graph.Users
 -	Install-Module Microsoft.Graph.Users.Actions
@@ -92,8 +94,8 @@ The script accepts various parameters as input, the following table lists all th
 | ApplicationSecret	| True	| Secret for the application used to authenticate to send emails and meeting invites. |
 | Credential	| True	| Credential of a user to impersonate when sending Teams Chat Messages. |
 | DatasetPath	| True	| Path to the root folder that contains files with the content to use to generate the content of the random signals. |
-| NumberofItemsPerRun	| False	| Represents the number of signal to create for each type. The default value is 1,000. This means every time the script is executed it will generate 1,000 emails, 1,000 meeting invites and 1,000 Teams Chats. |
-| SignalTypes	| False	| Array of the signal types you want to generate. If this property is not provided then all signals will be generated. Value can be one or more of the following:	Emails, Meetings or	TeamsChats |
+| NumberofItemsPerRun	| False	| Represents the number of signal to create for each type. The default value is 1,000. This means every time the script is executed it will generate 1,000 contacts, 1,000 emails, 1,000 meeting invites and 1,000 Teams Chats. |
+| SignalTypes	| False	| Array of the signal types you want to generate. If this property is not provided then all signals will be generated. Value can be one or more of the following: Contacts, Emails, Meetings or TeamsChats |
  
 To execute the script, open a new PowerShell console as an administrator, navigate to the folder where the script  (M365Seeder.ps1) is located and execute the following command, replacing the parameters by your own:
   

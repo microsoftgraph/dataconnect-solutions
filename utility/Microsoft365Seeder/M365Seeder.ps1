@@ -10,9 +10,8 @@
     [Parameter(Mandatory = $true)]
     [System.String]
     $ApplicationSecret,
-    
 
-    [Parameter(Mandatory = $true)]
+    [Parameter()]
     [System.Management.Automation.PSCredential]
     $Credential,
 
@@ -25,10 +24,16 @@
     $NumberOfItemsPerRun = 1000,
 
     [Parameter()]
-    [ValidateSet("Emails", "Meetings", "TeamsChats")]
+    [ValidateSet("Contacts", "Emails", "Meetings", "TeamsChats")]
     [System.String[]]
     $SignalTypes
 )
+
+if ($SignalTypes.Contains("TeamsChats") -and -not $Credential)
+{
+    $Credential = Get-Credential
+}
+
 Write-Host "Initiating seeding engine..."
 $Script:SeedUsers = @()
 
@@ -103,8 +108,8 @@ function Get-RandomContent
     }
     $randomizer = [System.Random]::new()
     $randomFile = $allItems[$randomizer.Next(0, $allItems.Length - 1)]
-    $content = Get-Content $randomFile.FullName -Raw    
-    
+    $content = Get-Content $randomFile.FullName -Raw
+
     $start = $content.IndexOf("Subject: ") + 9
     $end = $content.IndexOf("`n", $start)
     $subject = $content.Substring($start, $end-$start)
@@ -147,15 +152,15 @@ function Start-SeedingM365Meetings
                 name    = $randomUser.DisplayName
             }
             type        = 'required'
-            status      = 'organizer' 
+            status      = 'organizer'
         }
     )
-    
-    $randomNumberAttendees = $randomizer.Next(0,3)       
+
+    $randomNumberAttendees = $randomizer.Next(0,3)
     for ($j = 0; $j -lt $randomNumberAttendees; $j++)
     {
         $randomNumber = $randomizer.Next(0, $Script:SeedUsers.Length - 1)
-        $randomAttendeeObject = $Script:SeedUsers[$randomNumber]        
+        $randomAttendeeObject = $Script:SeedUsers[$randomNumber]
         $randomAttendeeType    = $attendeeType[$randomizer.Next(0, $attendeeType.Length -1)]
         $randomAttendeeStatus  = $attendeeStatus[$randomizer.Next(0, $attendeeStatus.Length -1)]
 
@@ -183,12 +188,12 @@ function Start-SeedingM365Meetings
 
         $endObject = @{
             dateTime = $endTime.ToString("yyyy-MM-ddThh:mm:ss")
-            timeZone = $timeZone                    
+            timeZone = $timeZone
         }
-        
+
         $randomMeetingType        = $randomizer.Next(0,1) # 1 = Event, 2 = Online Meeting
-        [Boolean]$IsOnlineMeeting = ([System.Convert]::ToBoolean($randomMeetingType)) 
-        
+        [Boolean]$IsOnlineMeeting = ([System.Convert]::ToBoolean($randomMeetingType))
+
         $randomRecurrenceOdds = $randomizer.Next(1,100) # Only if > 95 does it become a recurring meeting (1 chance out of 20)
 
         $recurrenceObject = $null
@@ -208,7 +213,7 @@ function Start-SeedingM365Meetings
                 }
             }
 
-            # If weekly, then we need to specify day of Week.                    
+            # If weekly, then we need to specify day of Week.
             if ($recurrenceType[$randomNumber] -eq 'Weekly')
             {
                 $randomDayOfWeek = $dayOfWeek[$randomizer.Next(0, $dayOfWeek.Length - 1)]
@@ -240,7 +245,7 @@ function Start-SeedingM365Emails
 {
     [CmdletBinding()]
     param()
-        
+
     if ($Script:SeedUsers.Length -lt 1)
     {
         $Script:SeedUsers = Get-SeedUsers
@@ -253,12 +258,12 @@ function Start-SeedingM365Emails
 
     #region TO
     $to = @()
-    
+
     # Get a random number of that represents the number of recipients on the To line of the email;
     # -2 is because to handle the case where email is being to all users in the renant, we don't want to From
     # user to send himself an email.
     $numberOfToRecipients = $randomizer.Next(1, $Script:SeedUsers.Length - 2)
-    
+
     # Randomly loop through the list of users in the tenant and add the proper of unique number of To Recipients
     # based on the generated random number;
     for ($i = 1; $i -le $numberOfToRecipients; $i++)
@@ -275,11 +280,11 @@ function Start-SeedingM365Emails
 
     #region CC
     $cc = @()
-    
+
     # Get a random number of that represents the number of recipients on the CC line of the email.
     # The number of cc recipients canot be greater than the number of users remaining that were not
     # on the To line.
-    
+
     # Increase the chances of having no CC which is the most typical case for emails;
     $chancesOfNoCCPercent = 80
     $randomNumber = $randomizer.Next(1,100)
@@ -305,7 +310,7 @@ function Start-SeedingM365Emails
         $cc += $currentCCUser.UserPrincipalName
     }
     #endregion
-    
+
     $content = Get-RandomContent -Path $Script:DataSetPath
     #region SUBJECT
     $subject = $content.Subject
@@ -385,16 +390,16 @@ function Start-SeedingM365TeamsChats
 
     $ownerUserId = (Get-MgUser -UserId $Credential.UserName).Id
     $members = @(
-        @{            
+        @{
             "@odata.type"     = "#microsoft.graph.aadUserConversationMember"
             roles             = @("owner")
             "user@odata.bind" = "https://graph.microsoft.com/v1.0/users('" + $ownerUserId + "')"
         }
     )
-    
+
     # Get a random number of that represents the number of members in the chat between 1 and 5
     $numberOfMember = $randomizer.Next(1, 5)
-    
+
     # Improve chances of getting a 1:1 chat which is the most frequent type of chat;
     $number = $randomizer.Next(1,100)
     if ($number -lt 80)
@@ -406,7 +411,7 @@ function Start-SeedingM365TeamsChats
     if ($numberofMember -gt 1)
     {
         $chatType = "group"
-    } 
+    }
 
     # Randomly loop through the list of users in the tenant and add the proper of unique number of To Recipients
     # based on the generated random number;
@@ -417,7 +422,7 @@ function Start-SeedingM365TeamsChats
         {
             $currentUser = $Script:SeedUsers[$randomizer.Next(0, $Script:SeedUsers.Length -1)]
         } while ($currentUser.Id -eq $ownerUserId -or $memberIds.Contains($currentUser.Id))
-        
+
         $memberIds += $currentUser.Id
         $member = @{
             "@odata.type"     = "#microsoft.graph.aadUserConversationMember"
@@ -452,6 +457,176 @@ function Start-SeedingM365TeamsChats
     }
 }
 
+function Get-M365ContactsFromDataset
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $DataSetRootPath
+    )
+
+    if ($Script:AllContacts)
+    {
+        return $Script:AllContacts
+    }
+
+    $Script:allContactsFolders = Get-ChildItem -Path $DataSetRootPath -Recurse -Directory -Force -ErrorAction SilentlyContinue | Where-Object -FilterScript {$_.Name -eq 'contacts'}
+
+    $randomizer = [System.Random]::new()
+    $Script:AllContacts = @()
+    foreach ($folder in $Script:AllContactsFolders)
+    {
+        $filesInFolder = Get-ChildItem -Path $folder.FullName
+
+        foreach ($file in $filesInFolder)
+        {
+            $content = Get-Content $file.FullName -Raw
+
+            $start = $content.IndexOf("X-FileName:", 0)
+            $start = $content.IndexOf("`r", $start) + 2
+
+            $contactContent = $content.Substring($start, $content.Length - $start)
+            $contactEntries = $contactContent.Split("`r")
+
+            foreach ($contactEntry in $contactEntries)
+            {
+                $parts = $contactEntry.Replace("`n", "").Split(' ')
+                $nameInfo = ""
+                $phoneInfo = ""
+                $emailInfo = ""
+                foreach ($part in $parts)
+                {
+                    try
+                    {
+                        if ($part.Contains('@'))
+                        {
+                            $emailInfo = $part
+                        }
+                        else
+                        {
+                            $phoneParts = $part.Split('-')
+
+                            if ($phoneParts.Length -gt 0)
+                            {
+                                $tryParseToNumber = [int]$phoneParts[0]
+
+                                $i = 1
+                                foreach ($phonePart in $phoneParts)
+                                {
+                                    try
+                                    {
+                                        $tryParseToNumber = [int]$phonePart
+                                        $phoneInfo += $phonePart
+                                        if ($i -ne $phoneParts.Length)
+                                        {
+                                            $phoneInfo += "-"
+                                        }
+                                    }
+                                    catch
+                                    {
+                                        Write-Verbose -Message "$phonePart is not a valid phone number part. Discarding"
+                                    }
+                                    $i++
+                                }
+                            }
+                            else
+                            {
+                                $nameInfo += $part
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        $nameInfo += $part + " "
+                    }
+                }
+
+                if (-not $phoneInfo -or $phoneInfo.Length -lt 10)
+                {
+                    $firstPart = $randomizer.Next(100,999).ToString()
+                    $secondPart = $randomizer.Next(100,999).ToString()
+                    $thirdPart = $randomizer.Next(1000, 9999).ToString()
+
+                    $phoneInfo = $firstPart + "-" + $secondPart + "-" + $thirdPart
+                }
+
+                if (-not $emailInfo)
+                {
+                    $chars = "abcdefghijkmnopqrstuvwxyzABCEFGHJKLMNPQRSTUVWXYZ23456789_-".ToCharArray()
+                    $randomEmail=""
+                    1..15 | ForEach {  $randomEmail += $chars | Get-Random }
+                    $emailInfo = $randomEmail + "@" + "contoso.com"
+                }
+
+                if (-not $nameInfo)
+                {
+                    $chars = "abcdefghijkmnopqrstuvwxyzABCEFGHJKLMNPQRSTUVWXYZ".ToCharArray()
+                    1..15 | ForEach {  $nameInfo += $chars | Get-Random }
+                    $nameInfo += " "
+                    1..15 | ForEach {  $nameInfo += $chars | Get-Random }
+                }
+
+                $newContact = @{
+                    Name = $nameInfo.Trim()
+                    Phone = $phoneInfo
+                    Email = $emailInfo
+                }
+
+                $Script:AllContacts += $newContact
+            }
+        }
+    }
+    return $Script:AllContacts
+}
+function Start-SeedingM365Contacts
+{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory = $true)]
+        [System.String]
+        $DataSetPath
+    )
+
+    if ($Script:SeedUsers.Length -lt 1)
+    {
+        $Script:SeedUsers = Get-SeedUsers
+    }
+
+    $Script:AllContacts = Get-M365ContactsFromDataset -DataSetRootPath $DataSetPath
+
+    $randomizer = [System.Random]::new()
+
+    $randomContact = $Script:AllContacts[$randomizer.Next(0, $Script:AllContacts.Length -1)]
+
+    $phoneTypes = @("BusinessPhones", "HomePhones", "MobilePhone")
+    $randomPhoneType = $phoneTypes[$randomizer.Next(0, $phoneTypes.Length -1)]
+
+    $Emails = @(
+        @{
+            address = $randomContact.email
+            name = $randomContact.Name
+        }
+    )
+    $randomUserId = $Script:SeedUsers[$randomizer.Next(0, $Script:SeedUsers.Length - 1)].Id
+
+    $creationParams = @{
+        UserId = $randomUserId
+        GivenName = $randomContact.Name
+        EmailAddresses = $Emails
+        DisplayName = $randomContact.Name
+    }
+    $creationParams.Add($randomPhoneType, $randomContact.Phone)
+    try
+    {
+        New-MgUserContact @creationParams -ErrorAction Stop | Out-Null
+    }
+    catch
+    {
+        Write-Verbose -Message $_
+    }
+}
+
 try
 {
     Disconnect-MGGraph -ErrorAction Stop | Out-Null
@@ -469,7 +644,7 @@ if (-not $SignalTypes -or $SignalTypes.Contains("Emails"))
         -ApplicationSecret $Script:ApplicationSecret
     for ($i = 1; $i -le $NumberOfItemsPerRun; $i++)
     {
-        Start-SeedingM365Emails   
+        Start-SeedingM365Emails
         Write-Host "Email #$i"
     }
 }
@@ -481,8 +656,21 @@ if (-not $SignalTypes -or $SignalTypes.Contains("Meetings"))
         -ApplicationSecret $Script:ApplicationSecret
     for ($i = 1; $i -le $NumberOfItemsPerRun; $i++)
     {
-        Start-SeedingM365Meetings 
+        Start-SeedingM365Meetings
         Write-Host "Meeting #$i"
+    }
+}
+
+if (-not $SignalTypes -or $SignalTypes.Contains("Contacts"))
+{
+    $Global:MSCloudLoginConnectionProfile = $null
+    Connect-M365Tenant -Workload MicrosoftGraph -ApplicationId $Script:ApplicationId `
+        -TenantId $Script:TenantId `
+        -ApplicationSecret $Script:ApplicationSecret
+    for ($i = 1; $i -le $NumberOfItemsPerRun; $i++)
+    {
+        Start-SeedingM365Contacts -DataSetPath $Script:DataSetPath
+        Write-Host "Contact #$i"
     }
 }
 
