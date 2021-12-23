@@ -66,6 +66,8 @@ Once you’ve downloaded the data set, extract it to a local folder on the machi
 In a new PowerShell console on the machine where you will be executing the script, run the following commands to install the required Microsoft Graph PowerShell SDK modules:
 -	Install-Module Microsoft.Graph.Authentication
 -	Install-Module Microsoft.Graph.Calendar
+- Install-Module Microsoft.Graph.Teams
+- Install-Module Microsoft.Graph.Users
 -	Install-Module Microsoft.Graph.Users.Actions
 -	Install-Module MSCloudLoginAssistant
 
