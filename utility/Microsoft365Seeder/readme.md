@@ -8,53 +8,70 @@ In order for the script to be able to execute properly in your demo environments
 
 ### Azure Active Directory Application
 The script will use a Service Principal to authenticate to the Microsoft 365 demo tenant. To authenticate properly, you will need to create a new Azure AD Application in your environment. In your Azure portal, navigate to Azure Active Directory. In the left navigation, click on **App registrations**.
+
  ![image](https://user-images.githubusercontent.com/2547149/146807749-6f8aa3e6-2beb-43b9-b5f7-8cecdf0022b0.png)
 
 From the App registration page, click on the **New registration** button in the menu bar:
+
  ![image](https://user-images.githubusercontent.com/2547149/146807769-7ce8650b-8255-48b4-8b64-5502898d7dce.png)
 
 Provide any value in the **Name** text box and click on the **Register** button at the bottom:
+
  ![image](https://user-images.githubusercontent.com/2547149/146807781-bf5e1831-fb5f-4c0e-a84c-efee87cc30c1.png)
 
 Once the application is created, take note of the **Application (client) ID** value from the main page:
+
  ![image](https://user-images.githubusercontent.com/2547149/146807787-5d93dc12-fbbd-4628-bdf4-41c938eeb2ad.png)
 
 From the left navigation, click on **Certificates & secrets**
+
  ![image](https://user-images.githubusercontent.com/2547149/146807792-a2be4592-962f-4862-9e9b-ed3c12cb0280.png)
 
 On the Certificates & secrets screen, click on the **New client secret** button in the menu.
+
  ![image](https://user-images.githubusercontent.com/2547149/146807799-b8e85743-6218-4388-a4f9-50dac7af3b69.png)
 
 In the **Add a client secret** blade, keep the default settings and click on the **Add** button at the bottom:
+
  ![image](https://user-images.githubusercontent.com/2547149/146807820-531a8a0f-4ba2-4f25-bb2e-70e001e3afe7.png)
 
 A new secret was generated. Make sure to take note of the secret's value, not the Secret ID.
+
  ![image](https://user-images.githubusercontent.com/2547149/146807833-90e69db3-b74f-479c-9992-01bd145ce33c.png)
 
 From the left menu, navigate to **API permissions**:
+
  ![image](https://user-images.githubusercontent.com/2547149/146807841-e3f53b6e-f1f4-4000-abfa-c0622d595aa6.png)
 
 On the API permissions page, click on the **Add a permission** button in the top menu:
+
  ![image](https://user-images.githubusercontent.com/2547149/146807846-30ee97f6-99e3-4cd0-9230-2ce5bc9a5d50.png)
 
 On the Request API permissions blade, click on **Microsoft Graph**:
+
  ![image](https://user-images.githubusercontent.com/2547149/146807857-5e7d6fb7-3fb9-4a13-84ae-4c3e220426b5.png)
 
 On the next screen, click on **Application permissions**:
+
  ![image](https://user-images.githubusercontent.com/2547149/146807863-c0598479-5127-4e08-8066-03112af14bac.png)
 
 From the list of permissions, make sure you check the following:
+
 * Calendar.ReadWrite
 * Contacts.ReadWrite
 * Mail.Send
 * User.Read.All
+
 Then click on the **Add permissions** button at the bottom.
+
  ![image](https://user-images.githubusercontent.com/2547149/146807877-d2c9deef-4283-4544-859d-12acada2c956.png)
 
 Back on the API permissions screen, click on the **Grant admin consent for <Tenant>** button in the top menu.
+ 
  ![image](https://user-images.githubusercontent.com/2547149/146807887-781dc09c-dc53-482d-aa2f-900f388acfa4.png)
 
 When prompted to confirm, click on the **Yes** button.
+ 
  ![image](https://user-images.githubusercontent.com/2547149/146807898-fcbc9315-cf75-41b4-a934-a67f05898d93.png)
 
 ### Defining Data Set
