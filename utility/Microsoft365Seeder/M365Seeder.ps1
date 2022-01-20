@@ -156,7 +156,7 @@ function Start-SeedingM365Meetings
         }
     )
 
-    $randomNumberAttendees = $randomizer.Next(0,3)
+    $randomNumberAttendees = $randomizer.Next(0,5)
     for ($j = 0; $j -lt $randomNumberAttendees; $j++)
     {
         $randomNumber = $randomizer.Next(0, $Script:SeedUsers.Length - 1)
@@ -172,71 +172,71 @@ function Start-SeedingM365Meetings
             type     = $randomAttendeeType
             status   = $randomAttendeeStatus
         }
-        $randomDaysDifference  = $randomizer.Next(-180,180) # Number of days in which meeting will occur (past or future)
-        $randomHourOfDay       = $randomizer.Next(7,19) # Meeting hour, keeping it between 7AM and 7PM
-        $randomLength          = $randomizer.Next(15,120) # Meeting's length between 15 minutes and 2 hours;
+    }
+    $randomDaysDifference  = $randomizer.Next(-180,180) # Number of days in which meeting will occur (past or future)
+    $randomHourOfDay       = $randomizer.Next(7,19) # Meeting hour, keeping it between 7AM and 7PM
+    $randomLength          = $randomizer.Next(15,120) # Meeting's length between 15 minutes and 2 hours;
 
-        $today = [System.DateTime]::Today
-        $startTime = $today.AddDays($randomDaysDifference)
-        $startTime = $startTime.AddHours($randomHourOfDay)
-        $endTime = $startTime.AddMinutes($randomLength)
+    $today = [System.DateTime]::Today
+    $startTime = $today.AddDays($randomDaysDifference)
+    $startTime = $startTime.AddHours($randomHourOfDay)
+    $endTime = $startTime.AddMinutes($randomLength)
 
-        $startObject = @{
-            dateTime = $startTime.ToString("yyyy-MM-ddThh:mm:ss")
-            timeZone = $timeZone
-        }
+    $startObject = @{
+        dateTime = $startTime.ToString("yyyy-MM-ddThh:mm:ss")
+        timeZone = $timeZone
+    }
 
-        $endObject = @{
-            dateTime = $endTime.ToString("yyyy-MM-ddThh:mm:ss")
-            timeZone = $timeZone
-        }
+    $endObject = @{
+        dateTime = $endTime.ToString("yyyy-MM-ddThh:mm:ss")
+        timeZone = $timeZone
+    }
 
-        $randomMeetingType        = $randomizer.Next(0,1) # 1 = Event, 2 = Online Meeting
-        [Boolean]$IsOnlineMeeting = ([System.Convert]::ToBoolean($randomMeetingType))
+    $randomMeetingType        = $randomizer.Next(0,2) # 0 = In-Person, 1 = Online Meeting
+    [Boolean]$IsOnlineMeeting = ([System.Convert]::ToBoolean($randomMeetingType))
 
-        $randomRecurrenceOdds = $randomizer.Next(1,100) # Only if > 95 does it become a recurring meeting (1 chance out of 20)
+    $randomRecurrenceOdds = $randomizer.Next(1,100) # Only if > 95 does it become a recurring meeting (1 chance out of 20)
 
-        $recurrenceObject = $null
-        if ($randomRecurrenceOdds -gt 95)
-        {
-            $randomNumber = $randomizer.Next(0, $recurrenceType.Length -1)
+    $recurrenceObject = $null
+    if ($randomRecurrenceOdds -gt 95)
+    {
+        $randomNumber = $randomizer.Next(0, $recurrenceType.Length -1)
 
-            $recurrenceObject = @{
-                pattern = @{
-                    type     = $recurrenceType[$randomNumber]
-                    interval = $randomizer.Next(1,3)
-                }
-                range = @{
-                    type      = "endDate"
-                    startDate = $startTime.ToString("yyyy-MM-dd")
-                    endDate   = $startTime.AddMonths(6).ToString("yyyy-MM-dd")
-                }
+        $recurrenceObject = @{
+            pattern = @{
+                type     = $recurrenceType[$randomNumber]
+                interval = $randomizer.Next(1,3)
             }
-
-            # If weekly, then we need to specify day of Week.
-            if ($recurrenceType[$randomNumber] -eq 'Weekly')
-            {
-                $randomDayOfWeek = $dayOfWeek[$randomizer.Next(0, $dayOfWeek.Length - 1)]
-                $recurrenceObject.pattern.Add("daysOfWeek", $randomDayOfWeek)
+            range = @{
+                type      = "endDate"
+                startDate = $startTime.ToString("yyyy-MM-dd")
+                endDate   = $startTime.AddMonths(6).ToString("yyyy-MM-dd")
             }
         }
-        try
+
+        # If weekly, then we need to specify day of Week.
+        if ($recurrenceType[$randomNumber] -eq 'Weekly')
         {
-            $content = Get-RandomContent -Path $Script:DataSetPath
-            New-MgUserCalendarEvent -CalendarId $calendar.Id `
-                -UserId $randomUser.Id `
-                -Body @{content = $content.Content; contentType = "text";} `
-                -Attendees $attendeesObject `
-                -Start $startObject `
-                -End $endObject `
-                -Subject $content.Subject `
-                -IsOnlineMeeting:$IsOnlineMeeting `
-                -Recurrence $recurrenceObject -ErrorAction SilentlyContinue | Out-Null
+            $randomDayOfWeek = $dayOfWeek[$randomizer.Next(0, $dayOfWeek.Length - 1)]
+            $recurrenceObject.pattern.Add("daysOfWeek", $randomDayOfWeek)
         }
-        catch
-        {
-            Write-Host $_ -ForegroundColor Red
-        }
+    }
+    try
+    {
+        $content = Get-RandomContent -Path $Script:DataSetPath
+        New-MgUserCalendarEvent -CalendarId $calendar.Id `
+            -UserId $randomUser.Id `
+            -Body @{content = $content.Content; contentType = "text";} `
+            -Attendees $attendeesObject `
+            -Start $startObject `
+            -End $endObject `
+            -Subject $content.Subject `
+            -IsOnlineMeeting:$IsOnlineMeeting `
+            -Recurrence $recurrenceObject -ErrorAction SilentlyContinue | Out-Null
+    }
+    catch
+    {
+        Write-Host $_ -ForegroundColor Red
     }
     #endregion
 }
@@ -443,12 +443,11 @@ function Start-SeedingM365TeamsChats
         $params.Add("topic", $content.Subject)
     }
 
-    # Create Chat entity
-    $chat = New-MgChat @params
-
     # Send chat message
     try
     {
+        # Create Chat entity
+        $chat = New-MgChat @params
         New-MgChatMessage -ChatId $chat.Id -Body @{content = $content.Content} -ErrorAction Stop | Out-Null
     }
     catch
