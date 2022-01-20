@@ -82,14 +82,17 @@ Once you’ve downloaded the data set, extract it to a local folder on the machi
 
 ### Install the Microsoft Graph PowerShell SDK
 In a new PowerShell console on the machine where you will be executing the script, run the following commands to install the required Microsoft Graph PowerShell SDK modules:
--	Install-Module Microsoft.Graph.Authentication
--	Install-Module Microsoft.Graph.Calendar
-- Install-Module Microsoft.Graph.PersonalContacts
-- Install-Module Microsoft.Graph.Teams
-- Install-Module Microsoft.Graph.Users
--	Install-Module Microsoft.Graph.Users.Actions
--	Install-Module MSCloudLoginAssistant
 
+ ```
+ Install-Module Microsoft.Graph.Authentication
+Install-Module Microsoft.Graph.Calendar
+Install-Module Microsoft.Graph.PersonalContacts
+Install-Module Microsoft.Graph.Teams
+Install-Module Microsoft.Graph.Users
+Install-Module Microsoft.Graph.Users.Actions
+Install-Module MSCloudLoginAssistant
+```
+ 
 ### Grant Permissions to the Microsoft Graph PowerShell SDK
 In order to generate the Teams chats signals, the script will need to authenticate as a given user and will leverage the Microsoft Graph PowerShell SDK Azure Active Directory app to authenticate. In order to grant proper permissions to the app, you will need to run the following command in a new PowerShell console:
 Connect-MgGraph -Scopes ("Chat.Create", "ChatMessage.Send", "User.Read.All") 
@@ -99,8 +102,10 @@ The first time you execute the script, you will be prompted to grant permission 
  
 Note that if you are using the **Credential** parameter when invoking the script that you will only need to select the account and grant proper permissions to the Microsoft Graph PowerShell SDK the first time you ever execute the script.
 
-  Connect-MgGraph -Scopes ("Chat.Create", "ChatMessage.Send") | Out-Null 
-
+ ```
+Connect-MgGraph -Scopes ("Chat.Create", "ChatMessage.Send") | Out-Null 
+```
+ 
 ## Executing the Script
 The script accepts various parameters as input, the following table lists all the accepted parameters, whether they are mandatory or not and what value should be provided for each one.
   
@@ -115,7 +120,8 @@ The script accepts various parameters as input, the following table lists all th
 | SignalTypes	| False	| Array of the signal types you want to generate. If this property is not provided then all signals will be generated. Value can be one or more of the following: Contacts, Emails, Meetings or TeamsChats |
  
 To execute the script, open a new PowerShell console as an administrator, navigate to the folder where the script  (M365Seeder.ps1) is located and execute the following command, replacing the parameters by your own:
-  
+
+```
 $AppId = "Your App ID"
 $TenantId = "Your Tenant ID including .onmicrosoft.com"
 $AppSecret = "Your App's secret"
@@ -127,7 +133,8 @@ $cred = Get-Credential
     -ApplicationSecret $AppSecret `
     -Credential $cred `
     -DataSetPath $DataSetPath
-
+```
+ 
 ## Troubleshooting
 This section contains information about the most frequent issues that could be encountered when running the script. This section will be updated on a regular basis as the scripts evolves.
 
