@@ -39,7 +39,7 @@
         "destinationAdlsAccountName": "[concat('astore', uniqueString(resourceGroup().id))]",
         "functionAppName": "[concat('functionApp', uniqueString(resourceGroup().id))]",
         "dataSetName": "[split(parameters('DataSet'), ' ')[0]]",
-        "serverFarmExternalId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/Microsoft.Web/serverfarms/ASP-', uniqueString(resourceGroup().id))]"
+        "serverFarmExternalId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/ASP-', uniqueString(resourceGroup().id))]"
     },
     "resources": [
         {
