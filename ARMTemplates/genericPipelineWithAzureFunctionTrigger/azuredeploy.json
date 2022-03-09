@@ -1908,7 +1908,7 @@
             "type": "Microsoft.Web/sites",
             "apiVersion": "2021-03-01",
             "name": "[variables('functionAppName')]",
-            "location": "Central US",
+            "location": "[resourceGroup().location]",
             "kind": "functionapp",
             "properties": {
                 "enabled": true,
@@ -1957,7 +1957,7 @@
             "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
             "apiVersion": "2021-03-01",
             "name": "[concat(variables('functionAppName'), '/ftp')]",
-            "location": "Central US",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
             ],
@@ -1969,7 +1969,7 @@
             "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
             "apiVersion": "2021-03-01",
             "name": "[concat(variables('functionAppName'), '/scm')]",
-            "location": "Central US",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
             ],
@@ -1981,7 +1981,7 @@
             "type": "Microsoft.Web/sites/config",
             "apiVersion": "2021-03-01",
             "name": "[concat(variables('functionAppName'), '/web')]",
-            "location": "Central US",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
             ],
@@ -2066,7 +2066,7 @@
             "type": "Microsoft.Web/sites/functions",
             "apiVersion": "2021-03-01",
             "name": "[concat(variables('functionAppName'), '/BlobTriggerFunction')]",
-            "location": "Central US",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
             ],
@@ -2092,7 +2092,7 @@
             "type": "Microsoft.Web/sites/hostNameBindings",
             "apiVersion": "2021-03-01",
             "name": "[concat(variables('functionAppName'), '/', variables('functionAppName'), '.azurewebsites.net')]",
-            "location": "Central US",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
             ],
