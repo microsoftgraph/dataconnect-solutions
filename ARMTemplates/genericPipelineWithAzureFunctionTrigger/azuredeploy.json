@@ -40,6 +40,8 @@
         "functionAppName": "[concat('functionApp', uniqueString(resourceGroup().id))]",
         "dataSetName": "[split(parameters('DataSet'), ' ')[0]]",
         "AppServicePlanName": "[concat('ASP-', uniqueString(resourceGroup().id))]",
+        "functionStorageName": "[concat('fctstor', uniqueString(resourceGroup().id))]",
+        "packageURL": "https://github.com/microsoftgraph/dataconnect-solutions/raw/VIvaInsightsARM/ARMTemplates/genericPipelineWithAzureFunctionTrigger/FunctionContent.zip",
         "serverFarmExternalId": "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Web/serverfarms/', variables('AppServicePlanName'))]"
     },
     "resources": [
@@ -1881,6 +1883,15 @@
             ]
         },
         {
+            "apiVersion": "2015-05-01-preview",
+            "type": "Microsoft.Storage/storageAccounts",
+            "name": "[variables('functionStorageName')]",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "accountType": "Standard_LRS"
+            }
+        },
+        {
             "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-02-01",
             "name": "[variables('AppServicePlanName')]",
@@ -1913,199 +1924,33 @@
             "location": "[resourceGroup().location]",
             "kind": "functionapp",
             "properties": {
-                "enabled": true,
-                "hostNameSslStates": [
-                    {
-                        "name": "[concat(variables('functionAppName'), '.azurewebsites.net')]",
-                        "sslState": "Disabled",
-                        "hostType": "Standard"
-                    },
-                    {
-                        "name": "[concat(variables('functionAppName'), '.scm.azurewebsites.net')]",
-                        "sslState": "Disabled",
-                        "hostType": "Repository"
-                    }
-                ],
                 "serverFarmId": "[variables('serverFarmExternalId')]",
-                "reserved": false,
-                "isXenon": false,
-                "hyperV": false,
                 "siteConfig": {
-                    "numberOfWorkers": 1,
-                    "acrUseManagedIdentityCreds": false,
-                    "alwaysOn": false,
-                    "http20Enabled": false,
-                    "functionAppScaleLimit": 200,
-                    "minimumElasticInstanceCount": 0
-                },
-                "scmSiteAlsoStopped": false,
-                "clientAffinityEnabled": false,
-                "clientCertEnabled": false,
-                "clientCertMode": "Required",
-                "hostNamesDisabled": false,
-                "customDomainVerificationId": "D85AC97FC4A76BCB8B30A00BE2CEA1A303EB5D8FC8FCB4BE7A9ADC9155D88A3B",
-                "containerSize": 1536,
-                "dailyMemoryTimeQuota": 0,
-                "httpsOnly": false,
-                "redundancyMode": "None",
-                "storageAccountRequired": false,
-                "keyVaultReferenceIdentity": "SystemAssigned"
+                    "appSettings": [
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('functionStorageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('functionStorageName')), '2015-05-01-preview').key1)]"
+                        }
+                    ]
+                }
             },
+            "resources": [
+            {
+                "name": "MSDeploy",
+                "type": "extensions",
+                "location": "[resourceGroup().location]",
+                "apiVersion": "2021-03-01",
+                "dependsOn": [
+                "[concat('Microsoft.Web/sites/', variables('functionAppName'))]"
+                ],
+                "properties": {
+                "packageUri": "[variables('packageURL')]"
+                }
+            }
+            ],
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms',variables('AppServicePlanName'))]"
             ]
-        },
-        {
-            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
-            "apiVersion": "2021-03-01",
-            "name": "[concat(variables('functionAppName'), '/ftp')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
-            ],
-            "properties": {
-                "allow": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
-            "apiVersion": "2021-03-01",
-            "name": "[concat(variables('functionAppName'), '/scm')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
-            ],
-            "properties": {
-                "allow": true
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/config",
-            "apiVersion": "2021-03-01",
-            "name": "[concat(variables('functionAppName'), '/web')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
-            ],
-            "properties": {
-                "numberOfWorkers": 1,
-                "defaultDocuments": [
-                    "Default.htm",
-                    "Default.html",
-                    "Default.asp",
-                    "index.htm",
-                    "index.html",
-                    "iisstart.htm",
-                    "default.aspx",
-                    "index.php"
-                ],
-                "netFrameworkVersion": "v6.0",
-                "powerShellVersion": "~7",
-                "requestTracingEnabled": false,
-                "remoteDebuggingEnabled": false,
-                "httpLoggingEnabled": false,
-                "acrUseManagedIdentityCreds": false,
-                "logsDirectorySizeLimit": 35,
-                "detailedErrorLoggingEnabled": false,
-                "publishingUsername": "Microsoft",
-                "scmType": "None",
-                "use32BitWorkerProcess": true,
-                "webSocketsEnabled": false,
-                "alwaysOn": false,
-                "managedPipelineMode": "Integrated",
-                "virtualApplications": [
-                    {
-                        "virtualPath": "/",
-                        "physicalPath": "site\\wwwroot",
-                        "preloadEnabled": false
-                    }
-                ],
-                "loadBalancing": "LeastRequests",
-                "experiments": {
-                    "rampUpRules": []
-                },
-                "autoHealEnabled": false,
-                "vnetRouteAllEnabled": false,
-                "vnetPrivatePortsCount": 0,
-                "cors": {
-                    "allowedOrigins": [
-                        "https://portal.azure.com"
-                    ],
-                    "supportCredentials": false
-                },
-                "localMySqlEnabled": false,
-                "ipSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictions": [
-                    {
-                        "ipAddress": "Any",
-                        "action": "Allow",
-                        "priority": 1,
-                        "name": "Allow all",
-                        "description": "Allow all access"
-                    }
-                ],
-                "scmIpSecurityRestrictionsUseMain": false,
-                "http20Enabled": false,
-                "minTlsVersion": "1.2",
-                "scmMinTlsVersion": "1.0",
-                "ftpsState": "AllAllowed",
-                "preWarmedInstanceCount": 0,
-                "functionAppScaleLimit": 200,
-                "functionsRuntimeScaleMonitoringEnabled": false,
-                "minimumElasticInstanceCount": 0,
-                "azureStorageAccounts": {}
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/functions",
-            "apiVersion": "2021-03-01",
-            "name": "[concat(variables('functionAppName'), '/BlobTriggerFunction')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
-            ],
-            "properties": {
-                "script_root_path_href": "[concat('https://', variables('functionAppName'), '.azurewebsites.net/admin/vfs/site/wwwroot/BlobTriggerFunction/')]",
-                "script_href": "[concat('https://', variables('functionAppName'), '.azurewebsites.net/admin/vfs/site/wwwroot/BlobTriggerFunction/run.ps1')]",
-                "config_href": "[concat('https://', variables('functionAppName'), '.azurewebsites.net/admin/vfs/site/wwwroot/BlobTriggerFunction/function.json')]",
-                "test_data_href": "[concat('https://', variables('functionAppName'), '.azurewebsites.net/admin/vfs/data/Functions/sampledata/BlobTriggerFunction.dat')]",
-                "href": "[concat('https://', variables('functionAppName'), '.azurewebsites.net/admin/functions/BlobTriggerFunction')]",
-                "config": {},
-                "bindings": {
-                    "name": "InputBlob",
-                    "path": "datasets/{name}",
-                    "connection": "astorerkpczgm3dyqka_STORAGE",
-                    "direction": "in",
-                    "type": "blobTrigger"
-                },
-                "language": "powershell",
-                "isDisabled": false
-            }
-        },
-        {
-            "type": "Microsoft.Web/sites/hostNameBindings",
-            "apiVersion": "2021-03-01",
-            "name": "[concat(variables('functionAppName'), '/', variables('functionAppName'), '.azurewebsites.net')]",
-            "location": "[resourceGroup().location]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
-            ],
-            "properties": {
-                "siteName": "[variables('functionAppName')]",
-                "hostNameType": "Verified",
-                "files": {
-                    "function.json": "[concat('{\r\n\"bindings\": [\r\n        {\r\n\"name\": \"InputBlob\",\r\n\"type\": \"blobTrigger\",\r\n\"direction\": \"in\",\r\n\"path\": \"samples-workitems/{name}\",\r\n\"connection\": \"',variables('destinationAdlsAccountName'),'_STORAGE\"\r\n}\r\n]\r\n}')]",
-                    "run.ps1": "using System.Net;\r\n\r\n public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)\r\n\r\n {\r\n\r\n     return req.CreateResponse(HttpStatusCode.OK, \"Hello from MyFunction\");\r\n\r\n }"
-                }
-            }
         }
     ]
 }
