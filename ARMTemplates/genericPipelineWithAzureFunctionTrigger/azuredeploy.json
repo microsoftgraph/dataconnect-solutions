@@ -1886,22 +1886,24 @@
             "name": "[variables('AppServicePlanName')]",
             "location": "[resourceGroup().location]",
             "sku": {
-                "name": "S1",
-                "tier": "Standard",
-                "size": "S1",
-                "family": "S",
-                "capacity": 1
+                "name": "Y1",
+                "tier": "Dynamic",
+                "size": "Y1",
+                "family": "Y",
+                "capacity": 0
             },
             "kind": "app",
             "properties": {
                 "perSiteScaling": false,
+                "elasticScaleEnabled": false,
                 "maximumElasticWorkerCount": 1,
                 "isSpot": false,
                 "reserved": false,
                 "isXenon": false,
                 "hyperV": false,
                 "targetWorkerCount": 0,
-                "targetWorkerSizeId": 0
+                "targetWorkerSizeId": 0,
+                "zoneRedundant": false
             }
         },
         {
