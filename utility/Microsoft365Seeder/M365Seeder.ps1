@@ -142,7 +142,14 @@ function Start-SeedingM365Meetings
     do
     {
         $randomUser = $Script:SeedUsers[$randomizer.Next(0, $Script:SeedUsers.Length - 1)]
-        $calendar = Get-MgUserCalendar -UserId $randomUser.Id -ErrorAction SilentlyContinue
+        try
+        {
+            $calendar = Get-MgUserCalendar -UserId $randomUser.Id -ErrorAction Stop
+        }
+        catch
+        {
+            Write-Error $_
+        }
     } while (-not $calendar)
 
     $attendeesObject = @(
