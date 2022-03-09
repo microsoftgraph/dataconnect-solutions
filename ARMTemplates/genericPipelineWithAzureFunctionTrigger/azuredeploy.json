@@ -1928,6 +1928,10 @@
                 "siteConfig": {
                     "appSettings": [
                         {
+                            "name": "TriggerStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('destinationAdlsAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('destinationAdlsAccountName')), '2015-05-01-preview').key1)]"
+                        },
+                        {
                             "name": "AzureWebJobsStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',variables('functionStorageName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('functionStorageName')), '2015-05-01-preview').key1)]"
                         }
