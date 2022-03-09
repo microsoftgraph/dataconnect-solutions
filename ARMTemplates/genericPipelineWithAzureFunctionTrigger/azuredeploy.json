@@ -1949,11 +1949,7 @@
                 "httpsOnly": false,
                 "redundancyMode": "None",
                 "storageAccountRequired": false,
-                "keyVaultReferenceIdentity": "SystemAssigned",
-                "files": {
-                    "function.json":"[concat('{\r\n\"bindings\": [\r\n        {\r\n\"name\": \"InputBlob\",\r\n\"type\": \"blobTrigger\",\r\n\"direction\": \"in\",\r\n\"path\": \"samples-workitems/{name}\",\r\n\"connection\": \"',variables('destinationAdlsAccountName'),'_STORAGE\"\r\n}\r\n]\r\n}')]",
-                    "run.ps1": "using System.Net;\r\n\r\n public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)\r\n\r\n {\r\n\r\n     return req.CreateResponse(HttpStatusCode.OK, \"Hello from MyFunction\");\r\n\r\n }"
-                }
+                "keyVaultReferenceIdentity": "SystemAssigned"
             },
             "dependsOn": [
                 "[resourceId('Microsoft.Web/serverfarms',variables('AppServicePlanName'))]"
@@ -2104,7 +2100,11 @@
             ],
             "properties": {
                 "siteName": "[variables('functionAppName')]",
-                "hostNameType": "Verified"
+                "hostNameType": "Verified",
+                "files": {
+                    "function.json": "[concat('{\r\n\"bindings\": [\r\n        {\r\n\"name\": \"InputBlob\",\r\n\"type\": \"blobTrigger\",\r\n\"direction\": \"in\",\r\n\"path\": \"samples-workitems/{name}\",\r\n\"connection\": \"',variables('destinationAdlsAccountName'),'_STORAGE\"\r\n}\r\n]\r\n}')]",
+                    "run.ps1": "using System.Net;\r\n\r\n public static HttpResponseMessage Run(HttpRequestMessage req, TraceWriter log)\r\n\r\n {\r\n\r\n     return req.CreateResponse(HttpStatusCode.OK, \"Hello from MyFunction\");\r\n\r\n }"
+                }
             }
         }
     ]
