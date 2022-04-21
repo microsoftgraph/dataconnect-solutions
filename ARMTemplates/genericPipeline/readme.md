@@ -9,20 +9,20 @@ Deploys an Azure Storage Account and an Azure Data Factory with a Pipeline that 
 1. Navigate to you Azure Active Directory Portal.
 2.	In the left navigation, click on App registrations.
 3.	In the top menu bar, click on the New registration button:
- 
+<img src="https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/images/ARM-Generic-1.png" />
 4.	You will be brought to the Register and application form. 
 5.	In the Name text box, provide your app a name.
-6.	Leave the other settings to their default values and click on the Register button at the bottom of the form.
- 
-7.	On the App Registration overview page, take note of the Application (client) ID value of your app registration. You will need it later.
- 
+6.	Leave the other settings to their default values and click on the Register button at the bottom of the form. 
+<img src="https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/images/ARM-Generic-2.png" />
+7.	On the App Registration overview page, take note of the Application (client) ID value of your app registration. You will need it later. 
+<img src="https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/images/ARM-Generic-3.png" />
 8.	In the left navigation, click on Certificates & secrets.
 9.	In the middle section of the page, click on the New client secret button.
- 
+<img src="https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/images/ARM-Generic-4.png" /> 
 10.	In the Add a client secret blade, leave the default settings in, and simply click on the Add button at the bottom.
- 
+<img src="https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/images/ARM-Generic-5.png" />
 11.	This will generate a new App secret. In the middle of the screen, make sure to take note of the Value field of the newly generated secret. You will need it for later.
- 
+<img src="https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/images/ARM-Generic-6.png" />
 
 ## Deploy the components using ARM
 
@@ -38,8 +38,10 @@ Deploys an Azure Storage Account and an Azure Data Factory with a Pipeline that 
   d.	Provide the Application Id of the App registration created at from the steps above in the App Id textbox.
   e.	Provide the Application Secret of the App registration generated from the steps above in the App Secret textbox.
   f.	Select the data set you wish to extract from your pipeline from the Data Set drop down list.
-  g.	Create on the Review + create button at the bottom of the form.	 
+  g.	Create on the Review + create button at the bottom of the form.	
+<img src="https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/images/ARM-Generic-7.png" />
 4.	Confirm that the information you’ve entered is correct, then click on the Create button at the bottom of the form to initiate the deployment process.
 5.	You will be brought to the Deployment screen where you will be able to see the deployments progress:
- 
-6.	After a few minutes, the deployment process will complete and you will be able to click on the Go to resource group button to access components of the resource group:
+<img src="https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/images/ARM-Generic-8.png" />
+6.	After a few minutes, the deployment process will complete and you will be able to click on the Go to resource group button to access components of the resource group.
+<img src="https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/images/ARM-Generic-9.png" />
