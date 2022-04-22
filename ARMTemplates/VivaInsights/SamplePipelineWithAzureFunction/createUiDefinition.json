@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+  "handler": "Microsoft.Azure.CreateUIDef",
+  "version": "0.1.2-preview",
+  "parameters": {
+    "basics": [
+      {}
+    ],
+    "steps": [
+      {
+        "name": "factoryConfig",
+        "label": "Azure Data Factory Settings",
+        "elements": [
+          {
+            "name": "adlsServicePrincipalAppId",
+            "type": "Microsoft.Common.TextBox",
+            "label": "The id of the Azure AD Application that has access to the Customer Azure Storage Account (1st hop).",
+            "defaultValue": "",
+            "placeholder": ""
+          },
+          {
+            "name": "adlsServicePrincipalAppSecret",
+            "type": "Microsoft.Common.TextBox",
+            "label": "The secret for the Azure AD Application that has access to the Customer Azure Storage Account (1st hop). App Secret is required for Microsoft Graph Data Connect (see documentation https://docs.microsoft.com/en-us/graph/data-connect-quickstart?tabs=Microsoft365&tutorial-step=2).",
+            "defaultValue": "",
+            "placeholder": ""
+          },
+          {
+            "name": "sasUrl",
+            "type": "Microsoft.Common.TextBox",
+            "label": "Shared Access Signature Url of the Partner destination storage account to store the content to, including the token (2nd hop).",
+            "defaultValue": "",
+            "placeholder": ""
+          }
+        ]
+      }
+    ],
+    "outputs": {
+
+      "AppId": "[steps('factoryConfig').adlsServicePrincipalAppId]",
+      "AppSecret": "[steps('factoryConfig').adlsServicePrincipalAppSecret]",
+      "SASUrl": "[steps('factoryConfig').sasUrl]"
+    }
+  }
+}
