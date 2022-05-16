@@ -12,7 +12,7 @@ Contains the information from a Teams chat group owners.
 
 ## Properties
 
-| Column Name | Type | Description |
+| Name | Type | Description |
 |--|--|--|
 | iD | string | The unique identifier for the owner of the group. |
 | userPrincipalName | string | SMTP address of the owner of the group. |

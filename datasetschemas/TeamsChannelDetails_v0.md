@@ -12,7 +12,7 @@ Contains the details from a Teams channel.
 
 ## Properties
 
-| Column Name | Type | Description |
+| Name | Type | Description |
 |--|--|--|
 | Id | string | Unique directory ID for the Teams channel. |
 | createdDateTime | dateTime | Timestamp in UTC when channel was created. |
