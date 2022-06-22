@@ -16,10 +16,16 @@
             }
         },
         "SASUrl": {
-            "type": "string",
-            "metadata": {
-                "description": "Shared Access Signature Url of the Partner destination storage account to store the content to, including the token (2nd hop)."
-            }
+          "type": "string",
+          "metadata": {
+            "description": "Shared Access Signature Url of the Partner destination storage account to store the content to, including the token (2nd hop)."
+          }
+        },
+        "sku": {
+          "type": "string"
+        },
+        "skuCode": {
+          "type": "string"
         }
     },
     // Variables can apply functions to parameters or be hardcoded values.
@@ -889,11 +895,8 @@
             "name": "[variables('AppServicePlanName')]",
             "location": "[resourceGroup().location]",
             "sku": {
-                "name": "Y1",
-                "tier": "Dynamic",
-                "size": "Y1",
-                "family": "Y",
-                "capacity": 0
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
             },
             "kind": "app",
             "properties": {
