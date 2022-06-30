@@ -20,12 +20,6 @@
           "metadata": {
             "description": "Shared Access Signature Url of the Partner destination storage account to store the content to, including the token (2nd hop)."
           }
-        },
-        "sku": {
-          "type": "string"
-        },
-        "skuCode": {
-          "type": "string"
         }
     },
     // Variables can apply functions to parameters or be hardcoded values.
@@ -895,8 +889,11 @@
             "name": "[variables('AppServicePlanName')]",
             "location": "[resourceGroup().location]",
             "sku": {
-                "Tier": "[parameters('sku')]",
-                "Name": "[parameters('skuCode')]"
+                "name": "F1",
+                "tier": "Free",
+                "size": "F1",
+                "family": "F",
+                "capacity": 0
             },
             "kind": "app",
             "properties": {
