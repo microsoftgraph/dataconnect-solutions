@@ -48,14 +48,14 @@
             "name": "ApplicationScript",
             "properties": {
                 "forceUpdateTag": "1",
-                "azPowerShellVersion": "3.0",
+                "azPowerShellVersion": "8.0",
                 "environmentVariables": [{
                         "name": "AppSecret",
                         "secureValue": "[parameters('AppSecret')]"
                     }
                 ],
                 "arguments": "[format(' -AppID {0} -TenantId {1} -AppToGet {2}', parameters('AppId'), subscription().tenantId, parameters('AppId'))]",
-                "primaryScriptUri": "https://raw.githubusercontent.com/NikCharlebois/dataconnect-solutions/main/ARMTemplates/SupportScripts/GetServicePricipalId.ps1",
+                "primaryScriptUri": "https://raw.githubusercontent.com/niblak/dataconnect-solutions/vivaarmtemplates/ARMTemplates/SupportScripts/GetServicePricipalId.ps1",
                 "timeout": "PT30M",
                 "cleanupPreference": "OnSuccess",
                 "retentionInterval": "P1D",
