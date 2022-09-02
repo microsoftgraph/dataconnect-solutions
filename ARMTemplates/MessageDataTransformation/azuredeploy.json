@@ -607,7 +607,7 @@
                     "lastPublishTime":"2022-08-17T02:06:23Z"
                 },
                 "dependsOn":[
-                    "ADLSGen2Dataset",
+                    "[resourceId(concat('Microsoft.DataFactory/factories/datasets', variables('WorkspaceName')),'ADLSGen2Dataset')]",
                     "[concat(variables('factoryId'), '/dataflows/Flattening Data Flow')]"
                 ]
             },
