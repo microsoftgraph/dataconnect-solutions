@@ -608,7 +608,7 @@
                 },
                 "dependsOn":[
                     "ADLSGen2Dataset",
-                    "[concat(variables('factoryId'), '/dataflows/Flattening Data Flow')]"
+                    "Flattening Data Flow"
                 ]
             },
             {
