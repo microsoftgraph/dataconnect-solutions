@@ -2,8 +2,21 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
+        "AppId": {
+            "type": "string",
+            "metadata": {
+                "description": "The id of the Azure AD Application that has access to the destination Azure Storage Account."
+            }
+        },
+        "AppSecret": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The secret for the Azure AD Application that has access to the destination Azure Storage Account."
+            }
+        }
     },
     "variables": {
+        "destinationAdlsAccountName": "[concat('astore', uniqueString(resourceGroup().id))]",
         "synapseStorageExternalId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Storage/storageAccounts/')]",
         "storageAccountName": "[concat('mgdcsynapse', uniqueString(resourceGroup().id))]",
         "WorkspaceName": "[concat('mgdcwsp', uniqueString(resourceGroup().id))]",
@@ -12,6 +25,125 @@
         "factoryId":"[concat('Microsoft.Synapse/workspaces/', variables('WorkspaceName'))]"
     },
     "resources": [
+        {
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2020-10-01",
+            "name": "ApplicationScript",
+            "location": "[resourceGroup().location]",
+            "kind": "AzurePowerShell",
+            "properties": {
+                "forceUpdateTag": "1",
+                "azPowerShellVersion": "3.0",
+                "environmentVariables": [
+                {
+                    "name":"AppSecret",
+                    "secureValue": "[parameters('AppSecret')]"
+                }
+                ],
+                "arguments": "[format(' -AppID {0} -TenantId {1} -AppToGet {2}', parameters('AppId'), subscription().tenantId, parameters('AppId'))]",
+                "primaryScriptUri": "https://raw.githubusercontent.com/NikCharlebois/dataconnect-solutions/main/ARMTemplates/SupportScripts/GetServicePricipalId.ps1",
+                "timeout": "PT30M",
+                "cleanupPreference": "OnSuccess",
+                "retentionInterval": "P1D",
+                "dependsOn": []
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2021-01-01",
+            "name": "[variables('destinationAdlsAccountName')]",
+            "location": "eastus2",
+            "sku": {
+                "name": "Standard_RAGRS",
+                "tier": "Standard"
+            },
+            "kind": "StorageV2",
+            "properties": {
+                "minimumTlsVersion": "TLS1_2",
+                "allowBlobPublicAccess": true,
+                "allowSharedKeyAccess": true,
+                "isHnsEnabled": false,
+                "networkAcls": {
+                    "bypass": "AzureServices",
+                    "virtualNetworkRules": [],
+                    "ipRules": [],
+                    "defaultAction": "Allow"
+                },
+                "supportsHttpsTrafficOnly": true,
+                "encryption": {
+                    "services": {
+                        "file": {
+                            "keyType": "Account",
+                            "enabled": true
+                        },
+                        "blob": {
+                            "keyType": "Account",
+                            "enabled": true
+                        }
+                    },
+                    "keySource": "Microsoft.Storage"
+                },
+                "accessTier": "Hot"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices",
+            "apiVersion": "2021-01-01",
+            "name": "[concat(variables('destinationAdlsAccountName'), '/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('destinationAdlsAccountName'))]"
+            ],
+            "sku": {
+                "name": "Standard_RAGRS",
+                "tier": "Standard"
+            },
+            "properties": {
+                "cors": {
+                    "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                    "enabled": false
+                }
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-01-01",
+            "name": "[concat(variables('destinationAdlsAccountName'), '/default/datasets')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('destinationAdlsAccountName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('destinationAdlsAccountName'))]"
+            ],
+            "properties": {
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "Container"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+            "apiVersion": "2018-07-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'datasets')]"
+            ],
+            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',guid(subscription().subscriptionId))]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                "principalId": "[reference('ApplicationScript').outputs.PrincipalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
+            "apiVersion": "2018-07-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'datasets')]"
+            ],
+            "name": "[concat(variables('destinationAdlsAccountName'), '/default/datasets/Microsoft.Authorization/aff0e9ba-b9c8-47a0-8dfa-0faa2c411d7c')]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                "principalId": "[reference('ApplicationScript').outputs.PrincipalId]"
+            }
+        },
         {
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2021-06-01",
@@ -192,23 +324,48 @@
             }
         },
         {
-            "name": "ADLSService",
-            "type": "Microsoft.Synapse/workspaces/linkedservices",
+            "name": "[concat(variables('WorkspaceName'), '/ADLSSink')]",
+            "type": "Microsoft.DataFactory/factories/linkedServices",
+            "apiVersion": "2018-06-01",
             "properties": {
                 "annotations": [],
                 "type": "AzureBlobFS",
                 "typeProperties": {
-                    "url": "https://nikdatasamples.dfs.core.windows.net",
-                    "tenant": "82100b66-ace5-4bd1-a137-f11432b93451",
-                    "servicePrincipalId": "3b34cb67-48cf-41fa-81ba-f23c196c5d14",
+                    "url": "[concat('https://', variables('destinationAdlsAccountName'), '.dfs.core.windows.net/')]",
+                    "tenant": "[subscription().tenantId]",
+                    "servicePrincipalId": "[parameters('AppId')]",
                     "servicePrincipalCredentialType": "ServicePrincipalKey",
-                    "encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlNZTkFQU0VAMTM2NTBFRkMtQkM2Qi00MTc5LThDQjQtQzRDMkY3QUYwRkQ0X2RmZDU4ZDU4LTU1NTAtNGUzMi1iYTNjLTVlODc5YTI3NzM0MiINCn0="
-                },
-                "connectVia": {
-                    "referenceName": "AutoResolveIntegrationRuntime",
-                    "type": "IntegrationRuntimeReference"
+                    "servicePrincipalCredential": {
+                        "type": "SecureString",
+                        "value": "[parameters('AppSecret')]"
+                    }
                 }
+            },
+            "dependsOn": [
+              "[resourceId('Microsoft.Synapse/workspace', variables('WorkspaceName'))]",
+              "[resourceId('Microsoft.Resources/deploymentScripts', 'ApplicationScript')]"
+            ]
+        },
+        {
+          "name": "[concat(variables('WorkspaceName'), '/Office365Service')]",
+          "type": "Microsoft.DataFactory/factories/linkedServices",
+          "apiVersion": "2018-06-01",
+          "properties": {
+            "annotations": [],
+            "type": "Office365",
+            "typeProperties": {
+              "office365TenantId": "[subscription().tenantId]",
+              "servicePrincipalTenantId": "[subscription().tenantId]",
+              "servicePrincipalId": "[parameters('AppId')]",
+              "servicePrincipalKey": {
+                "type": "SecureString",
+                "value": "[parameters('AppSecret')]"
+              }
             }
+          },
+          "dependsOn": [
+            "[resourceId('Microsoft.Synapse/workspace', variables('WorkspaceName'))]"
+          ]
         },
         {
             "name":"[concat(variables('WorkspaceName'), '/MGDC Message Data Transformation')]",
