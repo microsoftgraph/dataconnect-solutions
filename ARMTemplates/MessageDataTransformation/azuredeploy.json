@@ -387,6 +387,28 @@
               "Office365Service",
               "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
             ]
+        },        
+        {
+            "name":"[concat(variables('WorkspaceName'), '/ADLSGen2Dataset')]",
+            "type":"Microsoft.DataFactory/factories/datasets",
+            "apiVersion":"2018-06-01",
+            "properties":{
+                "linkedServiceName":{
+                    "referenceName":"ADLSSink",
+                    "type":"LinkedServiceReference"},
+                    "annotations":[],
+                    "type":"Binary",
+                    "typeProperties":{
+                        "location":{
+                            "type":"AzureBlobFSLocation",
+                            "fileSystem":"extracteddata"
+                        }
+                    }
+                },
+            "dependsOn":[                
+              "ADLSSink",
+              "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
+            ]
         },
         {
             "name":"[concat(variables('WorkspaceName'), '/MGDC Message Data Transformation')]",
@@ -584,26 +606,7 @@
                     "annotations":[],
                     "lastPublishTime":"2022-08-17T02:06:23Z"
                 },
-                "dependsOn":["[concat(variables('factoryId'), '/datasets/ADLSGen2Dataset')]","[concat(variables('factoryId'), '/dataflows/Flattening Data Flow')]"]
-            },
-            {
-                "name":"[concat(variables('WorkspaceName'), '/ADLSGen2Dataset')]",
-                "type":"Microsoft.DataFactory/factories/datasets",
-                "apiVersion":"2018-06-01",
-                "properties":{
-                    "linkedServiceName":{
-                        "referenceName":"ADLSSink",
-                        "type":"LinkedServiceReference"},
-                        "annotations":[],
-                        "type":"Binary",
-                        "typeProperties":{
-                            "location":{
-                                "type":"AzureBlobFSLocation",
-                                "fileSystem":"extracteddata"
-                            }
-                        }
-                    },
-                "dependsOn":[]
+                "dependsOn":["[concat(variables('WorkspaceName'), '/datasets/ADLSGen2Dataset')]","[concat(variables('factoryId'), '/dataflows/Flattening Data Flow')]"]
             },
             {
                 "name":"[concat(variables('WorkspaceName'), '/Flattening Data Flow')]",
