@@ -192,6 +192,25 @@
             }
         },
         {
+            "name": "ADLSService",
+            "type": "Microsoft.Synapse/workspaces/linkedservices",
+            "properties": {
+                "annotations": [],
+                "type": "AzureBlobFS",
+                "typeProperties": {
+                    "url": "https://nikdatasamples.dfs.core.windows.net",
+                    "tenant": "82100b66-ace5-4bd1-a137-f11432b93451",
+                    "servicePrincipalId": "3b34cb67-48cf-41fa-81ba-f23c196c5d14",
+                    "servicePrincipalCredentialType": "ServicePrincipalKey",
+                    "encryptedCredential": "ew0KICAiVmVyc2lvbiI6ICIyMDE3LTExLTMwIiwNCiAgIlByb3RlY3Rpb25Nb2RlIjogIktleSIsDQogICJTZWNyZXRDb250ZW50VHlwZSI6ICJQbGFpbnRleHQiLA0KICAiQ3JlZGVudGlhbElkIjogIlNZTkFQU0VAMTM2NTBFRkMtQkM2Qi00MTc5LThDQjQtQzRDMkY3QUYwRkQ0X2RmZDU4ZDU4LTU1NTAtNGUzMi1iYTNjLTVlODc5YTI3NzM0MiINCn0="
+                },
+                "connectVia": {
+                    "referenceName": "AutoResolveIntegrationRuntime",
+                    "type": "IntegrationRuntimeReference"
+                }
+            }
+        },
+        {
             "name":"[concat(variables('WorkspaceName'), '/MGDC Message Data Transformation')]",
             "type":"Microsoft.DataFactory/factories/pipelines",
             "apiVersion":"2018-06-01",
