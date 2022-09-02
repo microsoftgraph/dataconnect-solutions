@@ -368,6 +368,27 @@
           ]
         },
         {
+            "name": "[concat(variables('WorkspaceName'), '/Office365DataSet')]",
+            "type": "Microsoft.DataFactory/factories/datasets",
+            "apiVersion": "2018-06-01",
+            "properties": {
+                "linkedServiceName": {
+                    "referenceName": "Office365Service",
+                    "type": "LinkedServiceReference"
+                },
+                "annotations": [],
+                "type": "Office365Table",
+                "schema": [],
+                "typeProperties": {
+                    "tableName": "BasicDataSet_v0.Message_v1"
+                }
+            },
+            "dependsOn": [
+              "Office365Service",
+              "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
+            ]
+        },
+        {
             "name":"[concat(variables('WorkspaceName'), '/MGDC Message Data Transformation')]",
             "type":"Microsoft.DataFactory/factories/pipelines",
             "apiVersion":"2018-06-01",
