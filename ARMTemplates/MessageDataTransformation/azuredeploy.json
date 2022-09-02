@@ -217,61 +217,6 @@
             }
         },
         {
-            "type": "Microsoft.Sql/servers/advisors",
-            "apiVersion": "2014-04-01",
-            "name": "[concat(variables('sqlServer_name'), '/CreateIndex')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "autoExecuteValue": "Disabled"
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/advisors",
-            "apiVersion": "2014-04-01",
-            "name": "[concat(variables('sqlServer_name'), '/DbParameterization')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "autoExecuteValue": "Disabled"
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/advisors",
-            "apiVersion": "2014-04-01",
-            "name": "[concat(variables('sqlServer_name'), '/DefragmentIndex')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "autoExecuteValue": "Disabled"
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/advisors",
-            "apiVersion": "2014-04-01",
-            "name": "[concat(variables('sqlServer_name'), '/DropIndex')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "autoExecuteValue": "Disabled"
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/advisors",
-            "apiVersion": "2014-04-01",
-            "name": "[concat(variables('sqlServer_name'), '/ForceLastGoodPlan')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "autoExecuteValue": "Enabled"
-            }
-        },
-        {
             "type": "Microsoft.Sql/servers/auditingPolicies",
             "apiVersion": "2014-04-01",
             "name": "[concat(variables('sqlServer_name'), '/Default')]",
@@ -404,34 +349,6 @@
             }
         },
         {
-            "type": "Microsoft.Sql/servers/databases/ledgerDigestUploads",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(variables('sqlServer_name'), '/master/Current')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(variables('sqlServer_name'), '/master/Default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "state": "Disabled",
-                "disabledAlerts": [
-                    ""
-                ],
-                "emailAddresses": [
-                    ""
-                ],
-                "emailAccountAdmins": false,
-                "retentionDays": 0
-            }
-        },
-        {
             "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
             "apiVersion": "2021-11-01-preview",
             "name": "[concat(variables('sqlServer_name'), '/master/Current')]",
@@ -520,97 +437,7 @@
                 "serverKeyType": "ServiceManaged"
             }
         },
-        {
-            "type": "Microsoft.Sql/servers/securityAlertPolicies",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(variables('sqlServer_name'), '/Default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "state": "Disabled",
-                "disabledAlerts": [
-                    ""
-                ],
-                "emailAddresses": [
-                    ""
-                ],
-                "emailAccountAdmins": false,
-                "retentionDays": 0
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/databases/advancedThreatProtectionSettings",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(variables('sqlServer_name'), '/mySampleDatabase/Default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServer_name'), 'mySampleDatabase')]",
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "state": "Disabled"
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/databases/advisors",
-            "apiVersion": "2014-04-01",
-            "name": "[concat(variables('sqlServer_name'), '/mySampleDatabase/CreateIndex')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServer_name'), 'mySampleDatabase')]",
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "autoExecuteValue": "Disabled"
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/databases/advisors",
-            "apiVersion": "2014-04-01",
-            "name": "[concat(variables('sqlServer_name'), '/mySampleDatabase/DbParameterization')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServer_name'), 'mySampleDatabase')]",
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "autoExecuteValue": "Disabled"
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/databases/advisors",
-            "apiVersion": "2014-04-01",
-            "name": "[concat(variables('sqlServer_name'), '/mySampleDatabase/DefragmentIndex')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServer_name'), 'mySampleDatabase')]",
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "autoExecuteValue": "Disabled"
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/databases/advisors",
-            "apiVersion": "2014-04-01",
-            "name": "[concat(variables('sqlServer_name'), '/mySampleDatabase/DropIndex')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServer_name'), 'mySampleDatabase')]",
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "autoExecuteValue": "Disabled"
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/databases/advisors",
-            "apiVersion": "2014-04-01",
-            "name": "[concat(variables('sqlServer_name'), '/mySampleDatabase/ForceLastGoodPlan')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServer_name'), 'mySampleDatabase')]",
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "autoExecuteValue": "Enabled"
-            }
-        },
+        
         {
             "type": "Microsoft.Sql/servers/databases/auditingPolicies",
             "apiVersion": "2014-04-01",
@@ -637,21 +464,6 @@
                 "isAzureMonitorTargetEnabled": false,
                 "state": "Disabled",
                 "storageAccountSubscriptionId": "00000000-0000-0000-0000-000000000000"
-            }
-        },
-        {
-            "type": "Microsoft.Sql/servers/databases/backupLongTermRetentionPolicies",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(variables('sqlServer_name'), '/mySampleDatabase/default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServer_name'), 'mySampleDatabase')]",
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "weeklyRetention": "PT0S",
-                "monthlyRetention": "PT0S",
-                "yearlyRetention": "PT0S",
-                "weekOfYear": 0
             }
         },
         {
@@ -704,26 +516,6 @@
                 "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
             ],
             "properties": {}
-        },
-        {
-            "type": "Microsoft.Sql/servers/databases/securityAlertPolicies",
-            "apiVersion": "2021-11-01-preview",
-            "name": "[concat(variables('sqlServer_name'), '/mySampleDatabase/Default')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Sql/servers/databases', variables('sqlServer_name'), 'mySampleDatabase')]",
-                "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
-            ],
-            "properties": {
-                "state": "Disabled",
-                "disabledAlerts": [
-                    ""
-                ],
-                "emailAddresses": [
-                    ""
-                ],
-                "emailAccountAdmins": false,
-                "retentionDays": 0
-            }
         },
         {
             "type": "Microsoft.Sql/servers/databases/transparentDataEncryption",
