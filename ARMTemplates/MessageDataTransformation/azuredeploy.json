@@ -342,7 +342,7 @@
                 }
             },
             "dependsOn": [
-              "[resourceId('Microsoft.Synapse/workspace', variables('WorkspaceName'))]",
+              "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]",
               "[resourceId('Microsoft.Resources/deploymentScripts', 'ApplicationScript')]"
             ]
         },
@@ -364,7 +364,7 @@
             }
           },
           "dependsOn": [
-            "[resourceId('Microsoft.Synapse/workspace', variables('WorkspaceName'))]"
+            "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
           ]
         },
         {
