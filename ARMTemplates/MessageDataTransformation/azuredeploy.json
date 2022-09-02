@@ -584,7 +584,7 @@
                     "annotations":[],
                     "lastPublishTime":"2022-08-17T02:06:23Z"
                 },
-                "dependsOn":["[concat(variables('factoryId'), '/datasets/Office365MessageDataset')]","[concat(variables('factoryId'), '/datasets/ADLSGen2Dataset')]","[concat(variables('factoryId'), '/dataflows/Flattening Data Flow')]"]},{"name":"[concat(variables('WorkspaceName'), '/Office365MessageDataset')]",
+                "dependsOn":["[concat(variables('factoryId'), '/datasets/ADLSGen2Dataset')]","[concat(variables('factoryId'), '/dataflows/Flattening Data Flow')]"]},{"name":"[concat(variables('WorkspaceName'), '/Office365MessageDataset')]",
                 "type":"Microsoft.DataFactory/factories/datasets",
                 "apiVersion":"2018-06-01",
                 "properties":{
