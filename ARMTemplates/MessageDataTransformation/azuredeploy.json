@@ -606,7 +606,10 @@
                     "annotations":[],
                     "lastPublishTime":"2022-08-17T02:06:23Z"
                 },
-                "dependsOn":["[concat(variables('WorkspaceName'), '/datasets/ADLSGen2Dataset')]","[concat(variables('factoryId'), '/dataflows/Flattening Data Flow')]"]
+                "dependsOn":[
+                    "[concat('Microsoft.DataFactory/factories/datasets/', variables('WorkspaceName'), '/datasets/ADLSGen2Dataset')]",
+                    "[concat(variables('factoryId'), '/dataflows/Flattening Data Flow')]"
+                ]
             },
             {
                 "name":"[concat(variables('WorkspaceName'), '/Flattening Data Flow')]",
