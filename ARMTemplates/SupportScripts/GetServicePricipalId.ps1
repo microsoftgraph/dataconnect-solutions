@@ -4,6 +4,8 @@ param(
     [string] [Parameter(Mandatory=$true)] $AppToGet
 )
 
+Install-Module PowerShellGet -Force
+Import-Module PowerShellGet -Force
 Install-Module Microsoft.Graph.Authentication -Force
 Import-Module Microsoft.Graph.Authentication -Force
 Install-Module Microsoft.Graph.Applications -Force
