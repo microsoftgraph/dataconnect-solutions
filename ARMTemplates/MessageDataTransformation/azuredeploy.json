@@ -124,7 +124,8 @@
             "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
             "apiVersion": "2018-07-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'datasets')]"
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'datasets')]",
+                "[resourceId('Microsoft.Resources/deploymentScripts','ApplicationScript')]"
             ],
             "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',guid(subscription().subscriptionId))]",
             "properties": {
