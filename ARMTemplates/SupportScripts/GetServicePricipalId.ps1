@@ -5,11 +5,11 @@ param(
 )
 
 Install-Module PowerShellGet -Force
-Import-Module PowerShellGet -Force
+Import-Module PowerShellGet -Force -Verbose
 Install-Module Microsoft.Graph.Authentication -Force
-Import-Module Microsoft.Graph.Authentication -Force
+Import-Module Microsoft.Graph.Authentication -Force -Verbose
 Install-Module Microsoft.Graph.Applications -Force
-Import-Module Microsoft.Graph.Applications -Force
+Import-Module Microsoft.Graph.Applications -Force -Verbose
 
 $url = "https://login.microsoftonline.com/$TenantId/oauth2/v2.0/token"
 $body = @{
@@ -22,6 +22,7 @@ $body = @{
 
 $OAuthReq = Invoke-RestMethod -Uri $url -Method Post -Body $body
 $AccessToken = $OAuthReq.access_token
+Write-Host "AccessToken: $AccessToken"
 Connect-MgGraph -AccessToken $AccessToken | Out-Null
 
 $application = Get-MgServicePrincipal -All:$true -Filter "AppID eq '$AppToGet'"
