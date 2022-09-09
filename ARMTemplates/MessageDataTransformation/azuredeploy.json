@@ -21,8 +21,7 @@
         "storageAccountName": "[concat('mgdcsynapse', uniqueString(resourceGroup().id))]",
         "WorkspaceName": "[concat('mgdcwsp', uniqueString(resourceGroup().id))]",
         "sqlServer_name": "[concat('mysqlserver', uniqueString(resourceGroup().id))]",
-        "sqlserverAdminPassword": "[concat('P', uniqueString(resourceGroup().id, '224F5A8B-51DB-46A3-A7C8-59B0DD584A41'), 'x', '!')]",
-        "randomGUID":"[newGuid()]"
+        "sqlserverAdminPassword": "[concat('P', uniqueString(resourceGroup().id, '224F5A8B-51DB-46A3-A7C8-59B0DD584A41'), 'x', '!')]"
     },
     "resources": [
         {
@@ -127,7 +126,7 @@
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'datasets')]",
                 "[resourceId('Microsoft.Resources/deploymentScripts','ApplicationScript')]"
             ],
-            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',variables('randomGUID'))]",
+            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',guid(resourceGroup().id, deployment().name))]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                 "principalId": "[reference('ApplicationScript').outputs.PrincipalId]"
