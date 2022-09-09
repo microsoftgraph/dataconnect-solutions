@@ -22,7 +22,7 @@
         "WorkspaceName": "[concat('mgdcwsp', uniqueString(resourceGroup().id))]",
         "sqlServer_name": "[concat('mysqlserver', uniqueString(resourceGroup().id))]",
         "sqlserverAdminPassword": "[concat('P', uniqueString(resourceGroup().id, '224F5A8B-51DB-46A3-A7C8-59B0DD584A41'), 'x', '!')]",
-        "factoryId":"[concat('Microsoft.Synapse/workspaces/', variables('WorkspaceName'))]"
+        "randomGUID":"[newGuid()]"
     },
     "resources": [
         {
@@ -127,7 +127,7 @@
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'datasets')]",
                 "[resourceId('Microsoft.Resources/deploymentScripts','ApplicationScript')]"
             ],
-            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/', uniqueString(resourceGroup().id))]",
+            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',variables('randomGUID'))]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                 "principalId": "[reference('ApplicationScript').outputs.PrincipalId]"
