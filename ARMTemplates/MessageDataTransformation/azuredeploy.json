@@ -325,8 +325,7 @@
         },
         {
             "name": "[concat(variables('WorkspaceName'), '/ADLSSink')]",
-            "type": "Microsoft.Synapse/workspaces/linkedServices",
-            "apiVersion": "2021-06-01",
+            "type": "Microsoft.Synapse/workspaces/linkedservices",
             "properties": {
                 "annotations": [],
                 "type": "AzureBlobFS",
@@ -348,8 +347,7 @@
         },
         {
           "name": "[concat(variables('WorkspaceName'), '/Office365Service')]",
-          "type": "Microsoft.DataFactory/factories/linkedServices",
-          "apiVersion": "2018-06-01",
+          "type": "Microsoft.DataFactory/factories/linkedservices",
           "properties": {
             "annotations": [],
             "type": "Office365",
