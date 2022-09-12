@@ -24,7 +24,7 @@ $AccessToken = $OAuthReq.access_token
 Connect-MgGraph -AccessToken $AccessToken | Out-Null
 
 $DeploymentScriptOutputs = @{}
-if (-not [String]::IsNullOrEmpty(($AppToGet))
+if (-not [String]::IsNullOrEmpty($AppToGet))
 {
     $application = Get-MgServicePrincipal -All:$true -Filter "AppID eq '$AppToGet'"
 }
