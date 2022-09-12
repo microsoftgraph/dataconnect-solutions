@@ -232,6 +232,43 @@
             ]
         },
         {
+            "type": "Microsoft.Resources/deploymentScripts",
+            "apiVersion": "2020-10-01",
+            "name": "GrantSynapseAccessToStorage",
+            "location": "[resourceGroup().location]",
+            "kind": "AzurePowerShell",
+            "properties": {
+                "forceUpdateTag": "1",
+                "azPowerShellVersion": "3.0",
+                "environmentVariables": [
+                {
+                    "name":"AppSecret",
+                    "secureValue": "[parameters('AppSecret')]"
+                }
+                ],
+                "arguments": "[format(' -ServidePrincipalName {0}', variables('WorkspaceName'))]",
+                "primaryScriptUri": "https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/ARMTemplates/SupportScripts/GetServicePricipalId.ps1",
+                "timeout": "PT30M",
+                "cleanupPreference": "OnSuccess",
+                "retentionInterval": "P1D",
+                "dependsOn": [
+                    "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
+            "apiVersion": "2018-07-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'datasets')]"
+            ],
+            "name": "[concat(variables('destinationAdlsAccountName'), '/default/datasets/Microsoft.Authorization/aff0e9ba-b9c8-47a0-8dfa-0faa2c411d7c')]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                "principalId": "[reference('GrantSynapseAccessToStorage').outputs.PrincipalId]"
+            }
+        },
+        {
             "type": "Microsoft.Synapse/workspaces/auditingSettings",
             "apiVersion": "2021-06-01",
             "name": "[concat(variables('WorkspaceName'), '/Default')]",
@@ -306,107 +343,6 @@
                 "startIpAddress": "0.0.0.0",
                 "endIpAddress": "255.255.255.255"
             }
-        },
-        {
-            "type": "Microsoft.Synapse/workspaces/integrationruntimes",
-            "apiVersion": "2021-06-01",
-            "name": "[concat(variables('WorkspaceName'), '/AutoResolveIntegrationRuntime')]",
-            "dependsOn": [
-                "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
-            ],
-            "properties": {
-                "type": "Managed",
-                "typeProperties": {
-                    "computeProperties": {
-                        "location": "AutoResolve"
-                    }
-                }
-            }
-        },
-        {
-            "name": "[concat(variables('WorkspaceName'), '/ADLSSink')]",
-            "type": "Microsoft.Synapse/workspaces/linkedservices",
-            "properties": {
-                "annotations": [],
-                "type": "AzureBlobFS",
-                "typeProperties": {
-                    "url": "[concat('https://', variables('destinationAdlsAccountName'), '.dfs.core.windows.net/')]",
-                    "tenant": "[subscription().tenantId]",
-                    "servicePrincipalId": "[parameters('AppId')]",
-                    "servicePrincipalCredentialType": "ServicePrincipalKey",
-                    "servicePrincipalCredential": {
-                        "type": "SecureString",
-                        "value": "[parameters('AppSecret')]"
-                    }
-                }
-            },
-            "dependsOn": [
-              "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]",
-              "[resourceId('Microsoft.Resources/deploymentScripts', 'ApplicationScript')]"
-            ]
-        },
-        {
-          "name": "[concat(variables('WorkspaceName'), '/Office365Service')]",
-          "type": "Microsoft.DataFactory/factories/linkedservices",
-          "properties": {
-            "annotations": [],
-            "type": "Office365",
-            "typeProperties": {
-              "office365TenantId": "[subscription().tenantId]",
-              "servicePrincipalTenantId": "[subscription().tenantId]",
-              "servicePrincipalId": "[parameters('AppId')]",
-              "servicePrincipalKey": {
-                "type": "SecureString",
-                "value": "[parameters('AppSecret')]"
-              }
-            }
-          },
-          "dependsOn": [
-            "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
-          ]
-        },
-        {
-            "name": "[concat(variables('WorkspaceName'), '/Office365MessageDataset')]",
-            "type": "Microsoft.DataFactory/factories/datasets",
-            "apiVersion": "2018-06-01",
-            "properties": {
-                "linkedServiceName": {
-                    "referenceName": "Office365Service",
-                    "type": "LinkedServiceReference"
-                },
-                "annotations": [],
-                "type": "Office365Table",
-                "schema": [],
-                "typeProperties": {
-                    "tableName": "BasicDataSet_v0.Message_v1"
-                }
-            },
-            "dependsOn": [
-              "Office365Service",
-              "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
-            ]
-        },        
-        {
-            "name":"[concat(variables('WorkspaceName'), '/ADLSGen2Dataset')]",
-            "type":"Microsoft.DataFactory/factories/datasets",
-            "apiVersion":"2018-06-01",
-            "properties":{
-                "linkedServiceName":{
-                    "referenceName":"ADLSSink",
-                    "type":"LinkedServiceReference"},
-                    "annotations":[],
-                    "type":"Binary",
-                    "typeProperties":{
-                        "location":{
-                            "type":"AzureBlobFSLocation",
-                            "fileSystem":"extracteddata"
-                        }
-                    }
-                },
-            "dependsOn":[                
-              "ADLSSink",
-              "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
-            ]
         },
         {
             "type": "Microsoft.Sql/servers",
