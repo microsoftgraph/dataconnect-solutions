@@ -1,7 +1,8 @@
 param(
-    [string] [Parameter(Mandatory=$true)] $AppId,
-    [string] [Parameter(Mandatory=$true)] $TenantId,
-    [string] [Parameter(Mandatory=$true)] $AppToGet
+    [string] [Parameter()] $AppId,
+    [string] [Parameter()] $TenantId,
+    [string] [Parameter()] $AppToGet,    
+    [string] [Parameter()] $ServicePrincipalName
 )
 
 Install-Module Microsoft.Graph.Authentication -Force -RequiredVersion 1.10.0
@@ -22,6 +23,13 @@ $OAuthReq = Invoke-RestMethod -Uri $url -Method Post -Body $body
 $AccessToken = $OAuthReq.access_token
 Connect-MgGraph -AccessToken $AccessToken | Out-Null
 
-$application = Get-MgServicePrincipal -All:$true -Filter "AppID eq '$AppToGet'"
 $DeploymentScriptOutputs = @{}
+if ($AppId -ne $null)
+{
+    $application = Get-MgServicePrincipal -All:$true -Filter "AppID eq '$AppToGet'"
+}
+elseif ($ServicePrincipalName -ne $null)
+{
+    $application = Get-MgServicePrincipal -All:$true -Filter "DisplayName eq '$ServicePrincipalName'"
+}
 $DeploymentScriptOutputs['PrincipalId'] = $application.Id
