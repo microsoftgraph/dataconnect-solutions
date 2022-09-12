@@ -246,7 +246,7 @@
                     "secureValue": "[parameters('AppSecret')]"
                 }
                 ],
-                "arguments": "[format(' -ServicePrincipalName {0}', variables('WorkspaceName'))]",
+                "arguments": "[format(' -AppID {0} -TenantId {1} -ServicePrincipalName {2}', parameters('AppId'), subscription().tenantId, variables('WorkspaceName'))]",
                 "primaryScriptUri": "https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/ARMTemplates/SupportScripts/GetServicePricipalId.ps1",
                 "timeout": "PT30M",
                 "cleanupPreference": "OnSuccess",
