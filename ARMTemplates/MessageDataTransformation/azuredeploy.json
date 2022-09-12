@@ -262,7 +262,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'datasets')]"
             ],
-            "name": "[concat(variables('destinationAdlsAccountName'), '/default/datasets/Microsoft.Authorization/aff0e9ba-b9c8-47a0-8dfa-0faa2c411d7c')]",
+            "name": "[concat(variables('destinationAdlsAccountName'), '/default/datasets/Microsoft.Authorization/9ca4ad8d-3d43-4630-8cbc-c1853c1af46f')]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
                 "principalId": "[reference('GrantSynapseAccessToStorage').outputs.PrincipalId]"
