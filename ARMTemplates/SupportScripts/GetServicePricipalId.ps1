@@ -24,11 +24,11 @@ $AccessToken = $OAuthReq.access_token
 Connect-MgGraph -AccessToken $AccessToken | Out-Null
 
 $DeploymentScriptOutputs = @{}
-if (-not [System.String]::IsNullOrEmpty($AppToGet))
+if (-not [String]::IsNullOrEmpty(($AppToGet))
 {
     $application = Get-MgServicePrincipal -All:$true -Filter "AppID eq '$AppToGet'"
 }
-elseif (-not [System.String]::IsNullOrEmpty($ServicePrincipalName))
+elseif (-not [String]::IsNullOrEmpty($ServicePrincipalName))
 {
     $application = Get-MgServicePrincipal -All:$true -Filter "DisplayName eq '$ServicePrincipalName'"
 }
