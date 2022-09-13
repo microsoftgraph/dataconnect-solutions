@@ -430,7 +430,7 @@
                 "autoPauseDelay": 60,
                 "requestedBackupStorageRedundancy": "Geo",
                 "minCapacity": 0.5,
-                "maintenanceConfigurationId": "/subscriptions/30a81c99-6121-40ba-99d7-ac674961cd7e/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default",
+                "maintenanceConfigurationId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Maintenance/publicMaintenanceConfigurations/SQL_Default')]",
                 "isLedgerOn": false,
                 "sampleName": "AdventureWorksLT"
             }
