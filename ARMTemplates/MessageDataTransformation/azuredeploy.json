@@ -13,6 +13,12 @@
             "metadata": {
                 "description": "The secret for the Azure AD Application that has access to the destination Azure Storage Account."
             }
+        },
+        "SQLAdminPassword": {
+            "type": "securestring",
+            "metadata": {
+                "description": "The password used for the azureuser SQL Server admin."
+            }
         }
     },
     "variables": {
@@ -20,8 +26,7 @@
         "synapseStorageExternalId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Storage/storageAccounts/')]",
         "storageAccountName": "[concat('mgdcsynapse', uniqueString(resourceGroup().id))]",
         "WorkspaceName": "[concat('mgdcwsp', uniqueString(resourceGroup().id))]",
-        "sqlServer_name": "[concat('mysqlserver', uniqueString(resourceGroup().id))]",
-        "sqlserverAdminPassword": "[concat('P', uniqueString(resourceGroup().id, '224F5A8B-51DB-46A3-A7C8-59B0DD584A41'), 'x', '!')]"
+        "sqlServer_name": "[concat('mysqlserver', uniqueString(resourceGroup().id))]"
     },
     "resources": [
         {
@@ -288,7 +293,7 @@
             "type": "Microsoft.Synapse/workspaces/bigDataPools",
             "apiVersion": "2021-06-01",
             "name": "[concat(variables('WorkspaceName'), '/MGDCSParkPool')]",
-            "location": "[resourceGroup().location]",
+            "location": "westeurope",
             "dependsOn": [
                 "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
             ],
@@ -352,7 +357,7 @@
             "kind": "v12.0",
             "properties": {
                 "administratorLogin": "azureuser",
-                "administratorLoginPassword": "[variables('sqlserverAdminPassword')]",
+                "administratorLoginPassword": "[parameters('SQLAdminPassword')]",
                 "version": "12.0",
                 "minimalTlsVersion": "1.2",
                 "publicNetworkAccess": "Enabled",
