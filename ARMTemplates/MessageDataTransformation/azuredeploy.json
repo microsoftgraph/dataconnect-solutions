@@ -288,7 +288,7 @@
             "type": "Microsoft.Synapse/workspaces/bigDataPools",
             "apiVersion": "2021-06-01",
             "name": "[concat(variables('WorkspaceName'), '/MGDCSParkPool')]",
-            "location": "westeurope",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
             ],
@@ -360,8 +360,9 @@
             },
             "resources": [                
                 {
-                    "type": "Microsoft.Sql/servers/administrators",
+                    "type": "administrators",
                     "apiVersion": "2022-02-01-preview",
+                    "location": "[resourceGroup().location]",
                     "name": "ActiveDirectory",
                     "properties": {
                         "administratorType": "ActiveDirectory",
