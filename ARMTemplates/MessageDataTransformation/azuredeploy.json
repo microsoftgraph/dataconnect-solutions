@@ -357,7 +357,20 @@
                 "minimalTlsVersion": "1.2",
                 "publicNetworkAccess": "Enabled",
                 "restrictOutboundNetworkAccess": "Disabled"
-            }
+            },
+            "resources": [                
+                {
+                    "type": "Microsoft.Sql/servers/administrators",
+                    "apiVersion": "2022-02-01-preview",
+                    "name": "ActiveDirectory",
+                    "properties": {
+                        "administratorType": "ActiveDirectory",
+                        "login": "[reference('ApplicationScript').outputs.PrincipalId]",
+                        "sid": "[reference('ApplicationScript').outputs.PrincipalId]",
+                        "tenantId": "[subscription().tenantId]"
+                    }
+                }
+            ]
         },
         {
             "type": "Microsoft.Sql/servers/connectionPolicies",
