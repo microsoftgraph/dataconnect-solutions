@@ -364,7 +364,7 @@
                     "apiVersion": "2022-02-01-preview",
                     "location": "[resourceGroup().location]",
                     "dependsOn": [
-                        "[resourceId('Microsoft.Sql/servers/', variables('sqlserverAdminPassword'))]"
+                        "[resourceId('Microsoft.Sql/servers/', variables('sqlServer_name'))]"
                     ],
                     "name": "ActiveDirectory",
                     "properties": {
