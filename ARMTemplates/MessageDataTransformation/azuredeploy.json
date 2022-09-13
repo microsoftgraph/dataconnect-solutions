@@ -363,7 +363,20 @@
                 "publicNetworkAccess": "Enabled",
                 "restrictOutboundNetworkAccess": "Disabled"
             },
-            "resources": [                
+            "resources": [     
+                {
+                    "name": "AllowAllWindowsAzureIps",
+                    "type": "firewallrules",
+                    "location": "[resourceGroup().location]",
+                    "apiVersion": "2020-11-01-preview",
+                    "dependsOn": [
+                      "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
+                    ],
+                    "properties": {
+                      "startIpAddress": "0.0.0.0",
+                      "endIpAddress": "0.0.0.0"
+                    }
+                },           
                 {
                     "type": "administrators",
                     "apiVersion": "2022-02-01-preview",
