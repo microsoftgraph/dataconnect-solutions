@@ -26,8 +26,7 @@
         "synapseStorageExternalId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Storage/storageAccounts/')]",
         "storageAccountName": "[concat('mgdcsynapse', uniqueString(resourceGroup().id))]",
         "WorkspaceName": "[concat('mgdcwsp', uniqueString(resourceGroup().id))]",
-        "sqlServer_name": "[concat('mysqlserver', uniqueString(resourceGroup().id))]",
-        "roleAssignmentID": "[newGuid()]"
+        "sqlServer_name": "[concat('mysqlserver', uniqueString(resourceGroup().id))]"
     },
     "resources": [
         {
