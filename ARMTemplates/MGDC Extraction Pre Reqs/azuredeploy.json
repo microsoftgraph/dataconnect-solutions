@@ -143,7 +143,7 @@
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'datasets')]"
             ],
-            "name": "[concat(variables('destinationAdlsAccountName'), '/default/datasets/Microsoft.Authorization/', guid(resourceGroup().id, deployment().name))]",
+            "name": "[concat(variables('destinationAdlsAccountName'), '/default/datasets/Microsoft.Authorization/', guid(resourceGroup().id, subscription().displayName))]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
                 "principalId": "[reference('ApplicationScript').outputs.PrincipalId]"
