@@ -22,6 +22,6 @@ $OAuthReq = Invoke-RestMethod -Uri $url -Method Post -Body $body
 $AccessToken = $OAuthReq.access_token
 Connect-MgGraph -AccessToken $AccessToken | Out-Null
 
-$application = Get-MgServicePrincipal -All:$true -Filter "AppID eq '$AppToGet'"
+$application = Get-MgServicePrincipal -Filter "AppID eq '$AppToGet'"
 $DeploymentScriptOutputs = @{}
 $DeploymentScriptOutputs['PrincipalId'] = $application.Id
