@@ -301,7 +301,7 @@
                 "creationDate": "2021-12-15T13:50:11.03Z",
                 "sparkVersion": "3.1",
                 "nodeCount": 0,
-                "nodeSize": "Medium",
+                "nodeSize": "Small",
                 "nodeSizeFamily": "MemoryOptimized",
                 "autoScale": {
                     "enabled": true,
