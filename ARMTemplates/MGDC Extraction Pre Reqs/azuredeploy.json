@@ -56,7 +56,7 @@
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2021-01-01",
             "name": "[variables('destinationAdlsAccountName')]",
-            "location": "eastus2",
+            "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Standard_RAGRS",
                 "tier": "Standard"
@@ -353,7 +353,7 @@
             "type": "Microsoft.Sql/servers",
             "apiVersion": "2021-11-01-preview",
             "name": "[variables('sqlServer_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "kind": "v12.0",
             "properties": {
                 "administratorLogin": "azureuser",
@@ -398,7 +398,7 @@
             "type": "Microsoft.Sql/servers/connectionPolicies",
             "apiVersion": "2021-11-01-preview",
             "name": "[concat(variables('sqlServer_name'), '/default')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
             ],
@@ -410,7 +410,7 @@
             "type": "Microsoft.Sql/servers/databases",
             "apiVersion": "2021-11-01-preview",
             "name": "[concat(variables('sqlServer_name'), '/mySampleDatabase')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', variables('sqlServer_name'))]"
             ],
