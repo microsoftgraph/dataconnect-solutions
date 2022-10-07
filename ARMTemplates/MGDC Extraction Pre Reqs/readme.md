@@ -10,6 +10,11 @@
 
 Information oversharing is a security and compliance use case powered by our newly available SharePoint datasets. This allows customers to better understand how secure their SharePoint is, maintain information boundaries, and establish new rules based on how sensitive data is managed and classified.
 
+
+**After you follow these steps, you will have a great set of Power BI dashboards related to SharePoint security, like the one shown below.**
+
+![](Images/48.png) 
+
 ## Installing Pre-reqs
 The first step to running this template would be to create an application in the tenant and use that appId 
 and secret to setup the other required resources.
