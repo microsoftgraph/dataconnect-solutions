@@ -18,7 +18,7 @@
         "AzureActiveDirectoryTenantId":{ 
             "type": "string",
             "metadata": {
-                "description": "The Office 365 Tenant id of the customer whose data needs to be extracted."
+                "description": "The Azure Active Directory Tenant Id of the customer whose data needs to be extracted."
             }
         }
     },
