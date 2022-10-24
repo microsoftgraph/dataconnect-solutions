@@ -15,10 +15,10 @@
                 "description": "The secret for the Azure AD Application. App Secret is required for Microsoft Graph Data Connect (see documentation https://docs.microsoft.com/en-us/graph/data-connect-quickstart?tabs=Microsoft365&tutorial-step=2)."
             }
         },
-        "Office365TenantId":{ 
+        "AzureActiveDirectoryTenantId":{ 
             "type": "string",
             "metadata": {
-                "description": "The Office 365 Tenant id of the customer whose data needs to be extracted."
+                "description": "The Azure Active Directory Tenant Id of the customer whose data needs to be extracted."
             }
         }
     },
@@ -226,7 +226,7 @@
                             "location": {
                                 "type": "AzureBlobFSLocation",
                                 "folderPath": {
-                                    "value": "@concat(pipeline().RunId, '/VivaInsights/', variables('Office365TenantId'))",
+                                    "value": "@concat(pipeline().RunId, '/VivaInsights/', variables('AzureActiveDirectoryTenantId'))",
                                     "type": "Expression"
                                 },
                                 "fileSystem": "datasets"
@@ -254,7 +254,7 @@
                             "location": {
                                 "type": "AzureBlobFSLocation",
                                 "folderPath": {
-                                    "value": "@concat(pipeline().RunId, '/AADUser/', variables('Office365TenantId'))",
+                                    "value": "@concat(pipeline().RunId, '/AADUser/', variables('AzureActiveDirectoryTenantId'))",
                                     "type": "Expression"
                                 },
                                 "fileSystem": "datasets"
@@ -275,7 +275,7 @@
                         "annotations": [],
                         "type": "Office365",
                         "typeProperties": {
-                            "office365TenantId": "[parameters('Office365TenantId')]",
+                            "office365TenantId": "[parameters('AzureActiveDirectoryTenantId')]",
                             "servicePrincipalTenantId": "[subscription().tenantId]",
                             "servicePrincipalId": "[parameters('AppId')]",
                             "servicePrincipalKey": {
@@ -303,7 +303,7 @@
                         "schema": [],
                         "typeProperties": {
                             "tableName": "[variables('datasetName')]",
-                            "ScenarioDescription": "Your Application Name (Application ID: 9700b097-a809-44e3-b1cb-66ea8c41a976)"
+                            "ScenarioDescription": "Your Application Name (Application ID: 00000000-0000-0000-0000-000000000000)"
                         }
                     },
                     "dependsOn": [
