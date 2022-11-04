@@ -300,7 +300,353 @@
                         },
                         "annotations": [],
                         "type": "Office365Table",
-                        "schema": [],
+                        "structure": [
+                            {
+                                "name": "After-hours collaboration hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "After-hours email hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "After-hours chat hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "After-hours meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "After-hours scheduled call hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "After-hours unscheduled call hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Collaboration hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Email hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "External collaboration hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Chat hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Scheduled call hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Unscheduled call hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Conflicting meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Meetings with manager 1:1",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "IsActive",
+                                "type": "boolean",
+                                "description": " "
+                            },
+                            {
+                                "name": "MetricDate",
+                                "type": "datetime",
+                                "description": "The date and time the message was created."
+                            },
+                            {
+                                "name": "After-hours call hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Call hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Multitasking hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Emails sent",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Meetings",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Chats sent",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Calls",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Meeting and call hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Weekend emails sent",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Weekend chats sent",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Weekend meetings",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Unscheduled weekend calls",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Urgent email hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Urgent meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Small-group meeting call and chat hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Small-group emails sent excluding manager",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Small-group chats sent excluding manager",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Internal meeting hours with 3 to 8 attendees",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Internal meeting hours without manager 1:1",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Unscheduled call hours with manager 1:1",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Unscheduled call hours with manager",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Collaboration hours with direct reports",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Small-group emails sent including manager",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Small-group chats sent including manager",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Manager coaching hours 1:1",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Meeting hours with manager",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Meeting hours with manager 1:1",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Meetings with manager",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Meetings with skip level",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Meeting hours with skip level",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Internal network size",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "External unscheduled call hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "External email hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "External chat hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "External meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Available-to-focus hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Uninterrupted hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Interrupted hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Small and short meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Small and short recurring meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Large and long meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Large and long recurring meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Large and short meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Large and short recurring meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Small and long meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Small and long recurring meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Recurring meeting hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Working-hours collaboration hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Working-hours email hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Working-hours call hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Working-hours chat hours",
+                                "type": "double",
+                                "description": " "
+                            },
+                            {
+                                "name": "Working-hours meeting hours",
+                                "type": "double",
+                                "description": " "
+                            }
+                        ],
                         "typeProperties": {
                             "tableName": "[variables('datasetName')]",
                             "ScenarioDescription": "Your Application Name (Application ID: 00000000-0000-0000-0000-000000000000)"
@@ -357,216 +703,7 @@
                                 ],
                                 "typeProperties": {
                                     "source": {
-                                        "type": "Office365Source",
-                                        "outputColumns": [{
-                                                "name": "After-hours collaboration hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "After-hours email hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "After-hours call hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "After-hours unscheduled call hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "After-hours scheduled call hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "After-hours chat hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "After-hours meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Collaboration hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Email hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Chat hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Call hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Unscheduled call hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Scheduled call hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Multitasking hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Emails sent",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Meetings",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Chats sent",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Calls",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Meeting and call hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Weekend emails sent",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Weekend chats sent",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Weekend meetings",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Unscheduled weekend calls",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Urgent email hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Urgent meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Small-group meeting call and chat hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Small-group emails sent excluding manager",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Small-group chats sent excluding manager",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Internal meeting hours without manager 1:1",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Internal meeting hours with 3 to 8 attendees",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Unscheduled call hours with manager 1:1",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Unscheduled call hours with manager",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Collaboration hours with direct reports",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Small-group emails sent including manager",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Small-group chats sent including manager",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Manager coaching hours 1:1",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Meeting hours with manager",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Meeting hours with manager 1:1",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Meeting hours with skip level",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Meetings with manager",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Meetings with manager 1:1",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Meetings with skip level",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Internal network size",
-                                                "type": "double"
-                                            }, {
-                                                "name": "External collaboration hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "External unscheduled call hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "External email hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "External chat hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "External meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Available-to-focus hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Uninterrupted hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Interrupted hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Conflicting meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Small and short meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Small and short recurring meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Large and long meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Large and long recurring meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Large and short meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Large and short recurring meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Small and long meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Small and long recurring meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Recurring meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Working-hours collaboration hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Working-hours email hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Working-hours call hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Working-hours chat hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "Working-hours meeting hours",
-                                                "type": "double"
-                                            }, {
-                                                "name": "IsActive",
-                                                "type": "boolean"
-                                            }, {
-                                                "name": "MetricDate",
-                                                "type": "DateTime"
-                                            }
-                                        ]
+                                        "type": "Office365Source"
                                     },
                                     "sink": {
                                         "type": "BinarySink",
