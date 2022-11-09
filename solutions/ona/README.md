@@ -121,7 +121,7 @@ Confirm the Scala version of the pool matches to the packages
 
 ## Synapse Pipeline Template
 
-1.  Download the ONA pipeline template .zip from [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fona%2FSynapsePipelineTemplate%2FONA.zip)
+1.  Download the ONA pipeline template .zip from [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fona%2FSynapsePipelineTemplate)
 
 2.  In the Synapse Studio, select the fourth icon on the left to go to the Integrate page. Click on the "+" icon to Add new resource -> Import from pipeline template, and select the downloaded template
 
@@ -185,13 +185,85 @@ Template.
     - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center. [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494)
 2. Download the pre-created PowerBI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. Link to download PowerBI Report. [here](http://aka.ms/ona-m365-pbi)
 
-WIP
+3. Open the PowerBI file and click on Transform data → Data source settings
+
+![](Images/43.png)
+
+4. You will see data sources in the Data source settings page
+
+![](Images/44.png)
+
+5. Select one of the data source settings and click on Change Source.
+    - Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline Step 11 above
+    - Repeat changing storage account names to all Data sources in current file.
+
+![](Images/45.png)
+
+6. Two data sources you need to update the path with right Date and correct location values for the data generated for Sharing and Sites datasets.
+    - Click on data sources
+    - Change path with right date and GUID Values Example: (https://**StorageAccountName**.dfs.core.windows.net/output/users.csv **YYYY-MM-DD**) 
+    
+    After changing the paths your new path should be like below Example: (https://xyzabcpqr1234.dfs.core.windows.net/output/users.csv)
+
+    - You can get location values by navigating to storage account 
+
+![](Images/46.png)
+
+7. Now we need to give the right storage account key / credentials for these data sources.
+    - Click on Edit Permissions
+
+        ![](Images/47-a.png)        
+
+    - Click on Edit under credentials
+
+        ![](Images/47-b.png)        
+
+    - Enter the storage account key value
+
+        ![](Images/47-c.png)        
+
+    If you don’t know have storage key get the storage account key by navigating to storage account in azure portal (storage account → access keys)
+
+        ![](Images/47-d.png)        
 
 8. Congratulations, you are all set and will see that the report will be refreshed with the latest data
 
     ![](Images/0.png) 
 
-9. If you see any error or data is not being refreshed then please make sure your entered right storage account details, path and folder information along with credentials in data source settings
+**Overview Page**
+From the Overview page, you can start analyzing the network graph created from the interactions of the M365 communication data, understand the flow of interactions between departments, have a glance at the raw data populating the graphs, and evaluate the amount of connections and interactions of the nodes. There are date and flags filters available for comparison.
+
+Each node is a person. If a node interacts with another node, then they become a connection.
+An interaction can be either of the following:
+-  One email
+-  One meeting of 5 or less participants
+-  Eight chat messages
+
+This blend of interactions is informed by investigations from Microsoft Research (MSR) using statistical insights from US-based Microsoft employees.
+The two flags available to classify the nodes are the following and can be configured using parameters:
+-  Bridge flag: Top 15 percentile betweenness index
+-  Centrality flag: Top 15 percentile degree index 
+
+**Node Analysis Page**
+The Node Analysis page provides additional drill-down information of the interactions in the organization and insights on how people prefer to communicate. 
+
+**Influence Analysis Page**
+Influence – Explore influential connections: Measures the influence of nodes as being well-connected to others. A high score identifies that the node’s perspective will cascade to others efficiently. How to engage:
+    -  Identify influencers
+    -  Explore the profile of the influencers: Title, Department, Country
+    -  Compare period vs period to analyze consistency
+
+**Influence Analysis Page**
+Network Size and Breadth – Empower inclusive networks: Rank the nodes based on their number of connections to identify isolated groups that may be lacking information or left apart.
+    -  Identify siloes and communities that may not be interacting the most
+    -  Compare period vs period to analyze consistency
+
+**Betweenness Analysis Page**
+Betweenness – Evaluate information flow: Capture the approximate betweenness of nodes as their probability to be on the information flow between two people. Helps to identify potential gatekeepers, change agents, or controllers, and to remove bottlenecks.
+    -  Identify key bridges and their departments
+    -  Analyze the correlation of betweenness and influence: 
+        -  High betweenness and high influence usually imply a leader
+        -  High betweenness and low influence may imply a bottleneck 
 
 ## **Preview Considerations**
 This template is in PREVIEW stage at this time. The following considerations apply:
