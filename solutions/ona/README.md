@@ -84,7 +84,13 @@ On that screen, on top of providing information about the resource group and reg
 
 Once all required information has been provided, click on the Review + create button at the bottom of the page:
 
-WIP
+
+
+This will validate that the information provided to the template is correct. Once the information has been validated, click on the Create button at the bottom of the page.
+
+
+
+This will initiate the deployment. It should normally take about 5 minutes for the whole deployment to complete.
 
 ## Synapse pipeline template
 
