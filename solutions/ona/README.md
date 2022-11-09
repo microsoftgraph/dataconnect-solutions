@@ -2,8 +2,9 @@
 
 - [Overview](#Overview)
 - [Installing Pre-reqs](#Installing-Pre-reqs)
-- [Synapse pipeline template](#Synapse-pipeline-template)
-- [PBI report template](#PBI-report-template)
+- [Synapse Pipeline Packages](#Synapse-Pipeline-Packages)
+- [Synapse Pipeline Template](#Synapse-Pipeline-Template)
+- [PBI Report Template](#PBI-Report-Template)
 - [Preview Considerations](#Preview-Considerations)
 
 
@@ -92,7 +93,7 @@ This will validate that the information provided to the template is correct. Onc
 
 This will initiate the deployment. It should normally take about 5 minutes for the whole deployment to complete.
 
-## Synapse pipeline template
+## Synapse Pipeline Packages
 
 1.  After the pre-reqs are complete, navigate to the Synapse workspace just created
 
@@ -110,15 +111,74 @@ Confirm the Scala version of the pool matches to the packages
 ![](Images/2.3.png)
 ![](Images/2.4.png)
 
-4.  Click on the Apache Spark pools and then in the three dots for more options 
+4.  Click on the Apache Spark pools and then in the three dots for more options -> Packages
 
 ![](Images/2.5.png)
 
-5.  Select the workspace packages to enable use
+5.  Select the workspace packages to enable use and click Apply. It will take some minutes to complete
 
 ![](Images/2.6.png)
 
-## **PBI report template**
+## Synapse Pipeline Template
+
+1.  Download the ONA pipeline template .zip from [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fona%2FSynapsePipelineTemplate%2FONA.zip)
+
+2.  In the Synapse Studio, select the fourth icon on the left to go to the Integrate page. Click on the "+" icon to Add new resource -> Import from pipeline template, and select the downloaded template
+
+![](Images/3.1.png)
+
+3.  Create the new linked services required by this pipeline
+
+![](Images/3.2.png)
+
+4.  Provide the parameters of the Linked Service 
+        a. Select Authentication Type = Service Principal 
+        b. Use the storage account name (starting with "onastore"), SPN id and secret (SPN key) from the pre-req steps above
+        c. Test Connection and then click on Create
+
+![](Images/3.3.png)
+
+5.  Repeat the linked Service creation steps for the source linked service and select "Open Pipeline"
+
+![](Images/3.4.png)
+
+6.  Navigate to the Develop page (third icon on the left) -> ONA and ensure the notebook is attached to the onasynapsepool
+
+![](Images/3.5.png)
+
+7.  Click on "Publish All" to validate and publish the pipeline
+
+![](Images/3.6.png)
+
+8. Review the changes and click Publish
+
+![](Images/3.7.png)
+
+9. Verify that the pipeline has been successfully published
+
+![](Images/3.8.png)
+
+10. Trigger the pipeline
+
+![](Images/3.9.png)
+
+11. Provide the required parameters. Use one month per pipeline run. Use date format 'YYYY-MM-DD'. 
+Use the Storage Account created in the resource group (to get the URL, navigate to the resource group -> storage account -> Endpoints -> Data Lake Storage -> Primary endpoint)
+If required, change the flags if only certain datasets should run.
+
+![](Images/3.10.png)
+![](Images/3.11.1.png)
+![](Images/3.11.2.png)
+
+12. Congratulations! You just triggered the MGDC pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account.
+
+![](Images/3.12.png)
+
+13. You will see the data in the storage account.
+
+![](Images/3.13.png)
+
+## **PBI Report Template**
 Below steps will help to link datasets that are generated using Synapse pipeline above to link to PowerBI 
 Template. 
 1. Download and install Microsoft Power BI Desktop if you don’t have it installed already on your machine. 
