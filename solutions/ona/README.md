@@ -1,4 +1,4 @@
-# Organizational Network Analysis template setup
+# PREVIEW Organizational Network Analysis template
 
 - [Overview](#Overview)
 - [Installing Pre-reqs](#Installing-Pre-reqs)
@@ -8,6 +8,7 @@
 
 ## Overview
 
+**Disclaimer: This template is in PREVIEW stage at this time. Feedback is welcome [here](aka.ms/ona-m365-feedback)**
 The purpose of ONA is to harness information flows and team connectivity to unlock productivity, innovation, employee engagement and organizational change. This solution template aims to enable customers to leverage ONA metrics from their M365 data and analyze the networks within.
 
 
@@ -84,7 +85,7 @@ WIP
 
 ## Synapse pipeline template
 
-TBD
+WIP
 
 ## **PBI report template**
 Below steps will help to link datasets that are generated using Synapse pipeline above to link to PowerBI 
@@ -93,7 +94,7 @@ Template.
     - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center. [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494)
 2. Download the pre-created PowerBI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. Link to download PowerBI Report. [here](http://aka.ms/ona-m365-pbi)
 
-TBD
+WIP
 
 8. Congratulations, you are all set and will see that the report will be refreshed with the latest data
 
