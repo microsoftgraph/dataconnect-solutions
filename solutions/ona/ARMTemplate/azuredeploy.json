@@ -16,7 +16,7 @@
         }
     },
     "variables": {
-        "destinationAdlsAccountName": "[concat('astore', uniqueString(resourceGroup().id))]",
+        "destinationAdlsAccountName": "[concat('onastore', uniqueString(resourceGroup().id))]",
         "synapseStorageExternalId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Storage/storageAccounts/')]",
         "storageAccountName": "[concat('mgdcsynapse', uniqueString(resourceGroup().id))]",
         "WorkspaceName": "[concat('mgdcwsp', uniqueString(resourceGroup().id))]"
@@ -118,6 +118,20 @@
             }
         },
         {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+            "apiVersion": "2021-01-01",
+            "name": "[concat(variables('destinationAdlsAccountName'), '/default/output')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('destinationAdlsAccountName'), 'default')]",
+                "[resourceId('Microsoft.Storage/storageAccounts', variables('destinationAdlsAccountName'))]"
+            ],
+            "properties": {
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "Container"
+            }
+        },
+        {
             "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
             "apiVersion": "2018-07-01",
             "dependsOn": [
@@ -137,6 +151,31 @@
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'mgdc')]"
             ],
             "name": "[concat(variables('destinationAdlsAccountName'), '/default/mgdc/Microsoft.Authorization/', guid(subscription().id, resourceGroup().id))]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                "principalId": "[reference('ApplicationScript').outputs.PrincipalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
+            "apiVersion": "2018-07-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'output')]",
+                "[resourceId('Microsoft.Resources/deploymentScripts','ApplicationScript')]"
+            ],
+            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',guid(subscription().id, deployment().name))]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
+                "principalId": "[reference('ApplicationScript').outputs.PrincipalId]"
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
+            "apiVersion": "2018-07-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'output')]"
+            ],
+            "name": "[concat(variables('destinationAdlsAccountName'), '/default/output/Microsoft.Authorization/', guid(subscription().id, resourceGroup().id))]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
                 "principalId": "[reference('ApplicationScript').outputs.PrincipalId]"
@@ -267,6 +306,18 @@
             }
         },
         {
+            "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
+            "apiVersion": "2018-07-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'output')]"
+            ],
+            "name": "[concat(variables('destinationAdlsAccountName'), '/default/output/Microsoft.Authorization/', guid(resourceGroup().id, deployment().name))]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
+                "principalId": "[reference('GrantSynapseAccessToStorage').outputs.PrincipalId]"
+            }
+        },
+        {
             "type": "Microsoft.Synapse/workspaces/auditingSettings",
             "apiVersion": "2021-06-01",
             "name": "[concat(variables('WorkspaceName'), '/Default')]",
@@ -285,7 +336,7 @@
         {
             "type": "Microsoft.Synapse/workspaces/bigDataPools",
             "apiVersion": "2021-06-01",
-            "name": "[concat(variables('WorkspaceName'), '/MGDCSParkPool')]",
+            "name": "[concat(variables('WorkspaceName'), '/onasynapsepool')]",
             "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Synapse/workspaces', variables('WorkspaceName'))]"
