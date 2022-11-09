@@ -84,17 +84,39 @@ On that screen, on top of providing information about the resource group and reg
 
 Once all required information has been provided, click on the Review + create button at the bottom of the page:
 
-
+![](Images/1.12.png)
 
 This will validate that the information provided to the template is correct. Once the information has been validated, click on the Create button at the bottom of the page.
 
-
+![](Images/1.13.png)
 
 This will initiate the deployment. It should normally take about 5 minutes for the whole deployment to complete.
 
 ## Synapse pipeline template
 
-WIP
+1.  After the pre-reqs are complete, navigate to the Synapse workspace just created
+
+![](Images/2.1.png)
+
+2.  Open the Synapse Studio
+
+![](Images/2.2.png)
+
+3.  In the Synapse Studio, select the sixth icon on the left to go to the Manage page. Click on Workspace packages and then upload the following two required packages:
+- [Graphframes.whl](https://github.com/microsoft/adb2spark/blob/main/graphframes-0.8.2-py3-none-any.whl)
+- [GraphframesSpark.jar](https://spark-packages.org/package/graphframes/graphframes)
+Confirm the Scala version of the pool matches to the packages
+
+![](Images/2.3.png)
+![](Images/2.4.png)
+
+4.  Click on the Apache Spark pools and then in the three dots for more options 
+
+![](Images/2.5.png)
+
+5.  Select the workspace packages to enable use
+
+![](Images/2.6.png)
 
 ## **PBI report template**
 Below steps will help to link datasets that are generated using Synapse pipeline above to link to PowerBI 
