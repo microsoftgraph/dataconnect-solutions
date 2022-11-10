@@ -183,48 +183,40 @@ Below steps will help to link datasets that are generated using Synapse pipeline
 Template. 
 1. Download and install Microsoft Power BI Desktop if you don’t have it installed already on your machine. 
     - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center. [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494)
-2. Download the pre-created PowerBI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. Link to download PowerBI Report. [here](http://aka.ms/ona-m365-pbi)
+2. Download the pre-created PowerBI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. Link to download PowerBI template. [here](http://aka.ms/ona-m365-pbi)
+
+![](Images/4.0.png)
 
 3. Open the PowerBI file and click on Transform data → Data source settings
 
-![](Images/43.png)
+![](Images/4.1.png)
 
-4. You will see data sources in the Data source settings page
+4. You will see 2 data sources in the Data source settings page
 
-![](Images/44.png)
+![](Images/4.2.png)
 
 5. Select one of the data source settings and click on Change Source.
     - Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline Step 11 above
     - Repeat changing storage account names to all Data sources in current file.
 
-![](Images/45.png)
+![](Images/4.3.png)
 
-6. Two data sources you need to update the path with right Date and correct location values for the data generated for Sharing and Sites datasets.
-    - Click on data sources
-    - Change path with right date and GUID Values Example: (https://**StorageAccountName**.dfs.core.windows.net/output/users.csv **YYYY-MM-DD**) 
-    
-    After changing the paths your new path should be like below Example: (https://xyzabcpqr1234.dfs.core.windows.net/output/users.csv)
-
-    - You can get location values by navigating to storage account 
-
-![](Images/46.png)
-
-7. Now we need to give the right storage account key / credentials for these data sources.
+6. Set the right storage account key / credentials for these data sources.
     - Click on Edit Permissions
 
-        ![](Images/47-a.png)        
+        ![](Images/4.4.a.png)        
 
     - Click on Edit under credentials
 
-        ![](Images/47-b.png)        
+        ![](Images/4.4.b.png)        
 
     - Enter the storage account key value
 
-        ![](Images/47-c.png)        
+        ![](Images/4.4.c.png)        
 
     If you don’t know have storage key get the storage account key by navigating to storage account in azure portal (storage account → access keys)
 
-        ![](Images/47-d.png)        
+        ![](Images/4.4.d.png)        
 
 8. Congratulations, you are all set and will see that the report will be refreshed with the latest data
 
