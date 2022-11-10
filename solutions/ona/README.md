@@ -261,4 +261,4 @@ Betweenness – Evaluate information flow: Capture the approximate betweenness o
 This template is in PREVIEW stage at this time. The following considerations apply:
 - Link the Power BI to the pipeline output the next day after executing the pipeline or consider additional resources to reduce calculation time
 - The network graph visualizations in the Power BI template are limited to 1500 nodes
-- The Betweenness index provides an approximation via sampling to avoid excesive compute effort and calculation time. This index might be replaced in the upcoming months
+- The Betweenness index provides an approximation via sampling to avoid excesive compute effort and calculation time
