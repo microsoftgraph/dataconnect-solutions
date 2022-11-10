@@ -214,11 +214,11 @@ Template.
 
         ![](Images/4.4.c.png)        
 
-    If you don’t know have storage key get the storage account key by navigating to storage account in azure portal (storage account → access keys)
+    - The storage key can be retrieved by navigating to the storage account in azure portal (storage account → access keys)
 
         ![](Images/4.4.d.png)        
-
-8. Congratulations, you are all set and will see that the report will be refreshed with the latest data
+        
+7. Congratulations, you are all set and will see that the report will be refreshed with the latest data
 
     ![](Images/0.png) 
 
