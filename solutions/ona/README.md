@@ -162,19 +162,19 @@ Confirm the Scala version of the pool matches to the packages
 
 ![](Images/3.9.png)
 
-11. Provide the required parameters. Use one month per pipeline run. Use date format 'YYYY-MM-DD'. 
+11. Provide the required parameters. Use one month per pipeline run. Use date format 'YYYY-MM-DD'.
 Use the Storage Account created in the resource group (to get the URL, navigate to the resource group -> storage account -> Endpoints -> Data Lake Storage -> Primary endpoint)
-If required, change the flags if only certain datasets should run.
+If required, change the flags if only certain datasets should run
 
 ![](Images/3.10.png)
 ![](Images/3.11.1.png)
 ![](Images/3.11.2.png)
 
-12. Congratulations! You just triggered the MGDC pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account.
+12. Congratulations! You just triggered the MGDC pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account
 
 ![](Images/3.12.png)
 
-13. You will see the data in the storage account.
+13. You will see the data in the storage account
 
 ![](Images/3.13.png)
 
@@ -267,6 +267,6 @@ Betweenness – Evaluate information flow: Capture the approximate betweenness o
 
 ## **Preview Considerations**
 This template is in PREVIEW stage at this time. The following considerations apply:
+- Link the Power BI to the pipeline output the next day after executing the pipeline or consider additional resources to reduce calculation time
 - The network graph visualizations in the Power BI template are limited to 1500 nodes
-- The template has been tested in tenant sizes of <500 users
 - The Betweenness index provides an approximation via sampling to avoid excesive compute effort and calculation time. This index might be replaced in the upcoming months
