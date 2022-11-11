@@ -248,21 +248,21 @@ The Node Analysis page provides additional drill-down information of the interac
 
 **Influence Analysis Page**
 Influence – Explore influential connections: Measures the influence of nodes as being well-connected to others. A high score identifies that the node’s perspective will cascade to others efficiently. How to engage:
-    -  Identify influencers
-    -  Explore the profile of the influencers: Title, Department, Country
-    -  Compare period vs period to analyze consistency
+- Identify influencers
+- Explore the profile of the influencers: Title, Department, Country
+- Compare period vs period to analyze consistency
 
 **Network Size and Breadth Page**
 Network Size and Breadth – Empower inclusive networks: Rank the nodes based on their number of connections to identify isolated groups that may be lacking information or left apart.
-    -  Identify siloes and communities that may not be interacting the most
-    -  Compare period vs period to analyze consistency
+- Identify siloes and communities that may not be interacting the most
+- Compare period vs period to analyze consistency
 
 **Bridging Analysis Page**
 Bridging – Evaluate information flow: Capture the probability to be on the information flow between two communities. Helps to identify potential gatekeepers, change agents, or controllers, and to remove bottlenecks.
-    -  Identify key bridges and their departments
-    -  Analyze the correlation of bridging and influence: 
-        -  High bridging and high influence may imply a leader
-        -  High bridging and low influence may imply a bottleneck 
+- Identify key bridges and their departments
+- Analyze the correlation of bridging and influence: 
+    - High bridging and high influence may imply a leader
+    - High bridging and low influence may imply a bottleneck 
 
 ## **Preview Considerations**
 This template is in PREVIEW stage at this time. The following considerations apply:
