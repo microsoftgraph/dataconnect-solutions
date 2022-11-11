@@ -266,6 +266,6 @@ Bridging – Evaluate information flow: Capture the probability to be on the inf
 
 ## **Preview Considerations**
 This template is in PREVIEW stage at this time. The following considerations apply:
-- There may be updates performed regularly to fix eventual bugs 
+- There may be updates performed regularly to fit for adjustments and fixes 
 - The network graph visualizations in the Power BI template are limited to 1500 nodes
 - The Betweenness index provides an approximation via sampling to avoid excesive compute effort and calculation time
