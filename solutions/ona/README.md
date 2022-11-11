@@ -17,7 +17,7 @@ The purpose of ONA is to harness information flows and team connectivity to unlo
 
 **After you follow these steps, you will have a Power BI dashboard related to Organizational Network Analysis, like the one shown below.**
 
-![](Images/0.png) 
+![](Images/0.1.png) 
 
 ## Installing Pre-reqs
 The first step to running this template would be to create an application in the tenant and use that appId 
@@ -217,10 +217,17 @@ Template.
     - The storage key can be retrieved by navigating to the storage account in azure portal (storage account → access keys)
 
         ![](Images/4.4.d.png)        
-        
-7. Congratulations, you are all set and will see that the report will be refreshed with the latest data
 
-    ![](Images/0.png) 
+7. Confirm the Source and Navigation steps in each data source match to the folder location and file ID
+
+![](Images/5.1.png)
+
+![](Images/5.2.png)
+
+8. Congratulations, you are all set and will see that the report will be refreshed with the latest data
+
+    ![](Images/0.1.png) 
+
 
 **Overview Page**
 From the Overview page, you can start analyzing the network graph created from the interactions of the M365 communication data, understand the flow of interactions between departments, have a glance at the raw data populating the graphs, and evaluate the amount of connections and interactions of the nodes. There are date and flags filters available for comparison.
@@ -233,7 +240,7 @@ An interaction can be either of the following:
 
 This blend of interactions is informed by investigations from Microsoft Research (MSR) using statistical insights from US-based Microsoft employees.
 The two flags available to classify the nodes are the following and can be configured using parameters:
--  Bridge flag: Top 15 percentile betweenness index
+-  Bridge flag: Top 15 percentile bridging index
 -  Centrality flag: Top 15 percentile degree index 
 
 **Node Analysis Page**
@@ -245,20 +252,20 @@ Influence – Explore influential connections: Measures the influence of nodes a
     -  Explore the profile of the influencers: Title, Department, Country
     -  Compare period vs period to analyze consistency
 
-**Influence Analysis Page**
+**Network Size and Breadth Page**
 Network Size and Breadth – Empower inclusive networks: Rank the nodes based on their number of connections to identify isolated groups that may be lacking information or left apart.
     -  Identify siloes and communities that may not be interacting the most
     -  Compare period vs period to analyze consistency
 
-**Betweenness Analysis Page**
-Betweenness – Evaluate information flow: Capture the approximate betweenness of nodes as their probability to be on the information flow between two people. Helps to identify potential gatekeepers, change agents, or controllers, and to remove bottlenecks.
+**Bridging Analysis Page**
+Bridging – Evaluate information flow: Capture the probability to be on the information flow between two communities. Helps to identify potential gatekeepers, change agents, or controllers, and to remove bottlenecks.
     -  Identify key bridges and their departments
-    -  Analyze the correlation of betweenness and influence: 
-        -  High betweenness and high influence usually imply a leader
-        -  High betweenness and low influence may imply a bottleneck 
+    -  Analyze the correlation of bridging and influence: 
+        -  High bridging and high influence may imply a leader
+        -  High bridging and low influence may imply a bottleneck 
 
 ## **Preview Considerations**
 This template is in PREVIEW stage at this time. The following considerations apply:
-- Link the Power BI to the pipeline output the next day after executing the pipeline or consider additional resources to reduce calculation time
+- There may be updates performed regularly to fix eventual bugs 
 - The network graph visualizations in the Power BI template are limited to 1500 nodes
 - The Betweenness index provides an approximation via sampling to avoid excesive compute effort and calculation time
