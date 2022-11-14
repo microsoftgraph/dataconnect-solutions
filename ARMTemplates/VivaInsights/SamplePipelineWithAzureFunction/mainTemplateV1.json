@@ -702,8 +702,8 @@
                         "typeProperties": {
                             "tableName": "[variables('datasetName')]",
                             "dateFilterColumn": "MetricDate",
-                            "startTime": "[variables('currentTime')]",
-                            "endTime": "[dateTimeAdd(variables('currentTime'), '-P3M')]"
+                            "startTime": "[dateTimeAdd(variables('currentTime'), '-P3M')]",
+                            "endTime": "[variables('currentTime')]"
                         }
                     },
                     "dependsOn": [
