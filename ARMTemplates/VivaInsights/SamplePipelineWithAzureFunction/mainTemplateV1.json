@@ -30,8 +30,7 @@
         "destinationAdlsAccountName": "[concat('astore', uniqueString(resourceGroup().id))]",
         // Name given to the key vault created in the Partner subscription.
         "keyVaultName": "[concat('keyvault', uniqueString(resourceGroup().id))]",
-        "datasetName": "VivaInsightsDataset_PersonReport_v1",
-        "currentTime": "utcNow()"
+        "datasetName": "VivaInsightsDataset_PersonReport_v1"
     },
     "resources": [
         // Script to get the service principal from an app registration in the Partner subscription. Written by MGDC team.
@@ -351,6 +350,12 @@
                             "type": "LinkedServiceReference"
                         },
                         "annotations": [],
+                        "parameters": {
+                            "PipelineStartTime": {
+                                "type": "string"
+
+                            }
+                        },
                         "type": "Office365Table",
                         "structure": [
                             {
@@ -702,8 +707,8 @@
                         "typeProperties": {
                             "tableName": "[variables('datasetName')]",
                             "dateFilterColumn": "MetricDate",
-                            "startTime": "[dateTimeAdd(variables('currentTime'), '-P3M')]",
-                            "endTime": "[variables('currentTime')]"
+                            "startTime": "@addDays(dataset().PipelineStartTime, -90)",
+                            "endTime": "@dataset().PipelineStartTime"
                         }
                     },
                     "dependsOn": [
@@ -770,7 +775,9 @@
                                 "inputs": [{
                                         "referenceName": "[concat('Office365DataSet', variables('datasetName'))]",
                                         "type": "DatasetReference",
-                                        "parameters": {}
+                                        "parameters": {
+                                            "PipelineStartTime": "@pipeline().TriggerTime"
+                                        }
                                     }
                                 ],
                                 "outputs": [{
