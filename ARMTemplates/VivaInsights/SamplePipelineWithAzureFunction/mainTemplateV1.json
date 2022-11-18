@@ -350,6 +350,12 @@
                             "type": "LinkedServiceReference"
                         },
                         "annotations": [],
+                        "parameters": {
+                            "PipelineStartTime": {
+                                "type": "string"
+
+                            }
+                        },
                         "type": "Office365Table",
                         "structure": [
                             {
@@ -699,7 +705,10 @@
                             }
                         ],
                         "typeProperties": {
-                            "tableName": "[variables('datasetName')]"
+                            "tableName": "[variables('datasetName')]",
+                            "dateFilterColumn": "MetricDate",
+                            "startTime": "@addDays(dataset().PipelineStartTime, -90)",
+                            "endTime": "@dataset().PipelineStartTime"
                         }
                     },
                     "dependsOn": [
@@ -766,7 +775,9 @@
                                 "inputs": [{
                                         "referenceName": "[concat('Office365DataSet', variables('datasetName'))]",
                                         "type": "DatasetReference",
-                                        "parameters": {}
+                                        "parameters": {
+                                            "PipelineStartTime": "@pipeline().TriggerTime"
+                                        }
                                     }
                                 ],
                                 "outputs": [{
