@@ -209,12 +209,14 @@
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
+            "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
             "apiVersion": "2018-07-01",
             "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'mgdc')]",
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'output')]",
+                "[resourceId('Microsoft.Resources/deploymentScripts','GrantSynapseAccessToStorage')]"
             ],
-            "name": "[concat(variables('destinationAdlsAccountName'), '/Microsoft.Authorization/', guid(resourceGroup().id, deployment().name))]",
+            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',guid(subscription().id, deployment().name, resourceGroup().id))]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
                 "principalId": "[reference('GrantSynapseAccessToStorage').outputs.PrincipalId]"
