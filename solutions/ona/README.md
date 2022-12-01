@@ -97,7 +97,10 @@ If required, change the flags if only certain datasets should run
 ## **PBI Report Template**
 
 For setup instructions and usage, please refer to the documentation [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/PBItemplate) 
-Download the pre-created PowerBI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. Link to download PowerBI template. [here](http://aka.ms/ona-m365-pbi)
+
+Download the pre-created PowerBI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. 
+
+Link to download PowerBI template. [here](http://aka.ms/ona-m365-pbi)
 
 ## **Preview Considerations**
 This template is in PREVIEW stage at this time. The following considerations apply:
