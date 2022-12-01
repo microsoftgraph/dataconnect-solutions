@@ -1,4 +1,4 @@
-## **PBI Report Template**
+# **PBI Report Template**
 
 - [Setup](#Setup)
 - [Usage](#Usage)
@@ -9,7 +9,7 @@ Below steps will help to link datasets that are generated using Synapse pipeline
 Template. 
 1. Download and install Microsoft Power BI Desktop if you don’t have it installed already on your machine. 
     - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center. [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494)
-2. Download the pre-created PowerBI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. Link to download PowerBI template. [here](http://aka.ms/ona-m365-pbi)
+2. Download the pre-created PowerBI report from this folder.
 
 ![](Images/4.0.png)
 
