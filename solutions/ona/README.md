@@ -13,6 +13,13 @@
 
 The purpose of ONA is to harness information flows and team connectivity to unlock productivity, innovation, employee engagement and organizational change. This solution template enables customers to leverage ONA metrics from M365 data and analyze the networks within.
 
+The template leverages four data sets:
+- AAD Users (BasicDataSet_v0.User_v1)
+- Teams Chats (BasicDataSet_v0.TeamChat_v1)
+- Outlook Emails (BasicDataSet_v0.Message_v1)
+- Outlook Calendar (BasicDataSet_v0.CalendarView_v0)
+
+The later 3 are used to extract interactions from user-to-user activity. More calculation details are available [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/PBItemplate#usage)  
 
 **After you follow these steps, you will have a Power BI dashboard related to Organizational Network Analysis, like the one shown below.**
 
@@ -34,6 +41,11 @@ The link below sets up the Azure resource group for the template, which are:
 Custom deployment - Microsoft Azure [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fona%2FARMTemplate%2Fazuredeploy.json?token=AATN3TJ6UQWU7TFMZ2R6ZW3ASL5JQ)
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fona%2FARMTemplate%2Fazuredeploy.json?token=AATN3TJ6UQWU7TFMZ2R6ZW3ASL5JQ"><img src="https://camo.githubusercontent.com/bad3d579584bd4996af60a96735a0fdcb9f402933c139cc6c4c4a4577576411f/68747470733a2f2f616b612e6d732f6465706c6f79746f617a757265627574746f6e" alt="Deploy Environment in Azure" /></a>
+
+
+Provide Storage Blob Data Contributor access to the user who is developing the solution. The Synapse workspace should already have access with the automated deployment. 
+
+![](Images/6.0.png)
 
 ## Synapse Pipeline Template
 
@@ -100,7 +112,7 @@ For setup instructions and usage, please refer to the documentation [here](https
 
 Download the pre-created PowerBI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. 
 
-Link to download PowerBI template. [here](http://aka.ms/ona-m365-pbi)
+Link to download PowerBI template [here](http://aka.ms/ona-m365-pbi)
 
 ## **Preview Considerations**
 This template is in PREVIEW stage at this time. The following considerations apply:
