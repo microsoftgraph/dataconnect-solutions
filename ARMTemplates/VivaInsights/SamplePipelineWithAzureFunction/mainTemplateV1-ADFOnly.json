@@ -28,8 +28,6 @@
         "factoryName": "[concat('M365-', uniqueString(resourceGroup().id))]",
         // Name given to the storage account created in the Partner subscription.
         "destinationAdlsAccountName": "[concat('astore', uniqueString(resourceGroup().id))]",
-        // Name given to the key vault created in the Partner subscription.
-        "keyVaultName": "[concat('keyvault', uniqueString(resourceGroup().id))]",
         "datasetName": "VivaInsightsDataset_PersonReport_v1"
     },
     "resources": [
