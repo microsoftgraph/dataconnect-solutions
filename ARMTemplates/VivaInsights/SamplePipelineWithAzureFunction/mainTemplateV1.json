@@ -708,7 +708,10 @@
                             "tableName": "[variables('datasetName')]",
                             "dateFilterColumn": "MetricDate",
                             "startTime": "@addDays(dataset().PipelineStartTime, -90)",
-                            "endTime": "@dataset().PipelineStartTime"
+                            "endTime": "@dataset().PipelineStartTime",
+                            "AdditionalDataSetProperties": {
+                                "aggregationType": "Week"
+                            }
                         }
                     },
                     "dependsOn": [
