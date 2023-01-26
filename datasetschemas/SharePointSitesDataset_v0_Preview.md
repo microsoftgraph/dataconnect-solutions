@@ -44,3 +44,16 @@ The SharePointSitesDataset_v0_Preview dataset contains SharePoint site informati
 | CreatedTime | datetime |When the site was created (in UTC)|`2020-11-18T19:51:38Z`|0|false|
 | LastSecurityModifiedDate | datetime |When security on the site was last changed (in UTC)|`2020-11-18T19:51:38Z`|0|false|
 | SnapshotDate | datetime When this site information was captured (in UTC)|`2020-11-18T19:51:38Z`|1|true|
+| Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted'|
+
+## Notes
+
+- The "Operation" property with the Full or Delta Mode can be utilized in the examples below
+    1. To get a full snapshot, please ensure that start and end date are the SAME date
+        - start: 1/1/2023
+        - end: 1/1/2023
+        - user recieves: One full snapshot of data from requested time period of 1/1/2023
+    2. To get rows of a snapshot with only additions or deletions (delta mode), ensure start and data ranges are different in chronological order
+        - start: 1/1/2023
+        - end: 1/3/2023
+        - user recieves: either rows added or deleted from this time period. If no rows are returned, there were no changes in data during this time period.
