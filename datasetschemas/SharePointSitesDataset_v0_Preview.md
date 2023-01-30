@@ -44,3 +44,19 @@ The SharePointSitesDataset_v0_Preview dataset contains SharePoint site informati
 | CreatedTime | datetime |When the site was created (in UTC)|`2020-11-18T19:51:38Z`|0|false|
 | LastSecurityModifiedDate | datetime |When security on the site was last changed (in UTC)|`2020-11-18T19:51:38Z`|0|false|
 | SnapshotDate | datetime When this site information was captured (in UTC)|`2020-11-18T19:51:38Z`|1|true|
+| Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted'|
+
+## Notes
+
+The "Operation" property is related to the Full or Delta Mode. Please refer to the examples below.   
+1. To get a full snapshot, please ensure that start and end date are the SAME date       
+    - Start date: 1/1/2023       
+    - End date: 1/1/2023       
+    - User receives one full snapshot of data for that day (1/1/2023).       
+    - For all objects, the Operation will be “Full”    
+
+2. To get a Delta snapshot, with only the objects that were created/updated/deleted. Please ensure the start date and end date are different and the start date is before the end date.            
+    - Start date: 1/1/2023       
+    - End date: 1/3/2023       
+    - User receives objects that were created, updated or deleted in this time period. If no rows are returned, there were no changes during this time period.        
+    - For each object, the Operation will be “Created”, “Updated” or “Deleted”.
