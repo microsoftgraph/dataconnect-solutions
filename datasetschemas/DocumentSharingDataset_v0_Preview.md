@@ -44,15 +44,19 @@ SharePoint sharing information, showing what is being shared and who are the sha
 
 ## Notes
 
-- Sharing recipient is person or group with whom a resource is being shared.
+- SharedWith fields refer to a person or group with whom a resource is being shared with.
 - In a later release, we will offer a “Sites” data set which can be joined to this “Sharing” data set by Site Id. In the meantime, ItemURL is offered to help understand where the item is being shared.  
 - The “Shared With Count” property is useful if you decide to exclude the “Shared With” column from the data set for privacy reasons.
-- The "Operation" property with the Full or Delta Mode can be utilized in the examples below
-    1. To get a full snapshot, please ensure that start and end date are the SAME date
-        - start: 1/1/2023
-        - end: 1/1/2023
-        - user recieves: One full snapshot of data from requested time period of 1/1/2023
-    2. To get rows of a snapshot with only additions or deletions (delta mode), ensure start and data ranges are different in chronological order
-        - start: 1/1/2023
-        - end: 1/3/2023
-        - user recieves: either rows added or deleted from this time period. If no rows are returned, there were no changes in data during this time period.
+- The "Operation" property is related to the Full or Delta Mode. Please refer to the examples below.   
+    1. To get a full snapshot, please ensure that start and end date are the SAME date       
+        - Start date: 1/1/2023       
+        - End date: 1/1/2023       
+        - User receives one full snapshot of data for that day (1/1/2023).       
+        - For all objects, the Operation will be “Full”    
+
+    2. To get a Delta snapshot, with only the objects that were created/updated/delete. Please ensure the start date and end date are different and the start date is before the end date.       
+        - Start date: 1/1/2023       
+        - End date: 1/3/2023       
+        - User receives objects that were created, updated or deleted in this time period. If no rows are returned, there were no changes during this time period.        
+        - For each object, the Operation will be “Created”, “Updated” or “Deleted”.
+  
