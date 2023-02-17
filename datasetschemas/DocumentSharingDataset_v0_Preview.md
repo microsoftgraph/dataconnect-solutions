@@ -35,12 +35,12 @@ SharePoint sharing information, showing what is being shared and who are the sha
 | SharedWith, Name | String | Name of sharing recipient |
 | SharedWith, EmailAddress | String | Email of sharing recipient (optional, won’t show for SharePoint groups or special security groups) |
 | SnapshotDate | Date | Data this data set was collected, in UTC |
-| ShareCreatedBy | String | The user or group that created the sharing link. Format: <Struct <Type: String, Name: String, Email: String >|
+| ShareCreatedBy | String | The user or group that created the sharing link. Format: <Struct <Type: String, Name: String, Email: String>> |
 | ShareCreatedTime | Date | The date and time when the share link was created |
-| ShareLastModifiedBy | String | The user or group that last modified the sharing link. Format: <Struct <Type: String, Name: String, Email: String > |
+| ShareLastModifiedBy | String | The user or group that last modified the sharing link. Format: <Struct <Type: String, Name: String, Email: String>> |
 | ShareLastModifiedTime | Date | The date and time when the share was last modified |
 | ShareExpirationTime | Date | The date and time when the share link will expire |
-| Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted'|
+| Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted')|
 
 ## Notes
 
