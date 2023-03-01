@@ -61,7 +61,7 @@ By clicking on the above button (or navigating to the linked URL), users will be
 On that screen, on top of providing information about the resource group and region to deploy the components into, they will need to provide the following information:
 
 - Application Id to be used by MGDC (from step #3, ending in e430)
-- Application secret for that app
+- Application secret (Note: the secret is the value generated in Step 10 above) for that app
 
 Once all required information has been provided, click on the Review + create button at the bottom of the page:
 

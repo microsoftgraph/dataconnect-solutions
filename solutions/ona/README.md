@@ -61,7 +61,7 @@ Provide Storage Blob Data Contributor access to the user who is developing the s
 
 4.  Provide the parameters of the Linked Service 
         a. Select Authentication Type = Service Principal 
-        b. Use the storage account name (starting with "onastore"), SPN id and secret (SPN key) from the pre-req steps above
+        b. Use the storage account name (starting with "onastore"), SPN id (application id from Step 3 in pre-req steps) and secret (SPN key or client secret value Step 10 in pre-req steps) from the pre-req steps above
         c. Test Connection and then click on Create
 
 ![](Images/3.3.png)
