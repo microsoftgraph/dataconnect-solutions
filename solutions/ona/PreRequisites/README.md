@@ -1,5 +1,12 @@
 # Installing Pre-reqs
 
+- [Application Registration](#Application-Registration)
+- [Azure Resources Deployment](#Azure-Resources-Deployment)
+- [Synapse Pipeline Packages](#Synapse-Pipeline-Packages)
+
+
+## Application Registration
+
 The first step to running this template would be to create an application in the tenant and use that appId 
 and secret to setup the other required resources.
 
@@ -44,7 +51,9 @@ and secret to setup the other required resources.
 
 ![](Images/1.11.png)
 
-11. Use this link to initiate the setup of the pre-requisites. Use the appid and secret created in the 
+## Azure Resources Deployment
+
+1. Use this link to initiate the setup of the pre-requisites. Use the appid and secret created in the 
 previous steps. Custom deployment - Microsoft Azure [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fona%2FARMTemplate%2Fazuredeploy.json?token=AATN3TJ6UQWU7TFMZ2R6ZW3ASL5JQ)
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fona%2FARMTemplate%2Fazuredeploy.json?token=AATN3TJ6UQWU7TFMZ2R6ZW3ASL5JQ"><img src="https://camo.githubusercontent.com/bad3d579584bd4996af60a96735a0fdcb9f402933c139cc6c4c4a4577576411f/68747470733a2f2f616b612e6d732f6465706c6f79746f617a757265627574746f6e" alt="Deploy Environment in Azure" /></a>
@@ -58,17 +67,34 @@ The link above sets up the pre-requisites to using the information oversharing t
 
 By clicking on the above button (or navigating to the linked URL), users will be brought to the Azure portal on the Custom deployment page.
 
-On that screen, on top of providing information about the resource group and region to deploy the components into, they will need to provide the following information:
+2. On that screen, on top of providing information about the resource group and region to deploy the components into, they will need to provide the following information:
 
 - Application Id to be used by MGDC (from step #3, ending in e430)
-- Application secret (Note: the secret is the value generated in Step 10 above) for that app
+- Application secret for that app
 
-Once all required information has been provided, click on the Review + create button at the bottom of the page:
+3. Once all required information has been provided, click on the Review + create button at the bottom of the page. This will validate that the information provided to the template is correct. 
 
 ![](Images/1.12.png)
 
-This will validate that the information provided to the template is correct. Once the information has been validated, click on the Create button at the bottom of the page.
+4. Once the information has been validated, click on the Create button at the bottom of the page.
 
 ![](Images/1.13.png)
 
 This will initiate the deployment. It should normally take about 5 minutes for the whole deployment to complete.
+
+## Synapse Pipeline Packages
+
+1.  Navigate to the Synapse workspace just created and open the Synapse Studio.
+
+![](Images/2.1.png)
+
+2.  In the Synapse Studio, select the sixth icon on the left to go to the Manage page. Click on Apache Spark pools and right-click the pool to select the Packages.
+
+![](Images/2.2.png)
+![](Images/2.3.png)
+
+3. Upload the following file as a Required File and click Apply.
+
+- [env](env.yaml)
+
+![](Images/2.4.png)

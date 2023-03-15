@@ -1,15 +1,13 @@
-# PREVIEW Organizational Network Analysis template
+# Organizational Network Analysis template
 
 - [Overview](#Overview)
 - [Installing Pre-reqs](#Installing-Pre-reqs)
 - [Synapse Pipeline Template](#Synapse-Pipeline-Template)
 - [PBI Report Template](#PBI-Report-Template)
-- [Preview Considerations](#Preview-Considerations)
+- [Feedback & Considerations](#Feedback-&-Considerations)
 
 
 ## Overview
-
-**Disclaimer: This template is only available for customers in the Preview program. Also, the template is in Preview stage at this time. See [Preview Considerations](#Preview-Considerations) for more information. Feedback is welcome [here](https://aka.ms/ona-m365-feedback)**
 
 The purpose of ONA is to harness information flows and team connectivity to unlock productivity, innovation, employee engagement and organizational change. This solution template enables customers to leverage ONA metrics from M365 data and analyze the networks within.
 
@@ -61,7 +59,7 @@ Provide Storage Blob Data Contributor access to the user who is developing the s
 
 4.  Provide the parameters of the Linked Service 
         a. Select Authentication Type = Service Principal 
-        b. Use the storage account name (starting with "onastore"), SPN id (application id from Step 3 in pre-req steps) and secret (SPN key or client secret value Step 10 in pre-req steps) from the pre-req steps above
+        b. Use the storage account name (starting with "onastore"), SPN id and secret (SPN key) from the pre-req steps above
         c. Test Connection and then click on Create
 
 ![](Images/3.3.png)
@@ -114,7 +112,10 @@ Download the pre-created PowerBI security report that can generate insights from
 
 Link to download PowerBI template [here](http://aka.ms/ona-m365-pbi)
 
-## **Preview Considerations**
-This template is in PREVIEW stage at this time. The following considerations apply:
+## **Feedback & Considerations**
+
+Feedback is welcome [here](https://aka.ms/ona-m365-feedback)
+
+The following considerations apply:
 - There may be updates performed regularly to fit for adjustments and fixes 
 - The network graph visualizations in the Power BI template are limited to 1500 nodes
