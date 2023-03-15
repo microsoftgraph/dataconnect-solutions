@@ -1,6 +1,7 @@
 # **PBI Report Template**
 
 - [Setup](#Setup)
+- [Data Source Updates](#Data-Source-Updates)
 - [Usage](#Usage)
 
 ## Setup
@@ -53,6 +54,32 @@ Template.
 8. Congratulations, you are all set and will see that the report will be refreshed with the latest data
 
     ![](Images/0.1.png) 
+
+## Data Source Updates
+
+To update the data source to point at a different file, these steps are recommended:
+
+1. Within the Power Query portal from Transform data → Data source settings, duplicate the query that you are going to update.
+
+  ![](Images/5.3.png) 
+
+2. From the duplicated query, replace the URL in the Source step and click on the Binary content:
+
+  ![](Images/5.4.png) 
+
+3. Continue with replacing the next steps in the duplicated query.
+
+  ![](Images/5.5.png) 
+
+4. Copy the Source and Navigation formulas into the main query in the same steps.
+
+  ![](Images/5.6.png) 
+
+5. In the Navigation step, double click the file and proceed inserting a new step.
+
+  ![](Images/5.7.png) 
+
+6. Delete the old Imported step (and any other that applied to the previous data only) and save & apply changes. 
 
 ## Usage
 
