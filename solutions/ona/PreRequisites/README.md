@@ -95,6 +95,6 @@ This will initiate the deployment. It should normally take about 5 minutes for t
 
 3. Upload the following file as a Required File and click Apply.
 
-- [env](env.yaml)
+- [env](env.yml)
 
 ![](Images/2.4.png)
