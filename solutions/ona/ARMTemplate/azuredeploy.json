@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "AppId": {
-            "type": "string",
+            "type": "String",
             "metadata": {
                 "description": "The id of the Azure AD Application that has access to the destination Azure Storage Account."
             }
         },
         "AppSecret": {
-            "type": "securestring",
+            "type": "SecureString",
             "metadata": {
                 "description": "The secret for the Azure AD Application that has access to the destination Azure Storage Account."
             }
@@ -31,12 +31,12 @@
                 "forceUpdateTag": "1",
                 "azPowerShellVersion": "3.0",
                 "environmentVariables": [
-                {
-                    "name":"AppSecret",
-                    "secureValue": "[parameters('AppSecret')]"
-                }
+                    {
+                        "name": "AppSecret",
+                        "secureValue": "[parameters('AppSecret')]"
+                    }
                 ],
-                "arguments": "[format(' -AppID {0} -TenantId {1} -AppToGet {2}', parameters('AppId'), subscription().tenantId, parameters('AppId'))]",
+                "arguments": "[format(' -AppID {0} -TenantId {1} -AppToGet {2} -ServicePrincipalName {3}', parameters('AppId'), subscription().tenantId, parameters('AppId'), variables('WorkspaceName'))]",
                 "primaryScriptUri": "https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/ARMTemplates/SupportScripts/GetServicePricipalId.ps1",
                 "timeout": "PT30M",
                 "cleanupPreference": "OnSuccess",
@@ -133,12 +133,12 @@
         {
             "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
             "apiVersion": "2018-07-01",
+            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',guid(subscription().id, deployment().name))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'mgdc')]",
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'output')]",
                 "[resourceId('Microsoft.Resources/deploymentScripts','ApplicationScript')]"
             ],
-            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',guid(subscription().id, deployment().name))]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'b24988ac-6180-42a0-ab88-20f7382dd24c')]",
                 "principalId": "[reference('ApplicationScript').outputs.PrincipalId]"
@@ -147,11 +147,11 @@
         {
             "type": "Microsoft.Storage/storageAccounts/blobServices/containers/providers/roleAssignments",
             "apiVersion": "2018-07-01",
+            "name": "[concat(variables('destinationAdlsAccountName'), '/default/mgdc/Microsoft.Authorization/', guid(subscription().id, resourceGroup().id))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'mgdc')]",
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'output')]"
             ],
-            "name": "[concat(variables('destinationAdlsAccountName'), '/default/mgdc/Microsoft.Authorization/', guid(subscription().id, resourceGroup().id))]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
                 "principalId": "[reference('ApplicationScript').outputs.PrincipalId]"
@@ -162,6 +162,9 @@
             "apiVersion": "2021-06-01",
             "name": "[variables('WorkspaceName')]",
             "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('destinationAdlsAccountName'), 'default')]"
+            ],
             "identity": {
                 "type": "SystemAssigned"
             },
@@ -178,10 +181,7 @@
                 },
                 "managedResourceGroupName": "[concat('synapseworkspace-managedrg-', uniqueString(resourceGroup().id))]",
                 "privateEndpointConnections": []
-            },
-            "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('destinationAdlsAccountName'), 'default')]"
-            ]
+            }
         },
         {
             "type": "Microsoft.Resources/deploymentScripts",
@@ -193,12 +193,12 @@
                 "forceUpdateTag": "1",
                 "azPowerShellVersion": "3.0",
                 "environmentVariables": [
-                {
-                    "name":"AppSecret",
-                    "secureValue": "[parameters('AppSecret')]"
-                }
+                    {
+                        "name": "AppSecret",
+                        "secureValue": "[parameters('AppSecret')]"
+                    }
                 ],
-                "arguments": "[format(' -AppID {0} -TenantId {1} -ServicePrincipalName {2}', parameters('AppId'), subscription().tenantId, variables('WorkspaceName'))]",
+                "arguments": "[format(' -AppID {0} -TenantId {1} -AppToGet {2} -ServicePrincipalName {3}', parameters('AppId'), subscription().tenantId, parameters('AppId'), variables('WorkspaceName'))]",
                 "primaryScriptUri": "https://raw.githubusercontent.com/microsoftgraph/dataconnect-solutions/main/ARMTemplates/SupportScripts/GetServicePricipalId.ps1",
                 "timeout": "PT30M",
                 "cleanupPreference": "OnSuccess",
@@ -211,12 +211,12 @@
         {
             "type": "Microsoft.Storage/storageAccounts/providers/roleAssignments",
             "apiVersion": "2018-07-01",
+            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',guid(subscription().id, deployment().name, resourceGroup().id))]",
             "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'mgdc')]",
                 "[resourceId('Microsoft.Storage/storageAccounts/blobServices/containers', variables('destinationAdlsAccountName'), 'default', 'output')]",
                 "[resourceId('Microsoft.Resources/deploymentScripts','GrantSynapseAccessToStorage')]"
             ],
-            "name": "[concat(variables('destinationAdlsAccountName'),'/Microsoft.Authorization/',guid(subscription().id, deployment().name, resourceGroup().id))]",
             "properties": {
                 "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')]",
                 "principalId": "[reference('GrantSynapseAccessToStorage').outputs.PrincipalId]"
