@@ -1,0 +1,586 @@
+{
+  "DataSet": {
+    "TableName": "VivaInsightsDataset_PersonReport_v1", // Dataset for the WPA Viva Insights V1
+    "Columns": [
+      {
+        "Name": "After-hours collaboration hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "After-hours email hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "After-hours chat hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "After-hours meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "After-hours scheduled call hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "After-hours unscheduled call hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Collaboration hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Email hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Chat hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Scheduled call hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Unscheduled call hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Conflicting meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Meetings with manager 1:1",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "IsActive",
+        "Type": "boolean",
+        "Description": "",
+        "SampleData": "False",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "MetricDate",
+        "Type": "datetime",
+        "Description": "The date and time the message was created.",
+        "SampleData": "2017-10-21T16:50:28.9146164Z",
+        "FilterOptions": 1, // Allows inquality in the filter
+        "IsDateFilter": true
+      },
+      {
+        "Name": "After-hours call hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Call hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Multitasking hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Emails sent",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Meetings",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Chats sent",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Calls",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Meeting and call hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Weekend emails sent",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Weekend chats sent",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Weekend meetings",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Unscheduled weekend calls",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Urgent email hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Urgent meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Small-group meeting call and chat hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Small-group emails sent excluding manager",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Small-group chats sent excluding manager",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Internal meeting hours with 3 to 8 attendees",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Internal meeting hours without manager 1:1",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Unscheduled call hours with manager 1:1",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Unscheduled call hours with manager",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Collaboration hours with direct reports",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Small-group emails sent including manager",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Small-group chats sent including manager",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Manager coaching hours 1:1",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Meeting hours with manager",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Meeting hours with manager 1:1",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Meetings with manager",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Meetings with skip level",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Meeting hours with skip level",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Internal network size",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "External collaboration hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "External unscheduled call hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "External email hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "External chat hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "External meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Available-to-focus hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Uninterrupted hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Interrupted hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Small and short meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Small and short recurring meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Large and long meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Large and long recurring meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Large and short meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Large and short recurring meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Small and long meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Small and long recurring meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Recurring meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Working-hours collaboration hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Working-hours email hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Working-hours call hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Working-hours chat hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "Working-hours meeting hours",
+        "Type": "double",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      },
+      {
+        "Name": "ObjectId",
+        "Type": "string",
+        "Description": "",
+        "SampleData": "",
+        "FilterOptions": 0,
+        "IsDateFilter": false
+      }
+    ],
+    "CustomizationOptions": 1 // 1 is for DateFilter
+  },
+  "DiscoveryServiceDatasetType": "MGDC",
+  "MGDCDatasetType": "PreExtractedDataDelivery",
+  "BillingMeterIdAllowedList": [],
+  "AllowedRegions": [
+    "NAM",
+    "EUR",
+    "Dev"
+  ],
+  "PrivacyPolicy": [],
+  "FilterableSubColumns": [],
+  "PostProcessingRule": {},
+  "ExtractionConfigs": [
+    {
+      "TablePathName": "Viva Insights",
+      "OnboardingDelayInHours": 0,
+      "ExposedToApps": {}
+    }
+  ]
+}
