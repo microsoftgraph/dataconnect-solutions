@@ -179,7 +179,6 @@
                     "web": "[concat('https://web.azuresynapse.net?workspace=%2fsubscriptions%2f', subscription().subscriptionId,'%2fresourceGroups%2f',resourceGroup().id,'%2fproviders%2fMicrosoft.Synapse%2fworkspaces%2f', variables('WorkspaceName'))]",
                     "dev": "[concat('https://', variables('WorkspaceName'), '.dev.azuresynapse.net')]"
                 },
-                "publicNetworkAccess": "Disabled",
                 "managedResourceGroupName": "[concat('synapseworkspace-managedrg-', uniqueString(resourceGroup().id))]",
                 "privateEndpointConnections": []
             }
