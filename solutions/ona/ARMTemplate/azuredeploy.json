@@ -3,13 +3,13 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "AppId": {
-            "type": "String",
+            "type": "string",
             "metadata": {
                 "description": "The id of the Azure AD Application that has access to the destination Azure Storage Account."
             }
         },
         "AppSecret": {
-            "type": "SecureString",
+            "type": "securestring",
             "metadata": {
                 "description": "The secret for the Azure AD Application that has access to the destination Azure Storage Account."
             }
@@ -18,7 +18,8 @@
     "variables": {
         "destinationAdlsAccountName": "[concat('onastore', uniqueString(resourceGroup().id))]",
         "synapseStorageExternalId": "[concat('/subscriptions/', subscription().subscriptionId,'/resourceGroups/',resourceGroup().name,'/providers/Microsoft.Storage/storageAccounts/')]",
-        "WorkspaceName": "[concat('onasynapse', uniqueString(resourceGroup().id))]"
+        "WorkspaceName": "[concat('onasynapse', uniqueString(resourceGroup().id))]",
+        "EmptyString": "[string('')]"
     },
     "resources": [
         {
