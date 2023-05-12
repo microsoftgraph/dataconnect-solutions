@@ -47,6 +47,8 @@ Provide Storage Blob Data Contributor access to the user who is developing the s
 
 ## Synapse Pipeline Template
 
+As a pre-requisite, ensure that the required packages are installed by following the [Synapse Pipeline Installation instructions](https://github.com/microsoftgraph/dataconnect-solutions/tree/ona-v2-doc-updates/solutions/ona#Synapse-Pipeline-Template)
+
 1.  Download the ONA pipeline template .zip from [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/SynapsePipelineTemplate)
 
 2.  In the Synapse Studio, select the fourth icon on the left to go to the Integrate page. Click on the "+" icon to Add new resource -> Import from pipeline template, and select the downloaded template
@@ -58,8 +60,14 @@ Provide Storage Blob Data Contributor access to the user who is developing the s
 ![](Images/3.2.png)
 
 4.  Provide the parameters of the Linked Service 
+
         a. Select Authentication Type = Service Principal 
-        b. Use the storage account name (starting with "onastore"), SPN id and secret (SPN key) from the pre-req steps above
+
+        b. Use the storage account name (starting with "onastore"), for Service Principal ID use the Application (client) ID), and for Service Principal key use the value from the secret of the application certificate. See screenshots below
+
+![](Images/1.4.png)
+![](Images/1.11.png)
+        
         c. Test Connection and then click on Create
 
 ![](Images/3.3.png)
@@ -83,6 +91,8 @@ Provide Storage Blob Data Contributor access to the user who is developing the s
 9. Verify that the pipeline has been successfully published
 
 ![](Images/3.8.png)
+
+Configure the Synapse Pipeline Package required as described [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/PreRequisites#Synapse-Pipeline-Packages)
 
 10. Trigger the pipeline
 
