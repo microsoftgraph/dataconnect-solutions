@@ -7,7 +7,7 @@ azure-keyvault-certificates==4.2.1
 azure-keyvault-keys==4.3.1
 azure-keyvault-secrets==4.2.0
 azure-storage-blob==12.8.0
-databricks-connect==6.6.0
+databricks-connect==6.4.49
 dill==0.3.3
 gensim==3.8.0
 nltk==3.5
