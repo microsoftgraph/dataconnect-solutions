@@ -1,7 +1,7 @@
 ---
 title: "BasicDataSet_v0.SharePointGroups_v1"
 description: "Contains SharePoint group information, including details about group members."
-author: "David1997sb"
+author: "udaykp-msft"
 localization_priority: Priority
 ms.prod: "data-connect"
 ---

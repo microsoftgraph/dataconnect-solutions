@@ -1,7 +1,7 @@
 ---
 title: "BasicDataSet_v0.SharePointPermissions_v1"
 description: "SharePoint sharing information, showing what is being shared and who are the sharing recipients (including internal users, external users, security groups and SharePoint groups)."
-author: "fercobo-msft"
+author: "udaykp-msft"
 localization_priority: Priority
 ms.prod: "data-connect"
 ---
