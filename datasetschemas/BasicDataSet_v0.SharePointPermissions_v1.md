@@ -1,17 +1,14 @@
 ---
-title: "BasicDataSet_v0.SharePointPermissions_v1 "
+title: "BasicDataSet_v0.SharePointPermissions_v1"
 description: "SharePoint sharing information, showing what is being shared and who are the sharing recipients (including internal users, external users, security groups and SharePoint groups)."
 author: "fercobo-msft"
 localization_priority: Priority
 ms.prod: "data-connect"
 ---
 
-> [!NOTE]
-> The SharePoint Sharing dataset is currently in Preview. To enable this dataset, you need to join the Graph TAP program using the signup form at [https://aka.ms/GraphTAPForm](https://aka.ms/GraphTAPForm) and request to join the Preview.
-
 # Overview
 
-SharePoint sharing information, showing what is being shared and who are the sharing recipients (including internal users, external users, security groups and SharePoint groups).
+The BasicDataSet_v0.SharePointPermissions_v1 dataset contains SharePoint permissions information, showing what is being shared and who are the sharing recipients (including internal users, external users, security groups and SharePoint groups).
 
 ## Properties
 
