@@ -1,14 +1,14 @@
 ---
-title: "SharePointSitesDataset_v0_Preview"
+title: "BasicDataSet_v0.SharePointSites_v1"
 description: "Contains SharePoint site information, including details about name, size, owner, and type."
-author: "David1997sb"
+author: "udaykp-msft"
 localization_priority: Priority
 ms.prod: "data-connect"
 ---
 
 # Overview
 
-The SharePointSitesDataset_v0_Preview dataset contains SharePoint site information, including details about name, size, owner, and type.   
+The BasicDataSet_v0.SharePointSites_v1 dataset contains SharePoint site information, including details about name, size, owner, and type.   
 
 ## Properties
 | Name | Type | Description | SampleData | FilterOptions | IsDateFilter | 
