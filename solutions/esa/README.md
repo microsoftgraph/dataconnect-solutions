@@ -9,17 +9,16 @@
 
 ## Overview
 
-The purpose of ONA is to harness information flows and team connectivity to unlock productivity, innovation, employee engagement and organizational change. This solution template enables customers to leverage ONA metrics from M365 data and analyze the networks within.
+The purpose of ESA is to track what topics people are discussing in internal communications and how they're discussing them. With this tool, you'll be able to detect potential security conflicts, monitor reception to particular events, and gather company-wide sentiment surrounding important concepts. This solution template enables customers to leverage ONA metrics from M365 data and analyze the entities and sentiments therein.
 
-The template leverages four data sets:
+This template leverages several datasets:
+## I don't know what to put here...
 - AAD Users (BasicDataSet_v0.User_v1)
 - Teams Chats (BasicDataSet_v0.TeamChat_v1)
 - Outlook Emails (BasicDataSet_v0.Message_v1)
 - Outlook Calendar (BasicDataSet_v0.CalendarView_v0)
 
-The later 3 are used to extract interactions from user-to-user activity. More calculation details are available [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/PBItemplate#usage)  
-
-**After you follow these steps, you will have a Power BI dashboard related to Organizational Network Analysis, like the one shown below.**
+**After you follow these steps, you will have a Power BI dashboard related to Enitity Sentiment Analysis, like the one shown below.**
 
 ![](https://github.com/v-travhanes/dataconnect-solutions/blob/3c86c07cec44d809553c4c305c7241a03ecb5ae4/solutions/esa/Images/Welcome%20Page.png) 
 
@@ -40,10 +39,11 @@ Custom deployment - Microsoft Azure [here](https://portal.azure.com/#create/Micr
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fona%2FARMTemplate%2Fazuredeploy.json?token=AATN3TJ6UQWU7TFMZ2R6ZW3ASL5JQ"><img src="https://camo.githubusercontent.com/bad3d579584bd4996af60a96735a0fdcb9f402933c139cc6c4c4a4577576411f/68747470733a2f2f616b612e6d732f6465706c6f79746f617a757265627574746f6e" alt="Deploy Environment in Azure" /></a>
 
-
 Provide Storage Blob Data Contributor access to the user who is developing the solution. The Synapse workspace should already have access with the automated deployment. 
 
 ![](Images/6.0.png)
+
+Also, for this solution, you'll need to create an Azure Cognitive Services resource for its Text Analytics tool. You can find a complete tutorial for that [here](https://learn.microsoft.com/en-us/azure/synapse-analytics/machine-learning/tutorial-configure-cognitive-services-synapse).
 
 ## Synapse Pipeline Template
 
