@@ -21,7 +21,7 @@ The later 3 are used to extract interactions from user-to-user activity. More ca
 
 **After you follow these steps, you will have a Power BI dashboard related to Organizational Network Analysis, like the one shown below.**
 
-![](Images/0.1.png) 
+![](https://github.com/v-travhanes/dataconnect-solutions/blob/3c86c07cec44d809553c4c305c7241a03ecb5ae4/solutions/esa/Images/Welcome%20Page.png) 
 
 ## Installing Pre-reqs
 
