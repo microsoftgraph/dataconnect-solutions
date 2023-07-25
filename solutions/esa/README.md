@@ -50,7 +50,7 @@ As a pre-requisite, ensure that the required packages are installed by following
 
 3.  After completing the Pipeline Integration and running the pipeline, you will see the data in the storage account
 
-![](Images/3.13.png)
+![](Images/ADLOutputContainer.png)
 
 ## **PBI Report Template**
 
