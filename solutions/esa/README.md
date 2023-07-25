@@ -44,7 +44,7 @@ Provide Storage Blob Data Contributor access to the user who is developing the s
 
 As a pre-requisite, ensure that the required packages are installed by following the [Synapse Pipeline Installation instructions](https://github.com/microsoftgraph/dataconnect-solutions/tree/ona-v2-doc-updates/solutions/ona#Synapse-Pipeline-Template)
 
-1.  Download the ESA pipeline template .zip from [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/SynapsePipelineTemplate)
+1.  Download the ESA pipeline template .zip from [here](https://github.com/v-travhanes/dataconnect-solutions/tree/main/solutions/esa/SynapsePipelineTemplate)
 
 2.  In the Synapse Studio, select the fourth icon on the left to go to the Integrate page. Click on the "+" icon to Add new resource -> Import from pipeline template, and select the downloaded template
 
