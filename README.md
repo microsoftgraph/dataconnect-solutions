@@ -1,5 +1,8 @@
 # Microsoft Graph Data Connect - Solutions
 
+## [Entity Sentiment Analysis](solutions/esa/README.md)
+
+
 ## [Organizational Network Analysis](solutions/ona/README.md)
 
 The purpose of ONA is to harness information flows and team connectivity to unlock productivity, innovation, employee engagement and organizational change. This solution template enables customers to leverage ONA metrics from M365 data and analyze the networks within.
