@@ -39,7 +39,6 @@ Provide Storage Blob Data Contributor access to the user who is developing the s
 
 ![](Images/6.0.png)
 
-Also, for this solution, you'll need to create an Azure Cognitive Services resource for its Text Analytics tool. You can find a complete tutorial for that [here](https://learn.microsoft.com/en-us/azure/synapse-analytics/machine-learning/tutorial-configure-cognitive-services-synapse).
 
 ## Synapse Pipeline Template
 
