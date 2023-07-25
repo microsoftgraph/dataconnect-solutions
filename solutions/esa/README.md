@@ -11,8 +11,7 @@
 
 The purpose of ESA is to track what topics people are discussing in internal communications and how they're discussing them. With this tool, you'll be able to detect potential security conflicts, monitor reception to particular events, and gather company-wide sentiment surrounding important concepts. This solution template enables customers to leverage ONA metrics from M365 data and analyze the entities and sentiments therein.
 
-This template leverages the Enron emails dataset.
-- AAD Users (BasicDataSet_v0.User_v1)
+This template leverages an Enron emails dataset.
 
 **After you follow these steps, you will have a Power BI dashboard related to Enitity Sentiment Analysis, like the one shown below.**
 
