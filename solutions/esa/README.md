@@ -11,12 +11,8 @@
 
 The purpose of ESA is to track what topics people are discussing in internal communications and how they're discussing them. With this tool, you'll be able to detect potential security conflicts, monitor reception to particular events, and gather company-wide sentiment surrounding important concepts. This solution template enables customers to leverage ONA metrics from M365 data and analyze the entities and sentiments therein.
 
-This template leverages several datasets:
-## I don't know what to put here...
+This template leverages the Enron emails dataset.
 - AAD Users (BasicDataSet_v0.User_v1)
-- Teams Chats (BasicDataSet_v0.TeamChat_v1)
-- Outlook Emails (BasicDataSet_v0.Message_v1)
-- Outlook Calendar (BasicDataSet_v0.CalendarView_v0)
 
 **After you follow these steps, you will have a Power BI dashboard related to Enitity Sentiment Analysis, like the one shown below.**
 
@@ -30,6 +26,7 @@ If you already have an MGDC app and its secret, the automated deployment to Azur
 
 The link below sets up the Azure resource group for the template, which are:
 
+- Create an ACS Language Resource
 - Create a Synapse Workspace
 - Create a Spark Pool for the Synapse workspace
 - Create a storage account for the extracted data
