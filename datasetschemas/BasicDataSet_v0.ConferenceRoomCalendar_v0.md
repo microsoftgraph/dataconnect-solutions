@@ -1,5 +1,5 @@
 ---
-title: "CalendarView_v2"
+title: "BasicDataset_v0.ConferenceRoomCalendar_v0"
 description: "Contains the events from the Calendar view Of only CONFERENCE ROOMS in a given tenant"
 author: "rishichordia"
 localization_priority: Priority
