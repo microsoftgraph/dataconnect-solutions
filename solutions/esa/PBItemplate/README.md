@@ -16,19 +16,15 @@ Template.
 
 3. Open the PowerBI file and click on Transform data → Data source settings
 
-![](Images/4.1.png)
+![](Images/DataSourceSettings.png)
 
 4. You will see 1 data source in the Data source settings page
 
-![](Images/4.2.png)
+![](Images/ChangeSource.png)
 
-5. Select it and click on Change Source.
-    - Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline
-    - Repeat changing storage account names to all Data sources in current file.
+5. Select it and click on Change Source. Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline
 
-![]()
-
-![](Images/4.3.png)
+![](Images/ADLStorageURLChange.png)
 
 6. Set the right storage account key / credentials for these data sources.
     - Click on Edit Permissions
