@@ -54,11 +54,11 @@ As a pre-requisite, ensure that the required packages are installed by following
 
 ## **PBI Report Template**
 
-For setup instructions and usage, please refer to the documentation [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/PBItemplate) 
+For setup instructions and usage, please refer to the documentation [here](https://github.com/v-travhanes/dataconnect-solutions/tree/main/solutions/esa/PBItemplate) 
 
 Download the pre-created PowerBI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. 
 
-Link to download PowerBI template [here](http://aka.ms/ona-m365-pbi)
+Link to download PowerBI template [here](https://github.com/v-travhanes/dataconnect-solutions/tree/main/solutions/esa/PBItemplate)
 
 ## **Feedback & Considerations**
 
