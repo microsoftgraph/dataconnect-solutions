@@ -29,7 +29,7 @@ Template.
 6. Set the right storage account key / credentials for these data sources.
     - Click on Edit Permissions
 
-        ![](Images/4.4.a.png)        
+        ![](Images/EditPermissions1.png)        
 
     - Click on Edit under credentials
 
