@@ -18,12 +18,15 @@ Template.
 
 ![](Images/4.1.png)
 
-4. You will see 2 data sources in the Data source settings page
+4. You will see 1 data source in the Data source settings page
 
 ![](Images/4.2.png)
 
-5. Select one of the data source settings and click on Change Source.
-    - Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline Step 11 above
+5. Select it and click on Change Source.
+    - Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline
+
+![]()
+
     - Repeat changing storage account names to all Data sources in current file.
 
 ![](Images/4.3.png)
