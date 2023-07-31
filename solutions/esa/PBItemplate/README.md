@@ -22,7 +22,7 @@ Template.
 
 ![](Images/ChangeSource.png)
 
-5. Select it and click on Change Source. Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline
+5. Select it and click on Change Source. Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline. **Make sure the URL says dfs, not blob. If it says blob, change it to dfs.**
 
 ![](Images/ADLStorageURLChange.png)
 
