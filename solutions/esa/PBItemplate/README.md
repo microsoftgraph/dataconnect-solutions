@@ -33,11 +33,11 @@ Template.
 
     - Click on Edit under credentials
 
-        ![](Images/4.4.b.png)        
+        ![](Images/EditPermissions.png)        
 
     - Enter the storage account key value
 
-        ![](Images/4.4.c.png)        
+        ![](Images/ProvideAccountKey.png)        
 
     - The storage key can be retrieved by navigating to the storage account in azure portal (storage account → access keys)
 
