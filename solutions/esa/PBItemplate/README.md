@@ -12,7 +12,7 @@ Template.
     - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center. [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494)
 2. Download the pre-created PowerBI report from this folder.
 
-![](Images/4.0.png)
+![](Images/EsaPbiTemplateDownload.png)
 
 3. Open the PowerBI file and click on Transform data → Data source settings
 
