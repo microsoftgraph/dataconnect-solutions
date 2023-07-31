@@ -24,10 +24,9 @@ Template.
 
 5. Select it and click on Change Source.
     - Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline
+    - Repeat changing storage account names to all Data sources in current file.
 
 ![]()
-
-    - Repeat changing storage account names to all Data sources in current file.
 
 ![](Images/4.3.png)
 
@@ -87,34 +86,17 @@ To update the data source to point at a different file, these steps are recommen
 ## Usage
 
 **Overview Page**
-From the Overview page, you can start analyzing the network graph created from the interactions of the M365 communication data, understand the flow of interactions between departments, have a glance at the raw data populating the graphs, and evaluate the amount of connections and interactions of the nodes. There are date and flags filters available for comparison.
+Each page of the dashboard serves a particular purpose. Some are self-explanatory, like the Overview page. This page gives you a high-level view of all the data represented on a simple table. Keep in mind that we’ve filtered each widget to only provide the Top 100 Topics by Mention. Otherwise, there would be thousands of not-applicable Topics and Topics that have only been mentioned once. Accompanying the table are the three topics with the Most Mentions, Most Positive Mentions, and Most Negative Mentions.
 
-Each node is a person. If a node interacts with another node, then they become a connection.
-An interaction can be either of the following:
--  One email with 5 or less recipients
--  One meeting of 5 or less attendees
--  Eight chat messages (each with 5 or less recipients)
+**Sentiment Scatter Plot Page**
+This scatter plot is based on each Topic’s Sentiment Score and its number of Mentions. The dots are colored according to General Sentiment to ease reviewing the data. This is especially helpful for differentiating between the Neutral, Mixed, and Polarized general sentiments, but also emphasizes the differences between Positive and Very Positive, and Negative and Very Negative. Additionally, instead of having to remember each Topic and search for it on the View Topic page, you can get a quick snapshot of it by mousing over the datapoint and bringing up its Topic Tooltip. In this way, you can quickly check the data while having it all on the board. The Sentiment Scatter Plot serves as a quick way to review the data. 
 
-This blend of interactions is informed by investigations from Microsoft Research (MSR) using statistical insights from US-based Microsoft employees.
-The two flags available to classify the nodes are the following and can be configured using parameters:
--  Bridge flag: Top 15 percentile bridging index
--  Degree flag: Top 15 percentile degree index 
+**Conflate Topics Page**
+You’ll quickly realize that the entities aren’t always aggregated perfectly. Senders may be discussing the same Topic, but not using the same word. In a dataset about airline reviews, for instance, you might find a lot of posts about baggage-handling. The Senders could use words “bag,” “bags,” or “baggage” in reference to it. For situations like these, we’ve provided the Conflate Topics page.  Select the Topics that are alike in the slicer at the top left, and you’ll find your grouping on the table to its immediate right. All of the data displayed is an aggregate of the provided Topics. Using this tool, you can merge Topics together that are similar, but not identical. 
 
-**Node Analysis Page**
-The Node Analysis page provides additional drill-down information of the interactions in the organization and insights on how people prefer to communicate. 
+**Compare Topics**
+Just like with the Merge Alike Topics page, select which Topics you’d like to compare in the slicer in the top left and they’ll be added to the table to its immediate right. All of the visuals on this page will show the group of Topics you’ve selected.
 
-**Influence Analysis Page**
-Influence – Explore influential connections: Measures the influence of nodes as being well-connected to others. This is based on the PageRank of the graph. A high score identifies that the node’s perspective will cascade to others efficiently. How to engage:
-- Identify influencers
-- Explore the profile of the influencers: Title, Department, Country
-- Compare period vs period to analyze consistency
+**View Topic**
+For an in-depth view of a single Topic, visit the View Topic page. It provides a more readable interface than a table. By showing the various metric values, plus a couple graphs for how mentions and sentiment have changed over time, you’ll gain a better understanding of the chosen Topic. Perhaps you'll even pick up correlations between time and popularity. 
 
-**Network Size and Breadth Page**
-Network Size and Breadth – Empower inclusive networks: Rank the nodes based on their number of connections to identify isolated groups that may be lacking information or left apart.
-- Identify siloes and communities that may not be interacting the most
-- Compare period vs period to analyze consistency
-
-**Bridging Analysis Page**
-Bridging – Evaluate information flow: Measures the connectivity of nodes to detected graph communities. First, graph communities are discovered using LPA (label propagation algorithm). Then, we count how many communities a node is connected to and normalize by the total number of communities. A node connected to no communities will be 0. A node connected to all communities with be 1.
-- Identify key bridges and their departments
-- Analyze the correlation of bridging and influence
