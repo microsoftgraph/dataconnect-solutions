@@ -19,7 +19,7 @@ This template leverages a Contoso emails and teamschat datasets, as well as a co
 
 ## Installing Pre-reqs
 
-If you do not have an MGDC app, please proceed to the detailed documentation [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/PreRequisites)  
+If you do not have an MGDC app, please proceed to the detailed documentation [here]([https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/PreRequisites](https://github.com/v-travhanes/dataconnect-solutions/blob/main/solutions/esa/PreRequisites/README.md))  
 
 If you already have an MGDC app and its secret, the automated deployment to Azure helps setup the required resources in 5 minutes. 
 
