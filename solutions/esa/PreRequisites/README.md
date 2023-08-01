@@ -89,6 +89,7 @@ This will initiate the deployment. It should normally take about 5 minutes for t
 1.  Navigate to the Synapse workspace just created and open the Synapse Studio.
 
 ![](Images/NavigatetoSynapseWorkspace1.png)
+
 ![](Images/2.1.png)
 
 2.  In the Synapse Studio, select the sixth icon on the left to go to the Manage page. Click on Apache Spark pools and right-click the pool to select the Packages.
