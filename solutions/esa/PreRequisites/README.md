@@ -94,7 +94,7 @@ This will initiate the deployment. It should normally take about 5 minutes for t
 
 2.  In the Synapse Studio, select the sixth icon on the left to go to the Manage page. Click on Apache Spark pools and right-click the pool to select the Packages.
 
-![](Images/2.2.png)
+![](Images/2.2.a.png)
 ![](Images/2.3.png)
 
 3. Upload the following file as a Required File and click Apply.
