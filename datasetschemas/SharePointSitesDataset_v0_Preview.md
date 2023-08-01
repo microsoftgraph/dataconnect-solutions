@@ -45,7 +45,7 @@ The SharePointSitesDataset_v0_Preview dataset contains SharePoint site informati
 | CreatedTime | datetime |When the site was created (in UTC)|`2020-11-18T19:51:38Z`|0|false|
 | LastSecurityModifiedDate | datetime |When security on the site was last changed (in UTC)|`2020-11-18T19:51:38Z`|0|false|
 | SnapshotDate | datetime |When this site information was captured (in UTC)|`2020-11-18T19:51:38Z`|1|true|
-| Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted')|0|false|
+| Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted')|Created|0|false|
 
 ## Notes
 
