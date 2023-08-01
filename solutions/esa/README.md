@@ -42,8 +42,6 @@ Provide Storage Blob Data Contributor access to the user who is developing the s
 
 ## Synapse Pipeline Template
 
-As a pre-requisite, ensure that the required packages are installed by following the 
-
 1.  Download the ESA pipeline template .zip from [here](https://github.com/v-travhanes/dataconnect-solutions/tree/main/solutions/esa/SynapsePipelineTemplate)
 
 2.  Follow the [Synapse Pipeline Integration instructions](https://github.com/v-travhanes/dataconnect-solutions/blob/main/solutions/esa/Synapse%20Pipeline%20Integration/README.md) to integrate the pipeline. 
