@@ -46,7 +46,7 @@ As a pre-requisite, ensure that the required packages are installed by following
 
 1.  Download the ESA pipeline template .zip from [here](https://github.com/v-travhanes/dataconnect-solutions/tree/main/solutions/esa/SynapsePipelineTemplate)
 
-2.  Follow the [Synapse Pipeline Integration instructions](https://github.com/microsoftgraph/dataconnect-solutions/tree/ona-v2-doc-updates/solutions/ona#Synapse-Pipeline-Template) available on our ONA implementation to integrate the pipeline. 
+2.  Follow the [Synapse Pipeline Integration instructions](https://github.com/v-travhanes/dataconnect-solutions/blob/main/solutions/esa/Synapse%20Pipeline%20Integration/README.md) to integrate the pipeline. 
 
 3.  After completing the Pipeline Integration and running the pipeline, you will see the data in the storage account
 
