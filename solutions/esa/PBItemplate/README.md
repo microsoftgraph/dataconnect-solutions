@@ -82,17 +82,22 @@ To update the data source to point at a different file, these steps are recommen
 ## Usage
 
 **Overview Page**
-Each page of the dashboard serves a particular purpose. Some are self-explanatory, like the Overview page. This page gives you a high-level view of all the data represented on a simple table. Keep in mind that we’ve filtered each widget to only provide the Top 100 Topics by Mention. Otherwise, there would be thousands of not-applicable Topics and Topics that have only been mentioned once. Accompanying the table are the three topics with the Most Mentions, Most Positive Mentions, and Most Negative Mentions.
+
+This page gives you a high-level view of all the data represented on a simple table. Keep in mind that we’ve filtered each widget to only provide the Top 100 Topics by Mention. Otherwise, there would be thousands of not-applicable Topics and Topics that have only been mentioned once. Accompanying the table are the three topics with the Most Mentions, Most Positive Mentions, and Most Negative Mentions.
 
 **Sentiment Scatter Plot Page**
-This scatter plot is based on each Topic’s Sentiment Score and its number of Mentions. The dots are colored according to General Sentiment to ease reviewing the data. This is especially helpful for differentiating between the Neutral, Mixed, and Polarized general sentiments, but also emphasizes the differences between Positive and Very Positive, and Negative and Very Negative. Additionally, instead of having to remember each Topic and search for it on the View Topic page, you can get a quick snapshot of it by mousing over the datapoint and bringing up its Topic Tooltip. In this way, you can quickly check the data while having it all on the board. The Sentiment Scatter Plot serves as a quick way to review the data. 
+
+This scatter plot is based on each Topic’s Sentiment Score and its number of Mentions. The dots are colored according to General Sentiment to ease reviewing the data. This is especially helpful for differentiating between the Neutral, Mixed, and Polarized general sentiments, but also emphasizes the differences between Positive and Very Positive, and Negative and Very Negative. Additionally, instead of having to remember each Topic and search for it on the View Topic page, you can get a quick snapshot of it by mousing over the datapoint and bringing up its Topic Tooltip. In this way, you can quickly check the data while having it all on the board. 
 
 **Conflate Topics Page**
+
 You’ll quickly realize that the entities aren’t always aggregated perfectly. Senders may be discussing the same Topic, but not using the same word. In a dataset about airline reviews, for instance, you might find a lot of posts about baggage-handling. The Senders could use words “bag,” “bags,” or “baggage” in reference to it. For situations like these, we’ve provided the Conflate Topics page.  Select the Topics that are alike in the slicer at the top left, and you’ll find your grouping on the table to its immediate right. All of the data displayed is an aggregate of the provided Topics. Using this tool, you can merge Topics together that are similar, but not identical. 
 
 **Compare Topics**
+
 Just like with the Merge Alike Topics page, select which Topics you’d like to compare in the slicer in the top left and they’ll be added to the table to its immediate right. All of the visuals on this page will show the group of Topics you’ve selected.
 
 **View Topic**
+
 For an in-depth view of a single Topic, visit the View Topic page. It provides a more readable interface than a table. By showing the various metric values, plus a couple graphs for how mentions and sentiment have changed over time, you’ll gain a better understanding of the chosen Topic. Perhaps you'll even pick up correlations between time and popularity. 
 
