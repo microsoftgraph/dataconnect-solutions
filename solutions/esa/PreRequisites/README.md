@@ -45,7 +45,7 @@ and secret to setup the other required resources.
 
 9. Provide a description and add a secret
 
-![](Images/1.10.png)
+![](Images/1.10.b.png)
 
 10. Copy the value of this new secret and save it securely before navigating away from this page
 
