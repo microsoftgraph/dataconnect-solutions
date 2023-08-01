@@ -1,7 +1,7 @@
 Release Notes for Organization Network Analysis (ONA) MGDC Template
 
 v1.0.0
-July 20, 2023
+August 1, 2023
 - The id column used for deduplication is updated:
   - Teams Chats (BasicDataSet_v0.TeamChat_v1) changed from "id" to "InternetMessageId"
   - Outlook Emails (BasicDataSet_v0.Message_v1) changed from "id" to "InternetMessageId"
@@ -23,4 +23,4 @@ March 15, 2023
 
 v0.0.0
 December 1, 2022
-Initial implementation with ARM template, Synapse pipeline template and PowerBI.
+- Initial implementation with ARM template, Synapse pipeline template and PowerBI.
