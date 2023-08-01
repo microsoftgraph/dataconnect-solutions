@@ -23,7 +23,7 @@ The BasicDataSet_v0.SharePointGroups_v1 dataset contains SharePoint group inform
 | Owner | string |Group owner. Format: ```STRUCT<`AadObjectId`:STRING,`Name`:STRING,`Email`:STRING>```|`{\"AadObjectId\": \"12345676-6e0e-46ab-855d-2c8912345676\",\"Name\": \"John Smith\",\"Email\": \"jsmith@contoso.com\"}`|0|false|
 | Members | string |Members of the group. Format: ```ARRAY<STRUCT<`Type`:STRING, `AadObjectId`:STRING, `Name`:STRING, `Email`:STRING>>```|`[{\"Type\": \"User\", \"AadObjectId\": \"12345676-6e0e-46ab-855d-2c8912345676\", \"Name\": \"John Smith\", \"Email\": \"jsmith@contoso.com\"}]`|0|false|
 | SnapshotDate | datetime |Date this data set was generated|`2022-03-16T00:00:00Z`|1|true|
-| Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted'|
+| Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted')|Created|0|false|
 
 ## Notes
 
