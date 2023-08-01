@@ -1,3 +1,5 @@
+# Synapse Pipeline Integration
+
 As a pre-requisite, ensure that the required packages are installed by following the [Synapse Pipeline Installation instructions](https://github.com/microsoftgraph/dataconnect-solutions/tree/ona-v2-doc-updates/solutions/ona#Synapse-Pipeline-Template)
 
 1.  Download the ONA pipeline template .zip from [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/SynapsePipelineTemplate)
