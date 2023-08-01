@@ -67,9 +67,9 @@ The link above sets up the Azure resource group for the template, which are:
 - Grant permission to the Synapse workspace & the MGDC Service Principal to the storage account as Blob Data Contributor
 
 
-By clicking on the above button (or navigating to the linked URL), users will be brought to the Azure portal on the Custom deployment page.
+By clicking on the above button (or navigating to the linked URL), you will be brought to the Azure portal on the Custom deployment page.
 
-2. On that screen, on top of providing information about the resource group and region to deploy the components into, they will need to provide the following information:
+2. On that screen, on top of providing information about the resource group and region to deploy the components into, you will need to provide the following information:
 
 - Application Id to be used by MGDC (from step #3, ending in e430)
 - Application secret for that app
