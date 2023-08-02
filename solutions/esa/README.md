@@ -37,7 +37,7 @@ Custom deployment - Microsoft Azure [here](https://portal.azure.com/#create/Micr
 
 Provide Storage Blob Data Contributor access to the user who is developing the solution. The Synapse workspace should already have access with the automated deployment. 
 
-![](Images/storageBlobDataContributorAccessPicture.png)
+![](Images/storageBlobDataContributorAccessPicture1.png)
 
 
 ## Synapse Pipeline Template
