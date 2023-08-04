@@ -39,7 +39,7 @@
 
 8.  Update your storage paths in the Synapse Notebook
 
-![](Images/UpdatePaths.png)
+![](Images/UpdatesPaths.png)
 
 7.  Click on "Publish All" to validate and publish the pipeline
 
