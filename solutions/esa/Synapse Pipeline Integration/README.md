@@ -55,7 +55,7 @@ If required, change the flags if only certain datasets should run
 
 ![](Images/3.10.png)
 ![](Images/3.11.1.png)
-![](Images/3.11.2.png)
+![](Images/StorageAccountEndpoint.png)
 
 12. Congratulations! You just triggered the MGDC pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account
 
