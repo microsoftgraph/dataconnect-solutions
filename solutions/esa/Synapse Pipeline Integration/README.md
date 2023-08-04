@@ -33,7 +33,7 @@
 
 7.  Click on "Publish All" to validate and publish the pipeline
 
-![](Images/3.6.png)
+![](Images/PublishAll.png)
 
 8. Review the changes and click Publish
 
