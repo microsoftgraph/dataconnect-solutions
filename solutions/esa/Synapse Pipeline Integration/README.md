@@ -31,6 +31,10 @@
 
 ![](Images/3.5.a.png)
 
+7.  Update your ACS Key, Location, and Endpoint in the Synapse Notebook.
+
+
+
 7.  Click on "Publish All" to validate and publish the pipeline
 
 ![](Images/PublishAll.png)
