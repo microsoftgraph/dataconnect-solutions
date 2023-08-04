@@ -8,7 +8,7 @@
 
 3.  Create the new linked services required by this pipeline
 
-![](Images/3.2.png)
+![](Images/IntegratePipeline1.png)
 
 4.  Provide the parameters of the Linked Service 
 
