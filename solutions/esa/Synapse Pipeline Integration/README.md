@@ -21,11 +21,11 @@
         
         c. Test Connection and then click on Create
 
-![](Images/3.3.png)
+![](Images/IntegratePipeline2.png)
 
 5.  Repeat the linked Service creation steps for the source linked service and select "Open Pipeline"
 
-![](Images/3.4.png)
+![](Images/IntegratePipeline3.png)
 
 6.  Navigate to the Develop page (third icon on the left) -> ONA and ensure the notebook is attached to the onasynapsepool
 
