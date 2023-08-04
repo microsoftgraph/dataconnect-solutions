@@ -29,7 +29,7 @@
 
 6.  Navigate to the Develop page (third icon on the left) -> ONA and ensure the notebook is attached to the onasynapsepool
 
-![](Images/3.5.png)
+![](Images/3.5.a.png)
 
 7.  Click on "Publish All" to validate and publish the pipeline
 
