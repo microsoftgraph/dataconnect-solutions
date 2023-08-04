@@ -37,6 +37,10 @@
 ![](Images/GoToLanguageResource.png)
 ![](Images/LanguageResourceKeysAndEndpoint.png)
 
+8.  Update your storage paths in the Synapse Notebook
+
+![](Images/UpdatePaths.png)
+
 7.  Click on "Publish All" to validate and publish the pipeline
 
 ![](Images/PublishAll.png)
