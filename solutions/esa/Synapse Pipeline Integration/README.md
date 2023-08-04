@@ -16,8 +16,8 @@
 
         b. Use the storage account name (starting with "onastore"), for Service Principal ID use the Application (client) ID), and for Service Principal key use the value from the secret of the application certificate. See screenshots below
 
-![](Images/1.4.png)
-![](Images/1.11.png)
+![](Images/1.4.a.png)
+![](Images/1.11.a.png)
         
         c. Test Connection and then click on Create
 
