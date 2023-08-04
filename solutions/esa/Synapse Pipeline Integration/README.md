@@ -33,7 +33,9 @@
 
 7.  Update your ACS Key, Location, and Endpoint in the Synapse Notebook.
 
-
+![](Images/UpdateACSKeys.png)
+![](Images/GoToLanguageResource.png)
+![](Images/LanguageResourceKeysAndEndpoint.png)
 
 7.  Click on "Publish All" to validate and publish the pipeline
 
