@@ -47,7 +47,7 @@ Configure the Synapse Pipeline Package required as described [here](https://gith
 
 10. Trigger the pipeline
 
-![](Images/3.9.png)
+![](Images/TriggerNow.png)
 
 11. Provide the required parameters. Use one month per pipeline run. Use date format 'YYYY-MM-DD'.
 Use the Storage Account created in the resource group (simply replace with the storage account name created in the resource group or to get the URL, navigate to the resource group -> storage account -> Endpoints -> Data Lake Storage -> Primary endpoint)
