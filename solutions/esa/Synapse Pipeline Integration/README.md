@@ -37,7 +37,7 @@
 
 8. Review the changes and click Publish
 
-![](Images/3.7.png)
+![](Images/PublishAll2.png)
 
 9. Verify that the pipeline has been successfully published
 
