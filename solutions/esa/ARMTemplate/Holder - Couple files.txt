@@ -1,3 +1,0 @@
-azuredeploy.json
-
-azuredeployment.md
