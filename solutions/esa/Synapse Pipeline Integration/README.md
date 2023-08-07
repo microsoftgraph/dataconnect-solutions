@@ -41,25 +41,25 @@
 
 ![](Images/UpdatesPaths.png)
 
-7.  Click on "Publish All" to validate and publish the pipeline
+9.  Click on "Publish All" to validate and publish the pipeline
 
 ![](Images/PublishAll.png)
 
-8. Review the changes and click Publish
+10. Review the changes and click Publish
 
 ![](Images/PublishAll2.png)
 
-9. Verify that the pipeline has been successfully published
+11. Verify that the pipeline has been successfully published
 
 ![](Images/3.8.png)
 
 Configure the Synapse Pipeline Package required as described [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/PreRequisites#Synapse-Pipeline-Packages)
 
-10. Trigger the pipeline
+12. Trigger the pipeline
 
 ![](Images/TriggerNow.png)
 
-11. Provide the required parameters. Use one month per pipeline run. Use date format 'YYYY-MM-DD'.
+13. Provide the required parameters. Use one month per pipeline run. Use date format 'YYYY-MM-DD'.
 Use the Storage Account created in the resource group (simply replace with the storage account name created in the resource group or to get the URL, navigate to the resource group -> storage account -> Endpoints -> Data Lake Storage -> Primary endpoint)
 If required, change the flags if only certain datasets should run
 
@@ -67,10 +67,10 @@ If required, change the flags if only certain datasets should run
 ![](Images/YourStorageName.png)
 ![](Images/StorageAccountEndpoint.png)
 
-12. Congratulations! You just triggered the MGDC pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account
+14. Congratulations! You just triggered the MGDC pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account
 
 ![](Images/PipelineRun.png)
 
-13. You will see the data in the storage account
+15. You will see the data in the storage account
 
 ![](Images/output.png)
