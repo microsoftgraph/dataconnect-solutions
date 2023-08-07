@@ -49,7 +49,13 @@ Template.
 
 ![](Images/5.2.png)
 
-8. Congratulations, you are all set and will see that the report will be refreshed with the latest data
+8. You may need to click on Apply Changes or Refresh the data
+
+![](Images/ClickApplyChanges.png)
+
+![](Images/refresh.png)
+
+9. Congratulations, you are all set and will see that the report will be refreshed with the latest data
 
     ![](https://github.com/v-travhanes/dataconnect-solutions/blob/3c86c07cec44d809553c4c305c7241a03ecb5ae4/solutions/esa/Images/Welcome%20Page.png) 
 
