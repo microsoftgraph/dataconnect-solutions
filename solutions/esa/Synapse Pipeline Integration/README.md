@@ -63,7 +63,7 @@ Configure the Synapse Pipeline Package required as described [here](https://gith
 Use the Storage Account created in the resource group (simply replace with the storage account name created in the resource group or to get the URL, navigate to the resource group -> storage account -> Endpoints -> Data Lake Storage -> Primary endpoint)
 If required, change the flags if only certain datasets should run
 
-![](Images/ChangeYourStorageNameTrigger.png)
+![](Images/ChangeYourStorageNameTrigger1.png)
 ![](Images/YourStorageName.png)
 ![](Images/StorageAccountEndpoint.png)
 
