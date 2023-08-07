@@ -69,8 +69,8 @@ If required, change the flags if only certain datasets should run
 
 12. Congratulations! You just triggered the MGDC pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account
 
-![](Images/3.12.png)
+![](Images/PipelineRun.png)
 
 13. You will see the data in the storage account
 
-![](Images/3.13.png)
+![](Images/output.png)
