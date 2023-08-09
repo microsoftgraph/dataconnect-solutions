@@ -45,6 +45,5 @@
     - **[ExternalTables](sqlscript/ExternalTables.json):** SQL script to generate external tables that are utilized within Power BI.
 
 
-<div style="background-color:#f9f2f4; border: 1px solid #f78181; padding: 10px">
-    <strong style="color:red">Note:</strong> The provided code/solution has been tested on sample data to ensure its functionality. However, it is highly advised and best practice to thoroughly test the code on actual, real-world data before deploying it in a production environment.
-</div>
+> **Note:** The provided code/solution has been tested on sample data to ensure its functionality. However, it is highly advised and best practice to thoroughly test the code on actual, real-world data before deploying it in a production environment.
+
