@@ -22,7 +22,7 @@ This solution encompasses essential components, including Azure resource deploym
 
 Upon completion of all steps, you will have a comprehensive end-to-end solution with the following architecture:
 
-![Architecture](docs/media/architecture.png)
+![Architecture](docs/media/Architecture.PNG)
 
 ### Azure Services Used
 
