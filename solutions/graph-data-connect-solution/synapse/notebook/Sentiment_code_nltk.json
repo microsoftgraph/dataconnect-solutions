@@ -1,0 +1,524 @@
+{
+	"name": "Sentiment_code_nltk",
+	"properties": {
+		"description": "NLTK based sentiment model",
+		"folder": {
+			"name": "sentiment_analysis"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "synspgdcscin",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "c8c3c478-e9c1-40e8-ad52-717796fe2eb0"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/2058f82f-b8ac-423e-8c83-227732887c3a/resourceGroups/fractal-neal-coe-dev-rg/providers/Microsoft.Synapse/workspaces/syngdcscindevil/bigDataPools/synspgdcscin",
+				"name": "synspgdcscin",
+				"type": "Spark",
+				"endpoint": "https://syngdcscindevil.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/synspgdcscin",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"import nltk\r\n",
+					"nltk.download('punkt')\r\n",
+					"nltk.download('vader_lexicon')\r\n",
+					"nltk.download('stopwords')\r\n",
+					"\r\n",
+					"import pandas as pd\r\n",
+					"import re\r\n",
+					"from nltk.sentiment.vader import SentimentIntensityAnalyzer as sia\r\n",
+					"from nltk.tokenize import sent_tokenize, word_tokenize\r\n",
+					"from nltk.corpus import stopwords\r\n",
+					"import gensim\r\n",
+					"from gensim import corpora\r\n",
+					"\r\n",
+					"from pyspark.sql import SparkSession\r\n",
+					"from pyspark.sql.types import StructType, StructField, IntegerType, StringType"
+				],
+				"execution_count": 35
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"'''\r\n",
+					"This module contains functions for analyzing the sentiment of emails \r\n",
+					"and extracting themes using LDA topic modeling. It uses the VADER\r\n",
+					"(Valence Aware Dictionary and sEntiment Reasoner) sentiment analysis\r\n",
+					"tool to determine the sentiment of individual tokens and text. \r\n",
+					"The sentiment analysis can be performed using a sliding window \r\n",
+					"approach on sentences to identify the best and least sentiment \r\n",
+					"windows within the email text. Additionally, the module applies \r\n",
+					"LDA topic modeling to extract themes from the emails. \r\n",
+					"The output provides overall sentiment scores, token-level \r\n",
+					"sentiment scores, and themes for each email, which can be used\r\n",
+					"to gain insights and classify emails based on their sentiments \r\n",
+					"and themes.\r\n",
+					"'''\r\n",
+					"\r\n",
+					"def analyze_token_sentiment(token, additional_words=None):\r\n",
+					"    \"\"\"\r\n",
+					"    Analyzes the sentiment of a single token using the VADER SentimentIntensityAnalyzer.\r\n",
+					"    Args:\r\n",
+					"        token (str): The token to analyze.\r\n",
+					"        additional_words (list, optional): Additional words to include in the analysis. Defaults to None.\r\n",
+					"    Returns:\r\n",
+					"        float: The sentiment score of the token.\r\n",
+					"    \"\"\"\r\n",
+					"    sia_obj = sia()\r\n",
+					"    token_polarity_scores = sia_obj.polarity_scores(token)\r\n",
+					"    token_sentiment = token_polarity_scores['compound']\r\n",
+					"    return token_sentiment\r\n",
+					"\r\n",
+					"def analyze_sentiment(text, additional_words=None):\r\n",
+					"    \"\"\"\r\n",
+					"    Analyzes the sentiment of a text using the VADER SentimentIntensityAnalyzer.\r\n",
+					"    Args:\r\n",
+					"        text (str): The text to analyze.\r\n",
+					"        additional_words (list, optional): Additional words to include in the analysis. Defaults to None.\r\n",
+					"    Returns:\r\n",
+					"        tuple: A tuple containing the compound sentiment score of the text and a list of token-level sentiment scores.\r\n",
+					"    \"\"\"\r\n",
+					"\r\n",
+					"    sia_obj = sia()\r\n",
+					"    polarity_scores = sia_obj.polarity_scores(text)\r\n",
+					"    compound_score = polarity_scores['compound']\r\n",
+					"    tokenized_text = word_tokenize(text)\r\n",
+					"    stop_words = set(stopwords.words('english'))\r\n",
+					"\r\n",
+					"    if additional_words:\r\n",
+					"        stop_words.update(additional_words)\r\n",
+					"\r\n",
+					"    tokenized_text = [word.lower() for word in tokenized_text if word.lower() not in stop_words]\r\n",
+					"    token_sentiments = []\r\n",
+					"\r\n",
+					"    for token in tokenized_text:\r\n",
+					"        token_sentiment = analyze_token_sentiment(token, additional_words)\r\n",
+					"        token_sentiments.append(token_sentiment)\r\n",
+					"\r\n",
+					"    return compound_score, token_sentiments\r\n",
+					"\r\n",
+					"\r\n",
+					"def analyze_sentence_window(sentence, window_size, additional_words=None):\r\n",
+					"    \"\"\"\r\n",
+					"    Analyzes the sentiment of a sentence using a sliding window approach.\r\n",
+					"    Args:\r\n",
+					"        sentence (str): The sentence to analyze.\r\n",
+					"        window_size (int): The size of the sliding window.\r\n",
+					"        additional_words (list, optional): Additional words to include in the analysis. Defaults to None.\r\n",
+					"\r\n",
+					"    Returns:\r\n",
+					"        tuple: A tuple containing the best and least sentiment windows and their corresponding sentiment scores.\r\n",
+					"    \"\"\"\r\n",
+					"    words = word_tokenize(sentence)\r\n",
+					"    num_words = len(words)\r\n",
+					"    if num_words < window_size:\r\n",
+					"\r\n",
+					"        return None, None, None, None\r\n",
+					"\r\n",
+					"    best_sentiment = None\r\n",
+					"    best_window = None\r\n",
+					"    least_sentiment = None\r\n",
+					"    least_window = None\r\n",
+					"\r\n",
+					"    for i in range(num_words - window_size + 1):\r\n",
+					"        window_words = words[i:i+window_size]\r\n",
+					"        window_text = ' '.join(window_words)\r\n",
+					"        compound_score, _ = analyze_sentiment(window_text, additional_words)\r\n",
+					"\r\n",
+					"        if best_sentiment is None or compound_score > best_sentiment:\r\n",
+					"            best_sentiment = compound_score\r\n",
+					"            best_window = window_text\r\n",
+					"\r\n",
+					"        if least_sentiment is None or compound_score < least_sentiment:\r\n",
+					"            least_sentiment = compound_score\r\n",
+					"            least_window = window_text\r\n",
+					"\r\n",
+					"    return best_window, best_sentiment, least_window, least_sentiment\r\n",
+					"\r\n",
+					"\r\n",
+					"def analyze_email(email, additional_words=None, remove_phrases=None, window_size=5):\r\n",
+					"    \"\"\"\r\n",
+					"    Analyzes the sentiment of an email.\r\n",
+					"    Args:\r\n",
+					"        email (str): The email text to analyze.\r\n",
+					"        additional_words (list, optional): Additional words to include in the analysis. Defaults to None.\r\n",
+					"        remove_phrases (list, optional): Phrases to remove from the email text. Defaults to None.\r\n",
+					"        window_size (int, optional): The size of the sliding window. Defaults to 5.\r\n",
+					"\r\n",
+					"    Returns:\r\n",
+					"        tuple: A tuple containing lists of the overall sentiment scores and token-level sentiment scores for the email.\r\n",
+					"    \"\"\"\r\n",
+					"    sentences = sent_tokenize(email)\r\n",
+					"    email_sentiments = []\r\n",
+					"    email_token_sentiments = []\r\n",
+					"\r\n",
+					"    for sentence in sentences:\r\n",
+					"        # Remove specified phrases\r\n",
+					"        # Remove text after \"regard\" or \"regards\"\r\n",
+					"        sentence = re.sub(r'\\bregard(s)?\\b.*', '', sentence, flags=re.IGNORECASE)\r\n",
+					"        if remove_phrases:\r\n",
+					"            for phrase in remove_phrases:\r\n",
+					"                sentence = sentence.replace(phrase, \"\")\r\n",
+					"\r\n",
+					"        compound_score, token_sentiments = analyze_sentiment(sentence, additional_words)\r\n",
+					"        if compound_score != 0:\r\n",
+					"            email_sentiments.append(compound_score)\r\n",
+					"            email_token_sentiments.extend(token_sentiments)\r\n",
+					"\r\n",
+					"        best_window, best_sentiment, least_window, least_sentiment = analyze_sentence_window(sentence, window_size, additional_words)\r\n",
+					"        if best_window is not None and least_window is not None:\r\n",
+					"            print(f\"Sentence: {sentence}\")\r\n",
+					"            print(f\"Best {window_size}-Word Window: {best_window} (Sentiment: {best_sentiment})\")\r\n",
+					"            print(f\"Least {window_size}-Word Window: {least_window} (Sentiment: {least_sentiment})\")\r\n",
+					"            print()\r\n",
+					"    return email_sentiments, email_token_sentiments\r\n",
+					"\r\n",
+					" \r\n",
+					"def analyze_emails(emails, additional_words=None, remove_phrases=None, window_size=5):\r\n",
+					"    \"\"\"\r\n",
+					"    Analyzes the sentiment of a list of emails.\r\n",
+					"    Args:\r\n",
+					"        emails (list): A list of email texts to analyze.\r\n",
+					"        additional_words (list, optional): Additional words to include in the analysis. Defaults to None.\r\n",
+					"        remove_phrases (list, optional): Phrases to remove from the email text. Defaults to None.\r\n",
+					"        window_size (int, optional): The size of the sliding window. Defaults to 5.\r\n",
+					"    Returns:\r\n",
+					"        tuple: A tuple containing lists of overall sentiment scores, token-level sentiment scores, and themes for each email.\r\n",
+					"    \"\"\"\r\n",
+					"    all_email_sentiments = []\r\n",
+					"    all_email_token_sentiments = []\r\n",
+					"    overall_email_sentiments = []\r\n",
+					"\r\n",
+					"    for email in emails:\r\n",
+					"        email_sentiments, email_token_sentiments = analyze_email(email, additional_words, remove_phrases, window_size)\r\n",
+					"        all_email_sentiments.append(email_sentiments)\r\n",
+					"        all_email_token_sentiments.extend(email_token_sentiments)\r\n",
+					"        overall_sentiment = sum(email_sentiments) / len(email_sentiments) if email_sentiments else 0\r\n",
+					"        overall_email_sentiments.append(overall_sentiment)\r\n",
+					"    return all_email_sentiments, all_email_token_sentiments, overall_email_sentiments\r\n",
+					"\r\n",
+					" \r\n",
+					"def extract_theme(emails):\r\n",
+					"    \"\"\"\r\n",
+					"    Extracts themes from a list of emails using LDA topic modeling.\r\n",
+					"    Args:\r\n",
+					"        emails (list): A list of email texts.\r\n",
+					"    Returns:\r\n",
+					"        list: A list of integers representing the themes for each email.\r\n",
+					"    \"\"\"\r\n",
+					"    # Tokenize emails\r\n",
+					"    tokenized_emails = [word_tokenize(email.lower()) for email in emails]\r\n",
+					"\r\n",
+					"    # Remove stop words\r\n",
+					"    stop_words = set(stopwords.words('english'))\r\n",
+					"    tokenized_emails = [[word for word in email if word not in stop_words] for email in tokenized_emails]\r\n",
+					"\r\n",
+					"    # Create dictionary of words and their frequency\r\n",
+					"    dictionary = corpora.Dictionary(tokenized_emails)\r\n",
+					"\r\n",
+					"    # Create bag-of-words (BoW) representation of emails\r\n",
+					"    bow_corpus = [dictionary.doc2bow(email) for email in tokenized_emails]\r\n",
+					"\r\n",
+					"    # Perform LDA topic modeling\r\n",
+					"    num_topics = 5  # You can change the number of topics as per your requirement\r\n",
+					"    lda_model = gensim.models.LdaModel(bow_corpus, num_topics=num_topics, id2word=dictionary, passes=20)\r\n",
+					"\r\n",
+					"    # Extract themes from each email\r\n",
+					"    themes = []\r\n",
+					"    for bow in bow_corpus:\r\n",
+					"        topic_distribution = lda_model.get_document_topics(bow)\r\n",
+					"        theme = max(topic_distribution, key=lambda x: x[1])[0]\r\n",
+					"        themes.append(theme)\r\n",
+					"    return themes\r\n",
+					"\r\n",
+					"# Function to compute the label based on sentiment score\r\n",
+					"def compute_label(sentiment):\r\n",
+					"    if sentiment < -0.2:\r\n",
+					"        return \"Negative\"\r\n",
+					"    elif sentiment > 0.2:\r\n",
+					"        return \"Positive\"\r\n",
+					"    else:\r\n",
+					"        return \"Neutral\"\r\n",
+					"\r\n",
+					"# Function to scale sentiment scores from -1 to 1 to 0 to 100\r\n",
+					"def scale_sentiment(score):\r\n",
+					"    return (score + 1) * 50"
+				],
+				"execution_count": 39
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"container = \"gold\"\r\n",
+					"directory_alias = \"M365\"\r\n",
+					"\r\n",
+					"adls_name = \"adlsgdcscindevil\"\r\n",
+					"\r\n",
+					"input_url = f'abfss://{container}@{adls_name}.dfs.core.windows.net/{directory_alias}'\r\n",
+					"output_url = f'abfss://{container}@{adls_name}.dfs.core.windows.net/{directory_alias}'"
+				],
+				"execution_count": 36
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"df_email = spark.read.format('delta')\\\r\n",
+					"        .option(\"linesep\", \"\\n\")\\\r\n",
+					"        .option(\"header\", \"true\")\\\r\n",
+					"        .option(\"multiLine\",'true')\\\r\n",
+					"        .load(f'{input_url}/email')\r\n",
+					"\r\n",
+					"# Get the 'email_text' column from the DataFrame\r\n",
+					"email_text_column = df_email.select(\"email_text\")\r\n",
+					"\r\n",
+					"# Collect the 'email_text' values as a list of Rows\r\n",
+					"email_text_rows = email_text_column.collect()\r\n",
+					"\r\n",
+					"# Extract the email_text values from the Rows and create a list\r\n",
+					"email_text_list = [row[\"email_text\"] for row in email_text_rows]\r\n",
+					"\r\n",
+					"# # Display the list of email_text\r\n",
+					"# print(email_text_list)\r\n",
+					""
+				],
+				"execution_count": 47
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# # Sample emails and additional words\r\n",
+					"# emails = [\r\n",
+					"#     \"No\", \"I got this but next time be please a bit more careful. Create an action plan to mitigate this. Any suggestion required, please connect with me\",\r\n",
+					"#     \"Hi Team, Request you to please grant access to 172.20.33.124 server to me.\", \"This is bad, please redo\", \"We are not going with this deal\",\r\n",
+					"#     \"As discussed, please find attached my understanding about the Pyomo package in python and my approach for solving inventory problem using it.\",\r\n",
+					"#     \"Hope you are doing well. I’m on bench since 25th Sep and wish to know about this project. I’ve exposure related to Google Analytics but not into HTML, would I be eligible for this role?\",\r\n",
+					"#     \"Unfortunately, the HSBC’s project has been put on hold due to administrative issues and I’ve been put to bench.Wish to know about any opening related to DS. Also, wish to understand if I can upskill myself in cloud technologies meanwhile?\",\r\n",
+					"#     \"Thanks for sharing the proposal, it was great one. But we are not going with it as we found a better alternative\",\r\n",
+					"#     \"Action items:1.    Matt will update us on M365 after taking the follow-up with internal team.2.    Nitin to work on the feedback provided by Chantrelle and Rajesh on Help Information page  1.    KPIs and Metrics 2.    Support 1.    Put - Microsoft Graph Data Connect overview - Microsoft Graph | Microsoft Learn2.    No email aliases.3.    Put Fractal contact.3.    FAQ -  1.    Data description: account from CRM which ones we are using. 2.    Pricing (https://azure.microsoft.com/en-us/pricing/details/graph-data-connect/) and other things, Fractal will make those updates and send for review. 3.    Repo - put it in the in the GitHub with the collection of the rest of the templates.4.    Fractal team to send a note via email with this group as we need help from Microsoft (joespinoza@microsoft.com) to setup GitHub (https://github.com/microsoftgraph/dataconnect-solutions).5.    Fractal team to send Dashboard to Microsoft by tomorrow for review. Let me know if I missed anything.\",\r\n",
+					"#     \"I've read through the document and I really liked the plan. May I know the timelines for implementing it and if there would be any hurdles which you forsee. Also, do let us know the pricing details\",\r\n",
+					"#     \"Hope, you are doing well. I've read through the document and I really liked the plan.     May I know the timelines for implementing it and if there would be any hurdles which you forsee?\"\r\n",
+					"# ]\r\n",
+					"\r\n",
+					"emails = email_text_list \r\n",
+					"\r\n",
+					"additional_words = [\"thanks\", \" I hope you're doing well\", \"dear\", \"please\", \"fine\", \"ok\", \"greetings\", \"well\", \"hi\", \"thank\", \"hello\", \"kindly\", \",\", \":\", \"@\", \"!\", \"-\", \".\"]\r\n",
+					"\r\n",
+					"\r\n",
+					"# Analyze emails with a 5-word window\r\n",
+					"email_sentiments, email_token_sentiments, overall_email_sentiments = analyze_emails(emails, additional_words, window_size=5)\r\n",
+					"\r\n",
+					"\r\n",
+					"Print the overall sentiment scores for each email\r\n",
+					"for i, email in enumerate(emails):\r\n",
+					"    print(f\"Email {i+1}: {overall_email_sentiments[i]:.2f}\")\r\n",
+					"\r\n",
+					" \r\n",
+					"# Print the overall sentiment score based on token-level sentiment scores\r\n",
+					"overall_token_sentiment = sum(email_token_sentiments) / len(email_token_sentiments) if email_token_sentiments else 0\r\n",
+					"print(f\"Overall Token-Level Sentiment: {overall_token_sentiment:.2f}\")\r\n",
+					"\r\n",
+					" \r\n",
+					"df = pd.DataFrame({\r\n",
+					"    \"email_text\": emails,\r\n",
+					"    \"overall_email_sentiments\": overall_email_sentiments\r\n",
+					"})\r\n",
+					"\r\n",
+					" \r\n",
+					"\r\n",
+					"# Add a new column for labels\r\n",
+					"df[\"Label\"] = df[\"overall_email_sentiments\"].apply(compute_label)\r\n",
+					"\r\n",
+					"# Extract themes from each email\r\n",
+					"email_themes = extract_theme(emails)\r\n",
+					"\r\n",
+					" # Add the themes to the DataFrame\r\n",
+					"df[\"Theme\"] = email_themes\r\n",
+					"\r\n",
+					"# Map theme indices to human-readable theme labels\r\n",
+					"theme_labels = {0: \"Business Request\", 1: \"Technical Inquiry\", 2: \"Project Status\", 3: \"General Inquiry\", 4: \"Feedback\"}\r\n",
+					"df[\"Theme\"] = df[\"Theme\"].map(theme_labels)\r\n",
+					"  \r\n",
+					"# Add a new column with scaled sentiment scores\r\n",
+					"df[\"Scaled_Sentiment\"] = df[\"overall_email_sentiments\"].apply(scale_sentiment)\r\n",
+					"\r\n",
+					"# Remove the 'overall_email_sentiments' column from the DataFrame\r\n",
+					"df.drop(columns=[\"overall_email_sentiments\"], inplace=True)\r\n",
+					"\r\n",
+					"# Reorder the columns placing 'Scaled_Sentiment' before 'Label'\r\n",
+					"#df = df[[\"emails\", \"Scaled_Sentiment\", \"Label\", \"Theme\"]]\r\n",
+					"df = df[[\"email_text\", \"Scaled_Sentiment\", \"Label\"]]\r\n",
+					"# Print the updated DataFrame\r\n",
+					"# print(df)\r\n",
+					""
+				],
+				"execution_count": 48
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"email_m365 = df_email.toPandas()\r\n",
+					"df_final = pd.merge(email_m365, df, on='email_text', how='left')"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"# Initialize a SparkSession\r\n",
+					"spark = SparkSession.builder.appName(\"PandasToDelta\").getOrCreate()\r\n",
+					"\r\n",
+					"# Define the schema for the PySpark DataFrame\r\n",
+					"schema = StructType([\r\n",
+					"    StructField(\"email_id\", StringType(), False),\r\n",
+					"\tStructField(\"email_subject\", StringType(), True),\r\n",
+					"\tStructField(\"email_text\", StringType(), True),\r\n",
+					"\tStructField(\"opportunity_id\", StringType(), True),\r\n",
+					"\tStructField(\"conversation_id\", StringType(), True),\r\n",
+					"    StructField(\"sent_date_time\", StringType(), True),\r\n",
+					"    StructField(\"last_modified_date_time\", StringType(), True),\r\n",
+					"    StructField(\"body_preview\", StringType(), True),\r\n",
+					"    StructField(\"conversation_index\", StringType(), True),\r\n",
+					"    StructField(\"from_email_address\", StringType(), True),\r\n",
+					"    StructField(\"to_recipient_list\", StringType(), True),\r\n",
+					"    StructField(\"Scaled_Sentiment\", StringType(), True),\r\n",
+					"    StructField(\"Label\", StringType(), True)\r\n",
+					"])\r\n",
+					"\r\n",
+					"# Convert Pandas DataFrame to PySpark DataFrame with the specified schema\r\n",
+					"df_email_sentiment = spark.createDataFrame(df_final, schema)\r\n",
+					"\r\n",
+					"df_email_sentiment.write.format('delta') \\\r\n",
+					"         .mode('overwrite') \\\r\n",
+					"         .option(\"mergeSchema\", \"true\") \\\r\n",
+					"         .save(f'{output_url}/EmailSentiment')\r\n",
+					""
+				],
+				"execution_count": 54
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					""
+				],
+				"execution_count": null
+			}
+		]
+	}
+}
