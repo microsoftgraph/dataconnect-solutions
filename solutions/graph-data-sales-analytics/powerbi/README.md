@@ -3,8 +3,6 @@
 
 ## Data Sources: 
 
----
-
 1. Salesforce    
     - Opportunity: Tracks potential sales deals with details like amount, stage, and close date.                                             
     - Contact: Stores individual's contact information for effective customer communication.
@@ -15,9 +13,7 @@
     - Messages: Stores email communication data, including sender, recipient, and content.
 
 
-###**Data Connection** 
-
----
+### **Data Connection** 
 
  - **Azure Syanapse Analtics SQL** : Import Mode 
  <br>
@@ -25,38 +21,29 @@
     - Configured parameterization for the Server Name and Database Name, integrated dynamic M queries for each table.
     - Upon downloading the PowerBI template file, open it, and input the parameter values as given below, providing the respective data source parameters.
 
-![Parameter Configuration Dialog](https://dev.azure.com/Microsoft-Graph-Data-Connect-Solution-23-SMS-7186/3b38bb2b-5d73-4d2e-a6f9-3be46e53ce1e/_apis/git/repositories/7bf497aa-7f32-4bf9-afab-1fdb00605e14/items?path=/docs/media/Parameters.PNG&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=feature/pbi&resolveLfs=true&%24format=octetStream&api-version=5.0)
+![Parameter Configuration Dialog](../docs/media/Parameters.PNG)
 
 <br>
 
 
 
-###**Data Model** 
-
----
+### **Data Model** 
 
  - Data model created, enabling data integration and analysis of Salesforce and M-365 data source in a centralized platform, supporting data-driven decision-making.
 
-![Data model](https://dev.azure.com/Microsoft-Graph-Data-Connect-Solution-23-SMS-7186/3b38bb2b-5d73-4d2e-a6f9-3be46e53ce1e/_apis/git/repositories/7bf497aa-7f32-4bf9-afab-1fdb00605e14/items?path=/docs/media/DataModel.PNG&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=feature/readme-page-update-001&resolveLfs=true&%24format=octetStream&api-version=5.0)
+![Data model](../docs/media/DataModel.PNG)
 
 
 
 
 ## KPIs & Measures:
 
------
- 
  
 ### Opportunity Summary:
 
-
-
-
----
-
 <br>
 
-![opportunitiy Summary](https://dev.azure.com/Microsoft-Graph-Data-Connect-Solution-23-SMS-7186/3b38bb2b-5d73-4d2e-a6f9-3be46e53ce1e/_apis/git/repositories/7bf497aa-7f32-4bf9-afab-1fdb00605e14/items?path=/docs/media/OpportunitySummary.PNG&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=feature/pbi&resolveLfs=true&%24format=octetStream&api-version=5.0)
+![opportunitiy Summary](../docs/media/OpportunitySummary.PNG)
 
 <br>
 
@@ -68,13 +55,10 @@
 
 ### Communication Analysis:
 
-
-
----
 <br>
 
 
-![Communication Analysis](https://dev.azure.com/Microsoft-Graph-Data-Connect-Solution-23-SMS-7186/3b38bb2b-5d73-4d2e-a6f9-3be46e53ce1e/_apis/git/repositories/7bf497aa-7f32-4bf9-afab-1fdb00605e14/items?path=/docs/media/CommunicationAnalysis.png&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=feature/pbi&resolveLfs=true&%24format=octetStream&api-version=5.0)
+![Communication Analysis](../docs/media/CommunicationAnalysis.png)
 
 
 
@@ -85,15 +69,9 @@
 
 
 ### Help Information:
-
-
-
-
----
-
 <br>
 
-![Help Information Overview](https://dev.azure.com/Microsoft-Graph-Data-Connect-Solution-23-SMS-7186/3b38bb2b-5d73-4d2e-a6f9-3be46e53ce1e/_apis/git/repositories/7bf497aa-7f32-4bf9-afab-1fdb00605e14/items?path=/docs/media/HelpInformation.png&versionDescriptor%5BversionOptions%5D=0&versionDescriptor%5BversionType%5D=0&versionDescriptor%5Bversion%5D=feature/pbi&resolveLfs=true&%24format=octetStream&api-version=5.0)
+![Help Information Overview](../docs/media/HelpInformation.png)
 
 
 #### **Navigation**
@@ -108,7 +86,7 @@
    Sentiment Analysis and Communication Map offer a deeper understanding of customer satisfaction and engagement, facilitating better relationship management and targeted communication efforts.
    Email Communication data aids in tracking interactions with prospects, optimizing outreach efforts, and enhancing overall communication efficiency.
 
-####**Explainability**
+#### **Explainability**
 
 - Overall Sentiment Score: The model combines all the sentence-level scores and calculates their average. This average score represents the overall sentiment of the entire email. It's like a summary of how the whole email feels, without favoring any specific sentence.
 - Word-Level Analysis: The model examines the impact of each word in the emails by calculating scores for each word. It pays attention only to meaningful words and ignores common words like "a," "an," and "the," which don't contribute much to the sentiment.
