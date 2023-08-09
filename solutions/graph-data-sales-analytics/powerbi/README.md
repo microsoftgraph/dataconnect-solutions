@@ -16,7 +16,7 @@
 ### **Data Connection** 
 
  - **Azure Syanapse Analtics SQL** : Import Mode 
- <br>
+
  - **Access Power BI Report Using Parameters**:
     - Configured parameterization for the Server Name and Database Name, integrated dynamic M queries for each table.
     - Upon downloading the PowerBI template file, open it, and input the parameter values as given below, providing the respective data source parameters.
@@ -41,12 +41,7 @@
  
 ### Opportunity Summary:
 
-<br>
-
 ![opportunitiy Summary](../docs/media/OpportunitySummary.PNG)
-
-<br>
-
 
 - **Analyze Revenue trend over time**: Track the revenue generated from opportunities over different time periods, enabling you to identify growth patterns, seasonality, trends, and opportunity lost.
 - **Sentiment by Account or Opportunity**: Evaluate the sentiment associated with each account or opportunity, providing insights into customer satisfaction and potential areas for improvement.
@@ -54,25 +49,15 @@
 - **Revenue by accounts**: Gain visibility into revenue generated from different accounts, helping you prioritize and focus on high-value customers for continued growth.
 
 ### Communication Analysis:
-
-<br>
-
-
 ![Communication Analysis](../docs/media/CommunicationAnalysis.png)
-
-
 
 - **Opportunity Interactions** : Enables sales teams to track account and opportunity data in a structured format. Facilitates analysis of conversation counts, identifying engagement levels with accounts. Last interaction timestamp helps prioritize follow-ups and ensures timely communication. Provides an overview of the sales pipeline, allowing for better sales forecasting and planning.
 - **Communication Map** : Offers a visual representation of email interactions, making it easier to identify key communication patterns and relationships. Helps sales and customer support teams understand the most frequent interactions between email addresses. 
 - **Email Communications** : Empowers teams to analyze email conversations in detail, improving customer communication. Enables understanding of sentiment scores, aiding in gauging customer satisfaction, and addressing concerns promptly.
 
-
-
 ### Help Information:
-<br>
 
 ![Help Information Overview](../docs/media/HelpInformation.png)
-
 
 #### **Navigation**
 
