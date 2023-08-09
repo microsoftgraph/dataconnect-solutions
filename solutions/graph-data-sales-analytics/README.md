@@ -84,5 +84,3 @@ Kindly note the following considerations:
 
 - Regular updates may be performed to accommodate adjustments and fixes.
 - Network graph visualizations in the Power BI template are limited to 1500 nodes.
-
-For any inquiries or assistance, please feel free to contact us at [example@example.com](mailto:example@example.com).
