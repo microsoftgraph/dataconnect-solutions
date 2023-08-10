@@ -14,48 +14,48 @@ Template.
 
 ![](Images/EsaPbiTemplateDownload.png)
 
-3. Open the PowerBI file and click on Transform data → Data source settings
+3. Open the PowerBI file and click on Transform data → Data source settings.
 
 ![](Images/DataSourceSettings.png)
 
-4. You will see 1 data source in the Data source settings page
+4. You will see 1 data source in the Data source settings page.
 
 ![](Images/ChangeSource.png)
 
-5. Select it and click on Change Source. Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline. **Make sure the URL says dfs, not blob. If it says blob, change it to dfs.**
+5. Select it and click on Change Source. Change the Storage account path in URL with right storage account that data is generated from synapse pipeline in the steps above. You can get the storage account that is used in Synapse template pipeline. **Make sure the URL says dfs.core.windows.net, not blob.core.windows.net. If it says blob, change it to dfs.**
 
 ![](Images/ADLStorageURLChange.png)
 
 6. Set the right storage account key / credentials for these data sources.
-    - Click on Edit Permissions
+    - Click on Edit Permissions.
 
         ![](Images/EditPermissions1.png)        
 
-    - Click on Edit under credentials
+    - Click on Edit under credentials.
 
         ![](Images/EditPermissions.png)        
 
-    - Enter the storage account key value
+    - Enter the storage account key value.
 
         ![](Images/ProvideAccountKey.png)        
 
-    - The storage key can be retrieved by navigating to the storage account in azure portal (storage account → access keys)
+    - The storage key can be retrieved by navigating to the storage account in azure portal (storage account → access keys).
 
         ![](Images/4.4.d.png)        
 
-7. Confirm the Source and Navigation steps in each data source match to the folder location and file ID
+7. Confirm the Source and Navigation steps in each data source match to the folder location and file ID.
 
 ![](Images/5.1.png)
 
 ![](Images/5.2.png)
 
-8. You may need to click on Apply Changes or Refresh the data
+8. You may need to click on Apply Changes or Refresh the data.
 
 ![](Images/ClickApplyChanges.png)
 
 ![](Images/refresh.png)
 
-9. Congratulations, you are all set and will see that the report will be refreshed with the latest data
+9. Congratulations, you are all set and will see that the report will be refreshed with the latest data.
 
     ![](https://github.com/v-travhanes/dataconnect-solutions/blob/3c86c07cec44d809553c4c305c7241a03ecb5ae4/solutions/esa/Images/Welcome%20Page.png) 
 
