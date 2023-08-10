@@ -25,7 +25,7 @@ If you already have an MGDC app and its secret, the automated deployment to Azur
 
 The link below sets up the Azure resource group for the template, which are:
 
-- Create an ACS Language Resource
+- Create an Azure Cognitive Services (ACS) Language Resource
 - Create a Synapse Workspace
 - Create a Spark Pool for the Synapse workspace
 - Create a storage account for the extracted data
