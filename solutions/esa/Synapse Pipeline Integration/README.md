@@ -27,7 +27,7 @@
 
 ![](Images/IntegratePipeline3.png)
 
-6.  Navigate to the Develop page (third icon on the left) -> ESA and ensure the notebook is attached to the onasynapsepool.
+6.  Navigate to the Develop page (third icon on the left) -> ESA and ensure the notebook is attached to the esasynapsepool.
 
 ![](Images/3.5.a.png)
 
