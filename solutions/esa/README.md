@@ -13,7 +13,7 @@ The purpose of ESA is to track what topics people are discussing in internal com
 
 This template leverages a Contoso emails and teamschat datasets, as well as a completed Entity and Sentiment Analysis dataset based on Enron emails.
 
-**After you follow these steps, you will have a Power BI dashboard related to Enitity Sentiment Analysis, like the one shown below.**
+**After you follow these steps, you will have a Power BI dashboard related to Entity Sentiment Analysis, like the one shown below.**
 
 ![](https://github.com/v-travhanes/dataconnect-solutions/blob/3c86c07cec44d809553c4c305c7241a03ecb5ae4/solutions/esa/Images/Welcome%20Page.png) 
 
