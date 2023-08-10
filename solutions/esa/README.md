@@ -29,7 +29,7 @@ The link below sets up the Azure resource group for the template, which are:
 - Create a Synapse Workspace
 - Create a Spark Pool for the Synapse workspace
 - Create a storage account for the extracted data
-- Grant permission to the Synapse workspace & the MGDC Service Principal to the storage account as Blob Data Contributor
+- Grant permission to the Synapse workspace & the MGDC Service Principal to the storage account as Storage Blob Data Contributor
 
 Custom deployment - Microsoft Azure [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fv-travhanes%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fesa%2FARMTemplate%2Fazuredeploy.json)
 
