@@ -58,9 +58,3 @@ Download the pre-created PowerBI security report that can generate insights from
 
 Link to download PowerBI template [here](https://github.com/v-travhanes/dataconnect-solutions/tree/main/solutions/esa/PBItemplate)
 
-## **Feedback & Considerations**
-
-Feedback is welcome [here](https://aka.ms/ona-m365-feedback)
-
-The following considerations apply:
-- There may be updates performed regularly to fit for adjustments and fixes 
