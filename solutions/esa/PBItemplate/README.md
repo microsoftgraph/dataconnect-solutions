@@ -9,7 +9,7 @@
 Below steps will help to link datasets that are generated using Synapse pipeline above to link to PowerBI 
 Template. 
 1. Download and install Microsoft Power BI Desktop if you don’t have it installed already on your machine. 
-    - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center. [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494)
+    - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494).
 2. Download the pre-created PowerBI report from this folder.
 
 ![](Images/EsaPbiTemplateDownload.png)
