@@ -14,47 +14,47 @@ and secret to setup the other required resources.
 
 ![](Images/1.1.png)
 
-2. Register a new application
+2. Register a new application.
 
 ![](Images/1.2.png)
 ![](Images/1.3.png)
 
-3. Save the application id (In the screenshot, the one ending in e430). Navigate to API permissions in the Manage menu on the left
+3. Save the application id (In the screenshot, the one ending in e430). Navigate to API permissions in the Manage menu on the left.
 
 ![](Images/1.4.png)
 
-4. Select "Microsoft Graph" from the Add permission flyout
+4. Select "Microsoft Graph" from the Add permission flyout.
 
 ![](Images/1.5.png)
 
-5. Select "Application permissions -> Applications -> Application.Read.All"
+5. Select "Application permissions -> Applications -> Application.Read.All".
 
 ![](Images/1.6.png)
 
-6. Explicitly Grant consent for the new permissions
+6. Explicitly Grant consent for the new permissions.
 
 ![](Images/1.7.png)
 
-7. Verify that that the status shows as granted for the new Application.Read.All permission
+7. Verify that that the status shows as granted for the new Application.Read.All permission.
 
 ![](Images/1.8.png)
 
-8. Navigate to "Certificates and secrets" in the left pane and click on "New client secret"
+8. Navigate to "Certificates and secrets" in the left pane and click on "New client secret."
 
 ![](Images/1.9.png)
 
-9. Provide a description and add a secret
+9. Provide a description and add a secret.
 
 ![](Images/1.10.b.png)
 
-10. Copy the value of this new secret and save it securely before navigating away from this page
+10. Copy the value of this new secret and save it securely before navigating away from this page.
 
 ![](Images/1.11.png)
 
 ## Azure Resources Deployment
 
 1. Use this link to initiate the setup of the pre-requisites. Use the appid and secret created in the 
-previous steps. Custom deployment - Microsoft Azure [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fv-travhanes%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fesa%2FARMTemplate%2Fazuredeploy.json)
+previous steps. Custom deployment - Microsoft Azure [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fv-travhanes%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fesa%2FARMTemplate%2Fazuredeploy.json).
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fv-travhanes%2Fdataconnect-solutions%2Fmain%2Fsolutions%2Fesa%2FARMTemplate%2Fazuredeploy.json"><img src="https://camo.githubusercontent.com/bad3d579584bd4996af60a96735a0fdcb9f402933c139cc6c4c4a4577576411f/68747470733a2f2f616b612e6d732f6465706c6f79746f617a757265627574746f6e" alt="Deploy Environment in Azure" /></a>
 
