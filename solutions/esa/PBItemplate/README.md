@@ -89,31 +89,31 @@ To update the data source to point at a different file, these steps are recommen
 
 **Overview Page**
 
-This page gives you a high-level view of all the data represented on a simple table. Keep in mind that we’ve filtered each widget to only provide the Top 100 Topics by Mention. Otherwise, there would be thousands of not-applicable Topics and Topics that have only been mentioned once. Accompanying the table are the three topics with the Most Mentions, Most Positive Mentions, and Most Negative Mentions.
+This page gives you a high-level view of all the data represented on a simple table. Keep in mind that we’ve filtered each widget to only provide the Top 100 keywords by Mention. Otherwise, there would be thousands of not-applicable keywords and keywords that have only been mentioned once. Accompanying the table are the three keywords with the Most Mentions, Most Positive Mentions, and Most Negative Mentions.
 
 ![](Images/OverviewPage.png) 
 
 **Sentiment Scatter Plot Page**
 
-This scatter plot is based on each Topic’s Sentiment Score and its number of Mentions. The dots are colored according to General Sentiment to ease reviewing the data. This is especially helpful for differentiating between the Neutral, Mixed, and Polarized general sentiments, but also emphasizes the differences between Positive and Very Positive, and Negative and Very Negative. Additionally, instead of having to remember each Topic and search for it on the View Topic page, you can get a quick snapshot of it by mousing over the datapoint and bringing up its Topic Tooltip. In this way, you can quickly check the data while having it all on the board. 
+This scatter plot is based on each keyword’s Sentiment Score and its number of Mentions. The dots are colored according to General Sentiment to ease reviewing the data. This is especially helpful for differentiating between the Neutral, Mixed, and Polarized general sentiments, but also emphasizes the differences between Positive and Very Positive, and Negative and Very Negative. Additionally, instead of having to remember each keyword and search for it on the View keyword page, you can get a quick snapshot of it by mousing over the datapoint and bringing up its keyword Tooltip. In this way, you can quickly check the data while having it all on the board. 
 
 ![](Images/SentimentScatterPlotPage.png) 
 
-**Conflate Topics Page**
+**Conflate Keywords Page**
 
-You’ll quickly realize that the entities aren’t always aggregated perfectly. Senders may be discussing the same Topic, but not using the same word. In a dataset about airline reviews, for instance, you might find a lot of posts about baggage-handling. The Senders could use words “bag,” “bags,” or “baggage” in reference to it. For situations like these, we’ve provided the Conflate Topics page.  Select the Topics that are alike in the slicer at the top left, and you’ll find your grouping on the table to its immediate right. All of the data displayed is an aggregate of the provided Topics. Using this tool, you can merge Topics together that are similar, but not identical. 
+You’ll quickly realize that the entities aren’t always aggregated perfectly. Senders may be discussing the same keyword, but not using the same word. In a dataset about airline reviews, for instance, you might find a lot of posts about baggage-handling. The Senders could use words “bag,” “bags,” or “baggage” in reference to it. For situations like these, we’ve provided the Conflate keywords page.  Select the keywords that are alike in the slicer at the top left, and you’ll find your grouping on the table to its immediate right. All of the data displayed is an aggregate of the provided keywords. Using this tool, you can merge keywords together that are similar, but not identical. 
 
-![](Images/MergeAlikeTopicsPage.png) 
+![](Images/MergeAlikekeywordsPage.png) 
 
-**Compare Topics**
+**Compare Keywords**
 
-Just like with the Merge Alike Topics page, select which Topics you’d like to compare in the slicer in the top left and they’ll be added to the table to its immediate right. All of the visuals on this page will show the group of Topics you’ve selected.
+Just like with the Merge Alike keywords page, select which keywords you’d like to compare in the slicer in the top left and they’ll be added to the table to its immediate right. All of the visuals on this page will show the group of keywords you’ve selected.
 
-![](Images/CompareTopicsPage.png) 
+![](Images/ComparekeywordsPage.png) 
 
-**View Topic**
+**View Keyword**
 
-For an in-depth view of a single Topic, visit the View Topic page. It provides a more readable interface than a table. By showing the various metric values, plus a couple graphs for how mentions and sentiment have changed over time, you’ll gain a better understanding of the chosen Topic. Perhaps you'll even pick up correlations between time and popularity. 
+For an in-depth view of a single keyword, visit the View keyword page. It provides a more readable interface than a table. By showing the various metric values, plus a couple graphs for how mentions and sentiment have changed over time, you’ll gain a better understanding of the chosen keyword. Perhaps you'll even pick up correlations between time and popularity. 
 
-![](Images/ViewTopicPage.png) 
+![](Images/ViewkeywordPage.png) 
 
