@@ -103,17 +103,17 @@ This scatter plot is based on each keyword’s Sentiment Score and its number of
 
 You’ll quickly realize that the entities aren’t always aggregated perfectly. Senders may be discussing the same keyword, but not using the same word. In a dataset about airline reviews, for instance, you might find a lot of posts about baggage-handling. The Senders could use words “bag,” “bags,” or “baggage” in reference to it. For situations like these, we’ve provided the Conflate keywords page.  Select the keywords that are alike in the slicer at the top left, and you’ll find your grouping on the table to its immediate right. All of the data displayed is an aggregate of the provided keywords. Using this tool, you can merge keywords together that are similar, but not identical. 
 
-![](Images/MergeAlikekeywordsPage.png) 
+![](Images/MergeAlikeTopicsPage.png) 
 
 **Compare Keywords**
 
 Just like with the Merge Alike keywords page, select which keywords you’d like to compare in the slicer in the top left and they’ll be added to the table to its immediate right. All of the visuals on this page will show the group of keywords you’ve selected.
 
-![](Images/ComparekeywordsPage.png) 
+![](Images/CompareTopicsPage.png) 
 
 **View Keyword**
 
 For an in-depth view of a single keyword, visit the View keyword page. It provides a more readable interface than a table. By showing the various metric values, plus a couple graphs for how mentions and sentiment have changed over time, you’ll gain a better understanding of the chosen keyword. Perhaps you'll even pick up correlations between time and popularity. 
 
-![](Images/ViewkeywordPage.png) 
+![](Images/ViewTopicPage.png) 
 
