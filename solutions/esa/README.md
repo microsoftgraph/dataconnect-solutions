@@ -15,7 +15,7 @@ This template leverages a Contoso emails and teamschat datasets, as well as a co
 
 **After you follow these steps, you will have a Power BI dashboard related to Entity Sentiment Analysis, like the one shown below.**
 
-![](Images/Welcome Page.png)
+![](Images/WelcomePage.png)
 
 ## Installing Pre-reqs
 
