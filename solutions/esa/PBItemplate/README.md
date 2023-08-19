@@ -57,7 +57,7 @@ Template.
 
 9. Congratulations, you are all set and will see that the report will be refreshed with the latest data.
 
-    ![](https://github.com/v-travhanes/dataconnect-solutions/blob/3c86c07cec44d809553c4c305c7241a03ecb5ae4/solutions/esa/Images/Welcome%20Page.png) 
+    ![](Images/WelcomePage.png) 
 
 ## Data Source Updates
 
