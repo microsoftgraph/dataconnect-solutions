@@ -157,6 +157,8 @@ to a sql database. To provide access to the database follow the steps described 
 To build the jars without running the tests, run `mvn clean install -DskipTests`  
 The resulting jars can be found in the `target` folder of the corresponding module
 
+> Note: If you encounter any issue in the above step, try running ```mvn clean compile``` before running ```mvn clean install```
+
 ### Building the python utils wheel
 The steps required to build the pygraph utils wheel are defined in the pygraph_utils [readme file](../pygraph/azure_processing/pygraph_utils/README.md)
 
