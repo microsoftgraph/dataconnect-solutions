@@ -33,7 +33,7 @@ def prompt_or_create_ad_group(msg: str, tenant_id='default', provided_ad_group_i
             print('\n')
 
         if is_valid_uuid(ad_group):
-            rsp = az_cli("ad group list ", "--filter", "objectId eq '%s' " % ad_group)
+            rsp = az_cli("ad group list ", "--filter", "id eq '%s' " % ad_group)
         else:
             rsp = az_cli("ad group list ", "--filter", "displayname eq '%s' " % ad_group)
         if len(rsp) > 1:
@@ -44,12 +44,12 @@ def prompt_or_create_ad_group(msg: str, tenant_id='default', provided_ad_group_i
                 print("Please select unique name/objectId : ")
             print("ObjectId\tName ")
             for group in rsp:
-                print("%s\t%s" % (group['objectId'], group['displayName']))
+                print("%s\t%s" % (group['id'], group['displayName']))
         elif len(rsp) == 1:
             group = rsp[0]
             if not no_input:
                 group_accepted = yes_no("Selected group: %s, objectId: %s, confirm (y/n)" % (group['displayName'],
-                                                                                             group['objectId']))
+                                                                                             group['id']))
                 # reset selection if not accepted to prompt again
                 ad_group = ad_group if group_accepted else None
             else:
@@ -69,7 +69,7 @@ def prompt_or_create_ad_group(msg: str, tenant_id='default', provided_ad_group_i
 
     return {
         "ad_group_name": group['displayName'],
-        "objectId": group['objectId']
+        "objectId": group['id']
     }
 
 
@@ -199,7 +199,7 @@ def get_or_create_service_principal(name: str, tenant_id: str, non_interactive_m
         service_principal = dict()
         sp_accepted = False
         while not sp_accepted:
-            existing_sps = az_cli("ad sp list ", "--all", "--filter", "displayName eq '%s' " % name, "--query", "[?contains(appOwnerTenantId, '%s')]" % tenant_id)
+            existing_sps = az_cli("ad sp list ", "--all", "--filter", "displayName eq '%s' " % name, "--query", "[?contains(appOwnerOrganizationId, '%s')]" % tenant_id)
             if len(existing_sps) > 1:
                 print("There are multiple service principal found in your tenant ")
                 if create_if_not_exists:
@@ -414,5 +414,5 @@ def get_loggedin_user(fields: list):
 
 
 def get_service_principal_object_id(app_id: str):
-    rsp = az_cli("ad sp show", "--id", app_id, "--query", "objectId")
+    rsp = az_cli("ad sp show", "--id", app_id, "--query", "id")
     return rsp
