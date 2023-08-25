@@ -18,7 +18,7 @@ from skills_finder_utils import ad_ops
 
 class InstallConfiguration:
     __dump_file_name = expanduser("~") + "/.gdc/gdc_params.p"
-    __backup_artifacts_path = expanduser("~") + "/gdc/scripts/artifacts/"
+    __backup_artifacts_path = expanduser("~") + "/gdc/arm/scripts/artifacts/"
     __artifacts_path = str(pathlib.Path(__file__).parent.absolute()) + "/artifacts/"
 
     """
