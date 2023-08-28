@@ -139,7 +139,7 @@ echo "Deploying in subscription $SUBSCRIPTION_ID from tenant $TENANT_ID"
 
 if [[ -z "${NO_INPUT}" ]]; then
   REQUIRED_ROLE="Owner"
-  LOGGED_USER_ID=$(az ad signed-in-user show --query objectId --output tsv)
+  LOGGED_USER_ID=$(az ad signed-in-user show --query id --output tsv)
   ASSIGNMENTS_LIST=$(az role assignment list --scope /subscriptions/${SUBSCRIPTION_ID} --assignee ${LOGGED_USER_ID} --include-classic-administrators true --include-groups --include-inherited --role "${REQUIRED_ROLE}" --query [].{id:id} --output tsv)
   if [[ -z "${ASSIGNMENTS_LIST}" ]]; then
     echo "You don't have enough permissions within selected subscription ${SUBSCRIPTION_ID}. Required role: ${REQUIRED_ROLE}"
