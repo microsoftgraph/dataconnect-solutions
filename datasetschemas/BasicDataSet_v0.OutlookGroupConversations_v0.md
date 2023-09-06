@@ -8,7 +8,7 @@ ms.prod: "data-connect"
 
 # Overview
 
-The BasicDataSet_v0.OutlookGroupConversations_v0 dataset contains messages and conversations from [Microsoft 365](https://support.microsoft.com/en-us/office/create-a-group-in-outlook-04d0c9cf-6864-423c-a380-4fa858f27102) groups in Outlook.
+The BasicDataSet_v0.OutlookGroupConversations_v0 dataset contains messages and conversations from [Microsoft 365](https://support.microsoft.com/en-us/office/create-a-group-in-outlook-04d0c9cf-6864-423c-a380-4fa858f27102) groups in Outlook. This sentence is for demo purposes.
 
 ## Properties
 | Name | Type | Description | SampleData | FilterOptions | IsDateFilter | 

@@ -8,7 +8,7 @@ ms.prod: "data-connect"
 
 # Overview
 
-The BasicDataSet_v0.TeamsCallRecords_v1 dataset Contains activity records from Teams calls and meetings.
+The BasicDataSet_v0.TeamsCallRecords_v1 dataset Contains activity records from Teams calls and meetings. This sentence is for demo purposes.
 
 ## Properties
 | Name | Type | Description | SampleData | FilterOptions | IsDateFilter | 
