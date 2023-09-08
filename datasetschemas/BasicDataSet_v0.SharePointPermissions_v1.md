@@ -17,6 +17,7 @@ The BasicDataSet_v0.SharePointPermissions_v1 dataset contains SharePoint permiss
 | ptenant | String | GUID that identifies the Office 365 tenant in AAD |
 | SiteId | String | GUID that identifies the SharePoint site (site collection) |
 | WebId | String | GUID that identifies the SharePoint web (subsite) |
+| ListId | String | GUID that identifies the SharePoint list |
 | ItemType | String | The type of item being shared (Site, Folder, File) |
 | ItemURL | String | URL to the item being shared |
 | FileExtension | String | File extension of the item being shared (optional, shows only if item type is file) |
