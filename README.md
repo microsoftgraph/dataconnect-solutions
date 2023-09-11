@@ -1,5 +1,9 @@
 # Microsoft Graph Data Connect - Solutions
 
+## [Entity Sentiment Analysis](solutions/esa/README.md)
+
+The purpose of ESA is to track what subjects people are discussing in internal communications and how they're discussing them. With this tool, you'll be able to detect potential security conflicts, monitor reception to particular events, and gather company-wide sentiment surrounding important concepts. This solution template enables customers to leverage ESA metrics from M365 data and analyze the entities and sentiments therein.
+
 ## [Organizational Network Analysis](solutions/ona/README.md)
 
 The purpose of ONA is to harness information flows and team connectivity to unlock productivity, innovation, employee engagement and organizational change. This solution template enables customers to leverage ONA metrics from M365 data and analyze the networks within.
