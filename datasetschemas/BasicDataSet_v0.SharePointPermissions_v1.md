@@ -12,32 +12,33 @@ The BasicDataSet_v0.SharePointPermissions_v1 dataset contains SharePoint permiss
 
 ## Properties
 
-| Name | Type | Description  | SampleData | FilterOptions | IsDateFilter | 
-|--|--|--| -- | -- |--|
-| ptenant | String | GUID that identifies the Office 365 tenant in AAD |4b4741c0-4d67-4c21-842a-abcea48840d5|0|false|
-| SiteId | String | GUID that identifies the SharePoint site (site collection) |ec508b4b-6e54-401c-826f-775950f03353|0|false|
-| WebId | String | GUID that identifies the SharePoint web (subsite) |efe47d8c-6672-420b-80f9-fb884195bcbe|0|false|
-| ItemType | String | The type of item being shared (Site, Folder, File) | File|0|false|
-| ItemURL | String | URL to the item being shared |personal/johnd_contoso_onmicrosoft_com/Documents/SampleFolder/test.tsv|0|false|
-| FileExtension | String | File extension of the item being shared (optional, shows only if item type is file) |tsv|0|false|
-| RoleDefinition | String | Sharing role (Read, Contribute, Full Control) |Read|0|false|
-| LinkId | String | GUID for the share Link (optional, won’t show if share has no link) |e2acbe31-487d-460e-886c-366039ede3a8|0|false|
-| ScopeId | String | GUID that identifies the SharePoint scope |793e2f2d-cdf5-406a-91fc-d32b9ed9c2f1|0|false|
-| LinkScope | String | Scope of sharing link (specific people, anyone)(optional, won’t show if share has no link) |Anyone|0|false|
-| SharedWithCount | Object\[\] | Object array with one entry for every type of sharing recipient |[{"Type":"SharePointGroup","Count":1}]|0|false|
-| SharedWithCount, Type | String | Type of sharing recipient (Internal, External, SecurityGroup, SharePoint Group) |SharePointGroup|0|false|
-| SharedWithCount, Count | Number | Number of sharing recipients of this type |1|0|false|
-| SharedWith | Object\[\] | Object array with one entry for every sharing recipient |[{"Type":"SharePointGroup","Name":"ContosoTestingMembers"}]|0|false|
-| SharedWith, Type | String | Type of sharing recipient (Internal, External, SecurityGroup, SharePoint Group) |SharePointGroup|0|false|
-| SharedWith, Name | String | Name of sharing recipient |ContosoTestingMembers|0|false|
-| SharedWith, EmailAddress | String | Email of sharing recipient (optional, won’t show for SharePoint groups or special security groups) |ContosoTestingMembers@domain.com|0|false|
-| SnapshotDate | Date | Data this data set was collected, in UTC |2022-03-16T00:00:00Z|1|true|
-| ShareCreatedBy | String | The user or group that created the sharing link. Format: <Struct <Type: String, Name: String, Email: String>> |{"Type": "User","Name": "John Smith","Email": "jsmith@contoso.com"}|0|false|
-| ShareCreatedTime | Date | The date and time when the share link was created |2022-03-16T00:00:00Z|0|false|
-| ShareLastModifiedBy | String | The user or group that last modified the sharing link. Format: <Struct <Type: String, Name: String, Email: String>> |{"Type": "User","Name": "John Smith","Email": "jsmith@contoso.com"}|0|false|
-| ShareLastModifiedTime | Date | The date and time when the share was last modified |2022-03-16T00:00:00Z|0|false|
-| ShareExpirationTime | Date | The date and time when the share link will expire |2022-03-16T00:00:00Z|0|false|
-| Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted')|Created|0|false|
+| Name | Type | Description |
+|--|--|--|
+| ptenant | String | GUID that identifies the Office 365 tenant in AAD |
+| SiteId | String | GUID that identifies the SharePoint site (site collection) |
+| WebId | String | GUID that identifies the SharePoint web (subsite) |
+| ListId | String | GUID that identifies the SharePoint list |
+| ItemType | String | The type of item being shared (Site, Folder, File) |
+| ItemURL | String | URL to the item being shared |
+| FileExtension | String | File extension of the item being shared (optional, shows only if item type is file) |
+| RoleDefinition | String | Sharing role (Read, Contribute, Full Control) |
+| LinkId | String | GUID for the share Link (optional, won’t show if share has no link) |
+| ScopeId | String | GUID that identifies the SharePoint scope |
+| LinkScope | String | Scope of sharing link (specific people, anyone)(optional, won’t show if share has no link) |
+| SharedWithCount | Object\[\] | Object array with one entry for every type of sharing recipient |
+| SharedWithCount, Type | String | Type of sharing recipient (Internal, External, SecurityGroup, SharePoint Group) |
+| SharedWithCount, Count | Number | Number of sharing recipients of this type |
+| SharedWith | Object\[\] | Object array with one entry for every sharing recipient |
+| SharedWith, Type | String | Type of sharing recipient (Internal, External, SecurityGroup, SharePoint Group) |
+| SharedWith, Name | String | Name of sharing recipient |
+| SharedWith, EmailAddress | String | Email of sharing recipient (optional, won’t show for SharePoint groups or special security groups) |
+| SnapshotDate | Date | Data this data set was collected, in UTC |
+| ShareCreatedBy | String | The user or group that created the sharing link. Format: <Struct <Type: String, Name: String, Email: String>> |
+| ShareCreatedTime | Date | The date and time when the share link was created |
+| ShareLastModifiedBy | String | The user or group that last modified the sharing link. Format: <Struct <Type: String, Name: String, Email: String>> |
+| ShareLastModifiedTime | Date | The date and time when the share was last modified |
+| ShareExpirationTime | Date | The date and time when the share link will expire |
+| Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted')|
 
 ## Notes
 
