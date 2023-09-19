@@ -1,4 +1,4 @@
-# MGDC with Azure Cosmos DB
+# Microsoft Graph Data Connect with Azure Cosmos DB
 
 ## Table of contents
 * [Tutorial Overview](#tutorial-overview)
@@ -139,7 +139,7 @@ With this step complete, our Cosmos DB instance should be populated with data.
 
 > NOTE: You may execute different queries to investigate more specific data. For example:  
 > 1. ```g.E()``` to view the edge data.
-> 2. ```g.V('<office365-user>').as('b').bothE().as('e').select ('b', 'e')```, where `office365-user` would be a user that's available on your MGDC data set.
+> 2. ```g.V('<office365-user>').as('b').bothE().as('e').select ('b', 'e')```, where `office365-user` would be a user that's available on your Microsoft Graph Data Connect data set.
 
 ## Setting Up Linkcurious for Cosmos DB
 
