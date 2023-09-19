@@ -1,4 +1,4 @@
-Release Notes for Organization Network Analysis (ONA) MGDC Template
+Release Notes for Organization Network Analysis (ONA) Microsoft Graph Data Connect Template
 
 v1.0.0
 August 1, 2023

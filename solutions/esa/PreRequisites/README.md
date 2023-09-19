@@ -64,14 +64,14 @@ The link above sets up the Azure resource group for the template, which are:
 - Create a Synapse Workspace
 - Create a Spark Pool for the Synapse workspace
 - Create a storage account for the extracted data
-- Grant permission to the Synapse workspace & the MGDC Service Principal to the storage account as Blob Data Contributor
+- Grant permission to the Synapse workspace & the Microsoft Graph Data Connect Service Principal to the storage account as Blob Data Contributor
 
 
 By clicking on the above button (or navigating to the linked URL), you will be brought to the Azure portal on the Custom deployment page.
 
 2. On that screen, on top of providing information about the resource group and region to deploy the components into, you will need to provide the following information:
 
-- Application Id to be used by MGDC (from step #3, ending in e430)
+- Application Id to be used by Microsoft Graph Data Connect (from step #3, ending in e430)
 - Application secret for that app
 
 3. Once all required information has been provided, click on the Review + create button at the bottom of the page. This will validate that the information provided to the template is correct. 

@@ -25,16 +25,16 @@ The template leverages five data sets:
 
 ## Installing Pre-reqs
 
-If you do not have an MGDC app, please proceed to the detailed documentation [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/PreRequisites)  
+If you do not have an Microsoft Graph Data Connect app, please proceed to the detailed documentation [here](https://github.com/microsoftgraph/dataconnect-solutions/tree/main/solutions/ona/PreRequisites)  
 
-If you already have an MGDC app and its secret, the automated deployment to Azure helps setup the required resources in 5 minutes. 
+If you already have an Microsoft Graph Data Connect app and its secret, the automated deployment to Azure helps setup the required resources in 5 minutes. 
 
 The link below sets up the Azure resource group for the template, which are:
 
 - Create a Synapse Workspace
 - Create a Spark Pool for the Synapse workspace
 - Create a storage account for the extracted data
-- Grant permission to the Synapse workspace & the MGDC Service Principal to the storage account as Blob Data Contributor
+- Grant permission to the Synapse workspace & the Microsoft Graph Data Connect Service Principal to the storage account as Blob Data Contributor
 
 The required deployment assets are exactly the same to those for the ONA template, hence the naming convention is replicated but can be renamed post-deployment.
 
@@ -94,7 +94,7 @@ If required, change the flags if only certain datasets should run
 
 ![](Images/3.10.png)
 
-12. Congratulations! You just triggered the MGDC pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account
+12. Congratulations! You just triggered the Microsoft Graph Data Connect pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account
 
 13. You will see the data in the storage account
 
