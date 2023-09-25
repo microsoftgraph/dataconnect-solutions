@@ -69,7 +69,7 @@ The link above sets up the pre-requisites to using the information oversharing t
 - Create a Synapse Workspace
 - Create a Spark Pool for the Synapse workspace
 - Create a storage account for the extracted data
-- Grant permission to the Synapse workspace & the MGDC Service Principal to the storage account as Blob Data Contributor
+- Grant permission to the Synapse workspace & the Microsoft Graph Data Connect Service Principal to the storage account as Blob Data Contributor
 - Create an Azure SQL Server
 - Create a sample database within the Azure SQL Server.
 
@@ -77,7 +77,7 @@ By clicking on the above button (or navigating to the linked URL), users will be
 
 On that screen, on top of providing information about the resource group and region to deploy the components into, they will need to provide the following information:
 
-- Application Id to be used by MGDC (from step #3, ending in 9826)
+- Application Id to be used by Microsoft Graph Data Connect (from step #3, ending in 9826)
 - Application secret for that app
 - A new password for the Azure SQL Server
 
@@ -153,7 +153,7 @@ complete.
 
 ![](Images/33.png)
 
-14. Congratulations! You just triggered your first MGDC pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account.
+14. Congratulations! You just triggered your first Microsoft Graph Data Connect pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account.
 
 ![](Images/34.png)
 
