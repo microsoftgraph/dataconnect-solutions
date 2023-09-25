@@ -184,18 +184,7 @@ Template.
 
 ![](Images/45.png)
 
-
-6. Two data sources you need to update the path with right Date and correct GUID values for the data generated for Sharing and Sites datasets.
-    - Click on data sources that contain GUID’s (Most likely data sources 3 and 4 listed)
-    - Change path with right date and GUID Values Example: (https://**StorageAccountName**.dfs.core.windows.net/datasets/sharing/**YYYY**/**MM**/**DD**/**GUID**) 
-    
-    After changing the paths your new path should be like below Example:  (https://xyzabcpqr1234.dfs.core.windows.net/datasets/sharing/2022/10/03/12345678-0000-0000-0000-00000000000)
-
-    - You can get GUID/dates Values by navigating to storage account 
-
-![](Images/46.png)
-
-7. Now we need to give the right storage account key / credentials for these data sources.
+6. Now we need to give the right storage account key / credentials for these data sources.
     - Click on Edit Permissions
 
         ![](Images/47-a.png)        
@@ -208,12 +197,12 @@ Template.
 
         ![](Images/47-c.png)        
 
-    If you don’t know have storage key get the storage account key by navigating to storage account in azure portal (storage account → access keys)
+    - If you don’t know have storage key get the storage account key by navigating to storage account in azure portal (storage account → access keys)
 
-        ![](Images/47-d.png)        
+        ![](Images/47-d.png)         
 
-8. Congratulations, you are all set and will see that the report will be refreshed with the latest data
+7. Congratulations, you are all set and will see that the report will be refreshed with the latest data
 
     ![](Images/48.png) 
 
-9. If you see any error or data is not being refreshed then please make sure your entered right storage account details, path and GUID information along with credentials in data source settings
+8. If you see any error or data is not being refreshed then please make sure your entered right storage account details, path and GUID information along with credentials in data source settings
