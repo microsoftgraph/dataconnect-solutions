@@ -65,7 +65,7 @@ The TodoTasks_v0 dataset can be joined with the User_v1 dataset using the unique
 | Status | String | Indicates state or progress of the task: NotStarted, InProgress, Completed, WaitingOnOthers, Deferred. | No | None |
 | Subject | String | A brief description or title of the task. | No | None |
 | Attachments | String | The FileAttachment and ItemAttachment attachments for the message. Navigation property. *Format:*`ARRAY<STRUCT<LastModifiedDateTime: STRING, Name: STRING, ContentType: STRING, Size: INT, IsInline: BOOLEAN, Id: STRING>>.` | No | None |
-| DataType | String | Data type of the current folder. | No | None |
+| ODataType | String | Data type of the current folder. | No | None |
 | puser | String | User id. | No  | None |
 | ptenant | String |  Tenant id. | No | None |
 

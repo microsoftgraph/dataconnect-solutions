@@ -38,15 +38,15 @@ Mailbox folders can contain messages and other folders created by users.
 
 | Name  | Type  |  Description  |  FilterOptions  |  FilterType  | 
 | ----------- | ----------- | ----------- | ----------- | ----------- |
-| id | 	string | 	The unique identifier for 'mailFolder'. |	No |	None |
-| displayName |	string |	The display name for 'mailFolder'.  |	No |	None |
-| parentFolderId |	strin |g	The unique identifier for the folder's parent 'mailFolder'. |	No |	None |
-| childFolderCount |	int32 |	The number of immediate child folder in the current 'mailFolder'. |	No |	None |
-| unreadItemCount |	int32 |	The number of items in the 'mailFolder' marked as unread. |	No |	None |
-| totalItemCount |	int32 |	The number of items in the 'mailFolder'. |	No |	None |
-| ODataType |	string |	Data type of the current folder. |	No |	None |
-| puser	| string	| User id. |	No |  	None |
-| ptenant |	string  |	Tenant id. |	No |  	None |
+| id |  string | The unique identifier for 'mailFolder'. | No | None |
+| displayName | string | The display name for 'mailFolder'.  | No | None |
+| parentFolderId | string | The unique identifier for the folder's parent 'mailFolder'. | No | None |
+| childFolderCount | int32 | The number of immediate child folder in the current 'mailFolder'. | No | None |
+| unreadItemCount | int32 | The number of items in the 'mailFolder' marked as unread. | No | None |
+| totalItemCount | int32 | The number of items in the 'mailFolder'. | No | None |
+| ODataType | string | Data type of the current folder. | No | None |
+| puser | string | User id. | No |   None |
+| ptenant | string  | Tenant id. | No |   None |
 
 ## JSON representation
 

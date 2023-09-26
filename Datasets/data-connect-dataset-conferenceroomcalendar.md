@@ -88,19 +88,12 @@ The ConferenceRoomCalendar_v0 dataset can be joined with relevant events categor
 
 ## Query parameters
 
-In the request URL, provide the following required query parameters with values.
+In the request, please provide the Start time (UTC) and End time (UTC) date filter parameters with values. Details of the parameters are as below:
 
 | Parameter     | Type   | Description                                                                                                            |
 |:--------------|:-------|:-----------------------------------------------------------------------------------------------------------------------|
 | startDateTime | String | The start date and time of the time range, represented in ISO 8601 format. For example, "2019-11-08T19:00:00-08:00". |
 | endDateTime   | String | The end date and time of the time range, represented in ISO 8601 format. For example, "2019-11-08T20:00:00-08:00".   |
-
-The values of `startDateTime` and `endDateTime` are interpreted using the timezone offset specified in the value and are not impacted by the value of the `Prefer: outlook.timezone` header if present. If no timezone offset is included in the value, it is interpreted as UTC.
-
-This method also supports some of the [OData Query Parameters](/graph/query-parameters) to help customize the response.
-
-> [!NOTE]
-> The **createdDateTime** and **lastModifiedDateTime** properties of [event](../resources/event.md) do not support `$select`. To get their values, simply query on **calendarView** without applying `$select`.
 
 ## JSON representation
 
