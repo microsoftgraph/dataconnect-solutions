@@ -42,7 +42,7 @@ The SentItems_v1 dataset can be joined with datasets, such as Inbox, MailFolder,
 | id | string | The unique identifier of the message. | No | None |
 | createdDateTime | datetime | The date and time the message was created. | Yes | Date |
 | lastModifiedDateTime | datetime | The date and time the message was last changed. | Yes | Date |
-| cfhangeKey | string | The version of the message. | No | None |
+| changeKey | string | The version of the message. | No | None |
 | categories | string | The categories associated with the message. *Format:* `ARRAY<STRING>.` | No | None |
 | receivedDateTime | datetime | The date and time the message was received. | Yes | Date |
 | sentDateTime | datetime | The date and time the message was sent. | Yes | Date |

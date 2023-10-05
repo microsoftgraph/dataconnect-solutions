@@ -51,7 +51,7 @@ The DirectReport_v0 dataset can be joined with the Manager_v0 dataset.
 | id |	string |	The unique identifier for the direct report. Inherited from directoryObject. |	No |	None |
 | imAddresses |	string |	The instant message voice over IP (VOIP) session initiation protocol (SIP) addresses for the direct report. *Format:*` ARRAY<STRING>.` |	No |	None |
 | jobTitle	| string |	The direct report’s job title. |	No |	None |
-| legalAgeGroupClassificationv |	string |	Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated based on ageGroup and consentProvidedForMinor properties. *Allowed values:* null, minorWithOutParentalConsent, minorWithParentalConsent, minorNoParentalConsentRequired, notAdult and adult. |	No |	None |
+| legalAgeGroupClassification |	string |	Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated based on ageGroup and consentProvidedForMinor properties. *Allowed values:* null, minorWithOutParentalConsent, minorWithParentalConsent, minorNoParentalConsentRequired, notAdult and adult. |	No |	None |
 | mail | string	| The SMTP address for the direct report. |	No |	None |
 | mailNickname |	string |	The mail alias for the direct report. |	No |	None |
 | mobilePhone |	string |	The primary cellular telephone number for the direct report. |	No |	None |
