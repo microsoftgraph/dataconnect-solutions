@@ -76,6 +76,5 @@ The GroupOwners_v0 dataset can be joined with the GroupDetails_v0 and GroupMembe
 {"id":"e530bf91-e844-4369-a808-e0d12b1008cd","userPrincipalName":"contosouser21@contosotest21.onmicrosoft.com","displayName":"FirstName LastName","ODataType":"#microsoft.graph.user","pObjectId":"95b116e3-2d52-4503-bfc9-09ad4985a967","ptenant":"8e56195d-f07c-44f0-8108-40e4352e3e74"}
 {"id":"e530bf91-e844-4369-a808-e0d12b1008cd","userPrincipalName":"contosouser21@contosotest21.onmicrosoft.com","displayName":"FirstName LastName","ODataType":"#microsoft.graph.user","pObjectId":"966b082a-5c4d-4de7-b14a-9c145ec8ed69","ptenant":"8e56195d-f07c-44f0-8108-40e4352e3e74"}
 {"id":"e530bf91-e844-4369-a808-e0d12b1008cd","userPrincipalName":"contosouser21@contosotest21.onmicrosoft.com","displayName":"FirstName LastName","ODataType":"#microsoft.graph.user","pObjectId":"9b97ca6e-d0c0-4a84-b0aa-753695e8c1f2","ptenant":"8e56195d-f07c-44f0-8108-40e4352e3e74"}
-{"id":"e530bf91-e844-4369-a808-e0d12b1008cd","userPrincipalName":"contosouser21@contosotest21.onmicrosoft.com","displayName"
-:"FirstName LastName","ODataType":"#microsoft.graph.user","pObjectId":"9d96497a-4197-4c03-8809-4fa46dffd9e6","ptenant":"8e56195d-f07c-44f0-8108-40e4352e3e74"}
+{"id":"e530bf91-e844-4369-a808-e0d12b1008cd","userPrincipalName":"contosouser21@contosotest21.onmicrosoft.com","displayName":"FirstName LastName","ODataType":"#microsoft.graph.user","pObjectId":"9d96497a-4197-4c03-8809-4fa46dffd9e6","ptenant":"8e56195d-f07c-44f0-8108-40e4352e3e74"}
 ```
