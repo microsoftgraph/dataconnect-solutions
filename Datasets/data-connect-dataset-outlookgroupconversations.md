@@ -64,7 +64,7 @@ The OutlookGroupConversations_v0 dataset can be joined with Mail, Message, Mail 
 | ToRecipients |	string |	The To recipients for the message. |	No |	None |
 | UniqueBody |	string |	The part of the body of the message that is unique to the current message. It is in text format. |	No |	None |
 | WebLink |	string	| The URL to open the message in Microsoft Outlook web app. |	No |	None |
-| oDataType |	string |	Data type of the current folder. |	No	| None |
+| ODataType |	string |	Data type of the current folder. |	No	| None |
 | pObjectId |	string |	Object id. |	No |	None |
 | ptenant |	string |	Tenant id |	No |	None |
 

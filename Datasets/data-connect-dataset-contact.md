@@ -77,7 +77,7 @@ The Contact_v0 dataset can be joined with the Users dataset, and other relevant 
 | YomiSurname |	string |	The phonetic Japanese surname (last name) of the contact. |	No |	None |
 | ODataType |	string |	Data type of the current folder. |	No |	None |
 | puser	 | string |	User id. | 	No |  	None |
-| ptenant |	strinf  | 	Tenant id. |	No |  	None |
+| ptenant |	string  | 	Tenant id. |	No |  	None |
 
 
 ## JSON representation

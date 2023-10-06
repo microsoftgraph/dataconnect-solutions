@@ -81,9 +81,9 @@ The User_v0 dataset can be joined with other datasets that can be mapped to the 
 {
   "ExternalEmailAddress": "String",
   "Languages": ["String"],
-  "Name": “String”,
+  "Name": "String",
   "EmailAddresses": ["String"],
-  "PrimarySmtpAddress": “String”,
+  "PrimarySmtpAddress": "String",
   "DisplayName": "String",
   "City": "String",
   "Company": "String",
