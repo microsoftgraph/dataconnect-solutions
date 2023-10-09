@@ -8,7 +8,7 @@ ms.prod: "data-connect"
 
 # Overview
 
-Contains the email message in each user's mailbox.
+Contains the email message from each user's mailbox.
 
 ## Properties
 
