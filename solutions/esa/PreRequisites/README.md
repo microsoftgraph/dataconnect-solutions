@@ -10,46 +10,71 @@
 The first step to running this template would be to create an application in the tenant and use that appId 
 and secret to setup the other required resources.
 
-1. Navigate to app registrations in your subscription.
+The first step to running this template would be to create an application in the tenant and use that appId and secret to setup the other required resources.
+
+1. Go to Graph Data Connect [Portal](https://portal.azure.com/#view/Microsoft_Azure_GraphDataConnect/GraphApplication.ReactView) and click Add to start a new registration.
 
 ![](Images/1.1.png)
 
-2. Register a new application.
+2. Enter the subscription id and resource group. If you have an existing storage account created, proceed to the next step. Else, create a new one by clicking on "Create New" and fill out the information as shown below. Click on Review and Create. Once the storage account is created, you will be redirected to the app registration form. Proceed to the next step.
 
 ![](Images/1.2.png)
+
+3. Select the Storage Account Uri with .dfs.core.windows.net extension from the dropdown.
+
 ![](Images/1.3.png)
 
-3. Save the application id (In the screenshot, the one ending in e430). Navigate to API permissions in the Manage menu on the left.
+4. If you have an existing Application, proceed to the next step. Else, create a new application by clicking on Create New and fill out the information as show below. Click on Register. Once the application has been created, you will be redirected to the app registration form. Proceed to the next step.
 
 ![](Images/1.4.png)
 
-4. Select "Microsoft Graph" from the Add permission flyout.
+5. Enter the application ID (name of your application), description and select the publish type. Click on Next to proceed to the next step.
 
 ![](Images/1.5.png)
 
-5. Select "Application permissions -> Applications -> Application.Read.All".
+6. Select the following datasets for ESA template and select "All" columns.
+- BasicDataSet_v0.Message_v1
+- BasicDataSet_v0.TeamChat_v1
 
 ![](Images/1.6.png)
 
-6. Explicitly Grant consent for the new permissions.
+7. Click on Review + Create and your application should be visible in the landing page. For more information on updating the application information, visit the [wiki](https://learn.microsoft.com/en-us/graph/app-registration). Ensure that the consent has been granted for your application by your global administrator on the [MGDC authorization portal](https://admin.microsoft.com/Adminportal/Home?#/Settings/MGDCAdminCenter).
 
-![](Images/1.7.png)
-
-7. Verify that that the status shows as granted for the new Application.Read.All permission.
+8. Look for the application on Azure portal.
 
 ![](Images/1.8.png)
 
-8. Navigate to "Certificates and secrets" in the left pane and click on "New client secret."
+9. Save the application id (In the screenshot, the one ending in e430). Navigate to API permissions in the Manage menu on the left
 
 ![](Images/1.9.png)
 
-9. Provide a description and add a secret.
+10. Select "Microsoft Graph" from the Add permission flyout
 
-![](Images/1.10.b.png)
+![](Images/1.10.png)
 
-10. Copy the value of this new secret and save it securely before navigating away from this page.
+11. Select "Application permissions -> Applications -> Application.Read.All"
 
 ![](Images/1.11.png)
+
+12. Explicitly Grant consent for the new permissions
+
+![](Images/1.12.png)
+
+13. Verify that that the status shows as granted for the new Application.Read.All permission
+
+![](Images/1.13.png)
+
+14. Navigate to "Certificates and secrets" in the left pane and click on "New client secret"
+
+![](Images/1.14.png)
+
+15. Provide a description and add a secret
+
+![](Images/1.15.png)
+
+16. Copy the value of this new secret and save it securely before navigating away from this page
+
+![](Images/1.16.png)
 
 ## Azure Resources Deployment
 
@@ -76,11 +101,11 @@ By clicking on the above button (or navigating to the linked URL), you will be b
 
 3. Once all required information has been provided, click on the Review + create button at the bottom of the page. This will validate that the information provided to the template is correct. 
 
-![](Images/1.12.png)
+![](Images/1.17.png)
 
 4. Once the information has been validated, click on the Create button at the bottom of the page.
 
-![](Images/1.13.png)
+![](Images/1.18.png)
 
 This will initiate the deployment. It should normally take about 5 minutes for the whole deployment to complete.
 
