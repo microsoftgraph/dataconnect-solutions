@@ -40,8 +40,8 @@ The TeamsCallRecords_v1 dataset can be joined with Users datasets, Teams dataset
 | Name  | Type  |  Description  |  FilterOptions  |  FilterType  |
 | ----------- | ----------- | ----------- | ----------- | ----------- |
 | CreatedDateTime |	datetime |	Timestamp in UTC when the Call Record was created. It is approximately 9 hours after the meeting has ended. |	Yes	| Date |
-| Organizer |	string |	Represents Caller (P2P) or Organizer (Meeting). *Format:* `STRUCT<`tenantId`:STRING, `userAADObjectId`:STRING, `displayName`:STRING, `recipientType`:STRING>.` | No |	None |
-| Attendees |	string |	Represents user(s) who participated in a meeting/call. *Format:* `ARRAY<STRUCT<`tenantId`:STRING, `userAADObjectId`:STRING, `displayName`:STRING, `recipientType`:STRING>>.` | No |	None |
+| Organizer |	object |	Represents Caller (P2P) or Organizer (Meeting). *Format:* `STRUCT<`tenantId`:STRING, `userAADObjectId`:STRING, `displayName`:STRING, `recipientType`:STRING>.` | No |	None |
+| Attendees |	array |	Represents user(s) who participated in a meeting/call. *Format:* `ARRAY<STRUCT<`tenantId`:STRING, `userAADObjectId`:STRING, `displayName`:STRING, `recipientType`:STRING>>.` | No |	None |
 | StartTime |	datetime |	The start time of the meeting/call. |	No |	None |
 | EndTime |	datetime |	The end time of the meeting/call. |	No |	None |
 | CommunicationId |	string |	The Chain Id/Call id of the Call/Meeting; Unique per record. |	No |	None |
@@ -50,7 +50,7 @@ The TeamsCallRecords_v1 dataset can be joined with Users datasets, Teams dataset
 | CommunicationType | string |  Enum: 'Call' or 'Meeting' |  No | 	None | 
 | CommunicationSubType | 	string | 	Enum: 'MissedCall' or 'VoiceMail' |  No |  None | 
 | ThreadId | 	string | 	Teams meeting thread id for correlating with messages/chats | No | 	None | 
-| Content | 	string | 	Represents user activity/actions during the meeting. *Format:* `ARRAY<STRUCT<`dateTime`:DATETIME, `action`:STRING, `participant`:STRUCT<`tenantId`:STRING, `userAADObjectId`:STRING, `displayName`:STRING, `recipientType`:STRING>>>` |   No | None | 
+| Content | 	array | 	Represents user activity/actions during the meeting. *Format:* `ARRAY<STRUCT<`dateTime`:DATETIME, `action`:STRING, `participant`:STRUCT<`tenantId`:STRING, `userAADObjectId`:STRING, `displayName`:STRING, `recipientType`:STRING>>>` |   No | None | 
 | puser | 	string | 	User id. | No |   None | 
 | ptenant |  string |   Tenant id. | 	No |   	None | 
 

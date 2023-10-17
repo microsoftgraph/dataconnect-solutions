@@ -35,9 +35,9 @@ The MailboxSettings_v0 dataset can be joined with the User dataset, and other re
 | ----------- | ----------- | ----------- | ----------- | ----------- |
 | archiveFolder |	string |	Folder id of an archive folder for the user. |	No |	None |
 | timeZone |	string |	The default time zone for the user's mailbox. |	No |	None |
-| automaticRepliesSetting |	string |	Configuration settings to automatically notify the sender of an incoming email with a message from the signed-in user. |	No |	None |
-| language |	string |	The locale information for the user, including the preferred language and country/region. |	No |	None |
-| workingHours |	string |	The days of the week and hours in a specific time zone that the user works. |	No |	None |
+| automaticRepliesSetting |	object |	Configuration settings to automatically notify the sender of an incoming email with a message from the signed-in user. |	No |	None |
+| language |	object |	The locale information for the user, including the preferred language and country/region. |	No |	None |
+| workingHours |	object |	The days of the week and hours in a specific time zone that the user works. |	No |	None |
 | delegateMeetingMessageDeliveryOptions |	string |	If the user has a calendar delegate, this specifies whether the delegate, mailbox owner, or both receive meeting messages and meeting responses. *Allowed values:* sendToDelegateAndInformationToPrincipal, sendToDelegateAndPrincipal, sendToDelegateOnly. |	No |	None |
 | dateFormat |	string |	The date format for the user's mailbox. |	No |	None |
 | timeFormat |	string |  	The time format for the user's mailbox. |	No |	None |

@@ -61,7 +61,7 @@ The GroupDetails_v0 dataset can be joined with the GroupOwners_v0 and GroupMembe
 | description |	string |	User specified description for the group. |	No |	None |
 | displayName |	string |	The display name for the group. |	No	| None |
 | expirationDateTime |	datetime |	Timestamp in UTC when group is set to expire. |	No |	None |
-| groupTypes |	string |	Specified type of group and membership. |	No |	None |
+| groupTypes |	array |	Specified type of group and membership. |	No |	None |
 | isAssignableToRole |	boolean |	Indicates if group can have AAD role assigned. |	No |	None |
 | mail |	string |	SMTP address of the group.  |	No |	None |
 | mailEnabled |	boolean |	Specifies if Group is mail enabled. |	No |	None |
@@ -73,9 +73,9 @@ The GroupDetails_v0 dataset can be joined with the GroupOwners_v0 and GroupMembe
 | onPremisesSyncEnabled |	boolean |	True if synced from onpremise AD; "null" if not synced from AD; false if used to not anymore. |	No | None |
 | preferredDataLocation |	string |	Physical geographic location for the group data storage, such as emails, files, chat, etc. |	No |	None |
 | preferredLanguage |	string |	Preferred language set for the group. |	No |	None |
-| proxyAddresses |	string |	Email addresses that direct to the same group mailboxes as this group. |	No |	None |
+| proxyAddresses |	array |	Email addresses that direct to the same group mailboxes as this group. |	No |	None |
 | renewedDateTime |	datetime |	Timestamp in UTC when group was last renewed. |	No |	None |
-| resourceProvisioningOptions |	string |	Specifies the group resources that are provisioned as part of Microsoft 365 Group creation. *Possible value:* \"Team\"." |	No |	None |
+| resourceProvisioningOptions |	array |	Specifies the group resources that are provisioned as part of Microsoft 365 Group creation. *Possible value:* \"Team\"." |	No |	None |
 | securityEnabled |	boolean |	Specifies if the group is a security group. |	No |	None |
 | securityIdentifier |	string |	Security identifier for the group. |	No |	None |
 | theme	| string |	Specifies a Microsoft 365 group color theme. |	No |	None |

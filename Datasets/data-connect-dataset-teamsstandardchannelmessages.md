@@ -41,15 +41,16 @@ The TeamsStandardChannelMessages_v0 dataset can be joined to other Teams dataset
 | SentDateTime |	datetime |	UTC formatted sent date time of message. | Yes | Date |
 | Subject | string |	Subject of the message or announcement.	| No	| None |
 | Importance |	string |	The importance defined by the sender. |	No |	None |
-| From	| string |	Nested property outlining the sender of the message. |	No |	None |
-| Body |	string |	The message text body. |	No |	None |
+| From	| object |	Nested property outlining the sender of the message. |	No |	None |
+| Body |	object |	The message text body. |	No |	None |
 | ParentFolderId |	string |	The unique identifier for the teams message parent folder. |	No |	None |
 | ConversationId |	string |	The ID of the conversation the email belongs to. |	No |	None |
+| Mentions | array |All the @ mentions in body of the message.|`[{\"id\": 1024, \"mentionText\": \"test mention\", \"mentioned\": {\"@odata.type\": \"user\"}]`|0|false|
 | IsRead |	boolean |	Indicates whether the message has been read. |	No	| None |
-| Sender	| string |	The account that is actually used to generate the teams message. *Format:* `STRUCT<EmailAddress: STRUCT<Name: STRING, Address: STRING>>.` |	No |	None |
-| ReplyTo	| string |	The email addresses to use when replying. *Format:* `ARRAY<STRUCT<EmailAddress: STRUCT<Name: STRING, Address: STRING>>>.`  |	No |	None |
-| Flag | string | The flag value that indicates the status, start date, due date, or completion date for the teams message. |	No | None |
-| Attachments |	string |	List of attachments on the message. |	No |	None |
+| Sender	| object |	The account that is actually used to generate the teams message. *Format:* `STRUCT<EmailAddress: STRUCT<Name: STRING, Address: STRING>>.` |	No |	None |
+| ReplyTo	| array |	The email addresses to use when replying. *Format:* `ARRAY<STRUCT<EmailAddress: STRUCT<Name: STRING, Address: STRING>>>.`  |	No |	None |
+| Flag | object | The flag value that indicates the status, start date, due date, or completion date for the teams message. |	No | None |
+| Attachments |	array |	List of attachments on the message. |	No |	None |
 | ODataType |	string |	Data type of the current item. |	No |	None |
 | pObjectId |	string |	Object id. |	No |	None |
 | ptenant |	string |	Tenant id. |	No	 | None |
