@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect OutlookGroupConversations_v0 dataset
+# OutlookGroupConversations_v0 dataset
 
 The OutlookGroupConversations_v0 dataset provides a collection of group conversations between users of tenant.
  
@@ -54,7 +54,6 @@ The OutlookGroupConversations_v0 dataset can be joined with Mail, Message, Mail 
 | InternetMessageId |	string |	The message ID in the format specified by RFC2822. |	No |	None |
 | IsRead |	string |	Indicates whether the message has been read. |	No |	None |
 | LastModifiedDateTime |	datetime |	The date and time the message was last changed. |	Yes |	Date |
-| LikesPreview | object | Number of Likes of this message.| | 0 | false|
 | MentionsPreview |	object |	Preview of the mentions in the message. |	No |	None |
 | ReplyTo |	array |	The email addresses to use when replying. |	No |	None |
 | Body |	object	| The UniqueBody in raw format. |	No |	None |
@@ -65,7 +64,6 @@ The OutlookGroupConversations_v0 dataset can be joined with Mail, Message, Mail 
 | ToRecipients |	array |	The To recipients for the message. |	No |	None |
 | UniqueBody |	object |	The part of the body of the message that is unique to the current message. It is in text format. |	No |	None |
 | WebLink |	string	| The URL to open the message in Microsoft Outlook web app. |	No |	None |
-| Mentions | array | Represents a notification to a person based on the person's email address. This type of notification is also known as @-mentions. | | 0 | false|
 | ODataType |	string |	Data type of the current folder. |	No	| None |
 | pObjectId |	string |	Object id. |	No |	None |
 | ptenant |	string |	Tenant id |	No |	None |

@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect User_v0 dataset
+# User_v0 dataset
 
 The User_v0 dataset provides user details stored for all the Azure Active Directory (Azure AD) user accounts that are created for a particular tenant.
 

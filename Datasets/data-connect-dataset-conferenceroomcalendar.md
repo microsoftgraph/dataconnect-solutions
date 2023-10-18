@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect ConferenceRoomCalendar_v0 dataset
+# ConferenceRoomCalendar_v0 dataset
 
 The ConferenceRoomCalendar_v0 dataset provides CalendarView data of the Conference Rooms created for a tenant.
 

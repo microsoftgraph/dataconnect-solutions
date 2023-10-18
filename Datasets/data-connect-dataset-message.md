@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect Message_v0 dataset
+# Message_v0 dataset
 
 The Message_v0 dataset provides a collection of all the messages received by a user in mail folders.
 

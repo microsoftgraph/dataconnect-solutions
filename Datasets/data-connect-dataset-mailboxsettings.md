@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect MailboxSettings_v0 dataset
+# MailboxSettings_v0 dataset
 
 The MailboxSettings_v0 dataset provides details of all users' mailbox settings.
 

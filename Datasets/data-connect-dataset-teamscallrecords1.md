@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect TeamsCallRecords_v1 dataset
+# TeamsCallRecords_v1 dataset
 
 The TeamsCallRecords_v1 dataset provides activity records from Teams calls and meetings.
 

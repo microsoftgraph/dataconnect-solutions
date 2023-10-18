@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect  Manager_v0 dataset
+# Manager_v0 dataset
 
 The Manager_v0 dataset provides the list of users assigned as managers.
 

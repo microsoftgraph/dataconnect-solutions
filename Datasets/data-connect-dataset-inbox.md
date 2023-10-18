@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect Inbox_v1 dataset
+# Inbox_v1 dataset
 
 The Inbox_v1 dataset provides the messages from users' mail folders.
 

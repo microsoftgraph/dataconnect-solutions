@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect TodoTasks_v0 dataset
+# TodoTasks_v0 dataset
 
 The TodoTasks_v0 dataset provides a list of Microsoft Outlook tasks. Tasks in Microsoft Outlook tracks user-level work items. Users can note a task's start, due, and actual completion dates, its progress or status, and whether it's recurring or requires a reminder. Tasks are organized in task folders, which are organized in task groups. Each mailbox has a default task folder (with the Name property tasks) and a default task group (Name property *My Tasks*).
 

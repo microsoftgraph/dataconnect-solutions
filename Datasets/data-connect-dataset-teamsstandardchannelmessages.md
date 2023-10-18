@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect TeamsStandardChannelMessages_v0 dataset
+# TeamsStandardChannelMessages_v0 dataset
 
 The TeamsStandardChannelMessages_v0 dataset provides channel posts and messages from standard channels in Teams.
 
@@ -45,7 +45,6 @@ The TeamsStandardChannelMessages_v0 dataset can be joined to other Teams dataset
 | Body |	object |	The message text body. |	No |	None |
 | ParentFolderId |	string |	The unique identifier for the teams message parent folder. |	No |	None |
 | ConversationId |	string |	The ID of the conversation the email belongs to. |	No |	None |
-| Mentions | array |All the @ mentions in body of the message.|`[{\"id\": 1024, \"mentionText\": \"test mention\", \"mentioned\": {\"@odata.type\": \"user\"}]`|0|false|
 | IsRead |	boolean |	Indicates whether the message has been read. |	No	| None |
 | Sender	| object |	The account that is actually used to generate the teams message. *Format:* `STRUCT<EmailAddress: STRUCT<Name: STRING, Address: STRING>>.` |	No |	None |
 | ReplyTo	| array |	The email addresses to use when replying. *Format:* `ARRAY<STRUCT<EmailAddress: STRUCT<Name: STRING, Address: STRING>>>.`  |	No |	None |

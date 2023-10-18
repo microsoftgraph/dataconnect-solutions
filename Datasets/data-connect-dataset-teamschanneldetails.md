@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect TeamsChannelDetails_v0 dataset
+# TeamsChannelDetails_v0 dataset
 
 The TeamsChannelDetails_v0 dataset provides a list of Microsoft Teams channels. Teams in Microsoft Teams are made up of channels, which are the conversations that users have with their teammates. Each channel is dedicated to a specific topic, department, or project. 
 

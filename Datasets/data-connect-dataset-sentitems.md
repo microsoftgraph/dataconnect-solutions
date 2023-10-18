@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect SentItems_v0 dataset
+# SentItems_v0 dataset
 
 The SentItems_v0 dataset provides a collection of all the sent emails by all users of a tenant.
  

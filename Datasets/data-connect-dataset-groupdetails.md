@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect GroupDetails_v0 dataset
+# GroupDetails_v0 dataset
 
 The GroupDetails_v0 dataset represents the Azure Active Directory (Azure AD) groups data for a tenant, such as Microsoft 365 groups or a security group. 
 

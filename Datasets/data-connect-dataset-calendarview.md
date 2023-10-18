@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect CalendarView_v0 dataset
+# CalendarView_v0 dataset
 
 The CalendarView_v0 dataset provides occurrences, exceptions, and single instances of events, based on the calendar view from users' calendars.
 
@@ -76,7 +76,7 @@ The CalendarView_v0 dataset can be joined with relevant events, users, and other
 | transactionId | string | A custom identifier specified by a client app for the server to avoid redundant POST operations in case of client retries to create the same event.  | No | None |
 | type | string | The event type. *Possible values:* singleinstance, occurrence, exception, seriesmaster. | No | None |
 | attendees | array | The collection of attendees for the event. *Format:* `ARRAY<STRUCT<EmailAddress: STRUCT<Name: STRING, Address: STRING>, Status: STRUCT<Response: STRING, Time: STRING>, Type: STRING>>.` | No | None |
-| organizer | string | The organizer of the event. *Format:* `STRUCT<EmailAddress: STRUCT<Name: STRING, Address: STRING>>.` | No | None |
+| organizer | object | The organizer of the event. *Format:* `STRUCT<EmailAddress: STRUCT<Name: STRING, Address: STRING>>.` | No | None |
 | webLink | string | The URL to open the event in Microsoft Outlook web app. | No | None |
 | attachments | array | The 'FileAttachment' and 'ItemAttachment' attachments for the message, the navigation property. *Format:* `ARRAY<STRUCT<LastModifiedDateTime: STRING, Name: STRING, ContentType: STRING, Size: INT, IsInline: BOOLEAN, Id: STRING>>.` | No | None |
 | bodyPreview | string | The preview of the message associated with the event, in text format. | No | None |

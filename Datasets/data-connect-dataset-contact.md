@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect Contact_v0 dataset
+# Contact_v0 dataset
 
 The Contact_v0 dataset provides contact details available from users' address book.
 

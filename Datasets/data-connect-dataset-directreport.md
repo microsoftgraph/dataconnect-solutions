@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect DirectReport_v0 dataset
+# DirectReport_v0 dataset
 
 The DirectReport_v0 dataset provides details of all the direct reports for your users. 
 

@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect TeamChat_v2 dataset
+# TeamChat_v2 dataset
 
 The TeamChat_v2 dataset provides Teams chat messages for one-on-one and group chat messages. This dataset excludes chat messages explicitly deleted by users.
 

@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect Event_v0 dataset
+# Event_v0 dataset
 
 The Event_v0 dataset provides the information of all the events from users' calendar events.
 

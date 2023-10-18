@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect User_v1 dataset
+# User_v1 dataset
 
 The User_v1 dataset provides user details stored for all the Azure Active Directory (Azure AD) user accounts that are created for a particular tenant.
 
@@ -66,7 +66,7 @@ The User_v1 dataset can be joined with other datasets that can be mapped to the 
 | hireDate  | string  | The hire date of the user. The Timestamp type represents date and time information using ISO 8601 format and is always in UTC time. For example, midnight UTC on Jan 1, 2014 would look like this: '2014-01-01T00:00:00Z'.  | No  | None  |
 | id  | string  | The unique identifier for the user. Inherited from directoryObject.  | No  | None  |
 | imAddresses  | array  | The instant message voice over IP (VOIP) session initiation protocol (SIP) addresses for the user. *Format:*`ARRAY<STRING>.`  | No  | None  |
-| interests  | string  | A list of interests for the user. *Format:*`ARRAY<STRING>.`  | No  | None  |
+| interests  | array  | A list of interests for the user. *Format:*`ARRAY<STRING>.`  | No  | None  |
 | jobTitle  | string  | The user’s job title.  | No  | None  |
 | legalAgeGroupClassification  | string  | Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated based on ageGroup and consentProvidedForMinor properties. *Allowed values:* null, minorWithOutParentalConsent, minorWithParentalConsent, minorNoParentalConsentRequired, notAdult and adult.  | No  | None  |
 | mail   | string  | The SMTP address for the user.  | No  | None  |
