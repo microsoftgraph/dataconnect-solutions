@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect GroupOwners_v0 dataset
+# GroupOwners_v0 dataset
 
 The GroupOwners_v0 dataset retrieves the list of all the group owners. The owners are a set of users or service principals who are allowed to modify the group object. Owners are currently not available in Microsoft Graph for groups that were created in Microsoft Exchange or groups that are synchronized from an on-premises environment.
 

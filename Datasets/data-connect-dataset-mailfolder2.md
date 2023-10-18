@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect Mailfolder_v2 dataset
+# Mailfolder_v2 dataset
 
 This dataset provides the information on all folders created in users' mailboxes, along with a collection of all child folders created in all mail folders.
 

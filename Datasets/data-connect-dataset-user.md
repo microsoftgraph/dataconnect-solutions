@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect User_v0 dataset
+# User_v0 dataset
 
 The User_v0 dataset provides user details stored for all the Azure Active Directory (Azure AD) user accounts that are created for a particular tenant.
 
@@ -44,9 +44,9 @@ The User_v0 dataset can be joined with other datasets that can be mapped to the 
 | Name  | Type  |  Description  |  FilterOptions  |  FilterType  |
 | ----------- | ----------- | ----------- | ----------- | ----------- |
 | ExternalEmailAddress | string | The user's external email address. | No | None |
-| Languages | string | The languages the user understands. *Format:* `ARRAY<STRING>.` | No | None |
+| Languages | array | The languages the user understands. *Format:* `ARRAY<STRING>.` | No | None |
 | Name | string | The user's name.  | No | None |
-| EmailAddresses | string | The user's email addresses. *Format:* `ARRAY<STRING>.` | No | None |
+| EmailAddresses | array | The user's email addresses. *Format:* `ARRAY<STRING>.` | No | None |
 | PrimarySmtpAddress | string | The user's primary email address. | No | None |
 | DisplayName | string | The user's name, as it will be displayed. | No | None |
 | City | string | The city where the user works. | No | None |

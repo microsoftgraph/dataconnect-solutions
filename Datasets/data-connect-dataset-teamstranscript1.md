@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect TeamsTranscript_v1 dataset
+# TeamsTranscript_v1 dataset
 
 The TeamsTranscript_v1 dataset provides transcripts from calls and meetings in Teams when the transcript is enabled for a meeting or a call.
 
@@ -38,8 +38,8 @@ The TeamsTranscript_v1 dataset can be joined with Teams datasets, Users datasets
 | CreatedDateTime |	datetime |	Date time in UTC when the transcripts was finally saved after a meeting or a call. |	Yes |	Date |
 | ScopeId |	string |	Unique identifier for the transcript across all transcripts in a tenant. |	No |	None |
 | ICalUId |	string |	Unique identifier for the meeting for which this transcript was generated. |	No |	None |
-| Entries |	string	| Time ordered sequence of transcribed utterances in a meeting or a call. *Format:* `STRUCT<`editorId`:STRING, `editId`:STRING, `entryId`:STRING, `text`:STRING, `speakerId`:STRING, `displayName`:STRING, `confidence`:DOUBLE, `startTime`:STRING, `endTime`:STRING>.` |	No |  None |
-| Events |	string |	Time ordered sequence of actions in a meeting like meeting join, transcript started, stopped, and others. *Format:* `STRUCT<`eventType`:STRING, `eventId`:STRING, `chatMessageId`:STRING, `callId`:STRING, `callParticipants`:ARRAY<STRING>, `userId`:STRING, `displayName`:STRING, `timestamp`:STRING, `reason`:STRING>.` | No | None |
+| Entries |	array	| Time ordered sequence of transcribed utterances in a meeting or a call. *Format:* `ARRAY<STRUCT<`editorId`:STRING, `editId`:STRING, `entryId`:STRING, `text`:STRING, `speakerId`:STRING, `displayName`:STRING, `confidence`:DOUBLE, `startTime`:STRING, `endTime`:STRING>>. ` |	No |  None |
+| Events |	array |	Time ordered sequence of actions in a meeting like meeting join, transcript started, stopped, and others. *Format:* `ARRAY<STRUCT<`eventType`:STRING, `eventId`:STRING, `chatMessageId`:STRING, `callId`:STRING, `callParticipants`:ARRAY<STRING>, `userId`:STRING, `displayName`:STRING, `timestamp`:STRING, `reason`:STRING>>.` | No | None |
 | LastModifiedTime |	datetime |	DateTime in UTC when the transcript was last modified or edited. |	No |	None |
 | Id |	string |	The unique identifier. |	No |	None |
 | puser |	string	| User id. |	No |  None |

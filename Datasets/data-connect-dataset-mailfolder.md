@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect Mailfolder_v0  dataset
+# Mailfolder_v0  dataset
 
 The Mailfolder_v0 dataset provides information on all the folders created in a user's mailbox, such as Inbox and Drafts. Mail folders can contain messages, other Outlook items, and child mail folders.
  

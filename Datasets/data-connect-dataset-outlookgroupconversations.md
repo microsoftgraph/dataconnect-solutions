@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect OutlookGroupConversations_v0 dataset
+# OutlookGroupConversations_v0 dataset
 
 The OutlookGroupConversations_v0 dataset provides a collection of group conversations between users of tenant.
  
@@ -41,28 +41,28 @@ The OutlookGroupConversations_v0 dataset can be joined with Mail, Message, Mail 
 
 | Name  | Type  |  Description  |  FilterOptions  |  FilterType  |
 | ----------- | ----------- | ----------- | ----------- | ----------- |
-| Attachments |	string |	All attachments in a message. Contains metadata of attachments, such as LastModifiedDateTime, Name, ContentType, Size, IsInline, SourceUrl, and ProviderType. The actual attachment files are not included. |	No |	None |
+| Attachments |	array |	All attachments in a message. Contains metadata of attachments, such as LastModifiedDateTime, Name, ContentType, Size, IsInline, SourceUrl, and ProviderType. The actual attachment files are not included. |	No |	None |
 | BodyPreview	| string	| The first 255 characters of the message body content. |	No |	None |
-| CcRecipients |	string |	The Cc: recipients for the message. |	No |	None |
+| CcRecipients |	array |	The Cc: recipients for the message. |	No |	None |
 | ConversationId |	string |	The ID of the conversation that the email belongs to. |	No |	None |
 | ConversationIndex |	string |	Indicates the relative position of the message within the conversation that the message belongs to. |	No |	None |
 | CreatedDateTime |	datetime |	The date and time the message was created. |	Yes |	Date |
-| From |	string |	The mailbox owner and sender of the message. |	No |	None |
+| From |	object |	The mailbox owner and sender of the message. |	No |	None |
 | HasAttachments |	string |	Indicates whether the message has attachments. *Allowed values:* true or false. This property doesn't include inline attachments, so if a message contains only inline attachments, this property is false. |	No | 	None | 
 | Id |	string |	Unique identifier for the message. *Note:* This value may change if a message is moved or altered. |	No |	None |
 | Importance	| string |	The importance of the message; *Allowed values:* high, normal, low. |	No |	None |
 | InternetMessageId |	string |	The message ID in the format specified by RFC2822. |	No |	None |
 | IsRead |	string |	Indicates whether the message has been read. |	No |	None |
 | LastModifiedDateTime |	datetime |	The date and time the message was last changed. |	Yes |	Date |
-| MentionsPreview |	string |	Preview of the mentions in the message. |	No |	None |
-| ReplyTo |	string |	The email addresses to use when replying. |	No |	None |
-| Body |	string	| The UniqueBody in raw format. |	No |	None |
+| MentionsPreview |	object |	Preview of the mentions in the message. |	No |	None |
+| ReplyTo |	array |	The email addresses to use when replying. |	No |	None |
+| Body |	object	| The UniqueBody in raw format. |	No |	None |
 | ReceivedDateTime | 	datetime |	The date and time the message was received. |	Yes |	Date |
-| Sender |	string |	The account that is actually used to generate the message. |	No |	None |
+| Sender |	object |	The account that is actually used to generate the message. |	No |	None |
 | SentDateTime |	datetime |	The date and time the message was sent. |	Yes |	Date |
 | Subject |	string |	The subject of the message. |	No |	None |
-| ToRecipients |	string |	The To recipients for the message. |	No |	None |
-| UniqueBody |	string |	The part of the body of the message that is unique to the current message. It is in text format. |	No |	None |
+| ToRecipients |	array |	The To recipients for the message. |	No |	None |
+| UniqueBody |	object |	The part of the body of the message that is unique to the current message. It is in text format. |	No |	None |
 | WebLink |	string	| The URL to open the message in Microsoft Outlook web app. |	No |	None |
 | ODataType |	string |	Data type of the current folder. |	No	| None |
 | pObjectId |	string |	Object id. |	No |	None |

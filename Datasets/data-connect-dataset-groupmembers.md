@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect GroupMembers_v0 dataset
+# GroupMembers_v0 dataset
 
 The GroupMembers_v0 dataset generates a list of direct members of all groups. A group can have users, organizational contacts, devices, service principals, and other groups as members.
 

@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-# Microsoft Graph Data Connect Contact_v0 dataset
+# Contact_v0 dataset
 
 The Contact_v0 dataset provides contact details available from users' address book.
 
@@ -39,25 +39,25 @@ The Contact_v0 dataset can be joined with the Users dataset, and other relevant 
 | ----------- | ----------- | ----------- | ----------- | ----------- |
 | AssistantName	| string |	The name of the contact's assistant. |	No |	None |
 | Birthday	| datetime |	Contact's birthday. |	No |	None |
-| BusinessAddress |	string |	The contact's business address. *Format:* `STRUCT<Street : STRING, City : STRING, State : STRING, CountryOrRegion : STRING, PostalCode : STRING>.` |	No |	None |
+| BusinessAddress |	object |	The contact's business address. *Format:* `STRUCT<Street : STRING, City : STRING, State : STRING, CountryOrRegion : STRING, PostalCode : STRING>.` |	No |	None |
 | BusinessHomePage |	string |	The business home page of the contact. |	No |	None |
-| BusinessPhones |	string |	The contact's business phone numbers. *Format:* `ARRAY<STRING>.` | No |	None |
-| Categories |	string |	The categories associated with the contact.  *Format:* `ARRAY<STRING>.` | No | None |
+| BusinessPhones |	array |	The contact's business phone numbers. *Format:* `ARRAY<STRING>.` | No |	None |
+| Categories |	array |	The categories associated with the contact.  *Format:* `ARRAY<STRING>.` | No | None |
 | ChangeKey |	string |	Identifies the version of the contact. Every time the contact is changed, 'ChangeKey' changes as well. This allows Microsoft Exchange to apply changes to the correct version of the object. |	No |	None |
-| Children |	string |	The names of the contact's children. *Format:* `ARRAY<STRING>.` |	No |	None |
+| Children |	array |	The names of the contact's children. *Format:* `ARRAY<STRING>.` |	No |	None |
 | CompanyName |	string |	The name of the contact's company. |	No |	None |
 | Department |	string |	The contact's department. |	No |	None |
 | CreatedDateTime |	datetime |	The time the contact was created. |	No |	None |
 | LastModifiedDateTime |	datetime |	The time the contact was modified. |	No |	None |
 | DisplayName |	string |	The contact's display name. |	No |	None |
-| EmailAddresses |	string |	The contact's email addresses. *Format:* `ARRAY<STRUCT<Name : STRING, Address : STRING>>. ` |	No	 | None |
+| EmailAddresses |	array |	The contact's email addresses. *Format:* `ARRAY<STRUCT<Name : STRING, Address : STRING>>. ` |	No	 | None |
 | FileAs |	string |	The name the contact is filed under. |	No |	None |
 | Generation |	string |	The contact's generation. |	No |	None |
 | GivenName	 | string |	The contact's given name. |	No |	None |
-| HomeAddress |	string |	The contact's home address. *Format:* `STRUCT<Street : STRING, City : STRING, State : STRING, CountryOrRegion : STRING, PostalCode : STRING>.` | 	No |	None |
-| HomePhones |	string |	The contact's home phone number(s). *Format:* `ARRAY<STRING>.` | 	No |	None |
+| HomeAddress |	object |	The contact's home address. *Format:* `STRUCT<Street : STRING, City : STRING, State : STRING, CountryOrRegion : STRING, PostalCode : STRING>.` | 	No |	None |
+| HomePhones |	array |	The contact's home phone number(s). *Format:* `ARRAY<STRING>.` | 	No |	None |
 | Id |	string |	The contact's unique identifier. |	No |	None |
-| ImAddresses |	string |	The contact's instant messaging (IM) addresses. *Format:*  `ARRAY<STRING>.` |	No |	None |
+| ImAddresses |	array |	The contact's instant messaging (IM) addresses. *Format:*  `ARRAY<STRING>.` |	No |	None |
 | Initials |	string |	The contact's initials. |	No |	None |
 | JobTitle |	string |	The contact's job title. |	No |	None |
 | Manager |	string |	The name of the contact's manager. |	No |	None |
@@ -65,7 +65,7 @@ The Contact_v0 dataset can be joined with the Users dataset, and other relevant 
 | MobilePhone1 |	string |	The contact's mobile phone number. |	No |	None |
 | NickName |	string |	The contact's nickname. |	No |	None |
 | OfficeLocation |	string |	The location of the contact's office. |	No |	None |
-| OtherAddress |	string |	Other addresses for the contact. *Format:* `STRUCT<Street : STRING, City : STRING, State : STRING, CountryOrRegion : STRING, PostalCode : STRING>.` | 	No |	None |
+| OtherAddress |	object |	Other addresses for the contact. *Format:* `STRUCT<Street : STRING, City : STRING, State : STRING, CountryOrRegion : STRING, PostalCode : STRING>.` | 	No |	None |
 | ParentFolderId |	string |	The id of the contact's parent folder. |	No |	None |
 | PersonalNotes |	string |	The user's notes about the contact. |	No |	None |
 | Profession |	string |	The contact's profession. |	No |	None |
