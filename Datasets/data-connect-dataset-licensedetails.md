@@ -55,9 +55,11 @@ The LicenseDetails_v0 dataset can be joined with relevant users, and other categ
 ```json
 {  
 "id": "String (identifier)",
-"skuId": "Guid",
+"skuId": "String (identifier)",
 "skuPartNumber": "String"
-"servicePlans": [{"@odata.type": "microsoft.graph.servicePlanInfo"}]
+"servicePlans": [{"@odata.type": "microsoft.graph.servicePlanInfo"}],
+"puser": "String (identifier)",  
+"ptenant": "String (identifier)"
 } 
 ```
 
