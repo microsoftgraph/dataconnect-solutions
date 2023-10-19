@@ -41,10 +41,9 @@ The LicenseDetails_v0 dataset can be joined with relevant users, and other categ
 | Name  | Type  |  Description  |  FilterOptions  |  FilterType  |
 | ----------- | ----------- | ----------- | ----------- | ----------- |
 | id | string | The unique identifier of the license details object | No | None |
-| skuID | string | Unique Identifier(GUID) for the service SKU. Equal to the skuID property on the related SubscribedSKU object. | No | None |
+| skuId | string | Unique Identifier(GUID) for the service SKU. Equal to the skuID property on the related SubscribedSKU object. | No | None |
 | skuPartNumber | string | Unique SKU display name. Equal to the skuPartNumber on the related SubscribedSku object. | No | None |
 | servicePlans | array | Information about the service plans assinged with the license. FORMAT:- ARRAY<STRUCT<'servicePlanId':'String', 'servicePlanName': 'String', 'provisioningStatus':'String', 'appliesTo':'string'>> | No | None |
-| originalStart | datetime | The start time that was set when the event was created in UTC time. | No | None |
 | puser | string | User id. | No |   None |
 | ptenant | string |  Tenant id. | No  |  None |
 
