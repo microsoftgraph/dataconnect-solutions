@@ -148,7 +148,7 @@ complete.
 
 ![](Images/27c.PNG)
 
-13. Provide the required parameters - StartTime, EndTime, StorageAccount, and StorageContainer createed by the pre-req steps above (Note: names are case sensitive)
+13. Provide the required parameters - StartTime, EndTime, StorageAccount, and StorageContainer created by the pre-req steps above (Note: names are case sensitive)
 
 ![](Images/27d.PNG)
 
@@ -160,19 +160,19 @@ complete.
 
 ## PBI report template
 
-Note: In order to draw data to the powerbi report, you first need to run the Synapse pipeline as instructed in the previous section.
+Note: In order to draw data to the Power BI report, you first need to run the Synapse pipeline as instructed in the previous section.
 
-The report will always pull the latest data from your Azure Data Lake Storage Gen 2. The report is to been as a template and is to be modified based on your requiremnets 
+The report will always pull the latest data from your Azure Data Lake Storage Gen 2. The report is to been as a template and is to be modified based on your requirements 
 
-Below steps will help to link datasets that are generated using Synapse pipeline above to link to PowerBI 
+Below steps will help to link datasets that are generated using Synapse pipeline above to link to Power BI 
 Template. 
 1. Download and install Microsoft Power BI Desktop if you don’t have it installed already on your machine. 
     - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center. [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494)
-2. Download the pre-created PowerBI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. Link to download PowerBI Report. [here]()
+2. Download the pre-created Power BI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. Link to download Power BI Report. [here]()
 
 ![](Images/42.png)
 
-3. Open the PowerBI file and click on Transform data → Data source settings
+3. Open the Power BI file and click on Transform data → Data source settings
 
 ![](Images/43.png)
 
