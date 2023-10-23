@@ -114,10 +114,10 @@ complete.
 
 ![](Images/25.png)
 
-6.  Provide the parameters of the Linked Service 
-        a. Select Authentication Type = Service Principal 
-        b. Use the storage account name, SPN id and secret (SPN key) from the pre-req steps above
-        c. Test Connection and then click on Create
+6.  Provide the parameters of the Linked Service
+    - Select Authentication Type = Service Principal 
+    - Use the storage account name, SPN id and secret (SPN key) from the pre-req steps above
+    - Test Connection and then click on Create
 
 ![](Images/25a.png)
 
@@ -131,7 +131,7 @@ complete.
 ![](Images/26.png)
 
 
-1.  Click on "Publish All" to validate and publish the pipeline
+9. Click on "Publish All" to validate and publish the pipeline
 
 ![](Images/27.png)
 
@@ -206,3 +206,7 @@ Template.
     ![](Images/Image_1.PNG) 
 
 8. If you see any error or data is not being refreshed then please make sure your entered right storage account details, path along with credentials in data source settings
+
+Additional Notes:
+- The Power BI report will always pull the latest data copied during the Synapse pipeline run.
+- The Power BI report in this document is simply a template and is to be modified based on your requirements.
