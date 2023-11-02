@@ -17,8 +17,7 @@ Capacity scenario is a storage use case powered by our available Sharepoint data
 ![](Images/Image_1.png) 
 
 ## Installing Pre-reqs
-The first step to running this template would be to create an application in the tenant and use that appId 
-and secret to setup the other required resources.
+The first step to running this template would be to create an application in the tenant and use that appId and secret to setup the other required resources.
 
 1. Navigate to app registrations in your subscription.
 
@@ -104,7 +103,7 @@ complete.
 
 ![](Images/22.png)
 
-3.  Navigate to "Integrate -> Add new resource ->Browse gallery"
+3.  Navigate to "Integrate -> Add new resource -> Browse gallery"
 
 ![](Images/23.png)
 
