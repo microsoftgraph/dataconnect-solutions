@@ -11,7 +11,9 @@
 
 Capacity scenario is a storage use case powered by our available Sharepoint datasets. This allows customers to better understand how their storage is being used by providing meaningful insights and analytics offered by the SharePoint Sites and SharePoint Files datasets
 
-**After you follow these steps, you will have a great set of Power BI dashboards related to SharePoint Capacity Scneario, like the one shown below.**
+**IMPORTANT NOTE:** This scenario is not currently available publicly. It is coming soon. The details provided here are for informational purposes only.
+
+**After you follow these steps, you will have a great set of Power BI dashboards related to SharePoint Capacity Scenario, like the one shown below.**
 ![](Images/Image_1.png) 
 
 ## Installing Pre-reqs
