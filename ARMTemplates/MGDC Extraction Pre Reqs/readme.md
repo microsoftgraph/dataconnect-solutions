@@ -1,9 +1,10 @@
 # Information oversharing template setup
 
-- [Overview](#Overview)
-- [Installing Pre-reqs](#Installing-Pre-reqs)
-- [Synapse pipeline template](#Synapse-pipeline-template)
-- [PBI report template](#PBI-report-template)
+- [Information oversharing template setup](#information-oversharing-template-setup)
+  - [Overview](#overview)
+  - [Installing Pre-reqs](#installing-pre-reqs)
+  - [Synapse pipeline template](#synapse-pipeline-template)
+  - [**PBI report template**](#pbi-report-template)
 
 
 ## Overview
@@ -47,19 +48,23 @@ and secret to setup the other required resources.
 
 ![](Images/7.png)
 
-8. Navigate to "Certificates and secrets" in the left pane and click on "New client secret"
+8. In the App, navigate to **Owners** and add an owner who will be responsible for running the pipeline. This is required for the pipeline to run successfully.
+   ![](Images/6a.png)
+   ![](Images/6b.png)
+
+9. Navigate to "Certificates and secrets" in the left pane and click on "New client secret"
 
 ![](Images/8.png)
 
-9. Provide a description and add a secret
+10. Provide a description and add a secret
 
 ![](Images/9.png)
 
-10. Copy the value of this new secret and save it securely before navigating away from this page
+11. Copy the value of this new secret and save it securely before navigating away from this page
 
 ![](Images/10.png)
 
-11. Use this link to initiate the setup of the pre-requisites. Use the appid and secret created in the 
+12. Use this link to initiate the setup of the pre-requisites. Use the appid and secret created in the 
 previous steps. Custom deployment - Microsoft Azure [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2FARMTemplates%2FMGDC%20Extraction%20Pre%20Reqs%2Fazuredeploy.json?token=AATN3TJ6UQWU7TFMZ2R6ZW3ASL5JQ)
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2FARMTemplates%2FMGDC%20Extraction%20Pre%20Reqs%2Fazuredeploy.json?token=AATN3TJ6UQWU7TFMZ2R6ZW3ASL5JQ"><img src="https://camo.githubusercontent.com/bad3d579584bd4996af60a96735a0fdcb9f402933c139cc6c4c4a4577576411f/68747470733a2f2f616b612e6d732f6465706c6f79746f617a757265627574746f6e" alt="Deploy Environment in Azure" /></a>
