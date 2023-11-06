@@ -9,9 +9,9 @@ ms.custom: datasets:dataset-name
 
 # PlannerTasks_v0 dataset
 
-The PlannerTasks_v0 dataset provides a list of Microsoft Outlook tasks available on Planner App. You can also connect your Planner App to ToDo App to get all Tasks at one place. Tasks in Microsoft Outlook tracks user-level work items. Users can note a task's start, due, and actual completion dates, its progress or status, and whether it's recurring or requires a reminder. All Planner Tasks are a part of a Plan, under which they're organized in buckets. By default, there is no plan or task. The user have to create a Plan, inside which they can add tasks and assign them to a predefined or custom bucket.
+The PlannerTasks_v0 dataset provides a list of Microsoft Outlook tasks assigned to a user, which are available on Planner App. Tasks in Microsoft Outlook tracks user-level work items. Users can note a task's start, due, and actual completion dates, its progress or status, and whether it's recurring or requires a reminder. All Planner Tasks are a part of a Plan, under which they're organized in buckets. By default, there is no plan or task. The user has to create a Plan and the tasks inside, or someone in the organization can create a plan and assign tasks to that user. These tasks can now be assigned to a predefined or custom bucket, and progress can be tracked for both the task and the plan as a whole. 
 
-The PlannerTasks_v0 dataset enables you to identify all the Planner tasks assigned to any of the users of a tenant that are secured by Azure Active Directory (Azure AD) in Microsoft 365. User accounts can be on Microsoft 365 or a Microsoft account (Hotmail.com, Live.com, MSN.com, Outlook.com, and Passport.com).
+The PlannerTasks_v0 dataset enables you to identify all the Planner tasks assigned to any of the users of a tenant that are secured by Azure Active Directory (Azure AD) in Microsoft 365. User accounts can be on Microsoft 365 or a Microsoft account (Hotmail.com, Live.com, MSN.com, Outlook.com, and Passport.com). 
 
 ## Scenarios
 
@@ -29,6 +29,11 @@ The following are examples of questions that you can answer with this dataset:
 - How many tasks were created by all users of a tenant?
 - How many tasks were completed before the assigned due date by all users of a tenant?
 - How many tasks were completed after the assigned due date by all users of a tenant?
+- How many tasks were assigned to all users during a time range? 
+- How many average tasks are there inside a plan? 
+- What percentage of Tasks got completed during a time range? 
+- What is the average time it takes for any Task to move from InProgress state to Completed state? 
+- Which/How many Tasks have surpassed the Due Date but still haven’t been started? 
 
 ## Joining with other datasets
 
