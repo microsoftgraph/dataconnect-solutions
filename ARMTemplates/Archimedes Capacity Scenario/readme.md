@@ -115,7 +115,7 @@ complete.
 
 4.  Search for "SharePoint" and select the "Unlock Capacity Analytics and Insights for SharePoint and OneDrive using Microsoft 365 Datasets" template and Continue
 
-![](Images/24.png)
+![](Images/24.PNG)
 
 5.  Create the new **Target** Linked services required by this pipeline
 
