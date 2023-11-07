@@ -49,8 +49,9 @@ and secret to setup the other required resources.
 ![](Images/7.png)
 
 8. In the App, navigate to **Owners** and add an owner who will be responsible for running the pipeline. This is required for the pipeline to run successfully.
-   ![](Images/6a.png)
-   ![](Images/6b.png)
+
+![](Images/6a.PNG)
+![](Images/6b.PNG)
 
 9. Navigate to "Certificates and secrets" in the left pane and click on "New client secret"
 

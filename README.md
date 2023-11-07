@@ -14,7 +14,7 @@ Information oversharing is a security and compliance use case powered by our new
 
 ## [Capacity Scenario](solutions/capacity-scenario/readme.md)
 
-Capacity scenario is a storage use case powered by our newly available SharePoint datasets. his helps customers to comprehend their storage usage by giving them useful information and analysis from the SharePoint Sites and SharePoint Files datasets. 
+Capacity scenario is a storage use case powered by our newly available SharePoint datasets. This helps customers to comprehend their storage usage by giving them useful information and analysis from the SharePoint Sites and SharePoint Files datasets. 
 
 ## [Project Staffing application](solutions/projectstaffing/README.MD)
 
