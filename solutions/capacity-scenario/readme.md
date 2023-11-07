@@ -149,7 +149,7 @@ complete.
 
 ![](Images/27b.PNG)
 
-12. Trigger the pipeline
+12. Trigger the pipeline. **Note: You should not trigger the pipeline until the Files dataset becomes available**
 
 ![](Images/27c.PNG)
 
@@ -157,7 +157,7 @@ complete.
 
 ![](Images/27d.PNG)
 
-14. You ran the pipeline created the request for the SharePoint Sites and SharePoint Files datasets which will be used to power the report! Once the admin consents to the request the data will be processed and delivered to your storage account.
+14. You ran the pipeline created the request for the SharePoint Sites and SharePoint Files datasets which will be used to power the report! The data will be processed and delivered to your storage account.
 
 15.  You will see the data in the storage account. The report will pull the data from the uploaded capacity directory in your storage 
 
@@ -173,7 +173,7 @@ Below steps will help to link datasets that are generated using Synapse pipeline
 Template. 
 1. Download and install Microsoft Power BI Desktop if you don’t have it installed already on your machine. 
     - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center. [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494)
-2. Download the pre-created Power BI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. Link to download Power BI Report. [here]()
+2. Download the pre-created Power BI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. The link to download the Power BI Report will be available here when the template becomes available.
 
 ![](Images/42.png)
 

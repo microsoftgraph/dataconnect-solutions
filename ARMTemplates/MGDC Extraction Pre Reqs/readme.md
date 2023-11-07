@@ -158,7 +158,7 @@ complete.
 
 ![](Images/33.png)
 
-14. Congratulations! You just triggered your first Microsoft Graph Data Connect pipeline! Once the admin consents to the request the data will be processed and delivered to your storage account.
+14. Congratulations! You just triggered your first Microsoft Graph Data Connect pipeline! The data will be processed and delivered to your storage account.
 
 ![](Images/34.png)
 
