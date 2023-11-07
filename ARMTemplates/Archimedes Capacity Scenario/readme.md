@@ -44,11 +44,13 @@ The first step to running this template would be to create an application in the
 ![](Images/6.png)
 
 7. Verify that that the status shows as granted for the new Application.Read.All permission
+
 ![](Images/7.png)
 
 8. In the App, navigate to **Owners** and add an owner who will be responsible for running the pipeline. This is required for the pipeline to run successfully.
-   ![](Images/6a.png)
-   ![](Images/6b.png)
+
+![](Images/6a.PNG)
+![](Images/6b.PNG)
 
 
 9. Navigate to "Certificates and secrets" in the left pane and click on "New client secret"
@@ -107,7 +109,7 @@ complete.
 
 ![](Images/22.png)
 
-1.  Navigate to "Integrate -> Add new resource -> **Browse gallery**"
+3.  Navigate to "Integrate -> Add new resource -> **Browse gallery**"
 
 ![](Images/23.png)
 
