@@ -62,7 +62,7 @@ The SharePoint File Actions datasets includes details about every time a file wa
 | SiteId | string | GUID of the Site for the file | No | False |
 | SiteUrl | string | URL for the site | No | False |
 | WebId | string | GUID that identifies the Web inside the Site containing the file | No | False |
-| WebTemplateId | int | ID of the template for the site containing the file | No | False |
+| WebTemplateId | long | ID of the template for the site containing the file | No | False |
 | ListId | string | GUID that identifies the List or Document Library containing the file | No | False |
 | ListItemId | string | GUID that identifies the file | No | False |
 | ItemURL | string | Full URL for the item | No | False |
