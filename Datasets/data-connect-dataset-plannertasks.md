@@ -56,10 +56,10 @@ The PlannerTasks_v0 dataset can be joined with relevant users, and other categor
 | assigneePriority | String | Hint used to order items of this type in a list view. | No | None |
 | percentComplete | Int32 | Percentage of task completion. When set to 100, the task is considered completed. | No | None |
 | startDateTime | Datetime | Date and time at which the task starts. It is in UTC format. | No | None
-| createdDateTime | Datetime | Date and time at which the task is created. It is in UTC format. | 1 | Date |
+| createdDateTime | Datetime | Date and time at which the task is created. It is in UTC format. | Yes | Date |
 | dueDateTime | Datetime | Date and time at which the task is due. It is in UTC format. | No | None |
 | hasDescription | Boolean | Value is?true?if the details object of the task has a non-empty description and?None?otherwise. | No | None |
-| previewType | String | "This sets the type of preview that shows up on the task. The possible values are: automatic, noPreview, checklist, description, reference."	No | None |
+| previewType | String | "This sets the type of preview that shows up on the task. The possible values are: automatic, noPreview, checklist, description, reference." | No | None |
 | completedDateTime | Datetime | Date and time at which the 'percentComplete' of the task is set to '100'. It is in UTC format. | No | None |
 | completedBy | String | Identity of the user that completed the task. | No | None |
 | referenceCount | Int32 | Number of external references that exist on the task. | No | None |
