@@ -11,7 +11,7 @@ ms.custom: datasets:dataset-name
 
 ### Description: 
 
-The OneDrive Sync Errors dataset includes information about errors on devices running OneDrive for Business. This includes one object for every type of error in a specific device. Data includes OneDrive device id, error codes, error messages and number of times an error was seen on the device. 
+The OneDrive Sync Errors dataset includes information about errors on devices running OneDrive for Business. This includes one object for every type of error in a specific device. Data includes error codes, error messages and number of times an error was seen on the device. 
 
 **IMPORTANT NOTE**: This dataset is not currently available publicly. It is coming soon.  The details provided here are for informational purposes only.
 
@@ -45,13 +45,13 @@ The OneDrive Sync Errors dataset includes information about errors on devices ru
 | **Name** | **Type** | **Description** | **FilterOptions** | **IsDateFilter** |
 |-|-|-|:-:|:-:|
 | ptenant | string | Id of the tenant | No | False |
-| OneDriveDeviceId | string | Unique OneDrive Sync internal identifier | No | False |
+| OneDriveDeviceId | string | Unique OneDrive Sync internal identifier. Can be used to join with the Sync Health dataset | No | False |
 | SyncErrorId | int | Error id when this is a Sync error (shown in the system tray icon as a red X). If this is 34, this is not that type of error | No | False |
-| TaskDialogId1 | int | Error id when the error is shown in a task dialog type 1 (a native OS dialog on contextual action). If this is 0, this is not that type of error* | No | False |
-| TaskDialogId2 | int | Error id when the error is shown in a task dialog type 2 (a native OS dialog on contextual action). If this is 256, this is not that type of error* | No | False |
+| TaskDialogId1 | int | Error id when the error is shown in a task dialog type 1 (a native OS dialog on contextual action). If this is 0, this is not that type of error (see note) | No | False |
+| TaskDialogId2 | int | Error id when the error is shown in a task dialog type 2 (a native OS dialog on contextual action). If this is 256, this is not that type of error (see note) | No | False |
 | ErrorTitle | string | Error title shown to user (localized) | No | False |
 | ErrorDescription | string | Error description shown to user (localized) | No | False |
-| ErrorCount | int | Number of errors of this type | No | False |
+| ErrorCount | int | Number of errors of this type reported by this OneDriveDeviceId | No | False |
 
 NOTE: There is no distinction between the two types of task dialog errors. This will depend on the task dialog shown. 
 
