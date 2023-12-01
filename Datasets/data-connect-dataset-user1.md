@@ -11,6 +11,8 @@ ms.custom: datasets:dataset-name
 
 The User_v1 dataset provides user details stored for all the Azure Active Directory (Azure AD) user accounts that are created for a particular tenant.
 
+NOTE:- Currently, the MGDC platform only supports the users that have a valid mailbox which is **not inactive, soft-deleted or hosted on-Prem**. Trying to extract such users will result in no data to be returned for such users.
+
 ## Scenarios
 
 The following are business scenarios that you can answer with this dataset:
