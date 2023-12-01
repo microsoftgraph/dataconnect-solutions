@@ -12,6 +12,10 @@ The purpose of ONA is to harness information flows and team connectivity to unlo
 
 Information oversharing is a security and compliance use case powered by our newly available SharePoint datasets. This allows customers to better understand how secure their SharePoint is, maintain information boundaries, and establish new rules based on how sensitive data is managed and classified.
 
+## [Capacity Scenario](solutions/capacity-scenario/readme.md)
+
+Capacity scenario is a storage use case powered by our newly available SharePoint datasets. This helps customers to comprehend their storage usage by giving them useful information and analysis from the SharePoint Sites and SharePoint Files datasets. 
+
 ## [Project Staffing application](solutions/projectstaffing/README.MD)
 
 The Project Staffing application is a Microsoft Graph Data Connect based solution which allows engagement managers to build the best suited teams for projects, by finding employees that are available and have the best set of skills for the project, as well as the most relevant set of potential skills. The application ingests data from Microsoft Graph Data Connect and complementary data sources using Azure Data Factory (ADF) pipelines and uses this to build a model based on which the most relevant employees are recommended.
