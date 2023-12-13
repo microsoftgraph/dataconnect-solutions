@@ -56,13 +56,13 @@ The TeamsConversationActivity_v0 dataset can be joined with other activities dat
 | TeamGroupId | string | Unique GroupId of the teams channel. Among the properties defined by the signal producer. | No | None |                
 | TeamName | string | The team name owning the Channel. Among the properties defined by the signal producer. | No | None |                
 | Emotion | string | Emotion in case the signal is ReactedWithEmoji. Among the properties defined by the signal producer. | No |  None |
-| MembersAdded | object | A list of members added (in case the signal was AddToChannel or Join Channel). Among the properties defined by the signal producer. | No | None |               
-| MembersRemoved | object | A list of members removed (in case the signal was RemoveFromChannel or LeaveChannel). Among the properties defined by the signal producer. | No | None |        
-| ThreadMembers | object | A list of members in the channel (in case the signal was RenameChannel). Among the properties defined by the signal producer. | No | None |        
-| Mentions | object | Mentions in a conversation. Among the properties defined by the signal producer. | No | None |             
+| MembersAdded | array | A list of members added (in case the signal was AddToChannel or Join Channel). Among the properties defined by the signal producer. | No | None |               
+| MembersRemoved | array | A list of members removed (in case the signal was RemoveFromChannel or LeaveChannel). Among the properties defined by the signal producer. | No | None |        
+| ThreadMembers | array | A list of members in the channel (in case the signal was RenameChannel). Among the properties defined by the signal producer. | No | None |        
+| Mentions | array | Mentions in a conversation. Among the properties defined by the signal producer. | No | None |             
 | InteractionMetadata | object | The interaction metadata in a teams conversation. Among the properties defined by the signal producer. | No | None |
-| puser | String | User id. | No  | None |
-| ptenant | String |  Tenant id. | No | None |
+| puser | string | User id. | No  | None |
+| ptenant | string |  Tenant id. | No | None |
 
 ## JSON representation
 

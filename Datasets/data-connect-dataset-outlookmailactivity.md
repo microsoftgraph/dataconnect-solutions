@@ -52,8 +52,8 @@ The OutlookMailActivity_v0 dataset can be joined with other activities datasets,
 | MailboxGuid | string | Unique mailbox id for the user, among the properties defined by the signal producer. | No | None |
 | TenantName | string | The tenant name, among the properties defined by the signal producer. | No | None|
 | OId | string | UserId, among the properties defined by the signal producer. | No | None |
-| puser | String | User id. | No  | None |
-| ptenant | String |  Tenant id. | No | None |
+| puser | string | User id. | No  | None |
+| ptenant | string |  Tenant id. | No | None |
 
 ## JSON representation
 
