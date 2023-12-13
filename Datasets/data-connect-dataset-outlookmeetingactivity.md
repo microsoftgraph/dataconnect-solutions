@@ -48,10 +48,12 @@ The OutlookMeetingActivity_v0 dataset can be joined with other activities datase
 | ItemType | string | The type of item being acted on. | No | None |
 | AppName | string | The end user client name being used to generate the signal, E.g. "Unknown", "OutlookMobile", "OWA", "OutlookDesktop", etc. | No | None |
 | AadTenantId | string | AadTenantId of the actor (signal generator). | No | None |
-| ClientSessionId | string | Unique session id for the user, among the properties defined by the signal producer.| | No | None |
+| ClientSessionId | string | Unique session id for the user, among the properties defined by the signal producer. | No | None |
 | MailboxGuid | string | Unique mailbox id for the user, among the|properties defined by the signal producer. | No | None |
 | TenantName | string | The tenant name, among the properties defined by the signal producer. | No | None|
 | OId | string | UserId, among the properties defined by the signal producer. | No | None |
+| puser | String | User id. | No  | None |
+| ptenant | String |  Tenant id. | No | None |
 
 ## JSON representation
 

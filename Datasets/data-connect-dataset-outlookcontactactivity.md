@@ -48,10 +48,12 @@ The OutlookContactActivity_v0 dataset can be joined with other activities datase
 | ItemType | string | The type of item being acted on. | No | None |
 | AppName | string | The end user client name being used to generate the signal, E.g. "Unknown", "OutlookMobile", "OWA", "OutlookDesktop", etc. | No | None |
 | AadTenantId | string | AadTenantId of the actor (signal generator). | No | None |
-| ClientSessionId | string | Unique session id for the user, among the properties defined by the signal producer.| | No | None |
+| ClientSessionId | string | Unique session id for the user, among the properties defined by the signal producer. | No | None |
 | MailboxGuid | string | Unique mailbox id for the user, among the|properties defined by the signal producer. | No | None |
 | TenantName | string | The tenant name, among the properties defined by the signal producer. | No | None|
 | OId | string | UserId, among the properties defined by the signal producer. | No | None |
+| puser | String | User id. | No  | None |
+| ptenant | String |  Tenant id. | No | None |
 
 ## JSON representation
 
@@ -77,7 +79,7 @@ The OutlookContactActivity_v0 dataset can be joined with other activities datase
 ## Sample
 
 ```json
-{"AadTenantId":"8e56195d-f07c-44f0-8108-40e4352e3e74","AppName":"Other","CreationTime":"2023-07-17T18:18:03Z","ClientSessionId":"6e3e17f0-c800-44aa-a78f-3b0fe89795ff","MailboxGuid":"2a97d8eb-fcc5-4645-a4ad-d163490b2edb","OId":"e530bf91-e844-4369-a808-e0d12b1008cd","TenantName":"euclidtest21.onmicrosoft.com","EndTime":"2023-07-17T18:18:03Z","Id":"AAMkADJhOTdkOGViLWZjYzUtNDY0NS1hNGFkLWQxNjM0OTBiMmVkYgBGAAAAAABfknVfDfJURqxOuHBzEhFGBwCa8HKSWYdiSZsHkjRYM1qIAAAAAAEwAACa8HKSWYdiSZsHkjRYM1qIAARYVWTNAAA=","SignalType":"ContactCreated","StartTime":"2023-07-17T18:18:03Z","ptenant":"8e56195d-f07c-44f0-8108-40e4352e3e74","puser":"e530bf91-e844-4369-a808-e0d12b1008cd"} 
+{"AadTenantId":"8e56195d-f07c-44f0-8108-40e4352e3e74","AppName":"Other","CreationTime":"2023-07-17T18:18:03Z","ClientSessionId":"6e3e17f0-c800-44aa-a78f-3b0fe89795ff","ItemType":"Message","MailboxGuid":"2a97d8eb-fcc5-4645-a4ad-d163490b2edb","OId":"e530bf91-e844-4369-a808-e0d12b1008cd","TenantName":"euclidtest21.onmicrosoft.com","EndTime":"2023-07-17T18:18:03Z","Id":"AAMkADJhOTdkOGViLWZjYzUtNDY0NS1hNGFkLWQxNjM0OTBiMmVkYgBGAAAAAABfknVfDfJURqxOuHBzEhFGBwCa8HKSWYdiSZsHkjRYM1qIAAAAAAEwAACa8HKSWYdiSZsHkjRYM1qIAARYVWTNAAA=","SignalType":"ContactCreated","StartTime":"2023-07-17T18:18:03Z","ptenant":"8e56195d-f07c-44f0-8108-40e4352e3e74","puser":"e530bf91-e844-4369-a808-e0d12b1008cd"} 
 {"AadTenantId":"8e56195d-f07c-44f0-8108-40e4352e3e74","AppName":"Other","CreationTime":"2023-07-17T18:18:40Z","ClientSessionId":"9bfd424b-1373-42b0-a9cc-a28efca77fc6","MailboxGuid":"2a97d8eb-fcc5-4645-a4ad-d163490b2edb","OId":"e530bf91-e844-4369-a808-e0d12b1008cd","TenantName":"euclidtest21.onmicrosoft.com","EndTime":"2023-07-17T18:18:40Z","Id":"AAMkADJhOTdkOGViLWZjYzUtNDY0NS1hNGFkLWQxNjM0OTBiMmVkYgBGAAAAAABfknVfDfJURqxOuHBzEhFGBwCa8HKSWYdiSZsHkjRYM1qIAAAAAAEwAACa8HKSWYdiSZsHkjRYM1qIAARYVWTPAAA=","SignalType":"ContactCreated","StartTime":"2023-07-17T18:18:40Z","ptenant":"8e56195d-f07c-44f0-8108-40e4352e3e74","puser":"e530bf91-e844-4369-a808-e0d12b1008cd"} 
 {"AadTenantId":"8e56195d-f07c-44f0-8108-40e4352e3e74","AppName":"Other","CreationTime":"2023-07-17T18:18:04Z","ClientSessionId":"6e3e17f0-c800-44aa-a78f-3b0fe89795ff","MailboxGuid":"2a97d8eb-fcc5-4645-a4ad-d163490b2edb","OId":"e530bf91-e844-4369-a808-e0d12b1008cd","TenantName":"euclidtest21.onmicrosoft.com","EndTime":"2023-07-17T18:18:04Z","Id":"AAMkADJhOTdkOGViLWZjYzUtNDY0NS1hNGFkLWQxNjM0OTBiMmVkYgBGAAAAAABfknVfDfJURqxOuHBzEhFGBwCa8HKSWYdiSZsHkjRYM1qIAAAAAAEwAACa8HKSWYdiSZsHkjRYM1qIAARYVWTOAAA=","SignalType":"ContactUpdated","StartTime":"2023-07-17T18:18:04Z","ptenant":"8e56195d-f07c-44f0-8108-40e4352e3e74","puser":"e530bf91-e844-4369-a808-e0d12b1008cd"} 
 {"AadTenantId":"8e56195d-f07c-44f0-8108-40e4352e3e74","AppName":"Other","CreationTime":"2023-07-17T18:18:41Z","ClientSessionId":"6e3e17f0-c800-44aa-a78f-3b0fe89795ff","MailboxGuid":"2a97d8eb-fcc5-4645-a4ad-d163490b2edb","OId":"e530bf91-e844-4369-a808-e0d12b1008cd","TenantName":"euclidtest21.onmicrosoft.com","EndTime":"2023-07-17T18:18:41Z","Id":"AAMkADJhOTdkOGViLWZjYzUtNDY0NS1hNGFkLWQxNjM0OTBiMmVkYgBGAAAAAABfknVfDfJURqxOuHBzEhFGBwCa8HKSWYdiSZsHkjRYM1qIAAAAAAEwAACa8HKSWYdiSZsHkjRYM1qIAARYVWTQAAA=","SignalType":"ContactUpdated","StartTime":"2023-07-17T18:18:41Z","ptenant":"8e56195d-f07c-44f0-8108-40e4352e3e74","puser":"e530bf91-e844-4369-a808-e0d12b1008cd"} 
