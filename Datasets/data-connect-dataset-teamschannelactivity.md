@@ -51,9 +51,9 @@ The following are examples of questions that you can answer with this dataset:
 | PriorThreadName | string | Older Channel’s Name (in case the signal was for renaming the channel). Among the properties defined by the signal producer. | No |  None |               
 | TeamGroupId | string | Unique GroupId of the teams channel. Among the properties defined by the signal producer. | No | None |                
 | TeamName | string | The team name owning the Channel. Among the properties defined by the signal producer. | No | None |             
-| MembersAdded | string | A list of members added (in case the signal was AddToChannel or Join Channel). Among the properties defined by the signal producer. | No | None |               
-| MembersRemoved | string | A list of members removed (in case the signal was RemoveFromChannel or LeaveChannel). Among the properties defined by the signal producer. | No | None |        
-| ThreadMembers | string | A list of members in the channel (in case the signal was RenameChannel). Among the properties defined by the signal producer. | No | None |
+| MembersAdded | object | A list of members added (in case the signal was AddToChannel or Join Channel). Among the properties defined by the signal producer. | No | None |               
+| MembersRemoved | object | A list of members removed (in case the signal was RemoveFromChannel or LeaveChannel). Among the properties defined by the signal producer. | No | None |        
+| ThreadMembers | object | A list of members in the channel (in case the signal was RenameChannel). Among the properties defined by the signal producer. | No | None |
 | puser | String | User id. | No  | None |
 | ptenant | String |  Tenant id. | No | None |
 
@@ -73,9 +73,9 @@ The following are examples of questions that you can answer with this dataset:
 "PriorThreadName": "string", 
 "TeamGroupId": "string", 
 "TeamName": "string", 
-"MembersAdded": "string", 
-"MembersRemoved": "string", 
-"ThreadMembers": "string", 
+"MembersAdded": ["string"], 
+"MembersRemoved": ["string"], 
+"ThreadMembers": ["string"], 
 "puser": "String (identifier)", 
 "ptenant": "String (identifier)"
 }

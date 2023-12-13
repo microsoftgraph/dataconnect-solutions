@@ -56,9 +56,9 @@ The TeamsConversationActivity_v0 dataset can be joined with other activities dat
 | TeamGroupId | string | Unique GroupId of the teams channel. Among the properties defined by the signal producer. | No | None |                
 | TeamName | string | The team name owning the Channel. Among the properties defined by the signal producer. | No | None |                
 | Emotion | string | Emotion in case the signal is ReactedWithEmoji. Among the properties defined by the signal producer. | No |  None |
-| MembersAdded | string | A list of members added (in case the signal was AddToChannel or Join Channel). Among the properties defined by the signal producer. | No | None |               
-| MembersRemoved | string | A list of members removed (in case the signal was RemoveFromChannel or LeaveChannel). Among the properties defined by the signal producer. | No | None |        
-| ThreadMembers | string | A list of members in the channel (in case the signal was RenameChannel). Among the properties defined by the signal producer. | No | None |        
+| MembersAdded | object | A list of members added (in case the signal was AddToChannel or Join Channel). Among the properties defined by the signal producer. | No | None |               
+| MembersRemoved | object | A list of members removed (in case the signal was RemoveFromChannel or LeaveChannel). Among the properties defined by the signal producer. | No | None |        
+| ThreadMembers | object | A list of members in the channel (in case the signal was RenameChannel). Among the properties defined by the signal producer. | No | None |        
 | Mentions | string | Mentions in a conversation. Among the properties defined by the signal producer. | No | None |             
 | InteractionMetadata | string | The interaction metadata in a teams conversation. Among the properties defined by the signal producer. | No | None |
 | puser | String | User id. | No  | None |
@@ -83,11 +83,11 @@ The TeamsConversationActivity_v0 dataset can be joined with other activities dat
 "TeamGroupId": "string", 
 "TeamName": "string", 
 "Emotion": "string", 
-"MembersAdded": "string", 
-"MembersRemoved": "string", 
-"ThreadMembers": "string", 
-"Mentions": "string", 
-"InteractionMetadata": "string", 
+"MembersAdded": ["string"], 
+"MembersRemoved": ["string"], 
+"ThreadMembers": ["string"], 
+"Mentions": ["string"], 
+"InteractionMetadata": ["string"], 
 "puser": "String (identifier)", 
 "ptenant": "String (identifier)"
 }
