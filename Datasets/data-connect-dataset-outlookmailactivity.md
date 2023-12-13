@@ -71,8 +71,8 @@ The OutlookMailActivity_v0 dataset can be joined with other activities datasets,
 "MailboxGuid": "string",  
 "TenantName": "string",  
 "OId": "string", 
-"puser": "String (identifier)", 
-"ptenant": "String (identifier)"
+"puser": "string (identifier)", 
+"ptenant": "string (identifier)"
 }
 ```
 

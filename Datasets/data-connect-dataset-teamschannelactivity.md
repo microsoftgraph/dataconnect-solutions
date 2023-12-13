@@ -76,8 +76,8 @@ The following are examples of questions that you can answer with this dataset:
 "MembersAdded": ["string"], 
 "MembersRemoved": ["string"], 
 "ThreadMembers": ["string"], 
-"puser": "String (identifier)", 
-"ptenant": "String (identifier)"
+"puser": "string (identifier)", 
+"ptenant": "string (identifier)"
 }
 ```
 

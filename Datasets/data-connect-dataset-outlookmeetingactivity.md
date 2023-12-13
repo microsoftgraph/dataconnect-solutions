@@ -71,8 +71,8 @@ The OutlookMeetingActivity_v0 dataset can be joined with other activities datase
 "MailboxGuid": "string",  
 "TenantName": "string",  
 "OId": "string", 
-"puser": "String (identifier)", 
-"ptenant": "String (identifier)"
+"puser": "string (identifier)", 
+"ptenant": "string (identifier)"
 }
 ```
 

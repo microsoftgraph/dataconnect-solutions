@@ -88,8 +88,8 @@ The TeamsConversationActivity_v0 dataset can be joined with other activities dat
 "ThreadMembers": ["string"], 
 "Mentions": ["string"], 
 "InteractionMetadata": ["string"], 
-"puser": "String (identifier)", 
-"ptenant": "String (identifier)"
+"puser": "string (identifier)", 
+"ptenant": "string (identifier)"
 }
 ```
 
