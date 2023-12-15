@@ -1,0 +1,87 @@
+{
+	"name": "DF_M365",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "LS_Microsoft365",
+						"type": "LinkedServiceReference"
+					},
+					"name": "M365Source",
+					"description": "Import data from Microsoft 365"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Parquet",
+						"type": "DatasetReference"
+					},
+					"name": "sinkADLS"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          createdDateTime as timestamp,",
+				"          lastModifiedDateTime as timestamp,",
+				"          receivedDateTime as timestamp,",
+				"          sentDateTime as timestamp,",
+				"          subject as string,",
+				"          sender as (emailAddress as (address as string, name as string)),",
+				"          from as (emailAddress as (address as string, name as string)),",
+				"          toRecipients as (emailAddress as (address as string, name as string))[],",
+				"          ccRecipients as string[],",
+				"          bccRecipients as string[],",
+				"          replyTo as string[],",
+				"          conversationId as string,",
+				"          uniqueBody as (content as string, contentType as string),",
+				"          body as (content as string, contentType as string),",
+				"          bodyPreview as string,",
+				"          conversationIndex as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     store: 'microsoft365',",
+				"     format: 'json',",
+				"     sourceTableName: 'BasicDataSet_v0.Inbox_v1',",
+				"     autoFlatten: false,",
+				"     sourceAllowedGroups: ['ecd941cc-0ea7-47f6-badb-21b1e14ea6d3'],",
+				"     sourceDateFilterColumn: 'createdDateTime',",
+				"     sourceStartTime: (toTimestamp(1672531200000L)),",
+				"     sourceEndTime: (toTimestamp(1690502400000L)),",
+				"     sourceStructure: [",
+				"          ['name' -> 'id', 'type' -> 'string'],",
+				"          ['name' -> 'createdDateTime', 'type' -> 'string'],",
+				"          ['name' -> 'lastModifiedDateTime', 'type' -> 'string'],",
+				"          ['name' -> 'receivedDateTime', 'type' -> 'string'],",
+				"          ['name' -> 'sentDateTime', 'type' -> 'string'],",
+				"          ['name' -> 'subject', 'type' -> 'string'],",
+				"          ['name' -> 'sender', 'type' -> 'string'],",
+				"          ['name' -> 'from', 'type' -> 'string'],",
+				"          ['name' -> 'toRecipients', 'type' -> 'string'],",
+				"          ['name' -> 'ccRecipients', 'type' -> 'string'],",
+				"          ['name' -> 'bccRecipients', 'type' -> 'string'],",
+				"          ['name' -> 'replyTo', 'type' -> 'string'],",
+				"          ['name' -> 'conversationId', 'type' -> 'string'],",
+				"          ['name' -> 'uniqueBody', 'type' -> 'string'],",
+				"          ['name' -> 'body', 'type' -> 'string'],",
+				"          ['name' -> 'bodyPreview', 'type' -> 'string'],",
+				"          ['name' -> 'conversationIndex', 'type' -> 'string']",
+				"     ]) ~> M365Source",
+				"M365Source sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1) ~> sinkADLS"
+			]
+		}
+	}
+}

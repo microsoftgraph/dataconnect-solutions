@@ -1,0 +1,10 @@
+{
+	"name": "mpep_AzureSqlDatabase",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/2058f82f-b8ac-423e-8c83-227732887c3a/resourceGroups/fractal-neal-coe-dev-rg/providers/Microsoft.Sql/servers/sqlserver-gdcs-cin-dev-il",
+		"groupId": "sqlServer",
+		"fqdns": [
+			"sqlserver-gdcs-cin-dev-il.database.windows.net"
+		]
+	}
+}
