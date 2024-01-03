@@ -15,7 +15,10 @@ The TodoTasks_v0 dataset enables you to identify all tasks created by all users 
 
 NOTE:
 
-- Currently, the MGDC platform ONLY supports extracting users who have a valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**). The mailbox should also have it's account enabled (i.e.accountEnabled should not be set to false). Moreover, it should have a valid substrate mailbox (i.e. it should contain an exchange license). Trying to extract users not satisfying these conditions will result in no data to be returned for such users.
+- Currently, the MGDC platform ONLY supports extracting users who have:
+    * A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
+    * It's account enabled (i.e. accountEnabled should not be set to false)
+    * A valid substrate mailbox (i.e. it should have an exchange license)
 - The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions.
 
 ## Scenarios
