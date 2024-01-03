@@ -17,8 +17,8 @@ Currently, the MGDC platform ONLY supports extracting groups which have at least
 - A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
 - It's account enabled (i.e. accountEnabled should not be set to false)
 - A valid substrate mailbox (i.e. it should have an exchange license)
-Trying to extract groups not having any such valid user will result in pipelines failing with the error that none of the users requested were valid.
 
+Trying to extract groups not having any such valid user will result in pipelines failing with the error that none of the users requested were valid.
 
 ## Scenarios
 
