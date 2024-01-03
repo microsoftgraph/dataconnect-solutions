@@ -11,6 +11,11 @@ ms.custom: datasets:dataset-name
 
 The GroupDetails_v0 dataset represents the Azure Active Directory (Azure AD) groups data for a tenant, such as Microsoft 365 groups or a security group. 
 
+NOTE: 
+
+- Currently, the MGDC platform ONLY supports extracting groups which have at least one valid user. Valid users are the users who have a valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**). The mailbox should also have it's account enabled (i.e. accountEnabled should not be set to false). Moreover, it should have a valid substrate mailbox (i.e. it should have an exchange license). Trying to extract groups not having any such valid user will result in no data to be returned for such groups.
+
+
 ## Scenarios
 
 The following are business scenarios that you can answer with this dataset:
