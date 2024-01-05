@@ -1,5 +1,5 @@
 ---
-title: "BasicDataSet_v0.OneDriveSyncHealth_v1 dataset"
+title: "BasicDataSet_v0.OneDriveSyncHealth_v0 dataset"
 description: "The OneDrive Sync Health dataset includes information on devices running OneDrive for Business"
 author: "josebda"
 ms.localizationpriority: high
@@ -7,7 +7,7 @@ ms.prod: "data-connect"
 ms.custom: datasets:dataset-name
 ---
 
-## BasicDataSet_v0.OneDriveSyncHealth_v1 dataset
+## BasicDataSet_v0.OneDriveSyncHealth_v0 dataset
 
 ### Description: 
 
