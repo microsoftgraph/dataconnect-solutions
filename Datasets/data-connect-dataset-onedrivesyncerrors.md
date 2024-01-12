@@ -13,6 +13,13 @@ ms.custom: datasets:dataset-name
 
 The OneDrive Sync Errors dataset includes information about errors on devices running OneDrive for Business. This includes one object for every type of error in a specific device. Data includes error codes, error messages and number of times an error was seen on the device. 
 
+NOTE:
+
+- Currently, the MGDC platform ONLY supports extracting valid users. Trying to extract invalid users will result in no data to be returned for such users. Valid users must have the following:
+    * A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
+    * User account enabled (i.e. accountEnabled should not be set to false)
+    * A valid substrate mailbox (i.e. it should have an exchange license)
+
 **IMPORTANT NOTE**: This dataset is not currently available publicly. It is coming soon.  The details provided here are for informational purposes only.
 
 ### Scenarios:

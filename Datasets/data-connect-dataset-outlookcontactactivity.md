@@ -11,6 +11,14 @@ ms.custom: datasets:dataset-name
 
 The OutlookContactActivity_v0 dataset provides a list of Signals which are relevant for understanding an employee’s activities with their contacts in Microsoft Outlook. It can help get insights on how employees in the organization interact through Outlook’s contacts. Patterns of communication often change when on-site and in hybrid settings, leading to spikes or drops in activity. For example, "AddContact” can help understand how often an employee must interact outside their team/circle, leading to insights in new cross-team communications and how they can be reduced to increase efficiency. It includes the following signals: 'AddContact', 'ContactCreated', 'ContactUpdated' and 'RemoveContact'.
 
+NOTE:
+
+- Currently, the MGDC platform ONLY supports extracting valid users. Trying to extract invalid users will result in no data to be returned for such users. Valid users must have the following:
+    * A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
+    * User account enabled (i.e. accountEnabled should not be set to false)
+    * A valid substrate mailbox (i.e. it should have an exchange license)
+- The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions.
+
 ## Scenarios
 
 The following are business scenarios that you can answer with this dataset:

@@ -13,6 +13,14 @@ The PlannerTasks_v0 dataset provides a list of Microsoft Outlook tasks assigned 
 
 The PlannerTasks_v0 dataset enables you to identify all the Planner tasks assigned to any of the users of a tenant that are secured by Azure Active Directory (Azure AD) in Microsoft 365. User accounts can be on Microsoft 365 or a Microsoft account (Hotmail.com, Live.com, MSN.com, Outlook.com, and Passport.com). 
 
+NOTE:
+
+- Currently, the MGDC platform ONLY supports extracting valid users. Trying to extract invalid users will result in no data to be returned for such users. Valid users must have the following:
+    * A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
+    * User account enabled (i.e. accountEnabled should not be set to false)
+    * A valid substrate mailbox (i.e. it should have an exchange license)
+- The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions.
+
 ## Scenarios
 
 The following are business scenarios that you can answer with this dataset:

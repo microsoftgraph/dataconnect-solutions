@@ -13,12 +13,11 @@ The GroupDetails_v0 dataset represents the Azure Active Directory (Azure AD) gro
 
 NOTE: 
 
-Currently, the MGDC platform ONLY supports extracting groups which have at least one valid user. Valid users must have the following:
-- A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
-- It's account enabled (i.e. accountEnabled should not be set to false)
-- A valid substrate mailbox (i.e. it should have an exchange license)
-
-Trying to extract groups not having any such valid user will result in pipelines failing with the error that none of the users requested were valid.
+- Currently, the MGDC platform ONLY supports extracting groups which have at least one valid user. Trying to extract groups not having any such valid user will result in pipelines failing with the error that none of the users requested were valid. Valid users must have the following:
+    * A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
+    * User account enabled (i.e. accountEnabled should not be set to false)
+    * A valid substrate mailbox (i.e. it should have an exchange license)
+- The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions. 
 
 ## Scenarios
 
