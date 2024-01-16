@@ -13,10 +13,6 @@ The TeamsStandardChannelMessages_v0 dataset provides channel posts and messages 
 
 NOTE: 
 
-- Currently, the MGDC platform ONLY supports extracting groups which have at least one valid user. Trying to extract groups not having any such valid user will result in pipelines failing with the error that none of the users requested were valid. Valid users must have the following:
-    * A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
-    * User account enabled (i.e. accountEnabled should not be set to false)
-    * A valid substrate mailbox (i.e. it should have an exchange license)
 - The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions. 
 
 ## Scenarios

@@ -16,7 +16,6 @@ NOTE:
 - Currently, the MGDC platform ONLY supports extracting valid users. Trying to extract invalid users will result in no data to be returned for such users. Valid users must have the following:
     * A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
     * User account enabled (i.e. accountEnabled should not be set to false)
-    * A valid substrate mailbox (i.e. it should have an exchange license)
 - The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions.
 
 ## Scenarios
