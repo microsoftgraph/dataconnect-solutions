@@ -11,6 +11,14 @@ ms.custom: datasets:dataset-name
 
 The OutlookMailActivity_v0 dataset provides a list of Signals which are relevant for understanding an employee’s activity with their mails in Microsoft Outlook. It can help get insights on how and how much the employees in the organization interact through Outlook’s emails. Patterns of communication often change when on-site and in hybrid settings, leading to spikes or drops in activity. It includes the following signals: 'Reply', 'ReplyAll', 'MarkAsNotSpam', 'MarkAsOther', 'MarkAsPhishing', 'MarkAsUnread', 'MarkMessageAsRead', 'MessageSent', 'Flag', 'FlagCleared', 'FlagComplete', 'Forward', 'SendMessageToUnifiedGroup', 'ViewMessage', 'MarkAsFocused', 'MarkAsJunk', 'DeleteFolder', 'MoveFolder', 'JoinGroup' and 'LeaveGroup'. 
 
+NOTE:
+
+- Currently, the MGDC platform ONLY supports extracting valid users. Trying to extract invalid users will result in no data to be returned for such users. Valid users must have the following:
+    * A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
+    * User account enabled (i.e. accountEnabled should not be set to false)
+    * An exchange license
+- The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions.
+
 ## Scenarios
 
 The following are business scenarios that you can answer with this dataset:

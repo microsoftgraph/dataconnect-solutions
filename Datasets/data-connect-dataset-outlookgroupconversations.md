@@ -10,7 +10,11 @@ ms.custom: datasets:dataset-name
 # OutlookGroupConversations_v0 dataset
 
 The OutlookGroupConversations_v0 dataset provides a collection of group conversations between users of tenant.
- 
+
+NOTE: 
+
+- The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions. 
+
 ## Scenarios
 
 The following are business scenarios that you can answer with this dataset:

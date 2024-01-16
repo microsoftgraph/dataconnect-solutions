@@ -11,6 +11,10 @@ ms.custom: datasets:dataset-name
 
 The GroupMembers_v0 dataset generates a list of direct members of all groups. A group can have users, organizational contacts, devices, service principals, and other groups as members.
 
+NOTE: 
+
+- The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions. 
+
 ## Scenarios
 
 The following are business scenarios that you can answer with this dataset:

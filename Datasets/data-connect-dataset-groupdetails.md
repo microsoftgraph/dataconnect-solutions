@@ -11,6 +11,10 @@ ms.custom: datasets:dataset-name
 
 The GroupDetails_v0 dataset represents the Azure Active Directory (Azure AD) groups data for a tenant, such as Microsoft 365 groups or a security group. 
 
+NOTE: 
+
+- The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions. 
+
 ## Scenarios
 
 The following are business scenarios that you can answer with this dataset:
