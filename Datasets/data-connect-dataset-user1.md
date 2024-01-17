@@ -70,6 +70,7 @@ The User_v1 dataset can be joined with other datasets that can be mapped to the 
 | imAddresses  | array  | The instant message voice over IP (VOIP) session initiation protocol (SIP) addresses for the user. *Format:*`ARRAY<STRING>.`  | No  | None  |
 | interests  | array  | A list of interests for the user. *Format:*`ARRAY<STRING>.`  | No  | None  |
 | jobTitle  | string  | The user’s job title.  | No  | None  |
+| lastPasswordChangeDateTime  | datetime  | The time when this Microsoft Entra user last changed their password or when their password was created, whichever date the latest action was performed.  | No  | None  |
 | legalAgeGroupClassification  | string  | Used by enterprise applications to determine the legal age group of the user. This property is read-only and calculated based on ageGroup and consentProvidedForMinor properties. *Allowed values:* null, minorWithOutParentalConsent, minorWithParentalConsent, minorNoParentalConsentRequired, notAdult and adult.  | No  | None  |
 | mail   | string  | The SMTP address for the user.  | No  | None  |
 | mailNickname  | string  | The mail alias for the user.  | No  | None  |
