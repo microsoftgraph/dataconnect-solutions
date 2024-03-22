@@ -61,13 +61,13 @@ SharePoint sharing permissions information, showing what is being shared and who
 | LinkScope | String | Scope of sharing link (specific people, anyone)(optional, won’t show if share has no link) |  No | False |
 | SharedWithCount | Object[] | Object array with one entry for every type of sharing recipient |  No | False |
 | SharedWithCount, Type | String | Type of sharing recipient (Internal, External, SecurityGroup, SharePoint Group) |  No | False |
-| SharedWithCount, Count | Number Number of sharing recipients of this type |  No | False |
-| SharedWith Object[] Object array with one entry for every sharing recipient |  No | False |
+| SharedWithCount, Count | Number | Number of sharing recipients of this type |  No | False |
+| SharedWith | Object[] | Object array with one entry for every sharing recipient |  No | False |
 | SharedWith, Type | String | Type of sharing recipient (Internal, External, SecurityGroup, SharePoint Group) |  No | False |
 | SharedWith, Name | String | Name of sharing recipient |  No | False |
 | SharedWith, EmailAddress | String | Email of sharing recipient (optional, won’t show for SharePoint groups or special security groups) |  No | False |
 | ShareCreatedBy | String | The user or group that created the sharing link. <br />Format: ``STRUCT<`Type`: STRING, `Name`: STRING, `Email`: STRING>>`` |  No | False |
-| ShareCreatedTime Date The date and time when the share link was created |  No | False |
+| ShareCreatedTime | Date | The date and time when the share link was created |  No | False |
 | ShareLastModifiedBy | String | The user or group that last modified the sharing link. Format: <Struct <Type: String, Name: String, Email: String>> |  No | False |
 | ShareLastModifiedTime | Date | The date and time when the share was last modified |  No | False |
 | ShareExpirationTime | Date | The date and time when the share link will expire |  No | False |
