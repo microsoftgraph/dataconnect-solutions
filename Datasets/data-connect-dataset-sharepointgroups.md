@@ -44,8 +44,16 @@ SharePoint group information, including details about group members. Typical exa
 | GroupLinkId | int64 | Id of the sharing link associated with this group, if it was created for a sharing link. The id is all zeros if the group is not related to a sharing link | No | False |
 | GroupType | string | Type: SharePointGroup | No | False |
 | DisplayName | string | Name of the group | No | False |
-| Owner | string | Group owner. <br />Format: STRUCT<`AadObjectId`:STRING,`Name`:STRING,`Email`:STRING> | No | False |
-| Members | string |  of the group. <br />Format: ARRAY<STRUCT<`Type`:STRING, `AadObjectId`:STRING, `Name`:STRING, `Email`:STRING>> | No | False |
+| Owner | Object | Group owner | No | False |
+| Owner, Type | string | Type of group owner | No | False |
+| Owner, AadObjectId | string | AAD Object Id of the group owner | No | False |
+| Owner, Name | string | Name of the group owner | No | False |
+| Owner, Email | string | Email of the group owner | No | False |
+| Members | Object[] | Array of group members | No | False |
+| Members, Type | string | Type of group member | No | False |
+| Members, AadObjectId | string | AAD Object Id of the group member | No | False |
+| Members, Name | string | Name of the group member | No | False |
+| Members, Email | string | Email of the group member | No | False |
 | SnapshotDate | datetime | Date this data set was generated | Yes | True |
 | Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted') | No | False |
 
