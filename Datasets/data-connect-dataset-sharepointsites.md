@@ -57,11 +57,20 @@ The SharePoint Sites dataset includes information about every site in the tenant
 | ptenant | string | Id of the tenant | No | False |
 | Id | string | GUID of the site | No | False | 
 | Url | string | URL for the site | No | False | 
-| RootWeb | string | Root web information for the site. <br />Format: ``STRUCT<`Id`:STRING, `Title`:STRING, `WebTemplate`:STRING, `WebTemplateId`:INTEGER, `LastItemModifiedDate`:DATETIME>`` | No | False |
+| RootWeb | Object | Root web information for the site | No | False |
+| RootWeb, Id | string | Root web id | No | False |
+| RootWeb, Title | string | Root web title | No | False |
+| RootWeb, WebTemplate | string | Root web template name | No | False |
+| RootWeb, WebTemplateId | int | Root web template id | No | False |
+| RootWeb, LastItemModifiedDate | datetime | Date when an item in the root web was last modified | No | False |
 | WebCount | int64 | Number of webs (subsites) in the site | No | False |
 | StorageQuota | int64 | Total storage in bytes allowed for this site | No | False |
 | StorageUsed | int64 | Total storage in bytes used by this site (includes main file stream, file metadata, versions and recycle bin) | No | False |
-| StorageMetrics | string | Storage metrics for the site. <br />Format: ``STRUCT<`MetadataSize`:INT64, `TotalFileCount`:INT64, `TotalFileStreamSize`:INT64, `TotalSize`:INT64>`` | No | False | 
+| StorageMetrics | object | Storage metrics for the site | No | False | 
+| StorageMetrics, MetadataSize | int64 | Total metadata size for the site in bytes | No | False | 
+| StorageMetrics, TotalFileCount | int64 | Total number of files for the site | No | False | 
+| StorageMetrics, TotalFileStreamSize | int64 | Total size of the latest version of the files for the site in bytes | No | False | 
+| StorageMetrics, TotalSize | int64 | Total size of all files for the site in bytes, including metadata, all versions and the recycle bin | No | False | 
 | GroupId | string | Id of the group associated with this site | No | False | 
 | GeoLocation | string | Geographic region where the data is stored | No | False | 
 | IsInRecycleBin | boolean | Indicates that the site has been deleted and is in the recycle bin | No | False | 
@@ -75,12 +84,20 @@ The SharePoint Sites dataset includes information about every site in the tenant
 | BlockDownloadOf<br />ViewableFilesOn<br />UnmanagedDevices | boolean | Site is configured to block download of viewable files from unmanaged devices | No | False | 
 | ShareByEmailEnabled | boolean | Site is configured to enable share by e-mail | No | False | 
 | ShareByLinkEnabled | boolean | Site is configured to enable share by link | No | False | 
-| SensitivityLabelInfo | string | Sensitivity Label for the site. <br />Format: ``STRUCT<`DisplayName`:STRING, `Id`:STRING>`` | No | False | 
+| SensitivityLabelInfo | object | Sensitivity Label for the site | No | False | 
+| SensitivityLabelInfo, Id | string | Id of the Sensitivity Label for the site | No | False | 
+| SensitivityLabelInfo, DisplayName | string | Display name of the Sensitivity Label for the site | No | False | 
 | Classification | string | Classification of the site | No | False | 
 | IBMode | string | Information Barriers Mode: Open, Owner Moderated, Implicit, Explicit, Inferred | No | False | 
 | IBSegments | string | List of organization segments if IB mode is Explicit | No | False | 
-| Owner | string | Owner of the site. <br />Format: ``STRUCT<`AadObjectId`:STRING,`Email`:STRING,`Name`:STRING>`` | No | False | 
-| SecondaryContact | string | Secondary contact for the site. Format: ``STRUCT<`AadObjectId`:STRING,`Email`:STRING,`Name`:STRING>`` | No | False | 
+| Owner | object | Owner of the site | No | False | 
+| Owner, AadObjectId | string | AAD Object Id of the owner of the site | No | False | 
+| Owner, Email | string | Email of the owner of the site | No | False | 
+| Owner, Name | string | Name of the owner of the site | No | False | 
+| SecondaryContact | object | Secondary contact for the site | No | False | 
+| SecondaryContact, AadObjectId | string |  AAD Object Id of the secondary contact for the site | No | False | 
+| SecondaryContact, Email | string | Email of the secondary contact for the site | No | False | 
+| SecondaryContact, Name | string | Name of the secondary contact for the site | No | False | 
 | ReadLocked | boolean | Whether the site is locked for read access. If true, no  users or administrators will be able to access the site | No | False | 
 | ReadOnly | boolean | Whether the site is in read-only mode | No | False | 
 | CreatedTime | datetime | When the site was created (in UTC) | No | False | 
