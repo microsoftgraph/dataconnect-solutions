@@ -69,17 +69,17 @@ The SharePoint Files dataset includes information about files in SharePoint and 
 | IsLabelEncrypted | boolean | True if file has a sensitivity label and has encryption enabled | No | False |
 | MajorVersion | int | The major version number of the file | No | False |
 | MinorVersion | int | The minor version number of the file | No | False |
-| SensitivityLabelInfo | object | Sensitivity Label for the file. Format: STRUCT<`Id`:STRING, `DisplayName`:STRING> | No | False |
+| SensitivityLabelInfo | object | Sensitivity Label for the file. *Format:* STRUCT<`Id`:STRING, `DisplayName`:STRING> | No | False |
 | SensitivityLabelInfo, Id | string | GUID for the Sensitivity Label | No | False |
 | SensitivityLabelInfo, DisplayName | string | Sensitivity Label Display Name | No | False |
 | SizeInBytes | long | Size of the file in bytes (last version only) | No | False |
 | SizeInBytesWithVersions | long | Size of the file including all versions and metadata | No | False |
 | TimeCreated | datetime | The date and time when the file was created, in UTC | No | False |
 | TimeLastModified | datetime | The date and time when the file was last modified, in UTC | No | False |
-| Author | object | User that created the file. Format: STRUCT<`Email`:STRING,`Name`:STRING> | No | False |
+| Author | object | User that created the file. *Format:* STRUCT<`Email`:STRING,`Name`:STRING> | No | False |
 | Author, Email | string | Email of the user that created the file | No | False |
 | Author, Name | string | Name of the user that created the file | No | False |
-| ModifiedBy | object | User that last modified the file. Format: STRUCT<`Email`:STRING,`Name`:STRING> | No | False |
+| ModifiedBy | object | User that last modified the file. *Format:* STRUCT<`Email`:STRING,`Name`:STRING> | No | False |
 | ModifiedBy, Email | string | Email of the user that last modified the file | No | False |
 | ModifiedBy, Name | string | Name of the user that last modified the file | No | False |
 | SnapshotDate | datetime | The date this dataset was generated (in UTC) | Yes | True |
