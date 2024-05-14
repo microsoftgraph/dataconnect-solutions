@@ -57,11 +57,13 @@ The SharePoint Sites dataset includes information about every site in the tenant
 | ptenant | string | Id of the tenant | No | False |
 | Id | string | GUID of the site | No | False | 
 | Url | string | URL for the site | No | False | 
-| RootWeb | Object | Root web information for the site. *Format:* STRUCT<`Id`:STRING, `Title`:STRING, `WebTemplate`:STRING, `WebTemplateId`:INTEGER, `LastItemModifiedDate`:DATETIME> | No | False |
+| ArchiveState | string | The archive state of the site: None, Archived, or Reactivating | No | False |
+| RootWeb | Object | Root web information for the site. *Format:* STRUCT<`Id`:STRING, `Title`:STRING, `WebTemplate`:STRING, `WebTemplateId`:INTEGER, `Configuration`:INTEGER, `LastItemModifiedDate`:DATETIME> | No | False |
 | RootWeb, Id | string | Root web id | No | False |
 | RootWeb, Title | string | Root web title | No | False |
 | RootWeb, WebTemplate | string | Root web template name | No | False |
 | RootWeb, WebTemplateId | int | Root web template id | No | False |
+| RootWeb, Configuration | int | Root web template configuration id | No | False |
 | RootWeb, LastItemModifiedDate | datetime | Date when an item in the root web was last modified | No | False |
 | WebCount | int64 | Number of webs (subsites) in the site | No | False |
 | StorageQuota | int64 | Total storage in bytes allowed for this site | No | False |
@@ -74,36 +76,47 @@ The SharePoint Sites dataset includes information about every site in the tenant
 | GroupId | string | Id of the group associated with this site | No | False | 
 | GeoLocation | string | Geographic region where the data is stored | No | False | 
 | IsInRecycleBin | boolean | Indicates that the site has been deleted and is in the recycle bin | No | False | 
+| RecycleBinItemCount | int64 | Number of items in the recycle bin | No | False |
+| RecycleBinItemSize | int64 | Size of the items in the recycle bin | No | False |
+| SecondStageRecycle<br />BinStorageUsage | int64 | Size of the items in the second stage recycle bin | No | False |
 | IsTeamsConnectedSite | boolean | Indicates that the site is connected to Teams | No | False | 
 | IsTeamsChannelSite | boolean | Indicates that the site is a channel site | No | False | 
 | TeamsChannelType | string | Type of channel, if isTeamsChannelSite is true | No | False | 
 | IsHubSite | boolean | Indicates that the site is associated with a hub site | No | False | 
 | HubSiteId | string | Id of the hub site for this site, if IsHubSite is true | No | False | 
+| IsCommunicationSite | boolean | Indicates that the site is a communication site | No | False | 
+| IsOneDrive | boolean | Indicates that the site is a OneDrive | No | False | 
 | BlockAccessFrom<br />UnmanagedDevices | boolean | Site is configured to block access from unmanaged devices | No | False | 
 | BlockDownloadOf<br />AllFilesOn<br />UnmanagedDevices | boolean | Site is configured to block download of all files from unmanaged devices | No | False | 
 | BlockDownloadOf<br />ViewableFilesOn<br />UnmanagedDevices | boolean | Site is configured to block download of viewable files from unmanaged devices | No | False | 
 | ShareByEmailEnabled | boolean | Site is configured to enable share by e-mail | No | False | 
 | ShareByLinkEnabled | boolean | Site is configured to enable share by link | No | False | 
+| IsExternalSharing<br />Enabled | boolean | Indicates if the site is configured to enable external sharing | No | False | 
+| SiteConnectedTo<br />PrivateGroup | boolean |Indicates if a site is connected to Private Group | No | False | 
+| Privacy | string | Privacy of the site: Private or Public. Applies only to team sites | No | False | 
 | SensitivityLabelInfo | object | Sensitivity Label for the site. *Format:* STRUCT<`DisplayName`:STRING, `Id`:STRING> | No | False | 
 | SensitivityLabelInfo, Id | string | Id of the Sensitivity Label for the site | No | False | 
 | SensitivityLabelInfo, DisplayName | string | Display name of the Sensitivity Label for the site | No | False | 
 | Classification | string | Classification of the site | No | False | 
 | IBMode | string | Information Barriers Mode: Open, Owner Moderated, Implicit, Explicit, Inferred | No | False | 
 | IBSegments | string | List of organization segments if IB mode is Explicit | No | False | 
-| Owner | object | Owner of the site. *Format:* STRUCT<`AadObjectId`:STRING,`Email`:STRING,`Name`:STRING> | No | False | 
+| Owner | object | Owner of the site. *Format:* STRUCT<`AadObjectId`:STRING, `Email`:STRING, `UPN`:STRING, `Name`:STRING> | No | False | 
 | Owner, AadObjectId | string | AAD Object Id of the owner of the site | No | False | 
 | Owner, Email | string | Email of the owner of the site | No | False | 
+| Owner, UPN | string | User Principal Name for the owner of the site | No | False | 
 | Owner, Name | string | Name of the owner of the site | No | False | 
-| SecondaryContact | object | Secondary contact for the site. *Format:* STRUCT<`AadObjectId`:STRING,`Email`:STRING,`Name`:STRING> | No | False | 
+| SecondaryContact | object | Secondary contact for the site. *Format:* STRUCT<`AadObjectId`:STRING, `Email`:STRING,`UPN`:STRING,  `Name`:STRING> | No | False | 
 | SecondaryContact, AadObjectId | string |  AAD Object Id of the secondary contact for the site | No | False | 
 | SecondaryContact, Email | string | Email of the secondary contact for the site | No | False | 
+| SecondaryContact, UPN | string | User Principal Name for the secondary contact for the site | No | False | 
 | SecondaryContact, Name | string | Name of the secondary contact for the site | No | False | 
 | ReadLocked | boolean | Whether the site is locked for read access. If true, no  users or administrators will be able to access the site | No | False | 
 | ReadOnly | boolean | Whether the site is in read-only mode | No | False | 
 | CreatedTime | datetime | When the site was created (in UTC) | No | False | 
 | LastSecurityModifiedDate | datetime | When security on the site was last changed (in UTC) | No | False | 
+| LastUserAccessDate | datetime | Last access by a real user for the site (in UTC) | No | False | 
 | SnapshotDate | datetime | When this site information was captured (in UTC) | Yes | True |
-| Operation | string | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted') | No | False | 
+| Operation | string | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted') | No | False |
 
 ### JSON Representation:
 
@@ -112,11 +125,13 @@ The SharePoint Sites dataset includes information about every site in the tenant
     "ptenant": "3adad419-abdd-493e-a3ea-432bd7748cb3",
     "Id": "cf82c172-b840-4ecd-b391-6ab872212cc7",
     "Url": "https://m365x16144201-my.sharepoint.com/personal/isaiahl_m365x16144201_onmicrosoft_com",
+    "ArchiveState": "None",
     "RootWeb": {
         "Id": "ada06d11-4035-4519-8572-1374254f591f",
         "Title": "Isaiah Langer",
         "WebTemplate": "SPSPERS",
         "WebTemplateId": 21,
+        "Configuration": 0,
         "LastItemModifiedDate": "2023-09-05T23:00:02.000Z"
     },
     "WebCount": 1,
@@ -131,21 +146,30 @@ The SharePoint Sites dataset includes information about every site in the tenant
     "GroupId": "00000000-0000-0000-0000-000000000000",
     "GeoLocation": "NAM",
     "IsInRecycleBin": false,
+    "RecycleBinItemCount": 0,
+    "RecycleBinItemSize": 0,
+    "SecondStageRecycleBinStorageUsage": 0,
     "IsTeamsConnectedSite": false,
     "IsTeamsChannelSite": false,
     "TeamsChannelType": "None",
     "IsHubSite": false,
     "HubSiteId": "00000000-0000-0000-0000-000000000000",
+    "IsCommunicationSite": false,
+    "IsOneDrive": false,
     "BlockAccessFromUnmanagedDevices": false,
     "BlockDownloadOfAllFilesOnUnmanagedDevices": false,
     "BlockDownloadOfViewableFilesOnUnmanagedDevices": false,
     "ShareByEmailEnabled": true,
     "ShareByLinkEnabled": true,
+    "IsExternalSharingEnabled": true,
+    "SiteConnectedToPrivateGroup": true,
+    "Privacy": "Private",
     "SensitivityLabelInfo": {},
     "IBMode": "Open",
     "Owner": {
         "AadObjectId": "3d7237e5-c802-4e39-a87f-dfac34eb1447",
-        "Email": "IsaiahL@M365x16144201.OnMicrosoft.com",
+        "Email": "Isaiah.Langer@M365x16144201.OnMicrosoft.com",
+        "UPN": "IsaiahL@M365x16144201.OnMicrosoft.com",
         "Name": "Isaiah Langer"
     },
     "SecondaryContact": {},
@@ -153,8 +177,9 @@ The SharePoint Sites dataset includes information about every site in the tenant
     "ReadOnly": true,
     "CreatedTime": "2023-08-10T01:18:32Z",
     "LastSecurityModifiedDate": "2023-08-10T01:45:29Z",
+    "LastUserAccessDate": "2024-05-13T010:39:19Z",
     "Operation": "Full",
-    "SnapshotDate": "2023-09-06T00:00:00Z"
+    "SnapshotDate": "2024-05-16T00:00:00Z"
 }
 ```
 
