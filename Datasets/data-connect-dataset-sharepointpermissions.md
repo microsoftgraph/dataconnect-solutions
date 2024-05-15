@@ -59,16 +59,29 @@ SharePoint sharing permissions information, showing what is being shared and who
 | LinkId | String | GUID for the share Link (optional, won’t show if share has no link) |  No | False |
 | ScopeId | String | GUID that identifies the SharePoint scope |  No | False |
 | LinkScope | String | Scope of sharing link (specific people, anyone)(optional, won’t show if share has no link) |  No | False |
-| SharedWithCount | Object[] | Object array with one entry for every type of sharing recipient |  No | False |
+| SharedWithCount | Object[] | Object array with one entry for every type of sharing recipient. <br />Format: ``<ARRAY<STRUCT<`Type`: STRING, `Count`: INT64>>`` |  No | False |
 | SharedWithCount, Type | String | Type of sharing recipient (Internal, External, SecurityGroup, SharePoint Group) |  No | False |
-| SharedWithCount, Count | Number | Number of sharing recipients of this type |  No | False |
-| SharedWith | Object[] | Object array with one entry for every sharing recipient |  No | False |
-| SharedWith, Type | String | Type of sharing recipient (Internal, External, SecurityGroup, SharePoint Group) |  No | False |
+| SharedWithCount, Count | Int64 | Number of sharing recipients of this type |  No | False |
+| SharedWith | Object[] | Object array with one entry for every sharing recipient. <br />Format: ``<ARRAY<STRUCT<`Type`: STRING, `Name`: STRING, `Email`: STRING, `AadObjectId`: STRING, `UPN`: STRING, `TypeV2`: STRING, `UserCount`: INT64>>`` |  No | False |
+| SharedWith, Type | String | Type of sharing recipient: Internal, External, SecurityGroup, SharePoint Group |  No | False |
 | SharedWith, Name | String | Name of sharing recipient |  No | False |
-| SharedWith, EmailAddress | String | Email of sharing recipient (optional, won’t show for SharePoint groups or special security groups) |  No | False |
-| ShareCreatedBy | String | The user or group that created the sharing link. <br />Format: ``STRUCT<`Type`: STRING, `Name`: STRING, `Email`: STRING>>`` |  No | False |
+| SharedWith, Email | String | Email of sharing recipient. Blank for SharePoint groups or special security groups |  No | False |
+| SharedWith, AadObjectId | string | AAD Object Id of sharing recipient. Blank if this is not an AAD object. | No | False | 
+| SharedWith, UPN | string | User Principal Name of sharing recipient | No | False | 
+| SharedWith, TypeV2 | string | Type of sharing recipient: InternalUser, ExternalUser, B2BUser, SecurityGroup, SharePointGroup | No | False |
+| SharedWith, UserCount | int64 | Unique user count for this sharing recipient. For groups, this is number of users in the group, including nested groups. For users, this is 1. Blank if group is empty or count is unavailable | No | False | 
+| TotalUserCount | int64 | Unique user count for this entire permission. Blank if count is zero or if count is unavailable | No | False | 
+| ShareCreatedBy | String | The user or group that created the sharing link. <br />Format: ``STRUCT<`Type`: STRING, `Name`: STRING, `Email`: STRING, `UPN`: STRING>`` |  No | False |
+| ShareCreatedBy, Type | String | Type of principal that created the sharing link: User |  No | False |
+| ShareCreatedBy, Name | String | Name of user who created the sharing link |  No | False |
+| ShareCreatedBy, Email | String | Email of user who created the sharing link |  No | False |
+| ShareCreatedBy, UPN | string | User Principal Name of user who created the sharing link | No | False | 
 | ShareCreatedTime | Date | The date and time when the share link was created |  No | False |
-| ShareLastModifiedBy | String | The user or group that last modified the sharing link. Format: <Struct <Type: String, Name: String, Email: String>> |  No | False |
+| ShareLastModifiedBy | String | The user or group that last modified the sharing link. <br />Format: ``<Struct <`Type`: String, `Name`: String, `Email`: String, `UPN`: STRING>`` |  No | False |
+| ShareLastModifiedBy, Type | String | Type of principal that modified the sharing link: User |  No | False |
+| ShareLastModifiedBy, Name | String | Name of user who created the modified link |  No | False |
+| ShareLastModifiedBy, Email | String | Email of user who created the modified link |  No | False |
+| ShareLastModifiedBy, UPN | string | User Principal Name of user who modified the sharing link | No | False | 
 | ShareLastModifiedTime | Date | The date and time when the share was last modified |  No | False |
 | ShareExpirationTime | Date | The date and time when the share link will expire |  No | False |
 | SnapshotDate | Date | Data this data set was collected, in UTC | Yes | true |
@@ -78,49 +91,69 @@ SharePoint sharing permissions information, showing what is being shared and who
 
 ```json
 {
-  "ptenant": "3a3630bf-4d67-4c21-842a-abcea48840d5",
-  "SiteId": "d6fc2ce9-53c1-45e4-83ff-34ee770285d4",
-  "WebId": "e17df665-1a28-4c1d-9b81-f6c7e96df8ac",
-  "ListId": "db9268b1-ff99-4dc3-aae8-8a81c96bf14d",
-  "ItemType": "File",
-  "ItemURL": "sites/kptesting/kptesting_doclibrary1/Folder1/SharedWithUser2.txt",
-  "FileExtension": "txt",
-  "RoleDefinition": "Contribute",
-  "LinkId": "e2acbe31-487d-460e-886c-366039ede3a8",
-  "ScopeId": "420997ed-d028-4f02-a86d-e1101d9420cd",
-  "LinkScope": "Organization",
-  "SharedWithCount": [
-    {
-      "Type": "Internal",
-      "Count": 2
-    }
-  ],
-  "SharedWith": [
-    {
-      "Type": "Internal",
-      "Name": "User1",
-      "Email": "User1@M365x16144201.OnMicrosoft.com"
+    "ptenant": "9999990a-1285-4938-83eb-c3d131e0ef79",
+    "SiteId": "9999990a-e1b8-4b44-b1a3-e6faa6096960",
+    "WebId": "9999990a-aabf-49dc-957b-35a44c3cdf06",
+    "ListId": "9999990a-e823-47f3-8350-b9f46be00425",
+    "ItemType": "File",
+    "ItemURL": "sites/ProjectBlue/Shared Documents/Overview.docx",
+    "FileExtension": "docx",
+    "RoleDefinition": "Contribute",
+    "LinkId": "9999990a-056a-459d-ad66-920071a1ace2",
+    "ScopeId": "9999990a-bd0e-4b1f-a67c-c849a08c26ed",
+    "LinkScope": "Organization",
+    "SharedWithCount": [
+        {
+            "Type": "Internal",
+            "Count": 3
+        }
+    ],
+    "SharedWith": [
+        {
+            "Type": "Internal",
+            "Name": "Admin",
+            "Email": "admin@contoso.onmicrosoft.com",
+            "TypeV2": "InternalUser",
+            "UPN": "admin@contoso.onmicrosoft.com",
+            "AADObjectId": "9999990a-16c9-4b04-96de-be6e856e5333",
+            "UserCount": 1
+        },
+        {
+            "Type": "Internal",
+            "Name": "Demo User1",
+            "Email": "demouser1@contoso.onmicrosoft.com",
+            "TypeV2": "InternalUser",
+            "UPN": "demouser1@contoso.onmicrosoft.com",
+            "AADObjectId": "9999990a-6b74-4001-9890-ea0ce977ec7e",
+            "UserCount": 1
+        },
+        {
+            "Type": "Internal",
+            "Name": "Demo User2",
+            "Email": "DemoUser2@contoso.onmicrosoft.com",
+            "TypeV2": "InternalUser",
+            "UPN": "demouser2@contoso.onmicrosoft.com",
+            "AADObjectId": "9999990a-f05a-44ed-bd41-58e18227503c",
+            "UserCount": 1
+        }
+    ],
+    "TotalUserCount": 3,
+    "ShareCreatedBy": {
+        "Type": "User",
+        "Name": "Admin",
+        "Email": "admin@contoso.onmicrosoft.com",
+        "UPN": "admin@contoso.onmicrosoft.com"
     },
-    {
-      "Type": "Internal",
-      "Name": "User2",
-      "Email": "User2@M365x16144201.OnMicrosoft.com"
-    }
-  ],
-  "ShareCreatedBy": {
-    "Type": "User",
-    "Name": "User3",
-    "Email": "User3@M365x16144201.OnMicrosoft.com"
-  },
-  "ShareCreatedTime": "2021-09-26T05:38:38Z",
-  "ShareLastModifiedBy": {
-    "Type": "User",
-    "Name": "User3",
-    "Email": "User3@M365x16144201.OnMicrosoft.com"
-  },
-  "ShareLastModifiedTime": "2023-05-21T08:58:38Z",
-  "SnapshotDate": "2023-06-10T00:00:00Z",
-  "Operation": "Full"
+    "ShareCreatedTime": "2023-11-09T23:31:14Z",
+    "ShareLastModifiedBy": {
+        "Type": "User",
+        "Name": "Admin",
+        "Email": "admin@contoso.onmicrosoft.com",
+        "UPN": "admin@contoso.onmicrosoft.com"
+    },
+    "ShareLastModifiedTime": "2023-11-09T23:31:14Z",
+    "Operation": "Full",
+    "SnapshotDate": "2024-05-03T00:00:00Z"
 }
 ```
 
