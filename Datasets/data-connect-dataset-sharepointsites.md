@@ -57,7 +57,7 @@ The SharePoint Sites dataset includes information about every site in the tenant
 | ptenant | string | Id of the tenant | No | False |
 | Id | string | GUID of the site | No | False | 
 | Url | string | URL for the site | No | False | 
-| ArchiveState | string | The archive state of the site: None, Archived, or Reactivating | No | False |
+| ArchiveState | string | The archive state of the site: None, Archiving, Archived, or Reactivating | No | False |
 | RootWeb | Object | Root web information for the site. *Format:* STRUCT<`Id`:STRING, `Title`:STRING, `WebTemplate`:STRING, `WebTemplateId`:INTEGER, `Configuration`:INTEGER, `LastItemModifiedDate`:DATETIME> | No | False |
 | RootWeb, Id | string | Root web id | No | False |
 | RootWeb, Title | string | Root web title | No | False |
@@ -75,7 +75,7 @@ The SharePoint Sites dataset includes information about every site in the tenant
 | StorageMetrics, TotalSize | int64 | Total size of all files for the site in bytes, including metadata, all versions and the recycle bin | No | False | 
 | GroupId | string | Id of the group associated with this site | No | False | 
 | GeoLocation | string | Geographic region where the data is stored | No | False | 
-| IsInRecycleBin | boolean | Indicates that the site has been deleted and is in the recycle bin | No | False | 
+| IsInRecycleBin | boolean | Indicates that the site has been deleted and is in the recycle bin. If the site is in the recycle bin, other properties like TemplateId might be unavailable | No | False | 
 | RecycleBinItemCount | int64 | Number of items in the recycle bin | No | False |
 | RecycleBinItemSize | int64 | Size of the items in the recycle bin | No | False |
 | SecondStageRecycle<br />BinStorageUsage | int64 | Size of the items in the second stage recycle bin | No | False |
