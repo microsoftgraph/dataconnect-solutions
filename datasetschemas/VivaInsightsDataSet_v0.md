@@ -8,7 +8,10 @@ ms.prod: "data-connect"
 
 # Overview
 
-The BasicDataSet_v0.TeamsStandardChannelMessages_v0 dataset contains Viva Insights metrics.  .
+> [!IMPORTANT]
+> The VivaInsightsDataSet_v0 dataset is being replaced by dynamic datasets that can be registered and consented using the name of the query in Viva Insights report. 
+
+The VivaInsightsDataSet_v0 dataset contains Viva Insights metrics.
 
 ## Properties
 | Name | Type | Description | SampleData | FilterOptions | IsDateFilter | 
