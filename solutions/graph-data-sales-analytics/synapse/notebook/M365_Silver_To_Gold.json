@@ -1,0 +1,511 @@
+{
+	"name": "M365_Silver_To_Gold",
+	"properties": {
+		"folder": {
+			"name": "Stage4 SilverToGold"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "synspgdcscin",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "d70d390b-ac55-4019-8bd5-dee3ef69f1ea"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/2058f82f-b8ac-423e-8c83-227732887c3a/resourceGroups/fractal-neal-coe-dev-rg/providers/Microsoft.Synapse/workspaces/syngdcscindevil/bigDataPools/synspgdcscin",
+				"name": "synspgdcscin",
+				"type": "Spark",
+				"endpoint": "https://syngdcscindevil.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/synspgdcscin",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"from pyspark.sql.types import *\r\n",
+					"from pyspark.sql import SparkSession\r\n",
+					"from pyspark.sql.functions import col, explode, collect_list, concat_ws, udf, expr, regexp_replace,array_contains\r\n",
+					"from datetime import datetime\r\n",
+					"from sklearn.feature_extraction.text import TfidfVectorizer\r\n",
+					"from sklearn.metrics.pairwise import cosine_similarity\r\n",
+					"from pyspark.sql import Row\r\n",
+					"from bs4 import BeautifulSoup\r\n",
+					"from pyspark.ml.feature import HashingTF, Tokenizer\r\n",
+					"from pyspark.ml.feature import MinHashLSH\r\n",
+					"from pyspark.ml import Pipeline\r\n",
+					"from pyspark.sql import functions as F\r\n",
+					"\r\n",
+					"import json\r\n",
+					"import adal\r\n",
+					"import pyodbc\r\n",
+					"import struct\r\n",
+					"import os\r\n",
+					"import pandas as pd"
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Initialize the variables"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run config/variables"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Setup the global variables"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"input_container = \"silver\"\r\n",
+					"salesforce_alias = \"SFSC\"\r\n",
+					"\r\n",
+					"output_container = \"gold\"\r\n",
+					"email_alias = \"M365\"\r\n",
+					"\r\n",
+					"input_url_sfsc = f'abfss://{input_container}@{adls_name}.dfs.core.windows.net/{salesforce_alias}'\r\n",
+					"input_url_m365 = f'abfss://{input_container}@{adls_name}.dfs.core.windows.net/{email_alias}'\r\n",
+					"output_url = f'abfss://{output_container}@{adls_name}.dfs.core.windows.net/{email_alias}'"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"parquet_df_with_emails = spark.read.format('delta')\\\r\n",
+					"        .option(\"linesep\", \"\\n\")\\\r\n",
+					"        .option(\"header\", \"true\")\\\r\n",
+					"        .option(\"multiLine\",'true')\\\r\n",
+					"        .load(f'{input_url_m365}/Email')"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"# Select the desired columns\r\n",
+					"selected_columns = [\r\n",
+					"    \"id\",\r\n",
+					"    \"sentDateTime\",\r\n",
+					"    \"lastModifiedDateTime\",\r\n",
+					"    \"subject\",\r\n",
+					"    \"bodyPreview\",\r\n",
+					"    \"conversationId\",\r\n",
+					"    \"conversationIndex\",\r\n",
+					"    \"uniqueBody.content as uniqueBody_content\",\r\n",
+					"    \"unique_email_list\",\r\n",
+					"    \"from.emailAddress.address as from\",\r\n",
+					"    \"to_recipient_list\"\r\n",
+					"]\r\n",
+					"\r\n",
+					"# Select the desired columns and create the final DataFrame\r\n",
+					"email_df = parquet_df_with_emails.selectExpr(*selected_columns)\r\n",
+					"\r\n",
+					"# # Show the resulting DataFrame\r\n",
+					"# display(email_df)"
+				],
+				"execution_count": 14
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Filter the emails based on the unique list of EmployeeClient"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"email_pairs_df = spark.read.format('delta')\\\r\n",
+					"        .option(\"linesep\", \"\\n\")\\\r\n",
+					"        .option(\"header\", \"true\")\\\r\n",
+					"        .option(\"multiLine\",'true')\\\r\n",
+					"        .load(f'{input_url_sfsc}/OppEmployeeClientEmail')"
+				],
+				"execution_count": null
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Step 1: Tokenize and create TF vectors for email_pairs_df\r\n",
+					"tokenizer = Tokenizer(inputCol=\"EmployeeEmail\", outputCol=\"words\")\r\n",
+					"email_pairs_df = tokenizer.transform(email_pairs_df)\r\n",
+					"\r\n",
+					"# Step 2: Flatten the array of strings into a single string using concat_ws\r\n",
+					"email_pairs_df = email_pairs_df.withColumn(\"EmployeeEmail\", F.concat_ws(\", \", \"words\"))\r\n",
+					"\r\n",
+					"# Step 3: Create TF vectors for email_pairs_df\r\n",
+					"hashingTF = HashingTF(inputCol=\"words\", outputCol=\"tf_features\")\r\n",
+					"email_pairs_df = hashingTF.transform(email_pairs_df)\r\n",
+					"\r\n",
+					"# Step 4: Convert the list of emails into a single string representation in email_df\r\n",
+					"email_df = email_df.withColumn(\"unique_email_list_str\", F.concat_ws(\", \", \"unique_email_list\"))\r\n",
+					"\r\n",
+					"# Step 5: Tokenize and create TF vectors for email_df\r\n",
+					"tokenizer = Tokenizer(inputCol=\"unique_email_list_str\", outputCol=\"words\")\r\n",
+					"df_created_from_email_features = tokenizer.transform(email_df)\r\n",
+					"\r\n",
+					"# Step 6: Create TF vectors for df_created_from_email_features\r\n",
+					"hashingTF = HashingTF(inputCol=\"words\", outputCol=\"tf_features\")\r\n",
+					"df_created_from_email_features = hashingTF.transform(df_created_from_email_features)\r\n",
+					"\r\n",
+					"# Step 7: Apply MinHashLSH to find similar email addresses between email_pairs_df and df_created_from_email_features\r\n",
+					"num_hash_tables = 5\r\n",
+					"min_hash_lsh = MinHashLSH(inputCol=\"tf_features\", outputCol=\"hashes\", numHashTables=num_hash_tables)\r\n",
+					"model = min_hash_lsh.fit(email_pairs_df)\r\n",
+					"df_similar_emails = model.approxSimilarityJoin(email_pairs_df, df_created_from_email_features, 0)\r\n",
+					"\r\n",
+					"# Step 8: Extract the relevant information from the joined dataframe\r\n",
+					"df_comparison_result = df_similar_emails.select(\r\n",
+					"    F.col(\"datasetA.EmployeeEmail\").alias(\"EmployeeClient_Email\"),\r\n",
+					"    F.col(\"datasetA.opportunityId\").alias(\"opportunityId\"),\r\n",
+					"    F.col(\"datasetB.id\").alias(\"id\"),\r\n",
+					"    F.col(\"datasetB.unique_email_list\").alias(\"email from unique_email_list\")\r\n",
+					")\r\n",
+					"\r\n",
+					"# Step 9: Show the comparison result\r\n",
+					"df_comparison_result.show(truncate=False)"
+				],
+				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"entity_name = \"Opportunity\"\r\n",
+					"df_opportunity = spark.read.format('delta')\\\r\n",
+					"                .option(\"linesep\", \"\\n\")\\\r\n",
+					"                .option(\"header\", \"true\")\\\r\n",
+					"                .option(\"sep\", \"`\")\\\r\n",
+					"                .option(\"multiLine\",'true')\\\r\n",
+					"                .load(f'{input_url_sfsc}/{entity_name}')\r\n",
+					"\r\n",
+					"\r\n",
+					"df_opportunity = df_opportunity.select(\"Id\" ,\"IsDeleted\" ,\"AccountId\" ,\"Name\" ,\"Description\" ,\"StageName\" ,\"Amount\" ,\"ExpectedRevenue\" ,\"Type\" ,\"IsClosed\" ,\"IsWon\" ,\"OwnerId\" ,\"CreatedDate\" ,\"CreatedById\" ,\"LastModifiedDate\" ,\"LastModifiedById\" ,\"ContactId\")\r\n",
+					"\r\n",
+					"filtered_email_df = email_df.join(df_comparison_result, email_df.id == df_comparison_result.id, \"inner\")"
+				],
+				"execution_count": 12
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Map the opportunity Id to the Emails for the Filtered data based on Unique EmployeeClient From Opportunity"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Create an empty list to store results\r\n",
+					"results_list = []\r\n",
+					"\r\n",
+					"def find_opportunity_id(opportunity_data, email_subject, email_body):\r\n",
+					"    # Combine the opportunity name and description into a single string\r\n",
+					"    opportunity_text = [opp['opportunity_name'] + ' ' + opp['opportunity_description'] for opp in opportunity_data]\r\n",
+					"\r\n",
+					"    # Combine the email subject and body into a single string\r\n",
+					"    email_text = email_subject + ' ' + email_body\r\n",
+					"\r\n",
+					"    # Create a TfidfVectorizer and fit_transform the opportunity_text and email_text\r\n",
+					"    vectorizer = TfidfVectorizer()\r\n",
+					"    opportunity_vectors = vectorizer.fit_transform(opportunity_text)\r\n",
+					"    email_vector = vectorizer.transform([email_text])\r\n",
+					"\r\n",
+					"    # Calculate cosine similarity between the email vector and opportunity vectors\r\n",
+					"    similarities = cosine_similarity(email_vector, opportunity_vectors)\r\n",
+					"\r\n",
+					"     # Find the index of the highest similarity score\r\n",
+					"    max_similarity_index = similarities.argmax()\r\n",
+					"\r\n",
+					"     # If the similarity score is above a certain threshold (e.g., 0.5), consider it a match\r\n",
+					"    if similarities[0, max_similarity_index] > 0.5:\r\n",
+					"        return opportunity_data[max_similarity_index]['opportunity_id']\r\n",
+					"    else:\r\n",
+					"        return None\r\n",
+					"\r\n",
+					" \r\n",
+					"# Convert DataFrame to a list of dictionaries\r\n",
+					"opportunity_data = df_opportunity.rdd.map(lambda row: {\r\n",
+					"    'opportunity_id': row['Id'],\r\n",
+					"    'opportunity_name': row['Name'],\r\n",
+					"    'opportunity_description': row['Description']\r\n",
+					"}).collect()\r\n",
+					"\r\n",
+					" \r\n",
+					"# Convert DataFrame to a list of Rows\r\n",
+					"email_rows = filtered_email_df.collect()\r\n",
+					"\r\n",
+					"# Loop through the Rows and extract 'subject' and 'uniqueBody_content' values\r\n",
+					"for row in email_rows:\r\n",
+					"    # Replace 'row' with the object containing the email data\r\n",
+					"    email_id = row['id']\r\n",
+					"    sent_date_time = row['sentDateTime']\r\n",
+					"    last_modified_date_time = row['lastModifiedDateTime']\r\n",
+					"    email_subject = row['subject']\r\n",
+					"    body_preview = row['bodyPreview']\r\n",
+					"    conversation_id = row['conversationId']\r\n",
+					"    conversation_index = row['conversationIndex']\r\n",
+					"    from_email_address = row['from']\r\n",
+					"    to_recipient_list = row['to_recipient_list']\r\n",
+					"    html_data = row['uniqueBody_content']\r\n",
+					"\r\n",
+					"    # UDF to extract text from HTML\r\n",
+					"    def extract_text_from_html(html_string):\r\n",
+					"        soup = BeautifulSoup(html_string, 'html.parser')\r\n",
+					"        return soup.get_text().strip()\r\n",
+					"\r\n",
+					"    # Register UDF\r\n",
+					"    extract_text_udf = udf(extract_text_from_html, StringType())\r\n",
+					"\r\n",
+					"    # Create DataFrame from the given HTML data\r\n",
+					"    data = [(html_data,)]\r\n",
+					"    email_body = spark.createDataFrame(data, [\"html_data\"])\r\n",
+					"\r\n",
+					"    # Apply UDF to extract text\r\n",
+					"    email_body = email_body.withColumn(\"extracted_text\", extract_text_udf(\"html_data\"))\r\n",
+					"\r\n",
+					"    # Collect the extracted text as a string\r\n",
+					"    email_text = email_body.select(\"extracted_text\").collect()[0][0]\r\n",
+					" \r\n",
+					"    # Find the Opportunity ID using machine learning-based comparison\r\n",
+					"    opportunity_id = find_opportunity_id(opportunity_data, email_subject, email_text)\r\n",
+					"\r\n",
+					"    \r\n",
+					"    # Display the result\r\n",
+					"    if opportunity_id is not None:\r\n",
+					"            # Append the result to the results_list\r\n",
+					"        result = {\r\n",
+					"            'email_id': email_id,\r\n",
+					"            'sent_date_time': sent_date_time,\r\n",
+					"            'last_modified_date_time': last_modified_date_time,\r\n",
+					"            'body_preview': body_preview,\r\n",
+					"            'conversation_id': conversation_id,\r\n",
+					"            'conversation_index': conversation_index,\r\n",
+					"            'from_email_address': from_email_address,\r\n",
+					"            'to_recipient_list': to_recipient_list,\r\n",
+					"            'email_subject': email_subject,\r\n",
+					"            'email_text': email_text,\r\n",
+					"            'opportunity_id': opportunity_id\r\n",
+					"        }\r\n",
+					"        results_list.append(result)\r\n",
+					"        # print(f\"Opportunity ID: {opportunity_id}\")\r\n",
+					"    else:\r\n",
+					"        pass\r\n",
+					"        # print(\"No matching Opportunity found.\")"
+				],
+				"execution_count": 16
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Create Delta table"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# Define the schema for the result DataFrame\r\n",
+					"result_schema = StructType([\r\n",
+					"    StructField(\"email_id\", StringType(), False),\r\n",
+					"    StructField(\"sent_date_time\", StringType(), True),\r\n",
+					"    StructField(\"last_modified_date_time\", StringType(), True),\r\n",
+					"    StructField(\"body_preview\", StringType(), True),\r\n",
+					"    StructField(\"conversation_id\", StringType(), True),\r\n",
+					"    StructField(\"conversation_index\", StringType(), True),\r\n",
+					"    StructField(\"from_email_address\", StringType(), True),\r\n",
+					"    StructField(\"to_recipient_list\", StringType(), True),\r\n",
+					"    StructField(\"email_subject\", StringType(), True),\r\n",
+					"    StructField(\"email_text\", StringType(), True),\r\n",
+					"    StructField(\"opportunity_id\", StringType(), True)\r\n",
+					"])\r\n",
+					"\r\n",
+					"\r\n",
+					"# Create a DataFrame from the results_list\r\n",
+					"result_df = spark.createDataFrame(results_list, schema=result_schema)\r\n",
+					"\r\n",
+					"result_df.write.format('delta') \\\r\n",
+					"         .mode('overwrite') \\\r\n",
+					"         .option(\"mergeSchema\", \"true\") \\\r\n",
+					"         .save(f'{output_url}/Email')"
+				],
+				"execution_count": 19
+			}
+		]
+	}
+}
