@@ -13,8 +13,6 @@ ms.custom: datasets:dataset-name
 
 The OneDrive Sync Errors dataset includes information about errors on devices running OneDrive for Business. This includes one object for every type of error in a specific device. Data includes error codes, error messages and number of times an error was seen on the device. 
 
-**IMPORTANT NOTE**: This dataset is not currently available publicly. It is coming soon.  The details provided here are for informational purposes only.
-
 ### Scenarios:
 
 - Users can experience sync errors affecting productivity and collaboration. Administrators want to identify devices that are both experiencing errors and not staying up-to-date and want to drill down into report details to understand the users’ states.
