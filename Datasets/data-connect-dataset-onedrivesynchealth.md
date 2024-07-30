@@ -13,8 +13,6 @@ ms.custom: datasets:dataset-name
 
 The OneDrive Sync Health dataset includes information on devices running OneDrive for Business. This includes one object for every report-enabled OneDrive Sync client in the tenant. Reports include Sync app information, user details, error details, and relevant timestamps.
 
-**IMPORTANT NOTE**: This dataset is not currently available publicly. It is coming soon.  The details provided here are for informational purposes only.
-
 ### Scenarios:
 
 - Administrators need to know how many devices are online and syncing across the tenant.
