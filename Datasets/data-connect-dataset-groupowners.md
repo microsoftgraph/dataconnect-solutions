@@ -11,6 +11,10 @@ ms.custom: datasets:dataset-name
 
 The GroupOwners_v0 dataset retrieves the list of all the group owners. The owners are a set of users or service principals who are allowed to modify the group object. Owners are currently not available in Microsoft Graph for groups that were created in Microsoft Exchange or groups that are synchronized from an on-premises environment.
 
+NOTE: 
+
+- The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions. 
+
 ## Scenarios
 
 The following are business scenarios that you can answer with this dataset:

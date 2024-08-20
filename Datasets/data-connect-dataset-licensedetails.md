@@ -1,6 +1,6 @@
 ---
 title: "Microsoft Graph Data Connect LicenseDetails_v0 dataset"
-description: "Use the LicenseDetails_v0 dataset to provide detailed information related to all the devices that are owned by each user in the organization."
+description: "Use the LicenseDetails_v0 dataset provides details for user’s licenses that are directly assigned and those transitively assigned through memberships in licensed groups.  "
 author: "rimisra2"
 ms.localizationpriority: high
 ms.prod: "data-connect"
@@ -9,7 +9,15 @@ ms.custom: datasets:dataset-name
 
 # LicenseDetails_v0 dataset
 
-The LicenseDetails_v0 dataset provides detailed information related to all the devices that are owned by each user in the organization.
+The LicenseDetails_v0 dataset provides details for user’s licenses that are directly assigned and those transitively assigned through memberships in licensed groups.  
+
+NOTE:
+
+- Currently, the MGDC platform ONLY supports extracting valid users. Trying to extract invalid users will result in no data to be returned for such users. Valid users must have the following:
+    * A valid mailbox (i.e. users having mailbox that is **not in inactive state**, **not soft-deleted** or **not hosted on-Prem**)
+    * User account enabled (i.e. accountEnabled should not be set to false)
+    * An exchange license
+- The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions.
 
 ## Scenarios
 

@@ -13,8 +13,6 @@ ms.custom: datasets:dataset-name
 
 The SharePoint File Actions datasets includes details about every time a file was accessed, deleted, downloaded, modified, moved, renamed, or uploaded. Other file actions are not included. This helps you understand how documents are being used across the tenant. The dataset contains one object for each file-related action in SharePoint for the tenant, including the type of action, when it happened, what file was acted upon, what application was used, and who performed the action. 
 
-**IMPORTANT NOTE:** This dataset is not currently available publicly. It is coming soon. The details provided here are for informational purposes only.
-
 ### Scenarios:
 
 - Report on file usage by site, site type, file extension, action, or application. 

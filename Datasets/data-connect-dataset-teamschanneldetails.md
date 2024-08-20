@@ -13,6 +13,10 @@ The TeamsChannelDetails_v0 dataset provides a list of Microsoft Teams channels. 
 
 Channels are where the work actually gets done; where text, audio, and video conversations open to the whole team happen; where files are shared; and where tabs are added. TeamsChannelDetails dataset provides details of all the conversation channels created on Microsoft Teams for a particular tenant.
 
+NOTE: 
+
+- The MGDC platform supports extraction of data for all valid users matching with the ADF pipeline's region. Hence, if the users' mailbox are residing in different regions, then multiple pipelines will need to be triggered in the respective ADF regions. 
+
 ## Scenarios
 
 The following are business scenarios that you can answer with this dataset:
