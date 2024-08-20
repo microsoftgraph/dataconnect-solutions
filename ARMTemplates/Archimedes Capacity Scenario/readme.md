@@ -147,7 +147,7 @@ complete.
 
 ![](Images/27b.PNG)
 
-12. Trigger the pipeline. **Note: You should not trigger the pipeline until the Files dataset becomes available**
+12. Trigger the pipeline.
 
 ![](Images/27c.PNG)
 
