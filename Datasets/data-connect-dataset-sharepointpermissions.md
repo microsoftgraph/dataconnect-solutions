@@ -52,7 +52,9 @@ SharePoint sharing permissions information, showing what is being shared and who
 | SiteId | String | GUID that identifies the SharePoint site (site collection) |  No | False |
 | WebId | String | GUID that identifies the SharePoint web (subsite) |  No | False |
 | ListId | String | GUID that identifies the SharePoint list |  No | False |
-| ItemType | String | The type of item being shared (Site, Folder, File) |  No | False |
+| ListItemId | int64 | Integer that identifies the SharePoint list item within the list |  No | False |
+| UniqueId | String | GUID that identifies the SharePoint list item within the list |  No | False |
+| ItemType | String | The type of item being shared (SiteAdmin, Web, List, Folder, File) |  No | False |
 | ItemURL | String | URL to the item being shared |  No | False |
 | FileExtension | String | File extension of the item being shared (optional, shows only if item type is file) |  No | False |
 | RoleDefinition | String | Sharing role (Read, Contribute, Full Control) |  No | False |
