@@ -47,6 +47,8 @@ The SharePoint Files dataset includes information about files in SharePoint and 
 
 - This dataset is available after 48 hours. For instance, you can query data for 01/01 starting in 01/03.
 - This data is available for 21 days. For instance, the data for 01/01 is available from 01/03 to 01/22.
+- To get a full dataset (all the objects), use a date filter with the same date for the start and end date.
+- To get a delta dataset (objects that changed between two dates), use different dates for start and end in the date filter.
 
 ### Schema:
 
