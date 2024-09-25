@@ -11,8 +11,6 @@
 
 Capacity scenario is a storage use case powered by our available Sharepoint datasets. This allows customers to better understand how their storage is being used by providing meaningful insights and analytics offered by the SharePoint Sites and SharePoint Files datasets
 
-**IMPORTANT NOTE:** This scenario is not currently available publicly. It is coming soon. The details provided here are for informational purposes only.
-
 **After you follow these steps, you will have a great set of Power BI dashboards related to SharePoint Capacity Scenario, like the one shown below.**
 ![](Images/Image_1.png) 
 
@@ -151,11 +149,12 @@ complete.
 
 ![](Images/27b.PNG)
 
-12. Trigger the pipeline. **Note: You should not trigger the pipeline until the Files dataset becomes available**
+12.  Trigger the pipeline
 
 ![](Images/27c.PNG)
 
 13. Provide the required parameters - StartTime, EndTime, StorageAccount, and StorageContainer created by the pre-req steps above (Note: names are case sensitive)
+**NOTE:** This template is designed to run only for a full snapshot; therefore, StartTime and EndTime must be the same.
 
 ![](Images/27d.PNG)
 
@@ -189,9 +188,7 @@ Template.
 
 ![](Images/45.png)
 
-
-
-6. Now we need to give the right storage account key / credentials for these data sources.
+5. Now we need to give the right storage account key / credentials for these data sources.
     - Click on Edit Permissions
 
         ![](Images/47-a.png)        
@@ -208,11 +205,11 @@ Template.
 
         ![](Images/47-d.png)        
 
-7. Congratulations, you are all set and will see that the report will be refreshed with the latest data
+6. Congratulations, you are all set and will see that the report will be refreshed with the latest data
 
     ![](Images/Image_1.PNG) 
 
-8. If you see any error or data is not being refreshed then please make sure your entered right storage account details, path along with credentials in data source settings
+7. If you see any error or data is not being refreshed then please make sure your entered right storage account details, path along with credentials in data source settings
 
 Additional Notes:
 - The Power BI report will always pull the **latest data** copied during the Synapse pipeline run.
