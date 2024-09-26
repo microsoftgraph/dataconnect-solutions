@@ -51,6 +51,11 @@ The SharePoint File Actions datasets includes details about every time a file wa
 - This dataset is available after 48 hours. For instance, you can query data for 01/01 starting in 01/03.
 - This data is available for 21 days. For instance, the data for 01/01 is available from 01/03 to 01/22.
 - This dataset captures daily actions and does not support Deltas, since the data is unique for each day.
+- Actions include files from all list types, including SharePoint pages. This is different from the Files dataset, which only includes files in document libraries.
+- If the tenants includes multiple regions, File Actions only reports actions for actors (users) in the specific region. The sites, webs, lists and items acted upon could be in other regions.
+- You can accumulate the File Actions over time (if allowed by the tenant's compliance team) and group the actions by site to find the last action on a site. 
+- If the tenants includes multiple regions, it is necessary to aggregate actions from all regions to draw conclusions about a site.
+- An action might be performed by an automated application, which you can identify by the “user agent”. 
 
 ### Schema:
 
