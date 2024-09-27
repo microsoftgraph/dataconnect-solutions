@@ -209,7 +209,9 @@ Template.
 
     ![](Images/Image_1.PNG) 
 
-7. If you see any error or data is not being refreshed then please make sure your entered right storage account details, path along with credentials in data source settings
+7. If you see any errors or if the data is not being refreshed, please make sure you have entered the correct storage account details, path, and credentials in the data source settings
+
+8. The report is designed to filter out system sites. System sites include, **but are not limited to**, those with Site Types such as 'SPSMSITEHOST', 'SRCHCENTERLITE', and 'TENANTADMIN'. Please adjust this filter to suit your requirements
 
 Additional Notes:
 - The Power BI report will always pull the **latest data** copied during the Synapse pipeline run.
