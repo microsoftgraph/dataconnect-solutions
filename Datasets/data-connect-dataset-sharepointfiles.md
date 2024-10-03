@@ -105,7 +105,10 @@ The SharePoint Files dataset includes information about files in SharePoint and 
     "IsLabelEncrypted": false,
     "MajorVersion": 3,
     "MinorVersion": 0,
-    "SensitivityLabelInfo": {},
+    "SensitivityLabelInfo": {
+      "Id": "123e4567-e89b-12d3-a456-426614174000",
+      "DisplayName": "Confidential"
+    },
     "SizeInBytes": 16485996,
     "SizeInBytesWithVersions": 49459733,
     "TimeCreated": "2023-05-06T03:20:33Z",
