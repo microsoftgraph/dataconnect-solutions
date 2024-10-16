@@ -76,8 +76,8 @@ The link above sets up the pre-requisites to using the information oversharing t
 - Create a Spark Pool for the Synapse workspace
 - Create a storage account for the extracted data
 - Grant permission to the Synapse workspace & the Microsoft Graph Data Connect Service Principal to the storage account as Blob Data Contributor
-- Create an Azure SQL Server
-- Create a sample database within the Azure SQL Server.
+- Create an Azure SQL Server (optional)
+- Create a sample database within the Azure SQL Server (optional)
 
 By clicking on the above button (or navigating to the linked URL), users will be brought to the Azure portal on the Custom deployment page.
 
