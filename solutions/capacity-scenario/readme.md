@@ -29,41 +29,24 @@ The first step to running this template would be to create an application in the
 
 ![](Images/3.png)
 
-4. Select "Microsoft Graph" from the Add permission flyout
-
-![](Images/4.png)
-
-5. Select "Application permissions -> Applications -> Application.Read.All"
-
-![](Images/5.png)
-
-6. Explicitly Grant consent for the new permissions
-
-![](Images/6.png)
-
-7. Verify that that the status shows as granted for the new Application.Read.All permission
-
-![](Images/7.png)
-
-8. In the App, navigate to **Owners** and add an owner who will be responsible for running the pipeline. This is required for the pipeline to run successfully.
+4. In the App, navigate to **Owners** and add an owner who will be responsible for running the pipeline. This is required for the pipeline to run successfully.
 
 ![](Images/6a.PNG)
 ![](Images/6b.PNG)
 
-
-9. Navigate to "Certificates and secrets" in the left pane and click on "New client secret"
+5. Navigate to "Certificates and secrets" in the left pane and click on "New client secret"
 
 ![](Images/8.png)
 
-10. Provide a description and add a secret
+6. Provide a description and add a secret
 
 ![](Images/9.png)
 
-11. Copy the value of this new secret and save it securely before navigating away from this page
+7. Copy the value of this new secret and save it securely before navigating away from this page
 
 ![](Images/10.png)
 
-12. Use this link to initiate the setup of the pre-requisites. Use the appid and secret created in the 
+8. Use this link to initiate the setup of the pre-requisites. Use the appid and secret created in the 
 previous steps. Custom deployment - Microsoft Azure [here](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2FARMTemplates%2FMGDC%20Extraction%20Pre%20Reqs%2Fazuredeploy.json?token=AATN3TJ6UQWU7TFMZ2R6ZW3ASL5JQ)
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2FARMTemplates%2FMGDC%20Extraction%20Pre%20Reqs%2Fazuredeploy.json?token=AATN3TJ6UQWU7TFMZ2R6ZW3ASL5JQ"><img src="https://camo.githubusercontent.com/bad3d579584bd4996af60a96735a0fdcb9f402933c139cc6c4c4a4577576411f/68747470733a2f2f616b612e6d732f6465706c6f79746f617a757265627574746f6e" alt="Deploy Environment in Azure" /></a>
