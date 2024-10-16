@@ -68,7 +68,7 @@ previous steps. Custom deployment - Microsoft Azure [here](https://portal.azure.
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmicrosoftgraph%2Fdataconnect-solutions%2Fmain%2FARMTemplates%2FMGDC%20Extraction%20Pre%20Reqs%2Fazuredeploy.json?token=AATN3TJ6UQWU7TFMZ2R6ZW3ASL5JQ"><img src="https://camo.githubusercontent.com/bad3d579584bd4996af60a96735a0fdcb9f402933c139cc6c4c4a4577576411f/68747470733a2f2f616b612e6d732f6465706c6f79746f617a757265627574746f6e" alt="Deploy Environment in Azure" /></a>
 
-The link above sets up the pre-requisites to using the information oversharing template, which are:
+The link above sets up the pre-requisites to using the capacity analytics template, which are:
 
 - Create a Synapse Workspace
 - Create a Spark Pool for the Synapse workspace
@@ -174,7 +174,7 @@ Below steps will help to link datasets that are generated using Synapse pipeline
 Template. 
 1. Download and install Microsoft Power BI Desktop if you don’t have it installed already on your machine. 
     - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center. [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494)
-2. Download the pre-created Power BI security report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. The link to download the Power BI Report will be available here when the template becomes available.
+2. Download the pre-created Power BI Capacity report that can generate insights from data that is produced using Synapse pipeline in azure storage locations. Link to download PowerBI Report [here](https://go.microsoft.com/fwlink/?linkid=2290317)
 
 ![](Images/42.png)
 
