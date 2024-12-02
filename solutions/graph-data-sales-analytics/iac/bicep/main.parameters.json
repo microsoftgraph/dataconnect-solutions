@@ -1,0 +1,39 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+      "project": {
+      "value": "gdcs"
+    },
+    "region": {
+      "value": "eus2"
+    },
+    "env": {
+      "value": "dev"
+    },
+    "sqlAdministratorLogin": {
+      "value": "sqladminuser"
+    },
+    "sqlAdministratorLoginPassword": {
+      "value": "Test@dmin@12345"
+    },
+    "tag1": {
+      "value": "default"
+    },
+    "tag2": {
+      "value": "default"
+    },
+    "administratorLogin": {
+      "value": "default"
+    },
+    "administratorSid": {
+      "value": "default"
+    },
+    "isSQLResourceExists": {
+      "value": true
+    }
+  }
+}
+
+
+

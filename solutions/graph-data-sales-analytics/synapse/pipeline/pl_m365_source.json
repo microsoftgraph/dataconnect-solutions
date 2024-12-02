@@ -1,0 +1,37 @@
+{
+	"name": "pl_m365_source",
+	"properties": {
+		"activities": [
+			{
+				"name": "M365 Data flow",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DF_M365",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 16,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "DataSources"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-07-27T08:00:04Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

@@ -46,6 +46,9 @@ In this sample you will use Microsoft Graph Data Connect to analyze emails from 
 
 In this sample you will use Microsoft Graph Data Connect brings Microsoft 365 data and Azure resources to independent software vendors (ISVs). This system enables ISVs to build intelligent applications with Microsoft's most valuable data and best development tools. Microsoft 365 customers will gain innovative or industry-specific applications that enhance their productivity while keeping full control over their data.
 
+## [Sales Analytics using M365 and Salesforce data](solutions/graph-data-sales-analytics/README.md)
+This repository houses the Microsoft Data Graph Connect Solution Accelerator, which delivers a range of advantages, notably heightened insights encompassing email analytics, account sentiment analysis, and more. These insights are derived from the synergistic amalgamation of Salesforce Sales data (Opportunity) and Microsoft 365 data (Email).
+
 <br />
 
 # Give us your feedback
