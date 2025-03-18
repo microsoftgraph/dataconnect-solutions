@@ -46,18 +46,22 @@ SharePoint group information, including details about group members. Typical exa
 | GroupLinkId | int64 | Id of the sharing link associated with this group, if it was created for a sharing link. The id is all zeros if the group is not related to a sharing link | No | False |
 | GroupType | string | Type: SharePointGroup | No | False |
 | DisplayName | string | Name of the group | No | False |
-| Owner | Object | Group owner. *Format:* `STRUCT<AadObjectId:STRING,Name:STRING,Email:STRING,TypeV2:STRING>` | No | False |
+| Owner | Object | Group owner. *Format:* `STRUCT<AadObjectId:STRING, Name:STRING, Email:STRING, TypeV2:STRING, LoginName:STRING, UPN:STRING>` | No | False |
 | Owner, Type | string | Type of group owner: User, SharePointGroup, SecurityGroup | No | False |
 | Owner, AadObjectId | string | AAD Object Id of the group owner | No | False |
 | Owner, Name | string | Name of the group owner | No | False |
 | Owner, Email | string | Email of the group owner | No | False |
 | Owner, TypeV2 | string | Type of group owner: InternalUser, ExternalUser, B2BUser, SecurityGroup, SharePointGroup | No | False |
-| Members | Object[] | Array of group members. *Format:* `ARRAY<STRUCT<Type:STRING, AadObjectId:STRING, Name:STRING, Email:STRING, TypeV2:STRING>>` | No | False |
+| Owner, LoginName | string | Login name of group owner. If ending with _o, this should be expanded using the owners of the group, not the members | No | False |
+| Owner, UPN | string | User Principal Name of group owner | No | False |
+| Members | Object[] | Array of group members. *Format:* `ARRAY<STRUCT<Type:STRING, AadObjectId:STRING, Name:STRING, Email:STRING, TypeV2:STRING, LoginName:STRING, UPN:STRING>>` | No | False |
 | Members, Type | string | Type of group member: User, SharePointGroup, SecurityGroup | No | False |
 | Members, AadObjectId | string | AAD Object Id of the group member | No | False |
 | Members, Name | string | Name of the group member | No | False |
 | Members, Email | string | Email of the group member | No | False |
 | Members, TypeV2 | string | Type of group member: InternalUser, ExternalUser, B2BUser, SecurityGroup, SharePointGroup | No | False |
+| Members, LoginName | string | Login name of group member. If ending with _o, this should be expanded using the owners of the group, not the members | No | False |
+| Members, UPN | string | User Principal Name of group member | No | False |
 | SnapshotDate | datetime | Date this data set was generated | Yes | True |
 | Operation | String | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted') | No | False |
 
