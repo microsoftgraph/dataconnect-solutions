@@ -60,6 +60,8 @@ The SharePoint Sites dataset includes information about every site in the tenant
 | Id | string | GUID of the site | No | False | 
 | Url | string | URL for the site | No | False | 
 | ArchiveState | string | The archive state of the site: None, Archiving, Archived, or Reactivating | No | False |
+| SiteArchivedBy | string | Who archived the site. Null if not archived | No | False |
+| SiteArchivedTime | datetime | When the site was archived. Null if not archived | No | False |
 | RootWeb | Object | Root web information for the site. *Format:* STRUCT<`Id`:STRING, `Title`:STRING, `WebTemplate`:STRING, `WebTemplateId`:INTEGER, `Configuration`:INTEGER, `LastItemModifiedDate`:DATETIME> | No | False |
 | RootWeb, Id | string | Root web id | No | False |
 | RootWeb, Title | string | Root web title | No | False |
@@ -70,10 +72,11 @@ The SharePoint Sites dataset includes information about every site in the tenant
 | WebCount | int64 | Number of webs (subsites) in the site | No | False |
 | StorageQuota | int64 | Total storage in bytes allowed for this site | No | False |
 | StorageUsed | int64 | Total storage in bytes used by this site (includes main file stream, file metadata, versions and recycle bin) | No | False |
-| StorageMetrics | object | Storage metrics for the site. *Format:* STRUCT<`MetadataSize`:INT64, `TotalFileCount`:INT64, `TotalFileStreamSize`:INT64, `TotalSize`:INT64> | No | False | 
+| StorageMetrics | object | Storage metrics for the site. *Format:* STRUCT<`MetadataSize`:INT64, `TotalFileCount`:INT64, `TotalFileStreamSize`:INT64, `AdditionalFileStreamSize`:INT64, `TotalSize`:INT64> | No | False | 
 | StorageMetrics, MetadataSize | int64 | Total metadata size for the site in bytes | No | False | 
 | StorageMetrics, TotalFileCount | int64 | Total number of files for the site | No | False | 
 | StorageMetrics, TotalFileStreamSize | int64 | Total size of the latest version of the files for the site in bytes | No | False | 
+| StorageMetrics, AdditionalFileStreamSize | int64 | Total size of additional file streams in bytes, excluding the latest version, previous versions and metadata | No | False | 
 | StorageMetrics, TotalSize | int64 | Total size of all files for the site in bytes, including metadata, all versions and the recycle bin | No | False | 
 | GroupId | string | Id of the group associated with this site | No | False | 
 | GeoLocation | string | Geographic region where the data is stored | No | False | 
@@ -117,6 +120,7 @@ The SharePoint Sites dataset includes information about every site in the tenant
 | CreatedTime | datetime | When the site was created (in UTC) | No | False | 
 | LastSecurityModifiedDate | datetime | When security on the site was last changed (in UTC) | No | False | 
 | LastUserAccessDate | datetime | Last access by a real user for the site (in UTC) | No | False | 
+| LastContentChange | datetime | When the site contents were last changed (in UTC) | No | False | 
 | SnapshotDate | datetime | When this site information was captured (in UTC) | Yes | True |
 | Operation | string | Extraction mode of this row. Gives info about row extracted with full mode ('Full') or delta mode ('Created', 'Updated' or 'Deleted') | No | False |
 
