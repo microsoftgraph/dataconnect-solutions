@@ -1,0 +1,75 @@
+{
+	"name": "pl_salesforce_source",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy data Salesforce",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"source": {
+						"type": "SalesforceSource",
+						"readBehavior": "query"
+					},
+					"sink": {
+						"type": "DelimitedTextSink",
+						"storeSettings": {
+							"type": "AzureBlobFSWriteSettings"
+						},
+						"formatSettings": {
+							"type": "DelimitedTextWriteSettings",
+							"quoteAllText": true,
+							"fileExtension": ".txt"
+						}
+					},
+					"enableStaging": false,
+					"translator": {
+						"type": "TabularTranslator",
+						"typeConversion": true,
+						"typeConversionSettings": {
+							"allowDataTruncation": true,
+							"treatBooleanAsNumber": false
+						}
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "DS_SalesforceObjects",
+						"type": "DatasetReference",
+						"parameters": {
+							"objectname": "opportunity"
+						}
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DS_CSV",
+						"type": "DatasetReference",
+						"parameters": {
+							"container": "raw",
+							"directory": "SFSC",
+							"filename": {
+								"value": "opportunity.csv",
+								"type": "Expression"
+							}
+						}
+					}
+				]
+			}
+		],
+		"folder": {
+			"name": "DataSources"
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-07-03T07:46:55Z"
+	},
+	"type": "Microsoft.Synapse/workspaces/pipelines"
+}

@@ -1,0 +1,35 @@
+{
+	"name": "pl_raw_to_bronze",
+	"properties": {
+		"activities": [
+			{
+				"name": "Raw to Bronze",
+				"description": "Execute the raw_to_bronze notebook",
+				"type": "SynapseNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": "RawToBronze",
+						"type": "NotebookReference"
+					},
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "synspgdcscin",
+						"type": "BigDataPoolReference"
+					},
+					"executorSize": "Small",
+					"driverSize": "Small"
+				}
+			}
+		],
+		"annotations": []
+	}
+}

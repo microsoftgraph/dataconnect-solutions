@@ -1,0 +1,15 @@
+{
+	"name": "LS_AzureSqlDatabase",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"connectionString": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=sqlserver-gdcs-cin-dev-il.database.windows.net;Initial Catalog=sqldb-gdcs-cin-dev-i"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

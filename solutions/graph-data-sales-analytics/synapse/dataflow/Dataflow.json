@@ -1,0 +1,113 @@
+{
+	"name": "Dataflow",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"linkedService": {
+						"referenceName": "LS_Microsoft365",
+						"type": "LinkedServiceReference"
+					},
+					"name": "M365Source"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DS_Json",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          id as string,",
+				"          createdDateTime as string,",
+				"          lastModifiedDateTime as string,",
+				"          changeKey as string,",
+				"          categories as string,",
+				"          receivedDateTime as string,",
+				"          sentDateTime as string,",
+				"          hasAttachments as boolean,",
+				"          internetMessageId as string,",
+				"          subject as string,",
+				"          importance as string,",
+				"          parentFolderId as string,",
+				"          sender as string,",
+				"          from as string,",
+				"          toRecipients as string,",
+				"          ccRecipients as string,",
+				"          bccRecipients as string,",
+				"          replyTo as string,",
+				"          conversationId as string,",
+				"          uniqueBody as string,",
+				"          isDeliveryReceiptRequested as boolean,",
+				"          isReadReceiptRequested as boolean,",
+				"          isRead as boolean,",
+				"          isDraft as boolean,",
+				"          webLink as string,",
+				"          attachments as string,",
+				"          inferenceClassification as string,",
+				"          flag as string,",
+				"          body as string,",
+				"          bodyPreview as string,",
+				"          conversationIndex as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     store: 'microsoft365',",
+				"     format: 'json',",
+				"     sourceTableName: 'BasicDataSet_v0.Inbox_v1',",
+				"     autoFlatten: false,",
+				"     sourceAllowedGroups: ['ecd941cc-0ea7-47f6-badb-21b1e14ea6d3'],",
+				"     sourceDateFilterColumn: 'createdDateTime',",
+				"     sourceStartTime: (toTimestamp(1688169600000L)),",
+				"     sourceEndTime: (toTimestamp(1690329600000L)),",
+				"     sourceStructure: [",
+				"          ['name' -> 'id', 'type' -> 'string'],",
+				"          ['name' -> 'createdDateTime', 'type' -> 'string'],",
+				"          ['name' -> 'lastModifiedDateTime', 'type' -> 'string'],",
+				"          ['name' -> 'changeKey', 'type' -> 'string'],",
+				"          ['name' -> 'categories', 'type' -> 'string'],",
+				"          ['name' -> 'receivedDateTime', 'type' -> 'string'],",
+				"          ['name' -> 'sentDateTime', 'type' -> 'string'],",
+				"          ['name' -> 'hasAttachments', 'type' -> 'boolean'],",
+				"          ['name' -> 'internetMessageId', 'type' -> 'string'],",
+				"          ['name' -> 'subject', 'type' -> 'string'],",
+				"          ['name' -> 'importance', 'type' -> 'string'],",
+				"          ['name' -> 'parentFolderId', 'type' -> 'string'],",
+				"          ['name' -> 'sender', 'type' -> 'string'],",
+				"          ['name' -> 'from', 'type' -> 'string'],",
+				"          ['name' -> 'toRecipients', 'type' -> 'string'],",
+				"          ['name' -> 'ccRecipients', 'type' -> 'string'],",
+				"          ['name' -> 'bccRecipients', 'type' -> 'string'],",
+				"          ['name' -> 'replyTo', 'type' -> 'string'],",
+				"          ['name' -> 'conversationId', 'type' -> 'string'],",
+				"          ['name' -> 'uniqueBody', 'type' -> 'string'],",
+				"          ['name' -> 'isDeliveryReceiptRequested', 'type' -> 'boolean'],",
+				"          ['name' -> 'isReadReceiptRequested', 'type' -> 'boolean'],",
+				"          ['name' -> 'isRead', 'type' -> 'boolean'],",
+				"          ['name' -> 'isDraft', 'type' -> 'boolean'],",
+				"          ['name' -> 'webLink', 'type' -> 'string'],",
+				"          ['name' -> 'attachments', 'type' -> 'string'],",
+				"          ['name' -> 'inferenceClassification', 'type' -> 'string'],",
+				"          ['name' -> 'flag', 'type' -> 'string'],",
+				"          ['name' -> 'body', 'type' -> 'string'],",
+				"          ['name' -> 'bodyPreview', 'type' -> 'string'],",
+				"          ['name' -> 'conversationIndex', 'type' -> 'string']",
+				"     ]) ~> M365Source",
+				"M365Source sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1) ~> sink1"
+			]
+		}
+	}
+}

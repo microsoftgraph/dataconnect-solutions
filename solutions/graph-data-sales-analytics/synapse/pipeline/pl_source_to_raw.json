@@ -1,0 +1,55 @@
+{
+	"name": "pl_source_to_raw",
+	"properties": {
+		"activities": [
+			{
+				"name": "Salesforce Source to Raw",
+				"description": "This notebook will pull the data from Sales force using api.",
+				"type": "SynapseNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebook": {
+						"referenceName": "Saslesforce_SourceToRaw",
+						"type": "NotebookReference"
+					},
+					"snapshot": true,
+					"sparkPool": {
+						"referenceName": "synspgdcscin",
+						"type": "BigDataPoolReference"
+					},
+					"executorSize": "Small",
+					"conf": {
+						"spark.dynamicAllocation.enabled": null,
+						"spark.dynamicAllocation.minExecutors": null,
+						"spark.dynamicAllocation.maxExecutors": null
+					},
+					"driverSize": "Small",
+					"numExecutors": null
+				}
+			},
+			{
+				"name": "M365 Source To Raw",
+				"description": "Call the pipeline to run the copy activity for loading M65 data.",
+				"type": "ExecutePipeline",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "pl_m365_source",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
+			}
+		],
+		"annotations": []
+	}
+}
