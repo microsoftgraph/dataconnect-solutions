@@ -66,7 +66,7 @@ SharePoint sharing permissions information, showing what is being shared and who
 | SharedWithCount | Object[] | Object array with one entry for every type of sharing recipient. <br />Format: ``<ARRAY<STRUCT<`Type`: STRING, `Count`: INT64>>`` |  No | False |
 | SharedWithCount, Type | String | Type of sharing recipient (Internal, External, SecurityGroup, SharePoint Group) |  No | False |
 | SharedWithCount, Count | Int64 | Number of sharing recipients of this type |  No | False |
-| SharedWith | Object[] | Object array with one entry for every sharing recipient. <br />Format: ``<ARRAY<STRUCT<`Type`: STRING, `Name`: STRING, `Email`: STRING, `AadObjectId`: STRING, `UPN`: STRING, `TypeV2`: STRING, `UserCount`: INT64>>`` |  No | False |
+| SharedWith | Object[] | Object array with one entry for every sharing recipient. <br />Format: ``<ARRAY<STRUCT<`Type`: STRING, `Name`: STRING, `Email`: STRING, `AadObjectId`: STRING, `UPN`: STRING, `TypeV2`: STRING, `UserCount`: INT64, `UserLoginName`: STRING>>`` |  No | False |
 | SharedWith, Type | String | Type of sharing recipient: Internal, External, SecurityGroup, SharePoint Group |  No | False |
 | SharedWith, Name | String | Name of sharing recipient |  No | False |
 | SharedWith, Email | String | Email of sharing recipient. Blank for SharePoint groups or special security groups |  No | False |
@@ -74,6 +74,7 @@ SharePoint sharing permissions information, showing what is being shared and who
 | SharedWith, UPN | string | User Principal Name of sharing recipient | No | False | 
 | SharedWith, TypeV2 | string | Type of sharing recipient: InternalUser, ExternalUser, B2BUser, SecurityGroup, SharePointGroup | No | False |
 | SharedWith, UserCount | int64 | Unique user count for this sharing recipient. For groups, this is number of users in the group, including nested groups. For users, this is 1. Blank if group is empty or count is unavailable | No | False | 
+| SharedWith, UserLoginName | string | Login name for this sharing recipient. If ending with _o, this should be expanded using the owners of the group, not the members | No | False | 
 | TotalUserCount | int64 | Unique user count for this entire permission. Blank if count is zero or if count is unavailable | No | False | 
 | ShareCreatedBy | String | The user or group that created the sharing link. <br />Format: ``STRUCT<`Type`: STRING, `Name`: STRING, `Email`: STRING, `UPN`: STRING>`` |  No | False |
 | ShareCreatedBy, Type | String | Type of principal that created the sharing link: User |  No | False |
