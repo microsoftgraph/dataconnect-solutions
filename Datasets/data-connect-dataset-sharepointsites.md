@@ -77,7 +77,7 @@ The SharePoint Sites dataset includes information about every site in the tenant
 | StorageMetrics, TotalFileCount | int64 | Total number of files for the site | No | False | 
 | StorageMetrics, TotalFileStreamSize | int64 | Total size of the latest version of the files for the site in bytes | No | False | 
 | StorageMetrics, AdditionalFileStreamSize | int64 | Total size of additional file streams in bytes, excluding the latest version, previous versions and metadata | No | False | 
-| StorageMetrics, TotalSize | int64 | Total size of all files for the site in bytes, including metadata, all versions and the recycle bin | No | False | 
+| StorageMetrics, TotalSize | int64 | Total size of all files for the site in bytes, including metadata and all versions. It does not include the recycle bin | No | False | 
 | GroupId | string | Id of the group associated with this site | No | False | 
 | GeoLocation | string | Geographic region where the data is stored | No | False | 
 | IsInRecycleBin | boolean | Indicates that the site has been deleted and is in the recycle bin. If the site is in the recycle bin, other properties like TemplateId might be unavailable | No | False | 
