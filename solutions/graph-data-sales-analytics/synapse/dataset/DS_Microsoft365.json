@@ -1,0 +1,16 @@
+{
+	"name": "DS_Microsoft365",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_Microsoft365",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Office365Table",
+		"schema": [],
+		"typeProperties": {
+			"tableName": "BasicDataSet_v0.Inbox_v1"
+		}
+	},
+	"type": "Microsoft.Synapse/workspaces/datasets"
+}

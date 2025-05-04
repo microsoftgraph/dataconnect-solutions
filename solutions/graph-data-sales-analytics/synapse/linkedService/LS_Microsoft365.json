@@ -1,0 +1,27 @@
+{
+	"name": "LS_Microsoft365",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "Office365",
+		"typeProperties": {
+			"office365TenantId": "2d2199a8-cb98-4269-b2ae-c63cf2b7c7f0",
+			"servicePrincipalTenantId": "2d2199a8-cb98-4269-b2ae-c63cf2b7c7f0",
+			"servicePrincipalId": "f072c8b9-44a5-4908-bbb4-e44c05fb7728",
+			"servicePrincipalKey": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "LS_AzureKeyVault",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "client-secret"
+			},
+			"office365DataDiscoveryServiceUrl": "https://ind.odds.si.office.net/DiscoveryService/",
+			"officeDiscoveryUrl": "https://ind.odds.si.office.net/DiscoveryService/"
+		},
+		"connectVia": {
+			"referenceName": "AutoResolveIntegrationRuntime",
+			"type": "IntegrationRuntimeReference"
+		}
+	}
+}

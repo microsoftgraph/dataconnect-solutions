@@ -1,0 +1,11 @@
+{
+	"name": "LS_AzureKeyVault",
+	"type": "Microsoft.Synapse/workspaces/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://kv-gdcs-cin-il.vault.azure.net/"
+		}
+	}
+}
