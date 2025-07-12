@@ -1,6 +1,6 @@
-# Information capacity template setup
+# SharePoint capacity template setup
 
-- [Information capacity template for Fabric-Lakehouse setup](#information-capacity-template-setup)
+- [SharePoint capacity template for Fabric-Lakehouse setup](#SharePoint-capacity-template-setup)
   - [**Overview**](#overview)
   - [**Installing Pre-reqs**](#installing-pre-reqs)
   - [**PBI report template**](#pbi-report-template)
@@ -11,9 +11,9 @@
 
 ## Overview
 
-**TBD - DESCRIPTION HERE**
+**Capacity scenario is a storage use case powered by our available Sharepoint datasets. This allows customers to better understand how their storage is being used by providing meaningful insights and analytics offered by the SharePoint Sites and SharePoint Files datasets**
 
-**After you follow these steps, you will have a great set of Power BI dashboards related to SharePoint security, like the one shown below.**
+**After you follow these steps, you will have a great set of Power BI dashboards related to SharePoint Capacity, like the one shown below.**
 
 ![](Images/48.png) 
 
@@ -40,12 +40,12 @@ Next, you will configure a pipeline in Microsoft Fabric. You will import and  pi
 ![](Images/02.png) 
 
 3. Select “Data pipeline”.
-    - Give the new pipeline a name as ***"Unlock SharePoint Oversharing Insights"*** and click on “Create”
+    - Give the new pipeline a name as ***"Unlock SharePoint Capacity Insights"*** and click on “Create”
     
  ![](Images/03.png) 
 
 4. Select the "Templates” option
-    - Select a pre-published pipeline ***"Unlock SharePoint Oversharing Insights"***  and click on "Next"
+    - Select a pre-published pipeline ***"Unlock SharePoint Capacity Insights"***  and click on "Next"
 
 5. Grab connection string for lakehouse sql endpoint.
     - Goto workspace -> select the SQL analytics endpoint of lakehouse that you created.
@@ -61,7 +61,7 @@ Next, you will configure a pipeline in Microsoft Fabric. You will import and  pi
 
 7. This imported pipeline might be missing two note books that are required for pipeline to run. This is due to by design /known issues that exists in pipelines tempaltes that are published to fabric template gallery.
 
-    - Download note books [Merge Sites and Permissions To Final Table](./notebooks/Merge%20Sites%20and%20Permissions%20To%20Final%20Table.ipynb) and [Read Last Snapshot Dates](./notebooks/Read%20Last%20Snapshot%20Dates.ipynb) to local computer first and import to fabric work space. 
+    - Download note books [Merge Sites and Files To Final Table - Capacity Scenario](./notebooks/Merge%20Sites%20and%20Files%20To%20Final%20Table%20-%20Capacity%20Scenario.ipynb) and [Read Last Snapshot Dates - Capacity Scenario](./notebooks/Read%20Last%20Snapshot%20Dates%20-%20Capacity%20Scenario.ipynb) to local computer first and import to fabric work space. 
 
 8. Import downloaded notebooks to workspace
 
@@ -70,15 +70,15 @@ Next, you will configure a pipeline in Microsoft Fabric. You will import and  pi
 
     - Click on "Upload" button and select the two notebooks that you downloaded to local computer and click "Open"
 
-9. Go to Pipeline (Unlock SharePoint Oversharing Insight) window that you already imported.
+9. Go to Pipeline (Unlock SharePoint Capacity Insight) window that you already imported.
 
     - Select the notebook activity "Read Last Snapshot Dates" and go to the settings tab of that activity
-    - Choose "Read Last Snapshot Dates" notebook from dropdown 
+    - Choose "Read Last Snapshot Dates - Capacity Scenario" notebook from dropdown 
 
     ![](Images/08.png)
 
-    - Select the notebook activity "Merge Sites and Permissions To Final Table" and go to the settings tab of that activity
-    - Choose "Merge Sites and Permissions To Final Table" notebook from dropdown 
+    - Select the notebook activity "Merge Sites and Files To Final Table" and go to the settings tab of that activity
+    - Choose "Merge Sites and Files To Final Table - Capacity Scenario" notebook from dropdown 
 
     ![](Images/09.png)
 
@@ -88,8 +88,8 @@ Next, you will configure a pipeline in Microsoft Fabric. You will import and  pi
 11. Pipeline is now ready to run and extract the data from MGDC to lake house. 
     -![](Images/11.png)
 
-12. Once pipeline is succesful you will see the data in Sites and Permissions tables in lakehouse.
-    - You will see 2 staging tables and 2 final tablesin lake house that contains the data for Sites and Permissions.
+12. Once pipeline is succesful you will see the data in Sites,Files and Files_Aggs tables in lakehouse.
+    - You will see 2 staging tables and 3 final tables in lake house that contains the data for Sites(2) and Files(3).
     -![](Images/12.png)
 
 ## **PBI report template**
@@ -97,7 +97,7 @@ Below steps will help to link datasets that are generated using Fabric pipeline 
 Template. 
 1. Download and install Microsoft Power BI Desktop if you don’t have it installed already on your machine. 
     - Link to download Download Microsoft Power BI Desktop from Official Microsoft Download Center. [here](https://www.microsoft.com/en-us/download/details.aspx?id=58494)
-2. Download the pre-created PowerBI security report that can generate insights from data that is produced using Fabric pipeline. Link to download PowerBI Report. [here](https://go.microsoft.com/fwlink/?linkid=2300612)
+2. Download the pre-created PowerBI capacity report that can generate insights from data that is produced using Fabric pipeline. Link to download PowerBI Report. [here](https://go.microsoft.com/fwlink/?linkid=2327501)
 
 ![](Images/42.png)
 
