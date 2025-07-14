@@ -73,12 +73,12 @@ Next, you will configure a pipeline in Microsoft Fabric. You will import and  pi
 9. Go to Pipeline (Unlock SharePoint Capacity Insight) window that you already imported.
 
     - Select the notebook activity "Read Last Snapshot Dates" and go to the settings tab of that activity
-    - Choose "Read Last Snapshot Dates - Capacity Scenario" notebook from dropdown 
+    - Choose "**Read Last Snapshot Dates - Capacity Scenario**" notebook from dropdown 
 
     ![](Images/08.png)
 
     - Select the notebook activity "Merge Sites and Files To Final Table" and go to the settings tab of that activity
-    - Choose "Merge Sites and Files To Final Table - Capacity Scenario" notebook from dropdown 
+    - Choose "**Merge Sites and Files To Final Table - Capacity Scenario**" notebook from dropdown 
 
     ![](Images/09.png)
 
