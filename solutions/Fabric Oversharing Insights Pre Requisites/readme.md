@@ -20,8 +20,8 @@ This allows customers to better understand how secure their SharePoint is, maint
 
 ## Installing Pre-reqs
 You need to Enable Microsoft Graph Data Connect, Create an appilication identity to use with MGDC. Create a fabric workspace and Lakehouse to extract the required data from MGDC.
-All the steps are listed in the [blob post](https://techcommunity.microsoft.com/blog/microsoft_graph_data_connect_for_sharepo/step-by-step-microsoft-fabric-gather-a-detailed-dataset-on-sharepoint-sites-usin/4256383).
-Follow step-by-step guide from the above [blob post](https://techcommunity.microsoft.com/blog/microsoft_graph_data_connect_for_sharepo/step-by-step-microsoft-fabric-gather-a-detailed-dataset-on-sharepoint-sites-usin/4256383) and make sure steps 0  (Overview) and 1 (all from 1.a to 1.f ) are completed. 
+All the steps are listed in the [blog post](https://techcommunity.microsoft.com/blog/microsoft_graph_data_connect_for_sharepo/step-by-step-microsoft-fabric-gather-a-detailed-dataset-on-sharepoint-sites-usin/4256383).
+Follow step-by-step guide from the above [blog post](https://techcommunity.microsoft.com/blog/microsoft_graph_data_connect_for_sharepo/step-by-step-microsoft-fabric-gather-a-detailed-dataset-on-sharepoint-sites-usin/4256383) and make sure steps 0  (Overview) and 1 (all from 1.a to 1.f ) are completed. 
 
 ## Importing a pipeline from gallery and setting up
 
