@@ -1,0 +1,10 @@
+{
+	"name": "synapse-ws-sql--syngdcscindevil",
+	"properties": {
+		"privateLinkResourceId": "/subscriptions/2058f82f-b8ac-423e-8c83-227732887c3a/resourceGroups/fractal-neal-coe-dev-rg/providers/Microsoft.Synapse/workspaces/syngdcscindevil",
+		"groupId": "sql",
+		"fqdns": [
+			"syngdcscindevil.70962fda-26f0-4a3d-be69-9803a6a4e367.sql.azuresynapse.net"
+		]
+	}
+}

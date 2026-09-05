@@ -1,0 +1,147 @@
+######################################################
+########### Defining trigger and stages ##############
+######################################################
+
+trigger: 
+- none
+
+######################################################
+################# TEMPLATE VALIDATION ################
+######################################################
+stages:
+- stage: Template_Validation
+  jobs:
+  - job: Bicep_Template_Validation
+    displayName: 'Bicep_Template_Validation'
+    variables:
+    - group: devenv_variable_group
+    pool:
+      vmImage: 'windows-latest'
+    steps: 
+    - checkout: self
+      path: s/
+  
+    - task: AzureCLI@2
+      displayName: 'Bicep_Template_Validation'
+      inputs:
+        azureSubscription: 'sc-microsoft-graph-data'
+        scriptType: 'inlineScript'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az deployment group what-if --resource-group $(resource_group_name) --template-file $(template_filepath) --parameters sqlAdministratorLogin=$(sql_administrator_login) sqlAdministratorLoginPassword=$(sql_administrator_login_password) administratorLogin=$(administrator_login) administratorSid=$(administrator_sid) env=$(environment) tag1=$(tag1) tag2=$(tag2) project=$(project) region=$(region) isSQLResourceExists=$(is_sql_resource_exists)
+
+
+
+#####################################################
+########DEVELOPMENT ENVIRONMENT DEPLOYMENT #########
+#####################################################
+
+- stage: Development_Deployment
+  jobs:
+    - deployment: Development_Deployment
+      displayName: Development_Environment_Setup
+      variables:
+      - group: devenv_variable_group
+      environment: development
+      strategy:
+        runOnce:
+          deploy:
+              steps:
+              - checkout: self
+                path: s/
+
+              - task: AzureResourceManagerTemplateDeployment@3
+                displayName: Deploy Resources
+                inputs:
+                  deploymentScope: 'Resource Group'
+                  azureResourceManagerConnection: 'sc-microsoft-graph-data'
+                  action: 'Create Or Update Resource Group'
+                  resourceGroupName: $(resource_group_name)
+                  # subscriptionId: $(SubscriptionId)
+                  # location: $(Location)
+                  templateLocation: 'Linked artifact'
+                  csmFile: $(template_filepath)
+                  csmParametersFile: $(parameters_filepath)
+                  overrideParameters: -sqlAdministratorLogin $(sql_administrator_login) 
+                                      -sqlAdministratorLoginPassword $(sql_administrator_login_password)
+                                      -project=$(project)
+                                      -env $(environment)
+                                      -tag1 $(tag1)
+                                      -tag2 $(tag2)
+                                      -administratorLogin $(administrator_login)
+                                      -administratorSid $(administrator_sid)
+                                      -region $(region)
+                                      -isSQLResourceExists $(is_sql_resource_exists)    
+                  deploymentMode: 'Incremental'
+
+######################################################
+################# STAGING DEPLOYMENT #################
+######################################################
+
+# - stage: stg_Deployment
+#   jobs:
+#     - deployment: stg_Deployment
+#       displayName: stg_Deployment_Setup
+#       variables:
+#       - group: ct_stg_datamgmt_variables
+#       environment: staging
+#       strategy:
+#         runOnce:
+#           deploy:
+#               steps:
+#               - checkout: self
+#                 path: s/
+
+#               - task: AzureResourceManagerTemplateDeployment@3
+#                 displayName: Deploy Resources
+#                 inputs:
+#                   deploymentScope: 'Resource Group'
+#                   azureResourceManagerConnection: 'Datamgmt-SC'
+#                   action: 'Create Or Update Resource Group'
+#                   resourceGroupName: $(ResourceGroupName)
+#                   subscriptionId: $(SubscriptionId)
+#                   location: $(Location)
+#                   templateLocation: 'Linked artifact'
+#                   csmFile: $(TemplateFilePath)
+#                   csmParametersFile: $(ParametersFilePath)
+                  # overrideParameters: -sqlAdministratorLogin $(sqlAdministratorLogin) 
+                  #                     -sqlAdministratorLoginPassword $(sqlAdministratorLoginPassword)   
+#                   deploymentMode: 'Incremental'
+
+######################################################
+################# PRODUCTION DEPLOYMENT ##############
+######################################################
+
+# - stage: prod_Deployment
+#   jobs:
+#     - deployment: prod_Deployment
+#       displayName: prod_Deployment_Setup
+#       variables:
+#       - group: ct_prod_datamgmt_variables
+#       environment: production
+#       strategy:
+#         runOnce:
+#           deploy:
+#               steps:
+#               - checkout: self
+#                 path: s/
+
+#               - task: AzureResourceManagerTemplateDeployment@3
+#                 displayName: Deploy Resources
+#                 inputs:
+#                   deploymentScope: 'Resource Group'
+#                   azureResourceManagerConnection: 'Datamgmt-SC'
+#                   action: 'Create Or Update Resource Group'
+#                   resourceGroupName: $(ResourceGroupName)
+#                   subscriptionId: $(SubscriptionId)
+#                   location: $(Location)
+#                   templateLocation: 'Linked artifact'
+#                   csmFile: $(TemplateFilePath)
+#                   csmParametersFile: $(ParametersFilePath)
+                  # overrideParameters: -sqlAdministratorLogin $(sqlAdministratorLogin) 
+                  #                     -sqlAdministratorLoginPassword $(sqlAdministratorLoginPassword)   
+#                   deploymentMode: 'Incremental'
+
+###############################################################################
+###############################################################################
+###############################################################################

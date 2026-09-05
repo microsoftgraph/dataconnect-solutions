@@ -1,0 +1,150 @@
+{
+	"name": "SalesforceFunctions",
+	"properties": {
+		"folder": {
+			"name": "utility"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "synspgdcscin",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "1aceb01e-ce19-4215-86d6-1b8ae63512d1"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/2058f82f-b8ac-423e-8c83-227732887c3a/resourceGroups/fractal-neal-coe-dev-rg/providers/Microsoft.Synapse/workspaces/syngdcscindevil/bigDataPools/synspgdcscin",
+				"name": "synspgdcscin",
+				"type": "Spark",
+				"endpoint": "https://syngdcscindevil.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/synspgdcscin",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"def get_salesforce_access_token(client_id, client_secret):\r\n",
+					"    # Salesforce OAuth2 token endpoint\r\n",
+					"    token_url = 'https://fractalanalytics--uat.my.salesforce.com/services/oauth2/token'\r\n",
+					"\r\n",
+					"    # Request payload for token endpoint\r\n",
+					"    payload = {\r\n",
+					"        'grant_type': 'client_credentials',\r\n",
+					"        'client_id': client_id,\r\n",
+					"        'client_secret': client_secret,\r\n",
+					"    }\r\n",
+					"    # Send POST request to token endpoint\r\n",
+					"    response = requests.post(token_url, data=payload)\r\n",
+					"\r\n",
+					"    # Check if the request was successful\r\n",
+					"    if response.status_code == 200:\r\n",
+					"        # Access token is returned in the response\r\n",
+					"        access_token = response.json()['access_token']\r\n",
+					"        return access_token\r\n",
+					"    else:\r\n",
+					"        print('Error:', response.content)\r\n",
+					"        return None"
+				],
+				"execution_count": 16
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"\r\n",
+					"def get_salesforce_records(access_token, query):\r\n",
+					"    api_endpoint = 'https://fractalanalytics--uat.sandbox.my.salesforce.com' \r\n",
+					"    query_api_endpoint = api_endpoint + '/services/data/v58.0/query/'\r\n",
+					"\r\n",
+					"    # Set up the headers\r\n",
+					"    headers = {\r\n",
+					"        'Authorization': 'Bearer ' + access_token,\r\n",
+					"        'Content-Type': 'application/json'\r\n",
+					"    }\r\n",
+					"\r\n",
+					"    # Make the API request using the requests library\r\n",
+					"    response = requests.get(query_api_endpoint, headers=headers, params={'q': query})\r\n",
+					"\r\n",
+					"    # Process the response\r\n",
+					"    if response.status_code == 200:\r\n",
+					"        data = response.json()\r\n",
+					"\r\n",
+					"        # Create an empty list to hold all the records\r\n",
+					"        records = []\r\n",
+					"        records.extend(data['records'])\r\n",
+					"\r\n",
+					"        # Check if the response contains 'nextRecordsUrl' key\r\n",
+					"        next_records_url = data.get('nextRecordsUrl')\r\n",
+					"\r\n",
+					"        # Loop through subsequent pages until there are no more records\r\n",
+					"        while next_records_url:\r\n",
+					"            response = requests.get(api_endpoint + next_records_url, headers=headers)\r\n",
+					"            if response.status_code == 200:\r\n",
+					"                data = response.json()\r\n",
+					"                records.extend(data['records'])\r\n",
+					"                next_records_url = data.get('nextRecordsUrl')\r\n",
+					"            else:\r\n",
+					"                return response.status_code, response.text\r\n",
+					"        return records\r\n",
+					"    else:\r\n",
+					"        return response.status_code, response.text\r\n",
+					""
+				]
+			}
+		]
+	}
+}

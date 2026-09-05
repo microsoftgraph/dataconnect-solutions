@@ -1,0 +1,342 @@
+{
+	"name": "RawToBronze",
+	"properties": {
+		"folder": {
+			"name": "Stage2 RawToBronze"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "synspgdcscin",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "32599d53-d381-4f6b-9b2f-cc0ab258e00b"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/2058f82f-b8ac-423e-8c83-227732887c3a/resourceGroups/fractal-neal-coe-dev-rg/providers/Microsoft.Synapse/workspaces/syngdcscindevil/bigDataPools/synspgdcscin",
+				"name": "synspgdcscin",
+				"type": "Spark",
+				"endpoint": "https://syngdcscindevil.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/synspgdcscin",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net"
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"automaticScaleJobs": false
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Import all the libraries needed"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"from notebookutils import mssparkutils\r\n",
+					"from datetime import datetime\r\n",
+					"from pandas import date_range\r\n",
+					"from os.path import isfile\r\n",
+					"from datetime import timedelta\r\n",
+					"from pyspark.sql import SparkSession\r\n",
+					"import adal\r\n",
+					"import pyodbc\r\n",
+					"import struct\r\n",
+					"import os"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run config/variables"
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Set global constants"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"tags": [
+						"parameters"
+					]
+				},
+				"source": [
+					"## Global constants for adls\r\n",
+					"input_container = \"raw\"\r\n",
+					"output_container = \"bronze\"\r\n",
+					"cloud_alias = \"SFSC\""
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Generate input and utput container URL's"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"# create url for input and output container\r\n",
+					"input_url = f'abfss://{input_container}@{adls_name}.dfs.core.windows.net/{cloud_alias}'\r\n",
+					"output_url = f'abfss://{output_container}@{adls_name}.dfs.core.windows.net/{cloud_alias}'"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Create connection to database and set the cursor"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"conn = pyodbc.connect(connString, attrs_before = { SQL_COPT_SS_ACCESS_TOKEN:tokenstruct});\r\n",
+					"cursor = conn.cursor()"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Get all entities from input container"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"entities = mssparkutils.fs.ls(input_url)\r\n",
+					"\r\n",
+					"# for entity in entities:\r\n",
+					"#     entity_name = os.path.splitext(entity.name)[0]\r\n",
+					"#     print(entity_name)"
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Read CSV and save dataframe in delta format at desired location"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"for entity in entities:\r\n",
+					"    entity_name = os.path.splitext(entity.name)[0]\r\n",
+					"    watermark = cursor.execute(f\"SELECT [BronzeWatermark] FROM [dbo].[MetadataSalesCloud] WHERE [EntityName] = '{entity_name}' AND [CloudAbbreviation] = '{cloud_alias}'\")\\\r\n",
+					"                .fetchall()\r\n",
+					"    \r\n",
+					"    print('Table Name: ', entity_name)\r\n",
+					"    watermark = watermark[0][0]\r\n",
+					"    print('LastTimestamp:', watermark)\r\n",
+					"\r\n",
+					"    try:\r\n",
+					"        df = spark.read.csv(f'{input_url}/{entity_name}',sep='`', header=True,multiLine=True, inferSchema=True)\r\n",
+					"        df.write.format('delta').mode('overwrite').save(f'{output_url}/{entity_name}')\r\n",
+					"        \r\n",
+					"        cursor.execute(f\"UPDATE [dbo].[MetadataSalesCloud] SET [BronzeWatermark] = ? WHERE [EntityName] = ? AND [CloudAbbreviation] = ?\", datetime.utcnow(), entity_name, cloud_alias)\r\n",
+					"        cursor.commit()\r\n",
+					"\r\n",
+					"        print('Records written in delta table: ',df.count(),' for Entity: ', entity_name)\r\n",
+					"    except Exception as err:\r\n",
+					"        print(err)\r\n",
+					""
+				],
+				"execution_count": 7
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Read M365 data and create delta table"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"input_url_m365 = f'abfss://{input_container}@{adls_name}.dfs.core.windows.net/M365'\r\n",
+					"output_url_m365 = f'abfss://{output_container}@{adls_name}.dfs.core.windows.net/M365'\r\n",
+					"\r\n",
+					"entity_name = \"Inbox\"\r\n",
+					"\r\n",
+					"# Read the Parquet file into a DataFrame\r\n",
+					"parquet_df = spark.read.format('parquet').load(f'{input_url_m365}/{entity_name}')\r\n",
+					"\r\n",
+					"parquet_df.write.format('delta').mode('overwrite').save(f'{output_url}/{entity_name}')"
+				],
+				"execution_count": null
+			}
+		]
+	}
+}

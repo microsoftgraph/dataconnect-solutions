@@ -1,0 +1,166 @@
+{
+	"name": "variables",
+	"properties": {
+		"folder": {
+			"name": "config"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "synspgdcscin",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "38a47d2b-fa92-4971-ba9c-a82f2c80bd71"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "python"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/2058f82f-b8ac-423e-8c83-227732887c3a/resourceGroups/fractal-neal-coe-dev-rg/providers/Microsoft.Synapse/workspaces/syngdcscindevil/bigDataPools/synspgdcscin",
+				"name": "synspgdcscin",
+				"type": "Spark",
+				"endpoint": "https://syngdcscindevil.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/synspgdcscin",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"source": [
+					"## variables\n",
+					"\n",
+					"\n",
+					""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"# Variable\n",
+					"\n",
+					"**Purpose**: This notebook is designed to declare and define all the variables, paths and spark configurations used in all other notebooks. This notebook act as a single source container for all the settings and configurations."
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"source": [
+					"### Initializing all the variables used for authentication, jdbc connection and configuration"
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"# Create a SparkSession\n",
+					"sc = SparkSession.builder.getOrCreate()\n",
+					"\n",
+					"\n",
+					"token_library = sc._jvm.com.microsoft.azure.synapse.tokenlibrary.TokenLibrary\n",
+					"\n",
+					"\n",
+					"# adls name\n",
+					"adls_name = token_library.getSecretWithLS(\"LS_AzureKeyVault\",\"adls-name\")\n",
+					"\n",
+					"# server and database name\n",
+					"metadata_database_name = token_library.getSecretWithLS(\"LS_AzureKeyVault\",\"metadata-db-name\")\n",
+					"metadata_server_name = token_library.getSecretWithLS(\"LS_AzureKeyVault\",\"metadata-server-name\")\n",
+					"\n",
+					"syn_database_name = token_library.getSecretWithLS(\"LS_AzureKeyVault\",\"syn-db-name\")\n",
+					"syn_server_name = token_library.getSecretWithLS(\"LS_AzureKeyVault\",\"syn-server-name\")\n",
+					"\n",
+					"# SalesForce API details:\n",
+					"salesforce_client_id = token_library.getSecretWithLS(\"LS_AzureKeyVault\",\"salesforce-client-id\")\n",
+					"salesforce_client_secret = token_library.getSecretWithLS(\"LS_AzureKeyVault\",\"salesforce-client-secret\")\n",
+					"\n",
+					"# SPN details\n",
+					"client_id = token_library.getSecretWithLS(\"LS_AzureKeyVault\",\"client-id\")\n",
+					"client_secret = token_library.getSecretWithLS(\"LS_AzureKeyVault\",\"client-secret\")\n",
+					"tenant_id = token_library.getSecretWithLS(\"LS_AzureKeyVault\",\"tenant-id\")\n",
+					"\n",
+					"# Setting spark config\n",
+					"spark.conf.set(\"fs.azure.account.auth.type\", \"OAuth\")\n",
+					"spark.conf.set(\"fs.azure.account.oauth.provider.type\", \"org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider\")\n",
+					"spark.conf.set(\"fs.azure.account.oauth2.client.id\", client_id)\n",
+					"spark.conf.set(\"fs.azure.account.oauth2.client.secret\", client_secret)\n",
+					"spark.conf.set(\"fs.azure.account.oauth2.client.endpoint\", \"https://login.microsoftonline.com/\"+tenant_id+\"/oauth2/token\")\n",
+					"\n",
+					"\n",
+					"# Oauth connection variables\n",
+					"authority = \"https://login.microsoftonline.com/\" + tenant_id\n",
+					"context = adal.AuthenticationContext(authority)\n",
+					"token = context.acquire_token_with_client_credentials(\"https://database.windows.net/\", client_id,client_secret)\n",
+					"access_token = token[\"accessToken\"]\n",
+					"\n",
+					"#synapse server jdbc_url\n",
+					"jdbc_url = \"jdbc:sqlserver://\" + syn_server_name + \":1433\""
+				]
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## setup connection with metatdata db"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"SQL_COPT_SS_ACCESS_TOKEN = 1256 \r\n",
+					"connString = \"Driver={ODBC Driver 17 for SQL Server};SERVER=\"+ metadata_server_name + \";DATABASE=\" + metadata_database_name\r\n",
+					"#get bytes from token obtained\r\n",
+					"tokenb = bytes(token[\"accessToken\"], \"UTF-8\")\r\n",
+					"exptoken = b'';\r\n",
+					"for i in tokenb:\r\n",
+					" exptoken += bytes({i});\r\n",
+					" exptoken += bytes(1);\r\n",
+					"tokenstruct = struct.pack(\"=i\", len(exptoken)) + exptoken;"
+				]
+			}
+		]
+	}
+}

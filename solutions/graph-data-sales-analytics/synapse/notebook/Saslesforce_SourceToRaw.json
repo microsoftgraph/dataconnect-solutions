@@ -1,0 +1,314 @@
+{
+	"name": "Saslesforce_SourceToRaw",
+	"properties": {
+		"folder": {
+			"name": "Stage1 SourceToRaw"
+		},
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "synspgdcscin",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "56g",
+			"driverCores": 8,
+			"executorMemory": "56g",
+			"executorCores": 8,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "6c478333-5f46-4c26-b42e-9806ea465f32"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/2058f82f-b8ac-423e-8c83-227732887c3a/resourceGroups/fractal-neal-coe-dev-rg/providers/Microsoft.Synapse/workspaces/syngdcscindevil/bigDataPools/synspgdcscin",
+				"name": "synspgdcscin",
+				"type": "Spark",
+				"endpoint": "https://syngdcscindevil.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/synspgdcscin",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.1",
+				"nodeCount": 10,
+				"cores": 8,
+				"memory": 56,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "code",
+				"source": [
+					"from pyspark.sql.types import *\r\n",
+					"from pyspark.sql import SparkSession\r\n",
+					"from datetime import datetime\r\n",
+					"import json\r\n",
+					"import requests\r\n",
+					"import adal\r\n",
+					"import pyodbc\r\n",
+					"import struct"
+				],
+				"execution_count": 1
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run config/variables"
+				],
+				"execution_count": 2
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"%run utility/SalesforceFunctions"
+				],
+				"execution_count": 3
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Set global constants"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Global constants for adls\r\n",
+					"input_container = \"raw\"\r\n",
+					"cloud_alias = \"SFSC\""
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Create connection to database and set the cursor"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"conn = pyodbc.connect(connString, attrs_before = { SQL_COPT_SS_ACCESS_TOKEN:tokenstruct});\r\n",
+					"cursor = conn.cursor()"
+				],
+				"execution_count": 5
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Get all salesfroce entities from metdata db"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"metadata_entities = cursor.execute(f\"SELECT [EntityName],[Query],[SchemaColumn] FROM [dbo].[MetadataSalesCloud] WHERE [CloudAbbreviation] = '{cloud_alias}'\") \\\r\n",
+					"                .fetchall()\r\n",
+					""
+				],
+				"execution_count": 6
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Get data from Salesforce entitites"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"access_token = get_salesforce_access_token(salesforce_client_id, salesforce_client_secret)\r\n",
+					"\r\n",
+					"for row in metadata_entities:\r\n",
+					"    entity_name = row[0]\r\n",
+					"    query = row[1]\r\n",
+					"    schema_string = row[2]\r\n",
+					"\r\n",
+					"    result = get_salesforce_records(access_token, query)\r\n",
+					"\r\n",
+					"    if isinstance(result, tuple):\r\n",
+					"        status_code, response_text = result\r\n",
+					"        print(\"Request failed with status code:\", status_code)\r\n",
+					"        print(\"Response text:\", response_text)\r\n",
+					"    else:\r\n",
+					"        records = result\r\n",
+					"        print(\"Total records:\", len(records) , \"for entity:\", entity_name)\r\n",
+					"\r\n",
+					"        spark = SparkSession.builder.getOrCreate()\r\n",
+					"\r\n",
+					"        # Convert the schema string to StructType\r\n",
+					"        schema = eval(schema_string)\r\n",
+					"\r\n",
+					"        # Convert the JSON response to a Spark DataFrame using the specified schema\r\n",
+					"        df = spark.createDataFrame(records, schema=schema)\r\n",
+					"        \r\n",
+					"        # Filter out the rows with corrupt records\r\n",
+					"        df = df.filter(df[\"_corrupt_record\"].isNull())\r\n",
+					"\r\n",
+					"        # Drop the \"_corrupt_record\" column\r\n",
+					"        df = df.drop(\"_corrupt_record\")\r\n",
+					"\r\n",
+					"        input_url = f'abfss://{input_container}@{adls_name}.dfs.core.windows.net/{cloud_alias}/{entity_name}'\r\n",
+					"\r\n",
+					"        # Write DataFrame to CSV in ADLS\r\n",
+					"        df.write.csv(input_url, sep='`', header=True, mode=\"overwrite\")\r\n",
+					"        print('Records written in adls: ',df.count(),' for Entity: ', entity_name)\r\n",
+					"\r\n",
+					"        try:        \r\n",
+					"            cursor.execute(f\"UPDATE [dbo].[MetadataSalesCloud] SET [Watermark] = ? WHERE [EntityName] = ? AND [CloudAbbreviation] = ?\", datetime.utcnow(), entity_name, cloud_alias)\r\n",
+					"            cursor.commit()\r\n",
+					"        except Exception as err:\r\n",
+					"            print(err)\r\n",
+					""
+				],
+				"execution_count": 10
+			},
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Write data to CSV in ADLS"
+				]
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"# read csv file\r\n",
+					"# df_adls = spark.read.csv(input_url,sep='`', header=True,multiLine=True, inferSchema=True)\r\n",
+					"# display(df_adls)"
+				],
+				"execution_count": 9
+			}
+		]
+	}
+}
